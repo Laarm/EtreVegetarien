@@ -1,0 +1,17 @@
+#inscription .bottom .left button {
+    border-radius: 0;
+}
+#inscription .bottom .left a {
+    color: #000
+}
+#inscription .bottom .right button {
+    border: none;
+    background-color: transparent;
+    font-weight: bolder;
+    height: 38px
+}
+#inscription .bottom .right button span {
+    background-color: #58D68D;
+    color: #FFF;
+    padding: 3px 5px
+}
