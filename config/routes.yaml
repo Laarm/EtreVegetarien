@@ -1,3 +1,15 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+index:
+    path: /
+    controller: App\Controller\IndexController::index
+connexion:
+    path: /connexion
+    controller: App\Controller\ConnexionController::index
+inscription:
+    path: /inscription
+    controller: App\Controller\InscriptionController::index
+inscriptionAction:
+    path: /ajax/inscriptionAction
+    controller: App\Controller\InscriptionController::inscriptionAction
