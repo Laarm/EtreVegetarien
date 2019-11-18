@@ -5,56 +5,55 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * User
- *
- * @ORM\Table(name="user")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="account_id", type="string", length=255, nullable=true, options={"default"="NULL"})
+     * @ORM\Column(type="string", length=255)
      */
-    private $accountId = 'NULL';
+    private $username;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="password", type="string", length=255, nullable=true, options={"default"="NULL"})
+     * @ORM\Column(type="string", length=255)
      */
-    private $password = 'NULL';
+    private $password;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="created", type="string", length=255, nullable=true, options={"default"="NULL"})
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $created = 'NULL';
+    private $email;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $preference;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getAccountId(): ?string
+    public function getUsername(): ?string
     {
-        return $this->accountId;
+        return $this->username;
     }
 
-    public function setAccountId(?string $accountId): self
+    public function setUsername(string $username): self
     {
-        $this->accountId = $accountId;
+        $this->username = $username;
 
         return $this;
     }
@@ -64,24 +63,46 @@ class User
         return $this->password;
     }
 
-    public function setPassword(?string $password): self
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 
         return $this;
     }
 
-    public function getCreated(): ?string
+    public function getEmail(): ?string
     {
-        return $this->created;
+        return $this->email;
     }
 
-    public function setCreated(?string $created): self
+    public function setEmail(?string $email): self
     {
-        $this->created = $created;
+        $this->email = $email;
 
         return $this;
     }
 
+    public function getPreference(): ?string
+    {
+        return $this->preference;
+    }
 
+    public function setPreference(?string $preference): self
+    {
+        $this->preference = $preference;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
 }
