@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\UserParams;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class UserController extends AbstractController
 {
     /**
-     * @Route("/users", name="users")
+     * @Route("/user/{id}", name="user")
      */
     public function index(int $accountId, EntityManagerInterface $entityManager): Response
     {
@@ -27,7 +26,7 @@ class UserController extends AbstractController
             'param_id' => "username"
             ]);
         $stmt = $stmt->fetchAll();
-        return $this->render('users/index.html.twig', [
+        return $this->render('user/index.html.twig', [
             'username' => $stmt[0]['info'],
         ]);
     }

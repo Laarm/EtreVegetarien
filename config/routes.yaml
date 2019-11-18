@@ -1,7 +1,6 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
-#testhj,kkj
 index:
     path: /
     controller: App\Controller\IndexController::index
@@ -14,6 +13,12 @@ inscription:
 inscriptionAction:
     path: /ajax/inscriptionAction
     controller: App\Controller\InscriptionController::inscriptionAction
-users:
-    path: /users/{accountId}
+user:
+    path: /user/{id}
     controller: App\Controller\UserController::index
+article:
+    path: /article
+    controller: App\Controller\ArticleController::index
+articleShow:
+    path: /article/{id}
+    controller: App\Controller\ArticleController::show

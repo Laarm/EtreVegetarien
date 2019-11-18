@@ -15,7 +15,7 @@ class ProduitFixtures extends Fixture
         for($i = 1; $i <= 10; $i++) {
             $produit = new Produit();
             $produit->setNom("Produit n°$i")
-                    ->setImage("http://placehold.it/350x350")
+                    ->setImage("http://placehold.it/201x303")
                     ->setCreatedAt(new \DateTime());
 
             $manager->persist($produit);

@@ -6,46 +6,18 @@
         <h1 class="titre"><span>Nos Articles</span></h1>
     </div>
     <div class="container flex flex-center flex-wrap">
-        <div class="item">
+        {% for article in articles %}
+        <a class="item" href="{{ path('article_show', {'id': article.id}) }}">
             <div class="content shadow-2">
                 <div class="top">
-                    <img src="https://scontent.cdninstagram.com/vp/dde559d59dc4623b8abefdcd250a22a0/5E586909/t51.2885-15/sh0.08/e35/s640x640/70914769_1763199203987512_6672457541272830141_n.jpg?_nc_ht=scontent.cdninstagram.com" alt="Test" />
+                    <img src="{{ article.image }}" alt="Test" />
                 </div>
                 <div class="bottom">
-                    <h1>Titre du post</h1>
+                    <h1>{{ article.nom }}</h1>
                 </div>
             </div>
-        </div>
-        <div class="item">
-            <div class="content shadow-2">
-                <div class="top">
-                    <img src="https://scontent.cdninstagram.com/vp/3e7a24dd058ab7efae82b0d79dacfdd9/5E517979/t51.2885-15/sh0.08/e35/s640x640/71514578_2429992553889762_4795971366185156007_n.jpg?_nc_ht=scontent.cdninstagram.com" alt="Test" />
-                </div>
-                <div class="bottom">
-                    <h1>Titre du post</h1>
-                </div>
-            </div>
-        </div>
-        <div class="item">
-            <div class="content shadow-2">
-                <div class="top">
-                    <img src="https://scontent.cdninstagram.com/vp/b1e443db21a105171725066b823b67e2/5E48141D/t51.2885-15/sh0.08/e35/s640x640/70645450_146759889899448_6629800126277503847_n.jpg?_nc_ht=scontent.cdninstagram.com" alt="Test" />
-                </div>
-                <div class="bottom">
-                    <h1>Titre du post</h1>
-                </div>
-            </div>
-        </div>
-        <div class="item">
-            <div class="content shadow-2">
-                <div class="top">
-                    <img src="https://scontent.cdninstagram.com/vp/633e8c611d27570234ffe1f5b9bd3c50/5E54CFAD/t51.2885-15/sh0.08/e35/s640x640/69881397_684665865384215_8662651306213829100_n.jpg?_nc_ht=scontent.cdninstagram.com" alt="Test" />
-                </div>
-                <div class="bottom">
-                    <h1>Titre du post</h1>
-                </div>
-            </div>
-        </div>
+        </a>
+        {% endfor %}
     </div>
 </section>
 <section id="postInstagram" class="paddingSeperateur">
