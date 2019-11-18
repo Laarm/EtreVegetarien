@@ -30,7 +30,7 @@ h1.titre span {
     padding: 0 10px
 }
 .fakeBlank h1.titre span {
-    background-color: #fafafa
+    background-color: #f2f2f2
 }
 
 /*
@@ -173,6 +173,9 @@ header .banniere .options i {
 @media(min-width: 991px) {
     .mb50 {
         margin-bottom: 50px
+    }
+    .mt50 {
+        margin-top: 52px
     }
 }
 
@@ -395,7 +398,7 @@ footer .bottom .container p a {
     justify-content: center;
 }
 .fakeBlank {
-    background-color: #fafafa
+    background-color: #f2f2f2
 }
 .paddingSeperateur {
     padding: 50px 0;
@@ -410,6 +413,9 @@ footer .bottom .container p a {
 .mlr-auto {
     margin-left: auto;
     margin-right: auto
+}
+.flex.column {
+    flex-direction: column;
 }
 
 /*

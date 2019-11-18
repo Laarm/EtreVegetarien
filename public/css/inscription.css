@@ -1,3 +1,16 @@
+#inscription #resultat .content {
+    height: 40px;
+    border-left: #58D68D 7px solid;
+    background-color: #fafafa;
+    margin-bottom: 11px;
+}
+#inscription #resultat .content p {
+    line-height: 40px;
+    margin-left: 10px;
+}
+#inscription #resultat .content.red {
+    border-left: #ff3300 7px solid
+}
 #inscription .bottom .left button {
     border-radius: 0;
 }

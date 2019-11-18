@@ -1,12 +1,221 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+<div lang="fr">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{% block title %}Être végétarien sur Limoges{% endblock %}</title>
+        <meta property="og:site_name" content="Être végétarien sur Limoges">
+		<meta property="og:title" content="Être végétarien sur Limoges">
+		<meta property="og:image" content="">
+		<meta property="og:description" content="Être végétarien sur Limoges">
+        <meta name="medium" content="image">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/97fb64c932.js" crossorigin="anonymous"></script>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet">
+        <link href="{{ asset('/css/main.css') }}" rel="stylesheet" />
+        {% block stylesheets %}
+        {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        <header>
+            <div class="btnMobile flex" openNavMob=".sous-menu"><i class="fad fa-bars margin-auto"></i></div>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-1">
+                <a class="navbar-brand" href="/"><img class="logo" src="{{ asset('/img/logo/etrevegetariensur-min-min.png') }}" alt="Logo Être Végétarien" /></a>
+                <div class="form-group margin-auto choisirVille">
+                    <select class="form-control">
+                        <option>Limoges</option>
+                        <option>Brive</option>
+                        <option>Clermont-Ferrand</option>
+                    </select>
+                </div>
+                <div class="collapse navbar-collapse flex" id="navbarSupportedContent">
+                    <ul class="navbar-nav">
+                        <li id="account" class="nav-item">
+                            <button id="menu-account" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fad fa-user-circle"></i></button>
+                            <div class="item dropdown">
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="menu-account">
+                                    <a class="dropdown-item" href="/connexion"><i class="fad fa-sign-in"></i> Connexion</a>
+                                    <a class="dropdown-item" href="/inscription"><i class="fad fa-user-plus"></i> Inscription</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="banniere">
+                <div class="options flex">
+                    <div class="left flex">
+                        <i class="fad fa-angle-left margin-auto"></i>
+                    </div>
+                    <div class="right flex">
+                        <i class="fad fa-angle-right margin-auto"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="sous-menu flex shadow-1">
+                <a class="item">Restaurants</a>
+                <div class="item dropdown">
+                    <button class="btn dropdown-toggle" type="button" autoSize="menu-1" id="menu-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Derniers articles
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="menu-1">
+                        <a class="dropdown-item" href="#">Test 1</a>
+                        <a class="dropdown-item" href="#">Test 2</a>
+                        <a class="dropdown-item" href="#">Test 3</a>
+                        <a class="dropdown-item" href="#">Test 4</a>
+                    </div>
+                </div>
+                <a class="item">Trouver des magasins</a>
+                <a class="item">Devenir Végétarien</a>
+            </div>
+        </header>
+        <main>
+            {% block body %}{% endblock %}
+        </main>
+        <footer>
+            <div class="container top paddingSeperateur">
+                <div class="social flex flex-center">
+                    <a href="#" class="flex"><i class="fab fa-facebook-f margin-auto"></i></a>
+                    <a href="#" class="flex"><i class="fab fa-instagram margin-auto"></i></a>
+                </div>
+                <div class="info flex flex-center">
+                    <a href="#">Accueil</a>
+                    <a href="#">Magasins</a>
+                    <a href="#">Devenir Végétarien</a>
+                </div>
+                <div class="sous-info flex flex-center mb-4">
+                    <a href="#">Contact</a>
+                    <a href="#">Blog</a>
+                </div>
+            </div>
+            <div class="bottom">
+                <div class="container text-center">
+                    <p>Être Végétarien créer avec <i class="fad fa-heart"></i> à Limoges</p>
+                    <p><a href="https://arnaudjacques.ovh">Arnaud JACQUES</a> | <span>All rights reserved</span></p>
+                </div>
+            </div>
+        </footer>
+        <script>
+        class Banniere {
+            constructor(params) {
+                this.params = params.banniere
+                this.btnLeft = document.querySelector(".banniere .left");
+                this.btnRight = document.querySelector(".banniere .right");
+                this.optionMove()
+            }
+            optionMove() {
+                this.btnLeft.addEventListener("click", () => {
+                    this.clickLeft()
+                })
+                this.btnRight.addEventListener("click", () => {
+                    this.clickRight()
+                })
+            }
+            clickLeft() {
+                this.params['2']['count']--
+                if(this.params["0"][this.params['2']['count']] === undefined){
+                    this.params['2']['count'] = this.params["1"]["nombreImage"];
+                }
+                $( ".banniere" ).css( "backgroundImage", "url(" + this.params["0"][this.params['2']['count']] + ")" );
+            }
+            clickRight() {
+                this.params['2']['count']++
+                if(this.params["0"][this.params['2']['count']] === undefined){
+                    this.params['2']['count'] = 1;
+                }
+                $( ".banniere" ).css( "backgroundImage", "url(" + this.params["0"][this.params['2']['count']] + ")" );
+            }
+        }
+        class navBar {
+            constructor(params) {
+                this.params = params.openNavMob
+                this.btnOpenNav = document.querySelector("[openNavMob]");
+                this.minNav()
+                this.openNavBar()
+            }
+            minNav() {
+                if($(document).scrollTop().valueOf()>="2"){
+                    $("nav.navbar").addClass("minNav")
+                    $( ".banniere" ).addClass( "mt50" );
+                }else{
+                    $("nav.navbar").removeClass("minNav")
+                    $( ".banniere" ).removeClass( "mt50" );
+                }
+                if($(document).scrollTop().valueOf()>=($("header .banniere").offset().top+$("header .banniere").height()-$("header .sous-menu").height())){
+                    $("header .sous-menu").addClass("minNav")
+                        $( ".banniere" ).addClass( "mb50" );
+                }else{
+                    $("header .sous-menu").removeClass("minNav")
+                        $( ".banniere" ).removeClass( "mb50" );
+                }
+                $(window).scroll(function() {
+                    if($(document).scrollTop().valueOf()>="2"){
+                        $("nav.navbar").addClass("minNav")
+                        $( ".banniere" ).addClass( "mt50" );
+                    }else{
+                        $("nav.navbar").removeClass("minNav")
+                        $( ".banniere" ).removeClass( "mt50" );
+                    }
+                    if($(document).scrollTop().valueOf()>=($("header .banniere").offset().top+$("header .banniere").height()-$("header .sous-menu").height())){
+                        $("header .sous-menu").addClass("minNav")
+                        $( ".banniere" ).addClass( "mb50" );
+                    }else{
+                        $("header .sous-menu").removeClass("minNav")
+                        $( ".banniere" ).removeClass( "mb50" );
+                    }
+                })
+                if($(window).width()){
+                    $("nav .logo").attr("src", "/img/logo/logo-min-min.png");
+                }
+            }
+            openNavBar() {
+                this.btnOpenNav.addEventListener("click", () => {
+                    if(this.params==0){
+                        $($(this.btnOpenNav).attr('openNavMob')).addClass("opened")
+                        this.params++
+                    }else{
+                        $($(this.btnOpenNav).attr('openNavMob')).removeClass("opened")
+                        this.params--
+                    }
+                })
+            }
+        }
+        class frameWork {
+            constructor() {
+                this.btnOpenNav = document.querySelector("[autoSize]");
+                this.autoSize()
+            }
+            autoSize() {
+                this.btnOpenNav.addEventListener("click", () => {
+                    $( "[aria-labelledby='" + $(this.btnOpenNav).attr('autoSize') + "']" ).css( "width", $( "#menu-1" ).width()+24 );
+                });
+            }
+        }
+        addEventListener("load", () => {
+            var params = {
+                "openNavMob": 0,
+                "banniere": [
+                    {
+                        "1": "https://cdn.arnaudjacques.ovh/etrevegetarien/img/postes/Test-1.png",
+                        "2": "https://scontent.cdninstagram.com/vp/633e8c611d27570234ffe1f5b9bd3c50/5E54CFAD/t51.2885-15/sh0.08/e35/s640x640/69881397_684665865384215_8662651306213829100_n.jpg?_nc_ht=scontent.cdninstagram.com",
+                        "3": "https://scontent.cdninstagram.com/vp/b1e443db21a105171725066b823b67e2/5E48141D/t51.2885-15/sh0.08/e35/s640x640/70645450_146759889899448_6629800126277503847_n.jpg?_nc_ht=scontent.cdninstagram.com"
+                    },
+                    {
+                        "nombreImage": 3
+                    },
+                    {
+                        "count": 1
+                    }
+                ]
+            };
+            new Banniere(params);
+            new navBar(params);
+            new frameWork();
+        });
+        </script>
+        {% block javascript %}
+        {% endblock %}
     </body>
-</html>
