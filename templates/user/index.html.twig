@@ -143,31 +143,31 @@ main {
     color: #58D68D;
     text-align: center;
 }
-#timeline .container .bottom .col-7 #repas.active {
+#timeline .container .bottom .col-7 #repasfav.active {
     display: flex;
-    min-height: 343.5px;
+    min-height: 322px;
     overflow-x: scroll;
     overflow-y: hidden;
 }
-#timeline .container .bottom .col-7 #repas .item {
+#timeline .container .bottom .col-7 #repasfav .item {
     min-width: calc(100vw / 4.5);
     margin: auto 5%;
     -webkit-box-shadow: 0px 0px 48px -20px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 0px 48px -20px rgba(0,0,0,0.75);
     box-shadow: 0px 0px 48px -20px rgba(0,0,0,0.75);
 }
-#timeline .container .bottom .col-7 #repas .item .top {
+#timeline .container .bottom .col-7 #repasfav .item .top {
     transition-duration: .3s;
     background-color: #58D68D;
     display: flex;
     padding: 30px
 }
-#timeline .container .bottom .col-7 #repas .item .top img {
+#timeline .container .bottom .col-7 #repasfav .item .top img {
     width: 80%;
     margin: auto;
     transition-duration: .3s;
 }
-#timeline .container .bottom .col-7 #repas .item .bottom {
+#timeline .container .bottom .col-7 #repasfav .item .bottom {
     transition-duration: .3s;
     background-color: #FFF;
     text-align: center;
@@ -176,74 +176,79 @@ main {
     height: 60px;
     display: flex;
 }
-#timeline .container .bottom .col-7 #repas .item .bottom p {
+#timeline .container .bottom .col-7 #repasfav .item .bottom p {
     margin: auto;
     font-weight: bolder;
 }
-#timeline .container .bottom .col-7 #repas .item:hover .top {
+#timeline .container .bottom .col-7 #repasfav .item:hover .top {
     transition-duration: .3s;
     background-color: #FFF;
 }
-#timeline .container .bottom .col-7 #repas .item:hover .top img {
+#timeline .container .bottom .col-7 #repasfav .item:hover .top img {
     transition-duration: .3s;
     transform: scale(0.9);
 }
-#timeline .container .bottom .col-7 #repas .item:hover .bottom {
+#timeline .container .bottom .col-7 #repasfav .item:hover .bottom {
     transition-duration: .3s;
     background-color: #58D68D;
     height: 160px;
     margin-top: -100px;
 }
-#timeline .container .bottom .col-7 #repas .item:hover .bottom p {
+#timeline .container .bottom .col-7 #repasfav .item:hover .bottom p {
     margin: auto auto 13px auto;
+}
+#timeline .container .bottom .col-7 #v-rs.active {
+    min-height: 322px;
+    width: 100%;
+    display: flex!important
+}
+#timeline .container .bottom .col-7 #v-rs i {
+    font-size: 30px;
+    color: #58D68D
 }
 </style>
         <div class="bottom">
             <div class="row">
                 <div class="col-5">
                     <div class="nav flex nav-pills flex-between" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                        <a class="p-4 flex nav-link active" id="restaurant-tab" data-toggle="pill" href="#restaurant" role="tab" aria-controls="restaurant" aria-selected="true"><div class="margin-auto"><span><i class="fad fa-utensils"></i></span>Restaurant favoris</div></a>
-                        <a class="p-4 flex nav-link" id="repas-tab" data-toggle="pill" href="#repas" role="tab" aria-controls="repas" aria-selected="false"><div class="margin-auto"><span><i class="fad fa-hat-chef"></i></span>Repas favoris</div></a>
-                        <a class="p-4 flex nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false"><div class="margin-auto"><span><i class="fad fa-apple-crate"></i></span>Nourriture favoris</div></a>
-                        <a class="p-4 flex nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false"><div class="margin-auto"><span><i class="fad fa-globe"></i></span>Réseaux sociaux</div></a>
+                        <a class="p-4 flex nav-link active" id="restaurantfav-tab" data-toggle="pill" href="#restaurantfav" role="tab" aria-controls="restaurantfav" aria-selected="true"><div class="margin-auto"><span><i class="fad fa-utensils"></i></span>Restaurant favoris</div></a>
+                        <a class="p-4 flex nav-link" id="repasfav-tab" data-toggle="pill" href="#repasfav" role="tab" aria-controls="repasfav" aria-selected="false"><div class="margin-auto"><span><i class="fad fa-hat-chef"></i></span>Repas favoris</div></a>
+                        <a class="p-4 flex nav-link" id="nourriturefav-tab" data-toggle="pill" href="#v-nourriturefav" role="tab" aria-controls="v-nourriturefav" aria-selected="false"><div class="margin-auto"><span><i class="fad fa-apple-crate"></i></span>Nourriture favoris</div></a>
+                        <a class="p-4 flex nav-link" id="rs-tab" data-toggle="pill" href="#v-rs" role="tab" aria-controls="v-rs" aria-selected="false"><div class="margin-auto"><span><i class="fad fa-globe"></i></span>Réseaux sociaux</div></a>
                     </div>
                 </div>
                 <div class="col-7">
                     <div class="tab-content" id="v-pills-tabContent">
-                        <div class="tab-pane fade" id="restaurant" role="tabpanel" aria-labelledby="restaurant-tab">
+                        <div class="tab-pane fade show active" id="restaurantfav" role="tabpanel" aria-labelledby="restaurant-tab">
                             ...
                         </div>
-                        <div class="tab-pane fade show active" id="repas" role="tabpanel" aria-labelledby="repas-tab">
+                        <div class="tab-pane fade" id="repasfav" role="tabpanel" aria-labelledby="repasfav-tab">
+                            {% for produit in produits %}
                             <div class="item">
                                 <div class="top">
-                                    <img alt="Steak Soja" src="https://s3.croquonslavie.fr/cdn/farfuture/mxPjZ5RXQUDMLNPRP5Mqg7yWC0Ty--moWQJtSEmkzOc/mtime:1561614859/sites/default/files/images/product/principal/fa4e28e3-2cd0-44db-9563-7e2bfb651465.png" />
+                                    <img alt="{{ produit.nom }}" src="{{ produit.image }}" />
                                 </div>
                                 <div class="bottom">
-                                    <p>Steak Soja</p>
+                                    <p>{{ produit.nom }}</p>
                                 </div>
                             </div>
-                            <div class="item">
-                                <div class="top">
-                                    <img alt="Steak Soja" src="https://www.cereal.fr/sites/default/files/galette-orge-boulghour-chevre.png" />
-                                </div>
-                                <div class="bottom">
-                                    <p>Steak Soja</p>
-                                </div>
-                            </div>
-                            <div class="item">
-                                <div class="top">
-                                    <img alt="Steak Soja" src="https://www.cereal.fr/sites/default/files/galette-orge-boulghour-chevre.png" />
-                                </div>
-                                <div class="bottom">
-                                    <p>Steak Soja</p>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
-                        <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                        <div class="tab-pane fade" id="v-nourriturefav" role="tabpanel" aria-labelledby="v-nourriturefav-tab">
                             ...
                         </div>
-                        <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
-                            ...
+                        <div class="tab-pane fade" id="v-rs" role="tabpanel" aria-labelledby="v-rs-tab">
+                            <div class="margin-auto">
+                                <a href="https://">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="https://">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="https://">
+                                    <i class="fab fa-youtube"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

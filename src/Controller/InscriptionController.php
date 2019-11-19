@@ -43,7 +43,7 @@ class InscriptionController extends AbstractController
             $user = $repo->findOneBy([
                 'email' => $email,
             ]);
-            if($user->getEmail()!==$email){
+            if($user==null){
                 $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                 $sqlUser = new User();
                 $sqlUser->setUsername($username)
