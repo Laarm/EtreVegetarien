@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -45,6 +47,16 @@ class Restaurant
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\RestaurantAvis", mappedBy="restaurant")
+     */
+    private $restaurantAvis;
+
+    public function __construct()
+    {
+        $this->restaurantAvis = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -119,6 +131,37 @@ class Restaurant
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|RestaurantAvis[]
+     */
+    public function getRestaurantAvis(): Collection
+    {
+        return $this->restaurantAvis;
+    }
+
+    public function addRestaurantAvi(RestaurantAvis $restaurantAvi): self
+    {
+        if (!$this->restaurantAvis->contains($restaurantAvi)) {
+            $this->restaurantAvis[] = $restaurantAvi;
+            $restaurantAvi->setRestaurant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRestaurantAvi(RestaurantAvis $restaurantAvi): self
+    {
+        if ($this->restaurantAvis->contains($restaurantAvi)) {
+            $this->restaurantAvis->removeElement($restaurantAvi);
+            // set the owning side to null (unless already changed)
+            if ($restaurantAvi->getRestaurant() === $this) {
+                $restaurantAvi->setRestaurant(null);
+            }
+        }
 
         return $this;
     }

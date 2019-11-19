@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -45,6 +47,16 @@ class Magasin
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\MagasinAvis", mappedBy="magasin")
+     */
+    private $magasinAvis;
+
+    public function __construct()
+    {
+        $this->magasinAvis = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -119,6 +131,37 @@ class Magasin
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|MagasinAvis[]
+     */
+    public function getMagasinAvis(): Collection
+    {
+        return $this->magasinAvis;
+    }
+
+    public function addMagasinAvi(MagasinAvis $magasinAvi): self
+    {
+        if (!$this->magasinAvis->contains($magasinAvi)) {
+            $this->magasinAvis[] = $magasinAvi;
+            $magasinAvi->setMagasin($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMagasinAvi(MagasinAvis $magasinAvi): self
+    {
+        if ($this->magasinAvis->contains($magasinAvi)) {
+            $this->magasinAvis->removeElement($magasinAvi);
+            // set the owning side to null (unless already changed)
+            if ($magasinAvi->getMagasin() === $this) {
+                $magasinAvi->setMagasin(null);
+            }
+        }
 
         return $this;
     }
