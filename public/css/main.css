@@ -189,6 +189,7 @@ header .sous-menu {
     height: 50px;
     padding: 0 16px;
     position: sticky;
+    z-index: 1;
 }
 @media(min-width: 991px){
     header .sous-menu.minNav {

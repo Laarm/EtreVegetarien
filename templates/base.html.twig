@@ -23,7 +23,7 @@
         <header>
             <div class="btnMobile flex" openNavMob=".sous-menu"><i class="fad fa-bars margin-auto"></i></div>
             <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-1">
-                <a class="navbar-brand" href="/"><img class="logo" src="{{ asset('/img/logo/etrevegetariensur-min-min.png') }}" alt="Logo Être Végétarien" /></a>
+                <a class="navbar-brand" href="{{ path('index') }}"><img class="logo" src="{{ asset('/img/logo/etrevegetariensur-min-min.png') }}" alt="Logo Être Végétarien" /></a>
                 <div class="form-group margin-auto choisirVille">
                     <select class="form-control">
                         <option>Limoges</option>
@@ -68,8 +68,8 @@
                         <a class="dropdown-item" href="#">Test 4</a>
                     </div>
                 </div>
-                <a class="item">Trouver des magasins</a>
-                <a class="item">Devenir Végétarien</a>
+                <a class="item" href="{{ path('magasins') }}">Trouver des magasins</a>
+                <a class="item" href="{{ path('devenirVegetarien') }}">Devenir Végétarien</a>
             </div>
         </header>
         <main>
@@ -82,13 +82,13 @@
                     <a href="#" class="flex"><i class="fab fa-instagram margin-auto"></i></a>
                 </div>
                 <div class="info flex flex-center">
-                    <a href="#">Accueil</a>
-                    <a href="#">Magasins</a>
-                    <a href="#">Devenir Végétarien</a>
+                    <a href="{{ path('index') }}">Accueil</a>
+                    <a href="{{ path('magasins') }}">Magasins</a>
+                    <a href="{{ path('devenirVegetarien') }}">Devenir Végétarien</a>
                 </div>
                 <div class="sous-info flex flex-center mb-4">
-                    <a href="#">Contact</a>
-                    <a href="#">Blog</a>
+                    <a href="{{ path('contact') }}">Contact</a>
+                    <a href="{{ path('blog') }}">Blog</a>
                 </div>
             </div>
             <div class="bottom">

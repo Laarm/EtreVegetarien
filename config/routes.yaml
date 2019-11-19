@@ -31,3 +31,12 @@ contactSendMessage:
 restaurants:
     path: /restaurants
     controller: App\Controller\RestaurantController::index
+magasins:
+    path: /magasins
+    controller: App\Controller\MagasinController::index
+devenirVegetarien:
+    path: /devenirvegetarien
+    controller: App\Controller\DevenirVegetarienController::index
+blog:
+    path: /blog
+    controller: App\Controller\BlogController::index
