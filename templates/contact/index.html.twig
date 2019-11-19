@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ContactController!{% endblock %}
+
+{% block body %}
+<section id="contact">
+    <div class="container p-4">
+        <div id="resultat"></div>
+        <div class="form-group">
+            <label for="nomcomplet">Nom complet</label>
+            <input type="text" class="form-control" id="nomcomplet" placeholder="Entrer votre nom complet">
+        </div>
+        <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" class="form-control" id="email" placeholder="Entrer votre e-mail">
+        </div>
+        <div class="form-group">
+            <label for="sujet">Sujet</label>
+            <select class="form-control" id="sujet">
+                <option>Autre</option>
+                <option>Problème technique</option>
+                <option>Partenariat</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="message">Message</label>
+            <textarea class="form-control" id="message" rows="3"></textarea>
+        </div>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="cgu">
+            <label class="form-check-label" for="cgu">J'ai lu les CGU</label>
+        </div>
+        <button id="btnContact" class="btn btn-primary">Envoyer</button>
+    </div>
+</section>
+<script>
+    $(document).ready(function(){
+        $("#btnContact").click(function(e){
+            e.preventDefault();
+            $.post(
+                '/ajax/contact/sendMessage',
+                {
+                    nomcomplet : $("#nomcomplet").val(),
+                    email : $("#email").val(),
+                    sujet : $("#sujet").val(),
+                    message : $("#message").val()
+                },
+                function(data){
+                var data = data.split(",");
+                    if(data[0] == 'Success'){
+                        $("#resultat").html("<div class='content'><p>"+data[1]+"</p></div>");
+                    }
+                    else{
+                        $("#resultat").html("<div class='content red'><p>"+data[1]+"</p></div>");
+                    }
+                },
+                'text'
+            );
+        });
+    });
+</script>
+{% endblock %}

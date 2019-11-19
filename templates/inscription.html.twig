@@ -55,7 +55,7 @@
                 var data = data.split(",");
                     if(data[0] == 'Success'){
                         $("#resultat").html("<div class='content'><p>"+data[1]+"</p></div>");
-                        window.location.replace("/users/"+data[2]);
+                        window.location.replace("/user/"+data[2]);
                     }
                     else{
                         $("#resultat").html("<div class='content red'><p>"+data[1]+"</p></div>");

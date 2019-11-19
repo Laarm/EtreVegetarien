@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{username}} - Être végétarien!{% endblock %}
+{% block title %}{{user.username}} - Être végétarien!{% endblock %}
 
 {% block body %}
 <style>
@@ -78,13 +78,18 @@ main {
 <section id="profil" class="paddingSeperateur">
     <div class="container flex rond-2 p-4 shadow-1">
         <div class="left mtb-auto">
-            <h1>{{username}}</h1>
-            <h2>Végétarien</h2>
+            <h1>{{user.username}}</h1>
+            {% if user.preference is not empty %}
+            <h2>{{user.preference}}</h2>
             <span>(Depuis 2 ans)</span>
+            {% else %}
+            <h2>Membre</h2>
+            <span>(Depuis hier)</span>
+            {% endif %}
             <button id="btnParametre" type="button" class="btn btn-primary mr-1"><i class="fad fa-cog"></i> Paramètre</button>
         </div>
         <div class="right">
-            <div class="avatar flex"><img class="mtb-auto" src="https://arnaudjacques.ovh/img/photo.png" alt="Avatar de {{username}}" /></div>
+            <div class="avatar flex"><img class="mtb-auto" src="https://arnaudjacques.ovh/img/photo.png" alt="Avatar de {{user.username}}" /></div>
             <div class="badge"><div class="flex"><i class="fas fa-carrot margin-auto"></i></div></div>
         </div>
     </div>

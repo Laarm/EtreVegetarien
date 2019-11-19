@@ -3,12 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Entity\UserParams;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Repository\UserRepository;
 
 class InscriptionController extends AbstractController
 {
@@ -21,7 +21,7 @@ class InscriptionController extends AbstractController
             'user_first_name' => "test",
         ]);
     }
-    public function inscriptionAction(ValidatorInterface $validator, EntityManagerInterface $entityManager): Response
+    public function inscriptionAction(ValidatorInterface $validator, EntityManagerInterface $entityManager, UserRepository $repo): Response
     {
         if(
             strlen($_POST['username']) > 5
@@ -40,32 +40,28 @@ class InscriptionController extends AbstractController
         ){
             $username = htmlspecialchars($_POST['username']);
             $email = htmlspecialchars($_POST['email']);
-            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-            $entityManager = $this->getDoctrine()->getManager();
-            $sqlUser = new User();
-            $account_id = mt_rand(54557,579964679);
-            $sqlUser->setAccountId(strval($account_id));
-            $sqlUser->setPassword($password);
-            $sqlUser->setCreated(strval(time()));
-            $entityManager->persist($sqlUser);
-            $entityManager->flush();
-            $errors = $validator->validate($sqlUser);
-            if(count($errors) == 0){
-                $sqlUser_params = new UserParams();
-                $sqlUser_params->setParamId("username");
-                $sqlUser_params->setInfo($username);
-                $sqlUser_params->setCreated(strval(time()));
-                $entityManager->persist($sqlUser_params);
+            $user = $repo->findOneBy([
+                'email' => $email,
+            ]);
+            if($user->getEmail()!==$email){
+                $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+                $sqlUser = new User();
+                $sqlUser->setUsername($username)
+                        ->setPassword($password)
+                        ->setEmail($email)
+                        ->setCreatedAt(new \DateTime());
+                $entityManager->persist($sqlUser);
                 $entityManager->flush();
-                $sqlUser_params = new UserParams();
-                $sqlUser_params->setParamId("email");
-                $sqlUser_params->setInfo($email);
-                $sqlUser_params->setCreated(strval(time()));
-                $entityManager->persist($sqlUser_params);
-                $entityManager->flush();
-                return new Response('Success,Vous êtes bien inscrit !,'.$account_id);
+                $errors = $validator->validate($sqlUser);
+                if(count($errors) == 0){
+                    $_SESSION['email'] = $email;
+                    $_SESSION['password'] = $password;
+                    return new Response('Success,Vous êtes bien inscrit !,'.$sqlUser->getId());
+                }else{
+                    return new Response('Error,Problème au niveau du serveur, veuillez contacter un administrateur !');
+                }
             }else{
-                return new Response('Error,Problème au niveau du serveur, veuillez contacter un administrateur !');
+                return new Response('Error,L\'email est déjà utilisé !');
             }
         }else{
             if(strlen($_POST['username']) > 5){
