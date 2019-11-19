@@ -18,6 +18,7 @@ class RestaurantFixtures extends Fixture
             $restaurant->setNom("Restaurant n°$i")
                        ->setImage("http://placehold.it/350x250")
                        ->setLocation("74 avenue de France")
+                       ->setAdresse("74 avenue de France")
                        ->setVille("Limoges")
                        ->setCreatedAt(new \DateTime());
 

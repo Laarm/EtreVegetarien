@@ -213,7 +213,11 @@ header .sous-menu .item.active, .sous-menu button.active {
 }
 header .sous-menu a.item {
     line-height: 50px;
-    padding: 0 12px
+    padding: 0 12px;
+    color: #000;
+}
+header .sous-menu a.item:hover {
+    text-decoration: none;
 }
 header .sous-menu button {
     line-height: 50px;

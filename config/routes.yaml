@@ -28,3 +28,6 @@ contact:
 contactSendMessage:
     path: /ajax/contact/sendMessage
     controller: App\Controller\ContactController::sendMessage
+restaurants:
+    path: /restaurants
+    controller: App\Controller\RestaurantController::index

@@ -143,31 +143,31 @@ main {
     color: #58D68D;
     text-align: center;
 }
-#timeline .container .bottom .col-7 #repasfav.active {
+#timeline .container .bottom .col-7 .produit-list-design.active {
     display: flex;
     min-height: 322px;
     overflow-x: scroll;
     overflow-y: hidden;
 }
-#timeline .container .bottom .col-7 #repasfav .item {
+#timeline .container .bottom .col-7 .produit-list-design .item {
     min-width: calc(100vw / 4.5);
     margin: auto 5%;
     -webkit-box-shadow: 0px 0px 48px -20px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 0px 48px -20px rgba(0,0,0,0.75);
     box-shadow: 0px 0px 48px -20px rgba(0,0,0,0.75);
 }
-#timeline .container .bottom .col-7 #repasfav .item .top {
+#timeline .container .bottom .col-7 .produit-list-design .item .top {
     transition-duration: .3s;
     background-color: #58D68D;
     display: flex;
     padding: 30px
 }
-#timeline .container .bottom .col-7 #repasfav .item .top img {
+#timeline .container .bottom .col-7 .produit-list-design .item .top img {
     width: 80%;
     margin: auto;
     transition-duration: .3s;
 }
-#timeline .container .bottom .col-7 #repasfav .item .bottom {
+#timeline .container .bottom .col-7 .produit-list-design .item .bottom {
     transition-duration: .3s;
     background-color: #FFF;
     text-align: center;
@@ -176,25 +176,25 @@ main {
     height: 60px;
     display: flex;
 }
-#timeline .container .bottom .col-7 #repasfav .item .bottom p {
+#timeline .container .bottom .col-7 .produit-list-design .item .bottom p {
     margin: auto;
     font-weight: bolder;
 }
-#timeline .container .bottom .col-7 #repasfav .item:hover .top {
+#timeline .container .bottom .col-7 .produit-list-design .item:hover .top {
     transition-duration: .3s;
     background-color: #FFF;
 }
-#timeline .container .bottom .col-7 #repasfav .item:hover .top img {
+#timeline .container .bottom .col-7 .produit-list-design .item:hover .top img {
     transition-duration: .3s;
     transform: scale(0.9);
 }
-#timeline .container .bottom .col-7 #repasfav .item:hover .bottom {
+#timeline .container .bottom .col-7 .produit-list-design .item:hover .bottom {
     transition-duration: .3s;
     background-color: #58D68D;
     height: 160px;
     margin-top: -100px;
 }
-#timeline .container .bottom .col-7 #repasfav .item:hover .bottom p {
+#timeline .container .bottom .col-7 .produit-list-design .item:hover .bottom p {
     margin: auto auto 13px auto;
 }
 #timeline .container .bottom .col-7 #v-rs.active {
@@ -219,10 +219,31 @@ main {
                 </div>
                 <div class="col-7">
                     <div class="tab-content" id="v-pills-tabContent">
-                        <div class="tab-pane fade show active" id="restaurantfav" role="tabpanel" aria-labelledby="restaurant-tab">
-                            ...
+                        <div class="produit-list-design tab-pane fade show active" id="restaurantfav" role="tabpanel" aria-labelledby="restaurant-tab">
+                            {% for restaurant in restaurants %}
+                            <div class="item">
+                                <div class="top">
+                                    <img alt="{{ restaurant.nom }}" src="{{ restaurant.image }}" />
+                                </div>
+                                <div class="bottom">
+                                    <p>{{ restaurant.nom }}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
                         </div>
-                        <div class="tab-pane fade" id="repasfav" role="tabpanel" aria-labelledby="repasfav-tab">
+                        <div class="produit-list-design tab-pane fade" id="repasfav" role="tabpanel" aria-labelledby="repasfav-tab">
+                            {% for repa in repas %}
+                            <div class="item">
+                                <div class="top">
+                                    <img alt="{{ repa.nom }}" src="{{ repa.image }}" />
+                                </div>
+                                <div class="bottom">
+                                    <p>{{ repa.nom }}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="produit-list-design tab-pane fade" id="v-nourriturefav" role="tabpanel" aria-labelledby="v-nourriturefav-tab">
                             {% for produit in produits %}
                             <div class="item">
                                 <div class="top">
@@ -233,9 +254,6 @@ main {
                                 </div>
                             </div>
                             {% endfor %}
-                        </div>
-                        <div class="tab-pane fade" id="v-nourriturefav" role="tabpanel" aria-labelledby="v-nourriturefav-tab">
-                            ...
                         </div>
                         <div class="tab-pane fade" id="v-rs" role="tabpanel" aria-labelledby="v-rs-tab">
                             <div class="margin-auto">
