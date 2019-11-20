@@ -49,3 +49,36 @@ motDePasseOublie:
 deconnexion:
     path: /deconnexion
     controller: App\Controller\ConnexionController::logout
+admin:
+    path: /admin
+    controller: App\Controller\AdminController::index
+adminGestionArticle:
+    path: /admin/GestionArticle
+    controller: App\Controller\AdminController::gestionArticle
+adminGestionArticleCommentaires:
+    path: /admin/GestionArticleCommentaires
+    controller: App\Controller\AdminController::gestionArticleCommentaires
+adminGestionMagasins:
+    path: /admin/GestionMagasins
+    controller: App\Controller\AdminController::gestionMagasins
+adminGestionMagasinsAvis:
+    path: /admin/GestionMagasinsAvis
+    controller: App\Controller\AdminController::gestionMagasinsAvis
+adminGestionRestaurants:
+    path: /admin/GestionRestaurants
+    controller: App\Controller\AdminController::gestionRestaurants
+adminGestionRestaurantsAvis:
+    path: /admin/GestionRestaurantsAvis
+    controller: App\Controller\AdminController::gestionRestaurantsAvis
+adminProduits:
+    path: /admin/produits
+    controller: App\Controller\AdminController::produits
+adminUtilisateurs:
+    path: /admin/utilisateurs
+    controller: App\Controller\AdminController::utilisateurs
+adminRepas:
+    path: /admin/repas
+    controller: App\Controller\AdminController::repas
+adminContacts:
+    path: /admin/contacts
+    controller: App\Controller\AdminController::contacts

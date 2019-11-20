@@ -4,12 +4,39 @@
 
 {% block body %}
 <style>
+#article a {
+    text-decoration: none
+}
 #article .article_content {
     width: 66%;
-    padding-top: 50px
 }
 #article .article_content img {
     max-width: 100%
+}
+.container .sidebar {
+    width: 33%;
+    padding-left: 2.5%;
+}
+.container .sidebar .article {
+    border-bottom: 1px solid #ECEEF2;
+    width: 100%;
+    padding-bottom: 10px;
+    margin-top: 20px
+}
+.container .sidebar .article h1 {
+    margin-top: 2.5%;
+    font-size: 1rem;
+    font-weight: bold
+}
+.container .sidebar .article h2 {
+    margin-top: 2.5%;
+    font-size: 0.8rem;
+    font-weight: bold
+}
+.container .sidebar h1 {
+    margin-top: 2.5%;
+    font-size: 1.6rem;
+    font-weight: bold;
 }
 @media(max-width: 991px) {
     #article .sidebar {
@@ -32,20 +59,20 @@
     }
 }
 </style>
-<section id="article" class="container flex">
+<section id="article" class="container flex paddingSeperateur">
     <div class="article_content">
         <h1 class="text-center">{{article.nom}}</h1>
-        <p>{{donnee.contenu|raw}}</p>
-        <p><span class="cds">Chapitre {{article.categorie}}</span> - Posté le {{ donnee.createdAt|date("d/m/Y") }} à {{ donnee.createdAt|date("H:i:s") }}</p>
+        <p>{{article.contenu|raw}}</p>
+        <p><span class="cds">Chapitre {{article.categorie}}</span> - Posté le {{ article.createdAt|date("d/m/Y") }} à {{ article.createdAt|date("H:i:s") }}</p>
     </div>
     <div class="sidebar">
         <h1 class="gris">Derniers articles</h1>
         <div class="content">
         {% for donnee in articles %}
         <div class="article">
-            <a href="/article/{{ donnee.id }}">
+            <a href="{{ path('article_show', {'id': donnee.id}) }}">
                 <h1 class="cds">Chapitre {{ donnee.categorie }} <span>- {{ donnee.createdAt|date("d/m/Y") }} à {{ donnee.createdAt|date("H:i:s") }}</span></h1>
-                <h2 class="gris">{{ donnee.nom }}, {{ reducContent(donnee.contenu, 30) }}...</h2>
+                <h2 class="gris">{{ donnee.nom }}, {{ donnee.contenu|reducContent(30) }}...</h2>
             </a>
         </div>
         {% else %}

@@ -289,7 +289,11 @@ class User implements UserInterface
 
     public function getRoles()
     {
-        return ['ROLE_USER'];
+        // return ['ROLE_USER'];
+        if($this->role==null){
+            return ['ROLE_USER'];
+        }
+        return [$this->role];
     }
 
     public function getRole(): ?string

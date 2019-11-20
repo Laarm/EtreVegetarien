@@ -27,8 +27,8 @@
                 <div class="form-group margin-auto choisirVille">
                     <select class="form-control">
                         <option>Limoges</option>
-                        <option>Brive</option>
-                        <option>Clermont-Ferrand</option>
+                        <!-- <option>Brive</option>
+                        <option>Clermont-Ferrand</option> -->
                     </select>
                 </div>
                 <div class="collapse navbar-collapse flex" id="navbarSupportedContent">
@@ -42,8 +42,8 @@
                                     <a class="dropdown-item" href="{{ path('inscription') }}"><i class="fad fa-user-plus"></i> Inscription</a>
                                     {% else %}
                                     <a class="dropdown-item" href="{{ path('user', {'id': app.user.id}) }}"><i class="fad fa-user"></i> Mon profil</a>
-                                    {% if app.user.role == "admin" %}
-                                    <a class="dropdown-item" href="{{ path('inscription') }}"><i class="fad fa-tools"></i> Panel</a>
+                                    {% if app.user.role == "ROLE_ADMIN" %}
+                                    <a class="dropdown-item" href="{{ path('admin') }}"><i class="fad fa-tools"></i> Panel</a>
                                     {% endif %}
                                     <a class="dropdown-item" href="{{ path('inscription') }}"><i class="fad fa-user-cog"></i> Parametres</a>
                                     <div class="dropdown-divider"></div>
@@ -72,10 +72,9 @@
                       Derniers articles
                     </button>
                     <div class="dropdown-menu" aria-labelledby="menu-1">
-                        <a class="dropdown-item" href="#">Test 1</a>
-                        <a class="dropdown-item" href="#">Test 2</a>
-                        <a class="dropdown-item" href="#">Test 3</a>
-                        <a class="dropdown-item" href="#">Test 4</a>
+                        {% for article in articles %}
+                        <a class="dropdown-item" href="{{ path('article_show', {'id': article.id}) }}">{{ article.nom }}</a>
+                        {% endfor %}
                     </div>
                 </div>
                 <a class="item" href="{{ path('magasins') }}">Trouver des magasins</a>
@@ -200,7 +199,7 @@
             }
             autoSize() {
                 this.btnOpenNav.addEventListener("click", () => {
-                    $( "[aria-labelledby='" + $(this.btnOpenNav).attr('autoSize') + "']" ).css( "width", $( "#menu-1" ).width()+24 );
+                    $( "[aria-labelledby='" + $(this.btnOpenNav).attr('autoSize') + "']" ).css( "min-width", $( "#menu-1" ).width()+24 );
                 });
             }
         }

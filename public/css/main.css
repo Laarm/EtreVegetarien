@@ -374,6 +374,12 @@ footer .bottom .container p a {
 *
 */
 
+.cds {
+    color: #58D68D
+}
+.gris {
+    color: #4B5157
+}
 .shadow-1 {
     -webkit-box-shadow: 0 5px 40px -20px rgba(0,0,0,.75);
     -moz-box-shadow: 0 5px 40px -20px rgba(0,0,0,.75);
@@ -434,7 +440,6 @@ footer .bottom .container p a {
         height: 45px;
         background-color: #FFF;
         width: 100vw;
-        height: 45px;
         top: 0;
         position: fixed;
     }

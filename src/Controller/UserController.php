@@ -10,14 +10,16 @@ use App\Repository\UserRepository;
 use App\Repository\ProduitRepository;
 use App\Repository\RepasRepository;
 use App\Repository\RestaurantRepository;
+use App\Repository\ArticleRepository;
 
 class UserController extends AbstractController
 {
     /**
      * @Route("/user/{id}", name="user")
      */
-    public function index(int $id, EntityManagerInterface $entityManager, UserRepository $repo, ProduitRepository $produitrepo, RepasRepository $repasrepo, RestaurantRepository $restaurantrepo): Response
+    public function index(int $id, EntityManagerInterface $entityManager, UserRepository $repo, ProduitRepository $produitrepo, RepasRepository $repasrepo, RestaurantRepository $restaurantrepo, ArticleRepository $articlerepo): Response
     {
+        $articles = $articlerepo->findBy(array(), null, "5", null);
         $user = $repo->find($id);
         $produit = $produitrepo->findAll();
         $repas = $repasrepo->findAll();
@@ -27,6 +29,7 @@ class UserController extends AbstractController
             'produits' => $produit,
             'repas' => $repas,
             'restaurants' => $restaurant,
+            'articles' => $articles,
         ]);
     }
 }

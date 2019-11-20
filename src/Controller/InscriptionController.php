@@ -10,16 +10,19 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\Repository\UserRepository;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use App\Repository\ArticleRepository;
 
 class InscriptionController extends AbstractController
 {
     /**
      * @Route("/inscription", name="inscription")
      */
-    public function index()
+    public function index(ArticleRepository $repo)
     {
+        $articles = $repo->findBy(array(), null, "5", null);
         return $this->render('inscription.html.twig', [
             'user_first_name' => "test",
+            'articles' => $articles,
         ]);
     }
     public function inscriptionAction(ValidatorInterface $validator, EntityManagerInterface $entityManager, UserRepository $repo, UserPasswordEncoderInterface $passwordEncoder): Response

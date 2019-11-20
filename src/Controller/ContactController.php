@@ -6,16 +6,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Contact;
+use App\Repository\ArticleRepository;
 
 class ContactController extends AbstractController
 {
     /**
      * @Route("/contact", name="contact")
      */
-    public function index()
+    public function index(ArticleRepository $repo)
     {
+        $articles = $repo->findBy(array(), null, "5", null);
         return $this->render('contact/index.html.twig', [
             'controller_name' => 'ContactController',
+            'articles' => $articles,
         ]);
     }
 

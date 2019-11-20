@@ -10,7 +10,6 @@ class IndexController extends AbstractController
 {
     public function index(ArticleRepository $repo)
     {
-
         $articles = $repo->findBy(array(), null, "4", null);
 
         return $this->render('index.html.twig', [
