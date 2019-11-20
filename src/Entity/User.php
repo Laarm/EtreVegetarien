@@ -73,6 +73,11 @@ class User
      */
     private $twitter;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $preferenceDepuis;
+
     public function __construct()
     {
         $this->magasinAvis = new ArrayCollection();
@@ -250,6 +255,18 @@ class User
     public function setTwitter(?string $twitter): self
     {
         $this->twitter = $twitter;
+
+        return $this;
+    }
+
+    public function getPreferenceDepuis(): ?\DateTimeInterface
+    {
+        return $this->preferenceDepuis;
+    }
+
+    public function setPreferenceDepuis(?\DateTimeInterface $preferenceDepuis): self
+    {
+        $this->preferenceDepuis = $preferenceDepuis;
 
         return $this;
     }
