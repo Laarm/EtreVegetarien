@@ -12,4 +12,8 @@ class ConnexionController extends AbstractController
             'user_first_name' => "test",
         ]);
     }
+
+    public function logout() {
+        
+    }
 }

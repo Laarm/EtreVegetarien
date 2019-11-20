@@ -79,6 +79,11 @@ class User implements UserInterface
      */
     private $preferenceDepuis;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $role;
+
     public function __construct()
     {
         $this->magasinAvis = new ArrayCollection();
@@ -285,5 +290,17 @@ class User implements UserInterface
     public function getRoles()
     {
         return ['ROLE_USER'];
+    }
+
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    public function setRole(?string $role): self
+    {
+        $this->role = $role;
+
+        return $this;
     }
 }

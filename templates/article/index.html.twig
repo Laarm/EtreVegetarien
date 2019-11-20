@@ -1,17 +1,57 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ArticleController!{% endblock %}
+{% block title %}{{ article.nom }} - Être Végétarien{% endblock %}
 
 {% block body %}
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+#article .article_content {
+    width: 66%;
+    padding-top: 50px
+}
+#article .article_content img {
+    max-width: 100%
+}
+@media(max-width: 991px) {
+    #article .sidebar {
+        width: 100%
+    }
+    #article {
+        flex-direction: column;
+    }
+    #article .article_content {
+        width: 100%;
+        margin: auto;
+        flex-direction: row;
+        justify-content: space-between
+    }
+    #article .article_content img {
+        max-width: 100%
+    }
+    #article .sidebar {
+        width: 100%
+    }
+}
 </style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ article.nom }}! ✅</h1>
-    <img src="{{ article.image }}" alt="" />
-    {{ article.contenu | raw }}
-    {{ article.createdAt | date('d/m/Y') }} à {{ article.createdAt | date('H:i') }}
-</div>
+<section id="article" class="container flex">
+    <div class="article_content">
+        <h1 class="text-center">{{article.nom}}</h1>
+        <p>{{donnee.contenu|raw}}</p>
+        <p><span class="cds">Chapitre {{article.categorie}}</span> - Posté le {{ donnee.createdAt|date("d/m/Y") }} à {{ donnee.createdAt|date("H:i:s") }}</p>
+    </div>
+    <div class="sidebar">
+        <h1 class="gris">Derniers articles</h1>
+        <div class="content">
+        {% for donnee in articles %}
+        <div class="article">
+            <a href="/article/{{ donnee.id }}">
+                <h1 class="cds">Chapitre {{ donnee.categorie }} <span>- {{ donnee.createdAt|date("d/m/Y") }} à {{ donnee.createdAt|date("H:i:s") }}</span></h1>
+                <h2 class="gris">{{ donnee.nom }}, {{ reducContent(donnee.contenu, 30) }}...</h2>
+            </a>
+        </div>
+        {% else %}
+        <em>Aucun article</em>
+        {% endfor %}
+        </div>
+    </div>
+</section>
 {% endblock %}

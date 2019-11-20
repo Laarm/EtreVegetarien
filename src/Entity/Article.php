@@ -43,6 +43,11 @@ class Article
      */
     private $articleCommentaires;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $categorie;
+
     public function __construct()
     {
         $this->articleCommentaires = new ArrayCollection();
@@ -128,6 +133,18 @@ class Article
                 $articleCommentaire->setArticle(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategorie(): ?string
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(?string $categorie): self
+    {
+        $this->categorie = $categorie;
 
         return $this;
     }

@@ -22,12 +22,14 @@ class ArticleController extends AbstractController
     /**
      * @Route("/article/{id}", name="article_show")
      */
-    public function show(Article $article)
+    public function show(Article $article, ArticleRepository $repo)
     {
+        $articles = $repo->findBy(array(), null, "5", null);
 
         return $this->render('article/index.html.twig', [
             'controller_name' => 'ArticleController',
             'article' => $article,
+            'articles' => $articles,
         ]);
     }
 }

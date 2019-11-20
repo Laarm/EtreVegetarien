@@ -46,3 +46,6 @@ blog:
 motDePasseOublie:
     path: /motdepasseoublie
     controller: App\Controller\MotDePasseOublieController::index
+deconnexion:
+    path: /deconnexion
+    controller: App\Controller\ConnexionController::logout
