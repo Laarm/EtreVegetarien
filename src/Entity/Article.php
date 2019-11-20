@@ -39,7 +39,7 @@ class Article
     private $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ArticleCommentaire", mappedBy="article")
+     * @ORM\OneToMany(targetEntity="App\Entity\ArticleCommentaire", mappedBy="article", orphanRemoval=true)
      */
     private $articleCommentaires;
 

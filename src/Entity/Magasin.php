@@ -49,7 +49,7 @@ class Magasin
     private $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\MagasinAvis", mappedBy="magasin")
+     * @ORM\OneToMany(targetEntity="App\Entity\MagasinAvis", mappedBy="magasin", orphanRemoval=true)
      */
     private $magasinAvis;
 

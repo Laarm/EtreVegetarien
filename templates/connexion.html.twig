@@ -1,5 +1,34 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
+<section id="connexion" class="loginOrUp container paddingSeperateur">
+    <form action="{{ path('connexion') }}" method="POST">
+        <div class="shadow-1 rond-2 p-4">
+            <div class="top">
+                <h1>
+                    Connexion
+                </h1>
+            </div>
+            <div class="middle">
+                <div id="resultat"></div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" class="form-control" id="email" name="_username" placeholder="Votre e-mail">
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" class="form-control" id="password" name="_password" placeholder="Votre mot de passe">
+                </div>
+            </div>
+            <div class="bottom flex flex-between">
+                <div class="left">
+                    <button id="btnConnexion" type="submit" class="btn btn-primary mr-1">Se connecter</button> - <a href="{{ path('inscription') }}">S'inscrire</a>
+                </div>
+                <div class="right mtb-auto">
+                    <a href="{{ path('motDePasseOublie') }}" class="motDePasseOublie"><i class="fad fa-user-secret"></i> Mot de passe oublié</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
 {% endblock %}
