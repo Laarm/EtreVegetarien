@@ -18,7 +18,7 @@ class ArticleCommentaire
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="magasinAvis")
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $postedBy;
 
@@ -34,7 +34,7 @@ class ArticleCommentaire
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\article", inversedBy="articleCommentaires")
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $article;
 

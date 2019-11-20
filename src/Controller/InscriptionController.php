@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\Repository\UserRepository;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class InscriptionController extends AbstractController
 {
@@ -21,7 +22,7 @@ class InscriptionController extends AbstractController
             'user_first_name' => "test",
         ]);
     }
-    public function inscriptionAction(ValidatorInterface $validator, EntityManagerInterface $entityManager, UserRepository $repo): Response
+    public function inscriptionAction(ValidatorInterface $validator, EntityManagerInterface $entityManager, UserRepository $repo, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         if(
             strlen($_POST['username']) > 5
@@ -44,8 +45,9 @@ class InscriptionController extends AbstractController
                 'email' => $email,
             ]);
             if($user==null){
-                $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                 $sqlUser = new User();
+                $password = $passwordEncoder->encodePassword($sqlUser, $_POST['password']);
+                // $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                 $sqlUser->setUsername($username)
                         ->setPassword($password)
                         ->setEmail($email)

@@ -1,29 +1,29 @@
-#inscription #resultat .content {
+.loginOrUp #resultat .content {
     height: 40px;
     border-left: #58D68D 7px solid;
     background-color: #fafafa;
     margin-bottom: 11px;
 }
-#inscription #resultat .content p {
+.loginOrUp #resultat .content p {
     line-height: 40px;
     margin-left: 10px;
 }
-#inscription #resultat .content.red {
+.loginOrUp #resultat .content.red {
     border-left: #ff3300 7px solid
 }
-#inscription .bottom .left button {
+.loginOrUp .bottom .left button {
     border-radius: 0;
 }
-#inscription .bottom .left a {
+.loginOrUp .bottom .left a {
     color: #000
 }
-#inscription .bottom .right button {
+.loginOrUp .bottom .right button {
     border: none;
     background-color: transparent;
     font-weight: bolder;
     height: 38px
 }
-#inscription .bottom .right button span {
+.loginOrUp .bottom .right button span {
     background-color: #58D68D;
     color: #FFF;
     padding: 3px 5px

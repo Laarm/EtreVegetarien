@@ -18,13 +18,13 @@ class MagasinAvis
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Magasin", inversedBy="magasinAvis")
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $magasin;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="magasinAvis")
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $postedBy;
 

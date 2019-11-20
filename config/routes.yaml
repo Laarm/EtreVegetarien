@@ -7,6 +7,9 @@ index:
 connexion:
     path: /connexion
     controller: App\Controller\ConnexionController::index
+connexionAction:
+    path: /ajax/connexionAction
+    controller: App\Controller\ConnexionController::connexionAction
 inscription:
     path: /inscription
     controller: App\Controller\InscriptionController::index
@@ -40,3 +43,6 @@ devenirVegetarien:
 blog:
     path: /blog
     controller: App\Controller\BlogController::index
+motDePasseOublie:
+    path: /motdepasseoublie
+    controller: App\Controller\MotDePasseOublieController::index

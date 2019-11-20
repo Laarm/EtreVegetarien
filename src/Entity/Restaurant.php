@@ -49,7 +49,7 @@ class Restaurant
     private $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\RestaurantAvis", mappedBy="restaurant")
+     * @ORM\OneToMany(targetEntity="App\Entity\RestaurantAvis", mappedBy="restaurant", orphanRemoval=true)
      */
     private $restaurantAvis;
 
