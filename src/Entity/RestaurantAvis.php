@@ -18,11 +18,13 @@ class RestaurantAvis
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Restaurant", inversedBy="restaurantAvis")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $restaurant;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="restaurantAvis")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $postedBy;
 
