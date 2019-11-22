@@ -20,9 +20,16 @@ class AdminController extends AbstractController
             'articles' => $articles,
         ]);
     }
-    public function gestionArticle(ArticleRepository $repo)
+    public function gestionArticles(ArticleRepository $repo)
     {
-        $articles = $repo->findBy(array(), null, "5", null);
+        if(isset($_GET['view'])){
+            $view = $_GET['view'];
+            $maxView = $_GET['maxView'];
+        }else{
+            $view = null;
+            $maxView = 100;
+        }
+        $articles = $repo->findBy(array(), null, $maxView, $view);
 
         return $this->render('admin/gestionArticles.html.twig', [
             'controller_name' => 'AdminController',

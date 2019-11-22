@@ -428,6 +428,9 @@ footer .bottom .container p a {
 .flex.column {
     flex-direction: column;
 }
+.cursor-pointer {
+    cursor: pointer;
+}
 
 /*
 *

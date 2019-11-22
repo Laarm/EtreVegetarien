@@ -52,12 +52,12 @@ deconnexion:
 admin:
     path: /admin
     controller: App\Controller\AdminController::index
-adminGestionArticle:
-    path: /admin/GestionArticle
-    controller: App\Controller\AdminController::gestionArticle
-adminGestionArticleCommentaires:
-    path: /admin/GestionArticleCommentaires
-    controller: App\Controller\AdminController::gestionArticleCommentaires
+adminGestionArticles:
+    path: /admin/GestionArticles
+    controller: App\Controller\AdminController::gestionArticles
+adminGestionArticlesCommentaires:
+    path: /admin/GestionArticlesCommentaires
+    controller: App\Controller\AdminController::gestionArticlesCommentaires
 adminGestionMagasins:
     path: /admin/GestionMagasins
     controller: App\Controller\AdminController::gestionMagasins
