@@ -1,12 +1,47 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %}Gestion des contacts - Être Végétarien{% endblock %}
 
 {% block body %}
 <section id="panel" class="flex">
-    <div class="margin-auto">
-        <h1>Bienvenue <strong>{{ app.user.username }}</strong> !</h1>
-        <h3>Veuillez selectionner un menu pour commencer :).</h3>
+    <div class="w-100">
+        <div paginationView="contact">
+            <table class="table table-hover contentPagination">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Sujet</th>
+                        <th scope="col">Message</th>
+                        <th scope="col">Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for contact in contacts %}
+                    <tr paginationName="contact" paginationId="{{ loop.index }}">
+                        <th scope="row">{{ contact.id }}</th>
+                        <td>{{ contact.sujet }}</td>
+                        <td>{{ contact.message }}</td>
+                        <td class="btnOption">
+                            <a target="_BLANK" href="{{ path('article_show', {'id': contact.id}) }}"><i class="fad fa-eye"></i></a>
+                            <a href="" class="blue"><i class="fad fa-edit"></i></a>
+                            <a class="red"><i class="fad fa-times"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div aria-label="Page navigation example">
+            <ul paginationBtn="contact" class="pagination justify-content-end">
+                <div class="btnPagination flex mr-4">
+                </div>
+            </ul>
+        </div>
     </div>
 </section>
+<script>
+addEventListener("load", () => {
+    new pagination("contact", 7, 10, "table-row");
+})
+</script>
 {% endblock %}

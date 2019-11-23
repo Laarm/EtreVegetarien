@@ -73,4 +73,7 @@ nav .nav-item .dropdown-item:hover {
         font-size: 25px;
         margin-top: 4px
     }
+    #panel {
+        margin-top: 56px
+    }
 }

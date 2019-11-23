@@ -5,12 +5,18 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\ArticleRepository;
+use App\Repository\ArticleCommentaireRepository;
+use App\Repository\MagasinRepository;
+use App\Repository\MagasinAvisRepository;
+use App\Repository\RestaurantRepository;
+use App\Repository\RestaurantAvisRepository;
+use App\Repository\RepasRepository;
+use App\Repository\ProduitRepository;
+use App\Repository\ContactRepository;
+use App\Repository\UserRepository;
 
 class AdminController extends AbstractController
 {
-    /**
-     * @Route("/admin", name="admin")
-     */
     public function index(ArticleRepository $repo)
     {
         $articles = $repo->findBy(array(), null, "5", null);
@@ -32,89 +38,141 @@ class AdminController extends AbstractController
         $articles = $repo->findBy(array(), null, $maxView, $view);
 
         return $this->render('admin/gestionArticles.html.twig', [
-            'controller_name' => 'AdminController',
             'articles' => $articles,
         ]);
     }
-    public function gestionArticlesCommentaires(ArticleRepository $repo)
+    public function gestionArticlesCommentaires(ArticleCommentaireRepository $articleCommentaireRepo)
     {
-        $articles = $repo->findBy(array(), null, "5", null);
-
+        if(isset($_GET['view'])){
+            $view = $_GET['view'];
+            $maxView = $_GET['maxView'];
+        }else{
+            $view = null;
+            $maxView = 100;
+        }
+        $articleCommentaire = $articleCommentaireRepo->findBy(array(), null, $maxView, $view);
         return $this->render('admin/gestionArticlesCommentaires.html.twig', [
-            'controller_name' => 'AdminController',
-            'articles' => $articles,
+            'article_commentaire' => $articleCommentaire,
         ]);
     }
-    public function gestionMagasins(ArticleRepository $repo)
+    public function gestionMagasins(MagasinRepository $gestionMagasinsRepo)
     {
-        $articles = $repo->findBy(array(), null, "5", null);
+        if(isset($_GET['view'])){
+            $view = $_GET['view'];
+            $maxView = $_GET['maxView'];
+        }else{
+            $view = null;
+            $maxView = 100;
+        }
+        $magasins = $gestionMagasinsRepo->findBy(array(), null, $maxView, $view);
 
         return $this->render('admin/gestionMagasins.html.twig', [
-            'controller_name' => 'AdminController',
-            'articles' => $articles,
+            'magasins' => $magasins,
         ]);
     }
-    public function gestionMagasinsAvis(ArticleRepository $repo)
+    public function gestionMagasinsAvis(MagasinAvisRepository $gestionMagasinsAvisRepo)
     {
-        $articles = $repo->findBy(array(), null, "5", null);
+        if(isset($_GET['view'])){
+            $view = $_GET['view'];
+            $maxView = $_GET['maxView'];
+        }else{
+            $view = null;
+            $maxView = 100;
+        }
+        $magasinsAvis = $gestionMagasinsAvisRepo->findBy(array(), null, $maxView, $view);
 
         return $this->render('admin/gestionMagasinsAvis.html.twig', [
-            'controller_name' => 'AdminController',
-            'articles' => $articles,
+            'magasins_avis' => $magasinsAvis,
         ]);
     }
-    public function gestionRestaurants(ArticleRepository $repo)
+    public function gestionRestaurants(RestaurantRepository $gestionRestaurantRepo)
     {
-        $articles = $repo->findBy(array(), null, "5", null);
+        if(isset($_GET['view'])){
+            $view = $_GET['view'];
+            $maxView = $_GET['maxView'];
+        }else{
+            $view = null;
+            $maxView = 100;
+        }
+        $restaurants = $gestionRestaurantRepo->findBy(array(), null, $maxView, $view);
 
         return $this->render('admin/gestionRestaurants.html.twig', [
-            'controller_name' => 'AdminController',
-            'articles' => $articles,
+            'restaurants' => $restaurants,
         ]);
     }
-    public function gestionRestaurantsAvis(ArticleRepository $repo)
+    public function gestionRestaurantsAvis(RestaurantAvisRepository $gestionRestaurantAvisRepo)
     {
-        $articles = $repo->findBy(array(), null, "5", null);
+        if(isset($_GET['view'])){
+            $view = $_GET['view'];
+            $maxView = $_GET['maxView'];
+        }else{
+            $view = null;
+            $maxView = 100;
+        }
+        $magasinsAvis = $gestionRestaurantAvisRepo->findBy(array(), null, $maxView, $view);
 
         return $this->render('admin/gestionRestaurantsAvis.html.twig', [
-            'controller_name' => 'AdminController',
-            'articles' => $articles,
+            'restaurants_avis' => $magasinsAvis,
         ]);
     }
-    public function produits(ArticleRepository $repo)
+    public function produits(ProduitRepository $gestionProduitRepo)
     {
-        $articles = $repo->findBy(array(), null, "5", null);
+        if(isset($_GET['view'])){
+            $view = $_GET['view'];
+            $maxView = $_GET['maxView'];
+        }else{
+            $view = null;
+            $maxView = 100;
+        }
+        $produits = $gestionProduitRepo->findBy(array(), null, $maxView, $view);
 
         return $this->render('admin/produits.html.twig', [
-            'controller_name' => 'AdminController',
-            'articles' => $articles,
+            'produits' => $produits,
         ]);
     }
-    public function utilisateurs(ArticleRepository $repo)
+    public function utilisateurs(UserRepository $gestionUserRepo)
     {
-        $articles = $repo->findBy(array(), null, "5", null);
+        if(isset($_GET['view'])){
+            $view = $_GET['view'];
+            $maxView = $_GET['maxView'];
+        }else{
+            $view = null;
+            $maxView = 100;
+        }
+        $utilisateurs = $gestionUserRepo->findBy(array(), null, $maxView, $view);
 
         return $this->render('admin/utilisateurs.html.twig', [
-            'controller_name' => 'AdminController',
-            'articles' => $articles,
+            'utilisateurs' => $utilisateurs,
         ]);
     }
-    public function repas(ArticleRepository $repo)
+    public function repas(RepasRepository $gestionRepasRepo)
     {
-        $articles = $repo->findBy(array(), null, "5", null);
+        if(isset($_GET['view'])){
+            $view = $_GET['view'];
+            $maxView = $_GET['maxView'];
+        }else{
+            $view = null;
+            $maxView = 100;
+        }
+        $repas = $gestionRepasRepo->findBy(array(), null, $maxView, $view);
 
         return $this->render('admin/repas.html.twig', [
-            'controller_name' => 'AdminController',
-            'articles' => $articles,
+            'repas' => $repas,
         ]);
     }
-    public function contacts(ArticleRepository $repo)
+    public function contacts(ContactRepository $gestioncontactRepo)
     {
-        $articles = $repo->findBy(array(), null, "5", null);
+        if(isset($_GET['view'])){
+            $view = $_GET['view'];
+            $maxView = $_GET['maxView'];
+        }else{
+            $view = null;
+            $maxView = 100;
+        }
+        $contacts = $gestioncontactRepo->findBy(array(), null, $maxView, $view);
 
         return $this->render('admin/contacts.html.twig', [
-            'controller_name' => 'AdminController',
-            'articles' => $articles,
+            'contacts' => $contacts,
         ]);
     }
 }
