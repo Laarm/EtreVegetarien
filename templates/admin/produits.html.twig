@@ -26,7 +26,8 @@
                                     class="fad fa-eye"></i></a>
                             <a href="{{ path('admin_edit_produit', {'id': produit.id}) }}" class="blue"><i
                                     class="fad fa-edit"></i></a>
-                            <a class="red"><i class="fad fa-times"></i></a>
+                            <a class="red cursor-pointer" value="{{ produit.id }}" data-toggle="modal"
+                                data-target="#deleteModal"><i class="fad fa-times"></i></a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -45,9 +46,53 @@
         </div>
     </div>
 </section>
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Êtes-vous sûr de supprimer cet article ?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                <button deleteProduit="0" type="button" class="btn btn-primary">Oui</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     addEventListener("load", () => {
         new pagination("produit", 7, 10, "table-row");
     })
+
+    $(document).on('click', '[data-target="#deleteModal"]', function (e) {
+        $('[deleteProduit]').attr("deleteProduit", $(this).attr('value'))
+    });
+
+    $(document).on('click', '[deleteProduit]', function (e) {
+        id = $(this).attr('deleteProduit')
+        e.preventDefault();
+        $.post(
+            "{{ path('admin_delete_produit') }}",
+            {
+                id: id
+            },
+            function (data) {
+                if (data.code == '200') {
+                    location.reload();
+                }
+                else {
+                    console.log(data)
+                }
+            },
+            'json'
+        );
+    });
 </script>
 {% endblock %}

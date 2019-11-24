@@ -9,22 +9,10 @@ use App\Entity\Article;
 use App\Entity\Magasin;
 use App\Entity\Restaurant;
 use App\Entity\Produit;
-use App\Entity\User;
 use App\Entity\Repas;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use App\Repository\ArticleRepository;
-use App\Repository\ArticleCommentaireRepository;
-use App\Repository\MagasinRepository;
-use App\Repository\MagasinAvisRepository;
-use App\Repository\RestaurantRepository;
-use App\Repository\RestaurantAvisRepository;
-use App\Repository\RepasRepository;
-use App\Repository\ProduitRepository;
-use App\Repository\ContactRepository;
-use App\Repository\UserRepository;
 
 class AdminEditController extends AbstractController
 {
@@ -48,6 +36,27 @@ class AdminEditController extends AbstractController
         return $this->render('admin/edit/article.html.twig', [
             'article' => $article,
         ]);
+    }
+
+    /**
+     * @Route("/admin/deleteArticle", name="admin_delete_article")
+     */
+    public function deleteArticle(ValidatorInterface $validator, EntityManagerInterface $entityManager): Response
+    {
+        if (isset($_POST['id'])) {
+            $_POST['id'] = htmlspecialchars($_POST['id']);
+            $article = $entityManager->getRepository(Article::class)->find($_POST['id']);
+            $entityManager->remove($article);
+            $entityManager->flush();
+            $errors = $validator->validate($article);
+            if (count($errors) == 0) {
+                return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer cet article", 'id' => $_POST['id']], 200);
+            } else {
+                return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+            }
+        } else {
+            return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression de l\'article...'], 200);
+        }
     }
 
     /**
@@ -88,13 +97,13 @@ class AdminEditController extends AbstractController
                 if (count($errors) == 0) {
                     return $this->json(['code' => 200, 'message' => $success, 'articleId' => $id], 200);
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 400);
+                    return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
                 }
             } else {
                 return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
             }
         } else {
-            return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour de l\'article...'], 400);
+            return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour de l\'article...'], 200);
         }
     }
 
@@ -114,6 +123,27 @@ class AdminEditController extends AbstractController
     public function newMagasin()
     {
         return $this->render('admin/edit/newMagasin.html.twig');
+    }
+
+    /**
+     * @Route("/admin/deleteMagasin", name="admin_delete_magasin")
+     */
+    public function deleteMagasin(ValidatorInterface $validator, EntityManagerInterface $entityManager): Response
+    {
+        if (isset($_POST['id'])) {
+            $_POST['id'] = htmlspecialchars($_POST['id']);
+            $article = $entityManager->getRepository(Magasin::class)->find($_POST['id']);
+            $entityManager->remove($article);
+            $entityManager->flush();
+            $errors = $validator->validate($article);
+            if (count($errors) == 0) {
+                return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce magasin", 'id' => $_POST['id']], 200);
+            } else {
+                return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+            }
+        } else {
+            return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du magasin...'], 200);
+        }
     }
 
     /**
@@ -186,6 +216,27 @@ class AdminEditController extends AbstractController
     }
 
     /**
+     * @Route("/admin/deleteRestaurant", name="admin_delete_restaurant")
+     */
+    public function deleteRestaurant(ValidatorInterface $validator, EntityManagerInterface $entityManager): Response
+    {
+        if (isset($_POST['id'])) {
+            $_POST['id'] = htmlspecialchars($_POST['id']);
+            $article = $entityManager->getRepository(Restaurant::class)->find($_POST['id']);
+            $entityManager->remove($article);
+            $entityManager->flush();
+            $errors = $validator->validate($article);
+            if (count($errors) == 0) {
+                return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce restaurant", 'id' => $_POST['id']], 200);
+            } else {
+                return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+            }
+        } else {
+            return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du restaurant...'], 200);
+        }
+    }
+
+    /**
      * @Route("/admin/saveRestaurant", name="admin_save_restaurant")
      */
     public function saveRestaurant(ValidatorInterface $validator, EntityManagerInterface $entityManager): Response
@@ -255,6 +306,27 @@ class AdminEditController extends AbstractController
     }
 
     /**
+     * @Route("/admin/deleteProduit", name="admin_delete_produit")
+     */
+    public function deleteProduit(ValidatorInterface $validator, EntityManagerInterface $entityManager): Response
+    {
+        if (isset($_POST['id'])) {
+            $_POST['id'] = htmlspecialchars($_POST['id']);
+            $article = $entityManager->getRepository(Produit::class)->find($_POST['id']);
+            $entityManager->remove($article);
+            $entityManager->flush();
+            $errors = $validator->validate($article);
+            if (count($errors) == 0) {
+                return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce produit", 'id' => $_POST['id']], 200);
+            } else {
+                return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+            }
+        } else {
+            return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du produit...'], 200);
+        }
+    }
+
+    /**
      * @Route("/admin/saveProduit", name="admin_save_produit")
      */
     public function saveProduit(ValidatorInterface $validator, EntityManagerInterface $entityManager): Response
@@ -316,6 +388,27 @@ class AdminEditController extends AbstractController
     public function newRepas()
     {
         return $this->render('admin/edit/newRepas.html.twig');
+    }
+
+    /**
+     * @Route("/admin/deleteRepas", name="admin_delete_repas")
+     */
+    public function deleteRepas(ValidatorInterface $validator, EntityManagerInterface $entityManager): Response
+    {
+        if (isset($_POST['id'])) {
+            $_POST['id'] = htmlspecialchars($_POST['id']);
+            $article = $entityManager->getRepository(Repas::class)->find($_POST['id']);
+            $entityManager->remove($article);
+            $entityManager->flush();
+            $errors = $validator->validate($article);
+            if (count($errors) == 0) {
+                return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce repas", 'id' => $_POST['id']], 200);
+            } else {
+                return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+            }
+        } else {
+            return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du repas...'], 200);
+        }
     }
 
     /**
@@ -383,12 +476,12 @@ class AdminEditController extends AbstractController
             $uploadOk = 0;
         }
         if ($uploadOk == 0) {
-            return $this->json(['code' => 400, 'message' => 'L\'extension n\'est pas valide !'], 400);
+            return $this->json(['code' => 400, 'message' => 'L\'extension n\'est pas valide !'], 200);
         } else {
             if (move_uploaded_file($_FILES['file']['tmp_name'], $location)) {
                 return $this->json(['code' => 200, 'message' => 'Vous avez bien envoyer l\'image !', 'location' => $locationRenvoie], 200);
             } else {
-                return $this->json(['code' => 400, 'message' => 'Erreur'], 400);
+                return $this->json(['code' => 400, 'message' => 'Erreur'], 200);
             }
         }
     }

@@ -126,3 +126,7 @@ nav .nav-item .dropdown-item:hover {
 .justify-flex-end {
     justify-content: flex-end
 }
+
+.cursor-pointer {
+    cursor: pointer;
+}
