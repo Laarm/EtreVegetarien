@@ -130,3 +130,19 @@ nav .nav-item .dropdown-item:hover {
 .cursor-pointer {
     cursor: pointer;
 }
+
+td.btnOption {
+    justify-content: flex-end;
+}
+
+@media(max-width: 991px) {
+    .m-text-center {
+        text-align: center;
+    }
+}
+
+@media(max-width: 560px) {
+    [paginationview] {
+        zoom: 0.5
+    }
+}

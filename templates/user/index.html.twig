@@ -2,80 +2,12 @@
 
 {% block title %}{{user.username}} - Être végétarien!{% endblock %}
 
+{% block stylesheets %}
+<link href="{{ asset('/css/user.css') }}" rel="stylesheet" />
+{% endblock %}
+
 {% block body %}
-<style>
-main {
-    background-color: #f2f2f2;
-}
-#profil .container.flex {
-    justify-content: space-between;
-    background-color: #FFF;
-}
-#profil .container .right .avatar {
-    margin-bottom: -200px
-}
-#profil .container .right .avatar img {
-    height: 200px;
-    width: 200px;
-    border-radius: 100%;
-    -moz-border-radius: 100%;
-    -webkit-border-radius: 100%;
-    -webkit-box-shadow: 0px 0px 78px -20px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 0px 78px -20px rgba(0,0,0,0.75);
-    box-shadow: 0px 0px 78px -20px rgba(0,0,0,0.75);
-    border: #58D68D 10px solid
-}
-#profil .container .right .badge {
-    height: 200px;
-    width: 200px;
-}
-#profil .container .right .badge .flex {
-    margin-left: 1%;
-    margin-top: 73%;
-}
-#profil .container .right .badge div {
-    background-color: #58D68D;
-    border-radius: 100%;
-    -moz-border-radius: 100%;
-    -webkit-border-radius: 100%;
-    height: 50px;
-    width: 50px
-}
-#profil .container .right .badge div i {
-    font-size: 25px;
-    color: #FFF
-}
-#profil .container .left h1 {
-    font-weight: bolder;
-    font-size: 30px
-}
-#profil .container .left h2 {
-    font-size: 15px
-}
-#profil .container .left span {
-    font-size: 10px;
-    font-style: italic;
-    display: block;
-    margin-bottom: 12px
-}
-#profil .container .left #btnParametre {
-    border-radius: 0;
-}
-#timeline .container {
-    background-color: #FFF;
-}
-#timeline .container .top h1 {
-    font-weight: bolder;
-    font-size: 25px
-}
-#timeline .container .top h1 i {
-    color: #58D68D
-}
-#timeline .container .top p {
-    font-size: 13px
-}
-</style>
-<section id="profil" class="paddingSeperateur">
+<section id="profil" class="container paddingSeperateur">
     <div class="container flex rond-2 p-4 shadow-1">
         <div class="left mtb-auto">
             <h1>{{user.username}}</h1>
@@ -86,15 +18,19 @@ main {
             <h2>Membre</h2>
             <span>(Depuis hier)</span>
             {% endif %}
-            <button id="btnParametre" type="button" class="btn btn-primary mr-1"><i class="fad fa-cog"></i> Paramètre</button>
+            <button id="btnParametre" type="button" class="btn btn-primary mr-1"><i class="fad fa-cog"></i>
+                Paramètre</button>
         </div>
         <div class="right">
-            <div class="avatar flex"><img class="mtb-auto" src="https://arnaudjacques.ovh/img/photo.png" alt="Avatar de {{user.username}}" /></div>
-            <div class="badge"><div class="flex"><i class="fas fa-carrot margin-auto"></i></div></div>
+            <div class="avatar flex"><img class="mtb-auto" src="https://arnaudjacques.ovh/img/photo.png"
+                    alt="Avatar de {{user.username}}" /></div>
+            <div class="badge">
+                <div class="flex"><i class="fas fa-carrot margin-auto"></i></div>
+            </div>
         </div>
     </div>
 </section>
-<section id="timeline" class="paddingSeperateur">
+<section id="timeline" class="container paddingSeperateur">
     <div class="container flex flex-column rond-2 p-4 shadow-1">
         <div class="top">
             <h1><i class="fad fa-user"></i> Biographie</h1>
@@ -110,116 +46,35 @@ main {
                 Duis maximus ac risus id dapibus.
                 Donec quis nibh sed justo vehicula imperdiet.</p>
         </div>
-<style>
-#timeline .container .bottom {
-    padding: 25px 0 0 0
-}
-#timeline .container .bottom .row .col-5 .nav a.nav-link {
-    text-align: center;
-    color: #000;
-    width: 47%;
-    margin-bottom: 6%;
-    -webkit-box-shadow: 0px 0px 48px -20px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 0px 48px -20px rgba(0,0,0,0.75);
-    box-shadow: 0px 0px 48px -20px rgba(0,0,0,0.75);
-    height: 150px;
-    transition-duration: .3s;
-    border-bottom: #58D68D 0 solid;
-}
-#timeline .container .bottom .row .col-5 .nav a.nav-link.active {
-    background-color: transparent;
-    border-bottom: #58D68D 7px solid;
-    transition-duration: .1s;
-}
-#timeline .container .bottom .row .col-5 .nav a.nav-link:hover {
-    transform: scale(.95);
-}
-#timeline .container .bottom .row .col-5 .nav a.nav-link:focus {
-    transform: scale(.95);
-}
-#timeline .container .bottom .row .col-5 .nav a.nav-link span {
-    width: 100%;
-    display: block;
-    color: #58D68D;
-    text-align: center;
-}
-#timeline .container .bottom .col-7 .produit-list-design.active {
-    display: flex;
-    min-height: 322px;
-    overflow-x: scroll;
-    overflow-y: hidden;
-}
-#timeline .container .bottom .col-7 .produit-list-design .item {
-    min-width: calc(100vw / 4.5);
-    margin: auto 5%;
-    -webkit-box-shadow: 0px 0px 48px -20px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 0px 48px -20px rgba(0,0,0,0.75);
-    box-shadow: 0px 0px 48px -20px rgba(0,0,0,0.75);
-}
-#timeline .container .bottom .col-7 .produit-list-design .item .top {
-    transition-duration: .3s;
-    background-color: #58D68D;
-    display: flex;
-    padding: 30px
-}
-#timeline .container .bottom .col-7 .produit-list-design .item .top img {
-    width: 80%;
-    margin: auto;
-    transition-duration: .3s;
-}
-#timeline .container .bottom .col-7 .produit-list-design .item .bottom {
-    transition-duration: .3s;
-    background-color: #FFF;
-    text-align: center;
-    color: #000;
-    padding: 5px 10px;
-    height: 60px;
-    display: flex;
-}
-#timeline .container .bottom .col-7 .produit-list-design .item .bottom p {
-    margin: auto;
-    font-weight: bolder;
-}
-#timeline .container .bottom .col-7 .produit-list-design .item:hover .top {
-    transition-duration: .3s;
-    background-color: #FFF;
-}
-#timeline .container .bottom .col-7 .produit-list-design .item:hover .top img {
-    transition-duration: .3s;
-    transform: scale(0.9);
-}
-#timeline .container .bottom .col-7 .produit-list-design .item:hover .bottom {
-    transition-duration: .3s;
-    background-color: #58D68D;
-    height: 160px;
-    margin-top: -100px;
-}
-#timeline .container .bottom .col-7 .produit-list-design .item:hover .bottom p {
-    margin: auto auto 13px auto;
-}
-#timeline .container .bottom .col-7 #v-rs.active {
-    min-height: 322px;
-    width: 100%;
-    display: flex!important
-}
-#timeline .container .bottom .col-7 #v-rs i {
-    font-size: 30px;
-    color: #58D68D
-}
-</style>
         <div class="bottom">
             <div class="row">
                 <div class="col-5">
-                    <div class="nav flex nav-pills flex-between" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                        <a class="p-4 flex nav-link active" id="restaurantfav-tab" data-toggle="pill" href="#restaurantfav" role="tab" aria-controls="restaurantfav" aria-selected="true"><div class="margin-auto"><span><i class="fad fa-utensils"></i></span>Restaurant favoris</div></a>
-                        <a class="p-4 flex nav-link" id="repasfav-tab" data-toggle="pill" href="#repasfav" role="tab" aria-controls="repasfav" aria-selected="false"><div class="margin-auto"><span><i class="fad fa-hat-chef"></i></span>Repas favoris</div></a>
-                        <a class="p-4 flex nav-link" id="nourriturefav-tab" data-toggle="pill" href="#v-nourriturefav" role="tab" aria-controls="v-nourriturefav" aria-selected="false"><div class="margin-auto"><span><i class="fad fa-apple-crate"></i></span>Nourriture favoris</div></a>
-                        <a class="p-4 flex nav-link" id="rs-tab" data-toggle="pill" href="#v-rs" role="tab" aria-controls="v-rs" aria-selected="false"><div class="margin-auto"><span><i class="fad fa-globe"></i></span>Réseaux sociaux</div></a>
+                    <div class="nav flex nav-pills flex-between" id="v-pills-tab" role="tablist"
+                        aria-orientation="vertical">
+                        <a class="p-4 flex nav-link active" id="restaurantfav-tab" data-toggle="pill"
+                            href="#restaurantfav" role="tab" aria-controls="restaurantfav" aria-selected="true">
+                            <div class="margin-auto"><span><i class="fad fa-utensils"></i></span>Restaurant favoris
+                            </div>
+                        </a>
+                        <a class="p-4 flex nav-link" id="repasfav-tab" data-toggle="pill" href="#repasfav" role="tab"
+                            aria-controls="repasfav" aria-selected="false">
+                            <div class="margin-auto"><span><i class="fad fa-hat-chef"></i></span>Repas favoris</div>
+                        </a>
+                        <a class="p-4 flex nav-link" id="nourriturefav-tab" data-toggle="pill" href="#v-nourriturefav"
+                            role="tab" aria-controls="v-nourriturefav" aria-selected="false">
+                            <div class="margin-auto"><span><i class="fad fa-apple-crate"></i></span>Nourriture favoris
+                            </div>
+                        </a>
+                        <a class="p-4 flex nav-link" id="rs-tab" data-toggle="pill" href="#v-rs" role="tab"
+                            aria-controls="v-rs" aria-selected="false">
+                            <div class="margin-auto"><span><i class="fad fa-globe"></i></span>Réseaux sociaux</div>
+                        </a>
                     </div>
                 </div>
                 <div class="col-7">
                     <div class="tab-content" id="v-pills-tabContent">
-                        <div class="produit-list-design tab-pane fade show active" id="restaurantfav" role="tabpanel" aria-labelledby="restaurant-tab">
+                        <div class="produit-list-design tab-pane fade show active" id="restaurantfav" role="tabpanel"
+                            aria-labelledby="restaurant-tab">
                             {% for restaurant in restaurants %}
                             <div class="item">
                                 <div class="top">
@@ -231,7 +86,8 @@ main {
                             </div>
                             {% endfor %}
                         </div>
-                        <div class="produit-list-design tab-pane fade" id="repasfav" role="tabpanel" aria-labelledby="repasfav-tab">
+                        <div class="produit-list-design tab-pane fade" id="repasfav" role="tabpanel"
+                            aria-labelledby="repasfav-tab">
                             {% for repa in repas %}
                             <div class="item">
                                 <div class="top">
@@ -243,7 +99,8 @@ main {
                             </div>
                             {% endfor %}
                         </div>
-                        <div class="produit-list-design tab-pane fade" id="v-nourriturefav" role="tabpanel" aria-labelledby="v-nourriturefav-tab">
+                        <div class="produit-list-design tab-pane fade" id="v-nourriturefav" role="tabpanel"
+                            aria-labelledby="v-nourriturefav-tab">
                             {% for produit in produits %}
                             <div class="item">
                                 <div class="top">
