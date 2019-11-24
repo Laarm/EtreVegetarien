@@ -53,6 +53,11 @@ class Restaurant
      */
     private $restaurantAvis;
 
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $contenu;
+
     public function __construct()
     {
         $this->restaurantAvis = new ArrayCollection();
@@ -162,6 +167,18 @@ class Restaurant
                 $restaurantAvi->setRestaurant(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getContenu(): ?string
+    {
+        return $this->contenu;
+    }
+
+    public function setContenu(string $contenu): self
+    {
+        $this->contenu = $contenu;
 
         return $this;
     }

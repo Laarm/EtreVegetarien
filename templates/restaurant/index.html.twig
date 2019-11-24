@@ -81,6 +81,10 @@
         margin: auto auto 13px auto;
     }
 
+    a.item:hover {
+        text-decoration: none;
+    }
+
     @media(max-width: 991px) {
         #restaurants .produit-list-design .item {
             width: 90%;
@@ -101,14 +105,14 @@
     </div>
     <div class="produit-list-design flex flex-wrap flex-between">
         {% for restaurant in restaurants %}
-        <div class="item">
+        <a class="item" href="{{ path('restaurant_show', {'id': restaurant.id}) }}">
             <div class="top">
                 <img alt="{{ restaurant.nom }}" src="{{ restaurant.image }}" />
             </div>
             <div class="bottom">
                 <p>{{ restaurant.nom }}</p>
             </div>
-        </div>
+        </a>
         {% endfor %}
     </div>
 </section>

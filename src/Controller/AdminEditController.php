@@ -241,7 +241,7 @@ class AdminEditController extends AbstractController
      */
     public function saveRestaurant(ValidatorInterface $validator, EntityManagerInterface $entityManager): Response
     {
-        if (isset($_POST['nom']) && isset($_POST['ville']) && isset($_POST['restaurant_id'])) {
+        if (isset($_POST['nom']) && isset($_POST['ville']) && isset($_POST['restaurant_id']) && isset($_POST['contenu'])) {
             $_POST['nom'] = htmlspecialchars($_POST['nom']);
             $_POST['restaurant_id'] = htmlspecialchars($_POST['restaurant_id']);
             if (empty($_POST['image'])) {
@@ -256,24 +256,26 @@ class AdminEditController extends AbstractController
                     ->setLocation("null")
                     ->setAdresse($_POST['adresse'])
                     ->setVille($_POST['ville'])
+                    ->setContenu($_POST['contenu'])
                     ->setCreatedAt(new \DateTime());
                 $entityManager->persist($sqlRestaurant);
                 $entityManager->flush();
                 $errors = $validator->validate($sqlRestaurant);
                 $id = $sqlRestaurant->getId();
-                $success = "Le magasin à bien été créer !";
+                $success = "Le restaurant à bien été créer !";
             } else {
                 $restaurant = $entityManager->getRepository(Restaurant::class)->find($_POST['restaurant_id']);
                 $restaurant->setNom($_POST['nom'])
                     ->setImage($_POST['image'])
                     ->setAdresse($_POST['adresse'])
+                    ->setContenu($_POST['contenu'])
                     ->setVille($_POST['ville']);
                 $entityManager->flush();
                 $errors = $validator->validate($restaurant);
                 $id = $_POST['restaurant_id'];
                 $success = "Le restaurant à bien été mis à jour !";
             }
-            if (!empty($_POST['nom']) && !empty($_POST['restaurant_id'])) {
+            if (!empty($_POST['nom']) && !empty($_POST['restaurant_id']) && !empty($_POST['contenu'])) {
                 if (count($errors) == 0) {
                     return $this->json(['code' => 200, 'message' => $success, 'restaurantId' => $id], 200);
                 } else {

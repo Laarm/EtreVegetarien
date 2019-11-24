@@ -2,7 +2,7 @@
 
 {% block title %}{{ restaurant.nom }}!{% endblock %}
 {% block stylesheets %}
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/ui/trumbowyg.min.css">
 {% endblock %}
 {% block body %}
 <section class="container">
@@ -29,6 +29,7 @@
                 </div>
                 <input type="text" class="form-control" id="adresse" value="{{ restaurant.adresse }}">
             </div>
+            <textarea id="editeur">{{ restaurant.contenu | raw }}</textarea>
             <div class="input-group mb-3">
                 <form method="post" class="w-100" action="" enctype="multipart/form-data" id="uploadImage">
                     <div class="input-group mb-3 w-100">
@@ -49,7 +50,13 @@
 {% endblock %}
 
 {% block javascript %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/trumbowyg.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/langs/fr.min.js"></script>
 <script>
+    $('#editeur').trumbowyg({
+        lang: 'fr'
+    });
+    $.getJSON("https://api-adresse.data.gouv.fr/search/?q=74%20avenue%20de%20limoges,%2087920&limit=1", function (emp) { console.log(emp) })
     $(document).ready(function () {
         $("#btnSaveRestaurant").click(function (e) {
             e.preventDefault();
@@ -60,7 +67,8 @@
                     adresse: $("#adresse").val(),
                     ville: $("#ville").val(),
                     restaurant_id: '{{ restaurant.id }}',
-                    image: $("#image").val()
+                    image: $("#image").val(),
+                    contenu: $("#editeur").val()
                 },
                 function (data) {
                     if (data.code == 200) {
