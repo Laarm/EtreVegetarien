@@ -1,34 +1,40 @@
-
 /* Navbar */
 nav {
     background-color: #58D68D;
 }
+
 nav .navbar-nav {
     margin-left: 0
 }
+
 nav .navbar-nav a {
     color: #FFF;
     text-decoration: initial;
 }
+
 nav .nav-item .dropdown-menu.show {
     border-radius: 0
 }
+
 nav .nav-item .dropdown-item {
-    color: #000!important
+    color: #000 !important
 }
+
 nav .nav-item .dropdown-item:hover {
     background-color: #d1831d;
-    color: #FFF!important
+    color: #FFF !important
 }
 
 /* PanelContent */
 #panel {
     min-height: calc(100vh - 152px)
 }
+
 #panel tbody .btnOption {
     display: flex;
     flex-direction: row;
 }
+
 #panel tbody .btnOption a {
     background-color: #58D68D;
     height: 40px;
@@ -39,41 +45,84 @@ nav .nav-item .dropdown-item:hover {
     margin: 0 3px;
     text-decoration: none;
 }
+
 #panel tbody .btnOption a i {
     color: #FFF;
     margin: auto
 }
+
 #panel tbody .btnOption a.blue {
     background-color: #33adff;
 }
+
 #panel tbody .btnOption a.red {
     background-color: #ff4d4d;
 }
 
+/* PAGINATION */
+.new.btn {
+    height: 38px !important;
+    margin-right: 5px
+}
+
+.page-item.active a {
+    background-color: #58D68D !important;
+    border-color: #61ed9c !important
+}
+
 /* Responsive */
-@media (min-width: 992px){
+@media (min-width: 992px) {
     #navbarSupportedContent {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
     }
 }
-@media (max-width: 991px){
+
+@media (max-width: 991px) {
     nav.navbar {
         height: initial
     }
+
     nav .navbar-brand {
         height: 56px
     }
+
     nav .navbar-nav a {
         color: #000;
     }
+
     nav .navbar-toggler-icon i {
         color: #58D68D;
         font-size: 25px;
         margin-top: 4px
     }
+
     #panel {
         margin-top: 56px
     }
+}
+
+/* AUTRES */
+.contentPagination {
+    padding: 50px 0
+}
+
+.hidden {
+    display: none;
+}
+
+.btn-primary {
+    background-color: #58D68D;
+    border-color: #61ed9c
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: #43b071;
+    border-color: #43b071
+}
+
+.justify-flex-end {
+    justify-content: flex-end
 }

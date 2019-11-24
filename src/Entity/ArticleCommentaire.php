@@ -33,7 +33,7 @@ class ArticleCommentaire
     private $createdAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\article", inversedBy="articleCommentaires")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Article", inversedBy="articleCommentaires")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $article;

@@ -22,8 +22,10 @@
                         <td>{{ produit.nom }}</td>
                         <td><img height="40" width="40" src="{{ produit.image }}" /></td>
                         <td class="btnOption">
-                            <a target="_BLANK" href="{{ path('article_show', {'id': produit.id}) }}"><i class="fad fa-eye"></i></a>
-                            <a href="" class="blue"><i class="fad fa-edit"></i></a>
+                            <a target="_BLANK" href="{{ path('article_show', {'id': produit.id}) }}"><i
+                                    class="fad fa-eye"></i></a>
+                            <a href="{{ path('admin_edit_produit', {'id': produit.id}) }}" class="blue"><i
+                                    class="fad fa-edit"></i></a>
                             <a class="red"><i class="fad fa-times"></i></a>
                         </td>
                     </tr>
@@ -31,7 +33,11 @@
                 </tbody>
             </table>
         </div>
-        <div aria-label="Page navigation example">
+        <div class="flex justify-flex-end">
+            <a href="{{ path('adminNewProduit') }}" class="new btn btn-primary" role="button"><i
+                    class="fad fa-plus"></i>
+                Nouveau
+            </a>
             <ul paginationBtn="produit" class="pagination justify-content-end">
                 <div class="btnPagination flex mr-4">
                 </div>
@@ -40,8 +46,8 @@
     </div>
 </section>
 <script>
-addEventListener("load", () => {
-    new pagination("produit", 7, 10, "table-row");
-})
+    addEventListener("load", () => {
+        new pagination("produit", 7, 10, "table-row");
+    })
 </script>
 {% endblock %}

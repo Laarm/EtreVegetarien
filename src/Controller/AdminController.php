@@ -26,6 +26,10 @@ class AdminController extends AbstractController
             'articles' => $articles,
         ]);
     }
+
+    /**
+     * @Route("/admin/GestionArticles", name="admin_gestion_article")
+     */
     public function gestionArticles(ArticleRepository $repo)
     {
         if(isset($_GET['view'])){

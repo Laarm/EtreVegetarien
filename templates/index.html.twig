@@ -10,7 +10,7 @@
         <a class="item" href="{{ path('article_show', {'id': article.id}) }}">
             <div class="content shadow-2">
                 <div class="top">
-                    <img src="{{ article.image }}" alt="Test" />
+                    <img src="{{ asset(article.image) }}" alt="Test" />
                 </div>
                 <div class="bottom">
                     <h1>{{ article.nom }}</h1>
@@ -27,7 +27,8 @@
     <div class="container flex shadow-2">
         {% for post in postInstagram.data %}
         <div class="item">
-            <img src="{{post.images.standard_resolution.url}}" alt="{% if post.caption is not null %}{{ post.caption.text }}{% else %}Photo de {{post.user.full_name}}{% endif %}{% if post.location is not null %} à {{post.location.name}}{% endif %}" />
+            <img src="{{post.images.standard_resolution.url}}"
+                alt="{% if post.caption is not null %}{{ post.caption.text }}{% else %}Photo de {{post.user.full_name}}{% endif %}{% if post.location is not null %} à {{post.location.name}}{% endif %}" />
         </div>
         {% endfor %}
     </div>
@@ -37,10 +38,14 @@
         <img class="logo" src="{{ asset('/img/logo/logo-min-min.png') }}" alt="Logo Être Végétarien" />
         <h1 class="titre"><span>On parle de nous</span></h1>
         <div class="flex flex-center flex-wrap">
-            <a class="item" href="https://www.yaleen.fr/"><img src="https://www.yaleen.fr/res/img/logo.png" alt="Logo de Yaleen" /></a>
-            <a class="item" href="https://webagency.arnaudjacques.ovh/"><img src="https://webagency.arnaudjacques.ovh/img/logo.png" alt="Logo de WebAgency" /></a>
-            <a class="item" href="https://arnaudjacques.ovh/"><img src="https://arnaudjacques.ovh/img/photo.png" alt="Logo de Arnaud JACQUES" /></a>
-            <a class="item" href="https://weenovo.arnaudjacques.ovh/"><img src="https://weenovo.arnaudjacques.ovh/images/logo.png" alt="Logo de WeeNovo" /></a>
+            <a class="item" href="https://www.yaleen.fr/"><img src="https://www.yaleen.fr/res/img/logo.png"
+                    alt="Logo de Yaleen" /></a>
+            <a class="item" href="https://webagency.arnaudjacques.ovh/"><img
+                    src="https://webagency.arnaudjacques.ovh/img/logo.png" alt="Logo de WebAgency" /></a>
+            <a class="item" href="https://arnaudjacques.ovh/"><img src="https://arnaudjacques.ovh/img/photo.png"
+                    alt="Logo de Arnaud JACQUES" /></a>
+            <a class="item" href="https://weenovo.arnaudjacques.ovh/"><img
+                    src="https://weenovo.arnaudjacques.ovh/images/logo.png" alt="Logo de WeeNovo" /></a>
         </div>
     </div>
 </section>

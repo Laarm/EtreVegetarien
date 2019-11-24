@@ -82,3 +82,33 @@ adminRepas:
 adminContacts:
     path: /admin/contacts
     controller: App\Controller\AdminController::contacts
+adminNewArticle:
+    path: /admin/article/new
+    controller: App\Controller\AdminEditController::newArticle
+adminEditArticle:
+    path: /admin/article/{id}/edit
+    controller: App\Controller\AdminEditController::editArticle
+adminNewMagasin:
+    path: /admin/magasin/new
+    controller: App\Controller\AdminEditController::newMagasin
+adminEditMagasin:
+    path: /admin/magasin/{id}/edit
+    controller: App\Controller\AdminEditController::editMagasin
+adminNewRestaurant:
+    path: /admin/restaurant/new
+    controller: App\Controller\AdminEditController::newRestaurant
+adminEditRestaurant:
+    path: /admin/restaurant/{id}/edit
+    controller: App\Controller\AdminEditController::editRestaurant
+adminNewProduit:
+    path: /admin/produit/new
+    controller: App\Controller\AdminEditController::newProduit
+adminEditProduit:
+    path: /admin/produit/{id}/edit
+    controller: App\Controller\AdminEditController::editProduit
+adminNewRepas:
+    path: /admin/repas/new
+    controller: App\Controller\AdminEditController::newRepas
+adminEditRepas:
+    path: /admin/repas/{id}/edit
+    controller: App\Controller\AdminEditController::editRepas
