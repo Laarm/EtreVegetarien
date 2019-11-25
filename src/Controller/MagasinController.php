@@ -6,6 +6,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\MagasinRepository;
 use App\Repository\ArticleRepository;
+use App\Entity\Magasin;
+use Symfony\Component\HttpFoundation\Response;
+use Doctrine\ORM\EntityManagerInterface;
 
 class MagasinController extends AbstractController
 {
@@ -21,5 +24,24 @@ class MagasinController extends AbstractController
             'magasins' => $magasin,
             'articles' => $articles,
         ]);
+    }
+
+    /**
+     * @Route("/magasins/search", name="magasin_search")
+     */
+    public function searchMagasin(EntityManagerInterface $em): Response
+    {
+        $search = $_GET['search'];
+        if (!empty($search)) {
+            $result = $em->getRepository(Magasin::class)->createQueryBuilder('m')
+                ->select('m.id', 'm.nom', 'm.image')
+                ->where('m.nom LIKE :search')
+                ->setParameter('search', '%' . $search . '%')
+                ->orderBy('m.nom', 'ASC')
+                ->getQuery();
+            $magasins = $result->getResult();
+            return $this->json($magasins, 200);
+        }
+        return $this->json([], 200);
     }
 }

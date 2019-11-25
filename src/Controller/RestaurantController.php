@@ -38,17 +38,21 @@ class RestaurantController extends AbstractController
     }
 
     /**
-     * @Route("/restaurant/search/{search}", name="restaurant_search")
+     * @Route("/restaurants/search", name="restaurant_search")
      */
-    public function searchRestaurant($search, EntityManagerInterface $em): Response
+    public function searchRestaurant(EntityManagerInterface $em): Response
     {
-        $result = $em->getRepository(Restaurant::class)->createQueryBuilder('r')
-            ->select('r.id', 'r.nom', 'r.image')
-            ->where('r.nom LIKE :search')
-            ->setParameter('search', '%' . $search . '%')
-            ->orderBy('r.nom', 'ASC')
-            ->getQuery();
-        $orders = $result->getResult();
-        return $this->json($orders, 200);
+        $search = $_GET['search'];
+        if (!empty($search)) {
+            $result = $em->getRepository(Restaurant::class)->createQueryBuilder('r')
+                ->select('r.id', 'r.nom', 'r.image')
+                ->where('r.nom LIKE :search')
+                ->setParameter('search', '%' . $search . '%')
+                ->orderBy('r.nom', 'ASC')
+                ->getQuery();
+            $restaurants = $result->getResult();
+            return $this->json($restaurants, 200);
+        }
+        return $this->json([], 200);
     }
 }

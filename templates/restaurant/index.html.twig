@@ -122,7 +122,7 @@
     i = 0;
     $(document).ready(function () {
         $('[name="search"]').keypress(function (e) {
-            $.getJSON("http://127.0.0.1:8000/restaurant/search/" + $('[name="search"]').val())
+            $.getJSON("/restaurants/search?search=" + $('[name="search"]').val())
                 .then((restaurants) => {
                     $('.produit-list-design').html("")
                     if (restaurants.length == 0) {

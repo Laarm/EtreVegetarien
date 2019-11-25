@@ -113,3 +113,22 @@
     </div>
 </section>
 {% endblock %}
+{% block javascript %}
+<script>
+    i = 0;
+    $(document).ready(function () {
+        $('[name="search"]').keypress(function (e) {
+            $.getJSON("/magasins/search?search=" + $('[name="search"]').val())
+                .then((magasins) => {
+                    $('.produit-list-design').html("")
+                    if (magasins.length == 0) {
+                        $('.produit-list-design').html("<p class='margin-auto'>Aucun restaurant trouvé</p>")
+                    }
+                    magasins.forEach((magasin) => {
+                        $(".produit-list-design").append('<a class="item" href="/magasin/' + magasin.nom + '"><div class= "top"><img alt="' + magasin.nom + '" src="' + magasin.image + '" /></div><div class="bottom"><p>' + magasin.nom + '</p></div></a>')
+                    })
+                });
+        });
+    });
+</script>
+{% endblock %}
