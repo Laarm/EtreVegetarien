@@ -7,6 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\RestaurantRepository;
 use App\Repository\ArticleRepository;
 use App\Entity\Restaurant;
+use Symfony\Component\HttpFoundation\Response;
+use Doctrine\ORM\EntityManagerInterface;
 
 class RestaurantController extends AbstractController
 {
@@ -33,5 +35,20 @@ class RestaurantController extends AbstractController
             'restaurant' => $restaurant,
             'articles' => $articles,
         ]);
+    }
+
+    /**
+     * @Route("/restaurant/search/{search}", name="restaurant_search")
+     */
+    public function searchRestaurant($search, EntityManagerInterface $em): Response
+    {
+        $result = $em->getRepository(Restaurant::class)->createQueryBuilder('r')
+            ->select('r.id', 'r.nom', 'r.image')
+            ->where('r.nom LIKE :search')
+            ->setParameter('search', '%' . $search . '%')
+            ->orderBy('r.nom', 'ASC')
+            ->getQuery();
+        $orders = $result->getResult();
+        return $this->json($orders, 200);
     }
 }

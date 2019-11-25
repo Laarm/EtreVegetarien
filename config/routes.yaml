@@ -112,3 +112,6 @@ adminNewRepas:
 adminEditRepas:
     path: /admin/repas/{id}/edit
     controller: App\Controller\AdminEditController::editRepas
+restaurantSearch:
+    path: /restaurant/search/{search}
+    controller: App\Controller\RestaurantController::restaurantSearch
