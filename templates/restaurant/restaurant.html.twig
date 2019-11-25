@@ -50,7 +50,7 @@
         margin-top: -8px
     }
 
-    .tab-pane.fade.show.active {
+    .tab-pane.fade {
         padding-top: 40px
     }
 
@@ -90,6 +90,11 @@
 
     #restaurant #avis hr {
         margin: 40px 0
+    }
+
+    #map {
+        height: 300px;
+        width: 100%;
     }
 </style>
 <section id="restaurant" class="container paddingSeperateur flex">
@@ -167,4 +172,64 @@
     integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
     crossorigin=""></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
+<script>
+    class OpenStreetMap {
+
+        constructor() {
+            this.initMap();
+            this.jcdecauxApi();
+        }
+
+        initMap() {
+            $.getJSON("https://api-adresse.data.gouv.fr/search/?q={{ restaurant.adresse }}&limit=1")
+                .then((restaurant) => {
+                    this.lat = restaurant.features[0]['geometry']['coordinates'][1];
+                    this.lon = restaurant.features[0]['geometry']['coordinates'][0];
+                });
+            this.zoom = 13;	//ZOOM
+            this.macarte = L.map('map').setView([this.lat, this.lon], this.zoom);
+            this.tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+                attribution: 'données © <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>',
+                minZoom: 1,
+                maxZoom: 18
+            }).addTo(this.macarte);
+        }
+
+        jcdecauxApi() {
+            // $.getJSON("https://api-adresse.data.gouv.fr/search/?q={{ restaurant.adresse }}&limit=1")
+            //     .then((api) => {
+            //         this.api = api; this.station.ajoutStation(this.api, this.macarte);
+            //     });
+        }
+    }
+
+    addEventListener("load", () => {
+        // new OpenStreetMap()
+    });
+    $.getJSON("https://api-adresse.data.gouv.fr/search/?q={{ restaurant.adresse }}&limit=1")
+        .then((restaurant) => {
+            lat = restaurant.features[0]['geometry']['coordinates'][1];
+            lon = restaurant.features[0]['geometry']['coordinates'][0];
+            console.log(lat + "/" + lon)
+        });
+    var macarte = null;
+    // Fonction d'initialisation de la carte
+    function initMap() {
+        // Créer l'objet "macarte" et l'insèrer dans l'élément HTML qui a l'ID "map"
+        macarte = L.map('map').setView([lat, lon], 15);
+        // Leaflet ne récupère pas les cartes (tiles) sur un serveur par défaut. Nous devons lui préciser où nous souhaitons les récupérer. Ici, openstreetmap.fr
+        L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+            // Il est toujours bien de laisser le lien vers la source des données
+            attribution: 'données © <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>',
+            minZoom: 1,
+            maxZoom: 20
+        }).addTo(macarte);
+        var marker = L.marker([lat, lon]).addTo(macarte);
+        var latlng = L.latLng(lat, lon);
+    }
+    window.onload = function () {
+        // Fonction d'initialisation qui s'exécute lorsque le DOM est chargé
+        initMap();
+    };
+</script>
 {% endblock %}
