@@ -60,6 +60,14 @@ class RestaurantController extends AbstractController
             $restaurants = $result->getResult();
             return $this->json($restaurants, 200);
         }
+        if ($search == "") {
+            $result = $em->getRepository(Restaurant::class)->createQueryBuilder('r')
+                ->select('r.id', 'r.nom', 'r.image')
+                ->orderBy('r.nom', 'ASC')
+                ->getQuery();
+            $restaurants = $result->getResult();
+            return $this->json($restaurants, 200);
+        }
         return $this->json([], 200);
     }
 

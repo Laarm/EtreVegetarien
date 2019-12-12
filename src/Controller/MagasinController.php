@@ -43,6 +43,14 @@ class MagasinController extends AbstractController
             $magasins = $result->getResult();
             return $this->json($magasins, 200);
         }
+        if ($search == "") {
+            $result = $em->getRepository(Magasin::class)->createQueryBuilder('m')
+                ->select('m.id', 'm.nom', 'm.image')
+                ->orderBy('m.nom', 'ASC')
+                ->getQuery();
+            $magasins = $result->getResult();
+            return $this->json($magasins, 200);
+        }
         return $this->json([], 200);
     }
 }
