@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -9,14 +10,13 @@ class ConnexionController extends AbstractController
 {
     public function index(ArticleRepository $repo)
     {
-        $articles = $repo->findBy(array(), null, "5", null);
+        $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
         return $this->render('connexion.html.twig', [
             'user_first_name' => "test",
             'articles' => $articles,
         ]);
     }
 
-    public function logout() {
-        
-    }
+    public function logout()
+    { }
 }

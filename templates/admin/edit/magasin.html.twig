@@ -60,7 +60,8 @@
                     adresse: $("#adresse").val(),
                     ville: $("#ville").val(),
                     magasin_id: '{{ magasin.id }}',
-                    image: $("#image").val()
+                    image: $("#image").val(),
+                    csrfData: "{{ csrf_token('save-item') }}"
                 },
                 function (data) {
                     if (data.code == 200) {

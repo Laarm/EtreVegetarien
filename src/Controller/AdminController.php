@@ -14,6 +14,7 @@ use App\Repository\RepasRepository;
 use App\Repository\ProduitRepository;
 use App\Repository\ContactRepository;
 use App\Repository\UserRepository;
+use Symfony\Component\HttpFoundation\Request;
 
 class AdminController extends AbstractController
 {
@@ -30,12 +31,12 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/GestionArticles", name="admin_gestion_article")
      */
-    public function gestionArticles(ArticleRepository $repo)
+    public function gestionArticles(ArticleRepository $repo, Request $request)
     {
-        if(isset($_GET['view'])){
-            $view = $_GET['view'];
-            $maxView = $_GET['maxView'];
-        }else{
+        if ($request->get('view') !== null) {
+            $view = $request->get('view');
+            $maxView = $request->get('maxView');
+        } else {
             $view = null;
             $maxView = 100;
         }
@@ -45,12 +46,12 @@ class AdminController extends AbstractController
             'articles' => $articles,
         ]);
     }
-    public function gestionArticlesCommentaires(ArticleCommentaireRepository $articleCommentaireRepo)
+    public function gestionArticlesCommentaires(ArticleCommentaireRepository $articleCommentaireRepo, Request $request)
     {
-        if(isset($_GET['view'])){
-            $view = $_GET['view'];
-            $maxView = $_GET['maxView'];
-        }else{
+        if ($request->get('view') !== null) {
+            $view = $request->get('view');
+            $maxView = $request->get('maxView');
+        } else {
             $view = null;
             $maxView = 100;
         }
@@ -59,12 +60,12 @@ class AdminController extends AbstractController
             'article_commentaire' => $articleCommentaire,
         ]);
     }
-    public function gestionMagasins(MagasinRepository $gestionMagasinsRepo)
+    public function gestionMagasins(MagasinRepository $gestionMagasinsRepo, Request $request)
     {
-        if(isset($_GET['view'])){
-            $view = $_GET['view'];
-            $maxView = $_GET['maxView'];
-        }else{
+        if ($request->get('view') !== null) {
+            $view = $request->get('view');
+            $maxView = $request->get('maxView');
+        } else {
             $view = null;
             $maxView = 100;
         }
@@ -74,12 +75,12 @@ class AdminController extends AbstractController
             'magasins' => $magasins,
         ]);
     }
-    public function gestionMagasinsAvis(MagasinAvisRepository $gestionMagasinsAvisRepo)
+    public function gestionMagasinsAvis(MagasinAvisRepository $gestionMagasinsAvisRepo, Request $request)
     {
-        if(isset($_GET['view'])){
-            $view = $_GET['view'];
-            $maxView = $_GET['maxView'];
-        }else{
+        if ($request->get('view') !== null) {
+            $view = $request->get('view');
+            $maxView = $request->get('maxView');
+        } else {
             $view = null;
             $maxView = 100;
         }
@@ -89,12 +90,12 @@ class AdminController extends AbstractController
             'magasins_avis' => $magasinsAvis,
         ]);
     }
-    public function gestionRestaurants(RestaurantRepository $gestionRestaurantRepo)
+    public function gestionRestaurants(RestaurantRepository $gestionRestaurantRepo, Request $request)
     {
-        if(isset($_GET['view'])){
-            $view = $_GET['view'];
-            $maxView = $_GET['maxView'];
-        }else{
+        if ($request->get('view') !== null) {
+            $view = $request->get('view');
+            $maxView = $request->get('maxView');
+        } else {
             $view = null;
             $maxView = 100;
         }
@@ -104,12 +105,12 @@ class AdminController extends AbstractController
             'restaurants' => $restaurants,
         ]);
     }
-    public function gestionRestaurantsAvis(RestaurantAvisRepository $gestionRestaurantAvisRepo)
+    public function gestionRestaurantsAvis(RestaurantAvisRepository $gestionRestaurantAvisRepo, Request $request)
     {
-        if(isset($_GET['view'])){
-            $view = $_GET['view'];
-            $maxView = $_GET['maxView'];
-        }else{
+        if ($request->get('view') !== null) {
+            $view = $request->get('view');
+            $maxView = $request->get('maxView');
+        } else {
             $view = null;
             $maxView = 100;
         }
@@ -119,12 +120,12 @@ class AdminController extends AbstractController
             'restaurants_avis' => $magasinsAvis,
         ]);
     }
-    public function produits(ProduitRepository $gestionProduitRepo)
+    public function produits(ProduitRepository $gestionProduitRepo, Request $request)
     {
-        if(isset($_GET['view'])){
-            $view = $_GET['view'];
-            $maxView = $_GET['maxView'];
-        }else{
+        if ($request->get('view') !== null) {
+            $view = $request->get('view');
+            $maxView = $request->get('maxView');
+        } else {
             $view = null;
             $maxView = 100;
         }
@@ -134,12 +135,12 @@ class AdminController extends AbstractController
             'produits' => $produits,
         ]);
     }
-    public function utilisateurs(UserRepository $gestionUserRepo)
+    public function utilisateurs(UserRepository $gestionUserRepo, Request $request)
     {
-        if(isset($_GET['view'])){
-            $view = $_GET['view'];
-            $maxView = $_GET['maxView'];
-        }else{
+        if ($request->get('view') !== null) {
+            $view = $request->get('view');
+            $maxView = $request->get('maxView');
+        } else {
             $view = null;
             $maxView = 100;
         }
@@ -149,12 +150,12 @@ class AdminController extends AbstractController
             'utilisateurs' => $utilisateurs,
         ]);
     }
-    public function repas(RepasRepository $gestionRepasRepo)
+    public function repas(RepasRepository $gestionRepasRepo, Request $request)
     {
-        if(isset($_GET['view'])){
-            $view = $_GET['view'];
-            $maxView = $_GET['maxView'];
-        }else{
+        if ($request->get('view') !== null) {
+            $view = $request->get('view');
+            $maxView = $request->get('maxView');
+        } else {
             $view = null;
             $maxView = 100;
         }
@@ -164,12 +165,12 @@ class AdminController extends AbstractController
             'repas' => $repas,
         ]);
     }
-    public function contacts(ContactRepository $gestioncontactRepo)
+    public function contacts(ContactRepository $gestioncontactRepo, Request $request)
     {
-        if(isset($_GET['view'])){
-            $view = $_GET['view'];
-            $maxView = $_GET['maxView'];
-        }else{
+        if ($request->get('view') !== null) {
+            $view = $request->get('view');
+            $maxView = $request->get('maxView');
+        } else {
             $view = null;
             $maxView = 100;
         }

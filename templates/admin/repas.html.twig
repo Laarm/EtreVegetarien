@@ -60,7 +60,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-                <button deleteRepas="0" type="button" class="btn btn-primary">Oui</button>
+                <button deleteRepas="0" csrf-data="{{ csrf_token('delete-item') }}" type="button"
+                    class="btn btn-primary">Oui</button>
             </div>
         </div>
     </div>
@@ -80,7 +81,8 @@
         $.post(
             "{{ path('admin_delete_repas') }}",
             {
-                id: id
+                id: id,
+                csrfData: $(this).attr('csrf-data')
             },
             function (data) {
                 if (data.code == '200') {

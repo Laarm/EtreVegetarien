@@ -518,6 +518,21 @@ footer .bottom .container p a {
     cursor: pointer;
 }
 
+.justify-flex-end {
+    justify-content: flex-end
+}
+
+.btn-primary {
+    background-color: #58D68D;
+    border-color: #61ed9c
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: #43b071;
+    border-color: #43b071
+}
+
 /*
 *
 *   Mobile

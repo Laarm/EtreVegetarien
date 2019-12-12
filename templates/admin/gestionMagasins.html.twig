@@ -61,7 +61,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-                <button deleteMagasin="0" type="button" class="btn btn-primary">Oui</button>
+                <button deleteMagasin="0" csrf-data="{{ csrf_token('delete-item') }}" type="button"
+                    class="btn btn-primary">Oui</button>
             </div>
         </div>
     </div>
@@ -77,11 +78,13 @@
 
     $(document).on('click', '[deleteMagasin]', function (e) {
         id = $(this).attr('deleteMagasin')
+        csrfData = $(this).attr('csrf-data')
         e.preventDefault();
         $.post(
             "{{ path('admin_delete_magasin') }}",
             {
-                id: id
+                id: id,
+                csrfData: $(this).attr('csrf-data')
             },
             function (data) {
                 if (data.code == '200') {

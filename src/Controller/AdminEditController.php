@@ -13,6 +13,7 @@ use App\Entity\Repas;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class AdminEditController extends AbstractController
 {
@@ -41,69 +42,76 @@ class AdminEditController extends AbstractController
     /**
      * @Route("/admin/deleteArticle", name="admin_delete_article")
      */
-    public function deleteArticle(ValidatorInterface $validator, EntityManagerInterface $entityManager): Response
+    public function deleteArticle(ValidatorInterface $validator, EntityManagerInterface $entityManager, Request $request): Response
     {
-        if (isset($_POST['id'])) {
-            $_POST['id'] = htmlspecialchars($_POST['id']);
-            $article = $entityManager->getRepository(Article::class)->find($_POST['id']);
-            $entityManager->remove($article);
-            $entityManager->flush();
-            $errors = $validator->validate($article);
-            if (count($errors) == 0) {
-                return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer cet article", 'id' => $_POST['id']], 200);
-            } else {
-                return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+        if ($request->isXmlHttpRequest()) {
+            $submittedToken = $request->request->get('csrfData');
+            if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
+                if (!empty($request->request->get('id'))) {
+                    $article = $entityManager->getRepository(Article::class)->find($request->request->get('id'));
+                    $entityManager->remove($article);
+                    $entityManager->flush();
+                    $errors = $validator->validate($article);
+                    if (count($errors) == 0) {
+                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer cet article", 'id' => $request->request->get('id')], 200);
+                    } else {
+                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                    }
+                } else {
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression de l\'article...'], 200);
+                }
             }
-        } else {
-            return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression de l\'article...'], 200);
         }
     }
 
     /**
      * @Route("/admin/saveArticle", name="admin_save_article")
      */
-    public function saveArticle(ValidatorInterface $validator, EntityManagerInterface $entityManager): Response
+    public function saveArticle(ValidatorInterface $validator, EntityManagerInterface $entityManager, Request $request): Response
     {
-        if (isset($_POST['nom']) && isset($_POST['contenu']) && isset($_POST['article_id'])) {
-            $_POST['nom'] = htmlspecialchars($_POST['nom']);
-            $_POST['article_id'] = htmlspecialchars($_POST['article_id']);
-            if (empty($_POST['image'])) {
-                $_POST['image'] = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
-            } else {
-                $_POST['image'] = htmlspecialchars($_POST['image']);
-            }
-            if ($_POST['article_id'] == "new") {
-                $sqlArticle = new Article();
-                $sqlArticle->setNom($_POST['nom'])
-                    ->setContenu($_POST['contenu'])
-                    ->setImage($_POST['image'])
-                    ->setCreatedAt(new \DateTime());
-                $entityManager->persist($sqlArticle);
-                $entityManager->flush();
-                $errors = $validator->validate($sqlArticle);
-                $id = $sqlArticle->getId();
-                $success = "L'article à bien été créer !";
-            } else {
-                $article = $entityManager->getRepository(Article::class)->find($_POST['article_id']);
-                $article->setNom($_POST['nom'])
-                    ->setContenu($_POST['contenu'])
-                    ->setImage($_POST['image']);
-                $entityManager->flush();
-                $errors = $validator->validate($article);
-                $id = $_POST['article_id'];
-                $success = "L'article à bien été mis à jour !";
-            }
-            if (!empty($_POST['nom']) && !empty($_POST['article_id'])) {
-                if (count($errors) == 0) {
-                    return $this->json(['code' => 200, 'message' => $success, 'articleId' => $id], 200);
+        if ($request->isXmlHttpRequest()) {
+            $submittedToken = $request->request->get('csrfData');
+            if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
+                if (!empty($request->request->get('nom')) && !empty($request->request->get('contenu')) && !empty($request->request->get('article_id'))) {
+                    if (empty($request->request->get('image'))) {
+                        $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
+                    } else {
+                        $image = htmlspecialchars($request->request->get('image'));
+                    }
+                    if ($request->request->get('article_id') == "new") {
+                        $sqlArticle = new Article();
+                        $sqlArticle->setNom($request->request->get('nom'))
+                            ->setContenu($request->request->get('contenu'))
+                            ->setImage($image)
+                            ->setCreatedAt(new \DateTime());
+                        $entityManager->persist($sqlArticle);
+                        $entityManager->flush();
+                        $errors = $validator->validate($sqlArticle);
+                        $id = $sqlArticle->getId();
+                        $success = "L'article à bien été créer !";
+                    } else {
+                        $article = $entityManager->getRepository(Article::class)->find($request->request->get('article_id'));
+                        $article->setNom($request->request->get('nom'))
+                            ->setContenu($request->request->get('contenu'))
+                            ->setImage($request->request->get('image'));
+                        $entityManager->flush();
+                        $errors = $validator->validate($article);
+                        $id = $request->request->get('article_id');
+                        $success = "L'article à bien été mis à jour !";
+                    }
+                    if (!empty($request->request->get('nom')) && !empty($request->request->get('article_id'))) {
+                        if (count($errors) == 0) {
+                            return $this->json(['code' => 200, 'message' => $success, 'articleId' => $id], 200);
+                        } else {
+                            return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                        }
+                    } else {
+                        return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
+                    }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour de l\'article...'], 200);
                 }
-            } else {
-                return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
             }
-        } else {
-            return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour de l\'article...'], 200);
         }
     }
 
@@ -128,72 +136,79 @@ class AdminEditController extends AbstractController
     /**
      * @Route("/admin/deleteMagasin", name="admin_delete_magasin")
      */
-    public function deleteMagasin(ValidatorInterface $validator, EntityManagerInterface $entityManager): Response
+    public function deleteMagasin(ValidatorInterface $validator, EntityManagerInterface $entityManager, Request $request): Response
     {
-        if (isset($_POST['id'])) {
-            $_POST['id'] = htmlspecialchars($_POST['id']);
-            $article = $entityManager->getRepository(Magasin::class)->find($_POST['id']);
-            $entityManager->remove($article);
-            $entityManager->flush();
-            $errors = $validator->validate($article);
-            if (count($errors) == 0) {
-                return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce magasin", 'id' => $_POST['id']], 200);
-            } else {
-                return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+        if ($request->isXmlHttpRequest()) {
+            $submittedToken = $request->request->get('csrfData');
+            if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
+                if (!empty($request->request->get('id'))) {
+                    $article = $entityManager->getRepository(Magasin::class)->find($request->request->get('id'));
+                    $entityManager->remove($article);
+                    $entityManager->flush();
+                    $errors = $validator->validate($article);
+                    if (count($errors) == 0) {
+                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce magasin", 'id' => $request->request->get('id')], 200);
+                    } else {
+                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                    }
+                } else {
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du magasin...'], 200);
+                }
             }
-        } else {
-            return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du magasin...'], 200);
         }
     }
 
     /**
      * @Route("/admin/saveMagasin", name="admin_save_magasin")
      */
-    public function saveMagasin(ValidatorInterface $validator, EntityManagerInterface $entityManager): Response
+    public function saveMagasin(ValidatorInterface $validator, EntityManagerInterface $entityManager, Request $request): Response
     {
-        if (isset($_POST['nom']) && isset($_POST['ville']) && isset($_POST['magasin_id'])) {
-            $_POST['nom'] = htmlspecialchars($_POST['nom']);
-            $_POST['magasin_id'] = htmlspecialchars($_POST['magasin_id']);
-            if (empty($_POST['image'])) {
-                $_POST['image'] = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
-            } else {
-                $_POST['image'] = htmlspecialchars($_POST['image']);
-            }
-            if ($_POST['magasin_id'] == "new") {
-                $sqlMagasin = new Magasin();
-                $sqlMagasin->setNom($_POST['nom'])
-                    ->setImage($_POST['image'])
-                    ->setLocation("null")
-                    ->setAdresse($_POST['adresse'])
-                    ->setVille($_POST['ville'])
-                    ->setCreatedAt(new \DateTime());
-                $entityManager->persist($sqlMagasin);
-                $entityManager->flush();
-                $errors = $validator->validate($sqlMagasin);
-                $id = $sqlMagasin->getId();
-                $success = "Le magasin à bien été créer !";
-            } else {
-                $magasin = $entityManager->getRepository(Magasin::class)->find($_POST['magasin_id']);
-                $magasin->setNom($_POST['nom'])
-                    ->setImage($_POST['image'])
-                    ->setAdresse($_POST['adresse'])
-                    ->setVille($_POST['ville']);
-                $entityManager->flush();
-                $errors = $validator->validate($magasin);
-                $id = $_POST['magasin_id'];
-                $success = "Le magasin à bien été mis à jour !";
-            }
-            if (!empty($_POST['nom']) && !empty($_POST['magasin_id'])) {
-                if (count($errors) == 0) {
-                    return $this->json(['code' => 200, 'message' => $success, 'magasinId' => $id], 200);
+        if ($request->isXmlHttpRequest()) {
+            $submittedToken = $request->request->get('csrfData');
+            if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
+                if (!empty($request->request->get('nom')) && !empty($request->request->get('ville')) && !empty($request->request->get('magasin_id'))) {
+                    if (empty($request->request->get('image'))) {
+                        $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
+                    } else {
+                        $image = htmlspecialchars($request->request->get('image'));
+                    }
+                    if ($request->request->get('magasin_id') == "new") {
+                        $sqlMagasin = new Magasin();
+                        $sqlMagasin->setNom($request->request->get('nom'))
+                            ->setImage($image)
+                            ->setLocation("null")
+                            ->setAdresse($request->request->get('adresse'))
+                            ->setVille($request->request->get('ville'))
+                            ->setCreatedAt(new \DateTime());
+                        $entityManager->persist($sqlMagasin);
+                        $entityManager->flush();
+                        $errors = $validator->validate($sqlMagasin);
+                        $id = $sqlMagasin->getId();
+                        $success = "Le magasin à bien été créer !";
+                    } else {
+                        $magasin = $entityManager->getRepository(Magasin::class)->find($request->request->get('magasin_id'));
+                        $magasin->setNom($request->request->get('nom'))
+                            ->setImage($request->request->get('image'))
+                            ->setAdresse($request->request->get('adresse'))
+                            ->setVille($request->request->get('ville'));
+                        $entityManager->flush();
+                        $errors = $validator->validate($magasin);
+                        $id = $request->request->get('magasin_id');
+                        $success = "Le magasin à bien été mis à jour !";
+                    }
+                    if (!empty($request->request->get('nom')) && !empty($request->request->get('magasin_id'))) {
+                        if (count($errors) == 0) {
+                            return $this->json(['code' => 200, 'message' => $success, 'magasinId' => $id], 200);
+                        } else {
+                            return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                        }
+                    } else {
+                        return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
+                    }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour du magasin...'], 200);
                 }
-            } else {
-                return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
             }
-        } else {
-            return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour du magasin...'], 200);
         }
     }
 
@@ -218,74 +233,81 @@ class AdminEditController extends AbstractController
     /**
      * @Route("/admin/deleteRestaurant", name="admin_delete_restaurant")
      */
-    public function deleteRestaurant(ValidatorInterface $validator, EntityManagerInterface $entityManager): Response
+    public function deleteRestaurant(ValidatorInterface $validator, EntityManagerInterface $entityManager, Request $request): Response
     {
-        if (isset($_POST['id'])) {
-            $_POST['id'] = htmlspecialchars($_POST['id']);
-            $article = $entityManager->getRepository(Restaurant::class)->find($_POST['id']);
-            $entityManager->remove($article);
-            $entityManager->flush();
-            $errors = $validator->validate($article);
-            if (count($errors) == 0) {
-                return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce restaurant", 'id' => $_POST['id']], 200);
-            } else {
-                return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+        if ($request->isXmlHttpRequest()) {
+            $submittedToken = $request->request->get('csrfData');
+            if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
+                if (!empty($request->request->get('id'))) {
+                    $article = $entityManager->getRepository(Restaurant::class)->find($request->request->get('id'));
+                    $entityManager->remove($article);
+                    $entityManager->flush();
+                    $errors = $validator->validate($article);
+                    if (count($errors) == 0) {
+                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce restaurant", 'id' => $request->request->get('id')], 200);
+                    } else {
+                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                    }
+                } else {
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du restaurant...'], 200);
+                }
             }
-        } else {
-            return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du restaurant...'], 200);
         }
     }
 
     /**
      * @Route("/admin/saveRestaurant", name="admin_save_restaurant")
      */
-    public function saveRestaurant(ValidatorInterface $validator, EntityManagerInterface $entityManager): Response
+    public function saveRestaurant(ValidatorInterface $validator, EntityManagerInterface $entityManager, Request $request): Response
     {
-        if (isset($_POST['nom']) && isset($_POST['ville']) && isset($_POST['restaurant_id']) && isset($_POST['contenu'])) {
-            $_POST['nom'] = htmlspecialchars($_POST['nom']);
-            $_POST['restaurant_id'] = htmlspecialchars($_POST['restaurant_id']);
-            if (empty($_POST['image'])) {
-                $_POST['image'] = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
-            } else {
-                $_POST['image'] = htmlspecialchars($_POST['image']);
-            }
-            if ($_POST['restaurant_id'] == "new") {
-                $sqlRestaurant = new Restaurant();
-                $sqlRestaurant->setNom($_POST['nom'])
-                    ->setImage($_POST['image'])
-                    ->setLocation("null")
-                    ->setAdresse($_POST['adresse'])
-                    ->setVille($_POST['ville'])
-                    ->setContenu($_POST['contenu'])
-                    ->setCreatedAt(new \DateTime());
-                $entityManager->persist($sqlRestaurant);
-                $entityManager->flush();
-                $errors = $validator->validate($sqlRestaurant);
-                $id = $sqlRestaurant->getId();
-                $success = "Le restaurant à bien été créer !";
-            } else {
-                $restaurant = $entityManager->getRepository(Restaurant::class)->find($_POST['restaurant_id']);
-                $restaurant->setNom($_POST['nom'])
-                    ->setImage($_POST['image'])
-                    ->setAdresse($_POST['adresse'])
-                    ->setContenu($_POST['contenu'])
-                    ->setVille($_POST['ville']);
-                $entityManager->flush();
-                $errors = $validator->validate($restaurant);
-                $id = $_POST['restaurant_id'];
-                $success = "Le restaurant à bien été mis à jour !";
-            }
-            if (!empty($_POST['nom']) && !empty($_POST['restaurant_id']) && !empty($_POST['contenu'])) {
-                if (count($errors) == 0) {
-                    return $this->json(['code' => 200, 'message' => $success, 'restaurantId' => $id], 200);
+        if ($request->isXmlHttpRequest()) {
+            $submittedToken = $request->request->get('csrfData');
+            if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
+                if (!empty($request->request->get('nom')) && !empty($request->request->get('ville')) && !empty($request->request->get('restaurant_id')) && !empty($request->request->get('contenu'))) {
+                    if (empty($request->request->get('image'))) {
+                        $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
+                    } else {
+                        $image = htmlspecialchars($request->request->get('image'));
+                    }
+                    if ($request->request->get('restaurant_id') == "new") {
+                        $sqlRestaurant = new Restaurant();
+                        $sqlRestaurant->setNom($request->request->get('nom'))
+                            ->setImage($image)
+                            ->setLocation("null")
+                            ->setAdresse($request->request->get('adresse'))
+                            ->setVille($request->request->get('ville'))
+                            ->setContenu($request->request->get('contenu'))
+                            ->setCreatedAt(new \DateTime());
+                        $entityManager->persist($sqlRestaurant);
+                        $entityManager->flush();
+                        $errors = $validator->validate($sqlRestaurant);
+                        $id = $sqlRestaurant->getId();
+                        $success = "Le restaurant à bien été créer !";
+                    } else {
+                        $restaurant = $entityManager->getRepository(Restaurant::class)->find($request->request->get('restaurant_id'));
+                        $restaurant->setNom($request->request->get('nom'))
+                            ->setImage($request->request->get('image'))
+                            ->setAdresse($request->request->get('adresse'))
+                            ->setContenu($request->request->get('contenu'))
+                            ->setVille($request->request->get('ville'));
+                        $entityManager->flush();
+                        $errors = $validator->validate($restaurant);
+                        $id = $request->request->get('restaurant_id');
+                        $success = "Le restaurant à bien été mis à jour !";
+                    }
+                    if (!empty($request->request->get('nom')) && !empty($request->request->get('restaurant_id')) && !empty($request->request->get('contenu'))) {
+                        if (count($errors) == 0) {
+                            return $this->json(['code' => 200, 'message' => $success, 'restaurantId' => $id], 200);
+                        } else {
+                            return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                        }
+                    } else {
+                        return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
+                    }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour du restaurant...'], 200);
                 }
-            } else {
-                return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
             }
-        } else {
-            return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour du restaurant...'], 200);
         }
     }
 
@@ -310,67 +332,74 @@ class AdminEditController extends AbstractController
     /**
      * @Route("/admin/deleteProduit", name="admin_delete_produit")
      */
-    public function deleteProduit(ValidatorInterface $validator, EntityManagerInterface $entityManager): Response
+    public function deleteProduit(ValidatorInterface $validator, EntityManagerInterface $entityManager, Request $request): Response
     {
-        if (isset($_POST['id'])) {
-            $_POST['id'] = htmlspecialchars($_POST['id']);
-            $article = $entityManager->getRepository(Produit::class)->find($_POST['id']);
-            $entityManager->remove($article);
-            $entityManager->flush();
-            $errors = $validator->validate($article);
-            if (count($errors) == 0) {
-                return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce produit", 'id' => $_POST['id']], 200);
-            } else {
-                return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+        if ($request->isXmlHttpRequest()) {
+            $submittedToken = $request->request->get('csrfData');
+            if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
+                if (!empty($request->request->get('id'))) {
+                    $article = $entityManager->getRepository(Produit::class)->find($request->request->get('id'));
+                    $entityManager->remove($article);
+                    $entityManager->flush();
+                    $errors = $validator->validate($article);
+                    if (count($errors) == 0) {
+                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce produit", 'id' => $request->request->get('id')], 200);
+                    } else {
+                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                    }
+                } else {
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du produit...'], 200);
+                }
             }
-        } else {
-            return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du produit...'], 200);
         }
     }
 
     /**
      * @Route("/admin/saveProduit", name="admin_save_produit")
      */
-    public function saveProduit(ValidatorInterface $validator, EntityManagerInterface $entityManager): Response
+    public function saveProduit(ValidatorInterface $validator, EntityManagerInterface $entityManager, Request $request): Response
     {
-        if (isset($_POST['nom']) && isset($_POST['produit_id'])) {
-            $_POST['nom'] = htmlspecialchars($_POST['nom']);
-            $_POST['produit_id'] = htmlspecialchars($_POST['produit_id']);
-            if (empty($_POST['image'])) {
-                $_POST['image'] = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
-            } else {
-                $_POST['image'] = htmlspecialchars($_POST['image']);
-            }
-            if ($_POST['produit_id'] == "new") {
-                $sqlProduit = new Produit();
-                $sqlProduit->setNom($_POST['nom'])
-                    ->setImage($_POST['image'])
-                    ->setCreatedAt(new \DateTime());
-                $entityManager->persist($sqlProduit);
-                $entityManager->flush();
-                $errors = $validator->validate($sqlProduit);
-                $id = $sqlProduit->getId();
-                $success = "Le produit à bien été créer !";
-            } else {
-                $produit = $entityManager->getRepository(Produit::class)->find($_POST['produit_id']);
-                $produit->setNom($_POST['nom'])
-                    ->setImage($_POST['image']);
-                $entityManager->flush();
-                $errors = $validator->validate($produit);
-                $id = $_POST['produit_id'];
-                $success = "Le produit à bien été mis à jour !";
-            }
-            if (!empty($_POST['nom']) && !empty($_POST['produit_id'])) {
-                if (count($errors) == 0) {
-                    return $this->json(['code' => 200, 'message' => $success, 'produitId' => $id], 200);
+        if ($request->isXmlHttpRequest()) {
+            $submittedToken = $request->request->get('csrfData');
+            if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
+                if (!empty($request->request->get('nom')) && !empty($request->request->get('produit_id'))) {
+                    if (empty($request->request->get('image'))) {
+                        $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
+                    } else {
+                        $image = htmlspecialchars($request->request->get('image'));
+                    }
+                    if ($request->request->get('produit_id') == "new") {
+                        $sqlProduit = new Produit();
+                        $sqlProduit->setNom($request->request->get('nom'))
+                            ->setImage($image)
+                            ->setCreatedAt(new \DateTime());
+                        $entityManager->persist($sqlProduit);
+                        $entityManager->flush();
+                        $errors = $validator->validate($sqlProduit);
+                        $id = $sqlProduit->getId();
+                        $success = "Le produit à bien été créer !";
+                    } else {
+                        $produit = $entityManager->getRepository(Produit::class)->find($request->request->get('produit_id'));
+                        $produit->setNom($request->request->get('nom'))
+                            ->setImage($request->request->get('image'));
+                        $entityManager->flush();
+                        $errors = $validator->validate($produit);
+                        $id = $request->request->get('produit_id');
+                        $success = "Le produit à bien été mis à jour !";
+                    }
+                    if (!empty($request->request->get('nom')) && !empty($request->request->get('produit_id'))) {
+                        if (count($errors) == 0) {
+                            return $this->json(['code' => 200, 'message' => $success, 'produitId' => $id], 200);
+                        } else {
+                            return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                        }
+                    } else {
+                        return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
+                    }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour du produit...'], 200);
                 }
-            } else {
-                return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
             }
-        } else {
-            return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour du produit...'], 200);
         }
     }
 
@@ -395,71 +424,76 @@ class AdminEditController extends AbstractController
     /**
      * @Route("/admin/deleteRepas", name="admin_delete_repas")
      */
-    public function deleteRepas(ValidatorInterface $validator, EntityManagerInterface $entityManager): Response
+    public function deleteRepas(ValidatorInterface $validator, EntityManagerInterface $entityManager, Request $request): Response
     {
-        if (isset($_POST['id'])) {
-            $_POST['id'] = htmlspecialchars($_POST['id']);
-            $article = $entityManager->getRepository(Repas::class)->find($_POST['id']);
-            $entityManager->remove($article);
-            $entityManager->flush();
-            $errors = $validator->validate($article);
-            if (count($errors) == 0) {
-                return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce repas", 'id' => $_POST['id']], 200);
-            } else {
-                return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+        if ($request->isXmlHttpRequest()) {
+            $submittedToken = $request->request->get('csrfData');
+            if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
+                if (!empty($request->request->get('id'))) {
+                    $article = $entityManager->getRepository(Repas::class)->find($request->request->get('id'));
+                    $entityManager->remove($article);
+                    $entityManager->flush();
+                    $errors = $validator->validate($article);
+                    if (count($errors) == 0) {
+                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce repas", 'id' => $request->request->get('id')], 200);
+                    } else {
+                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                    }
+                } else {
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du repas...'], 200);
+                }
             }
-        } else {
-            return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du repas...'], 200);
         }
     }
 
     /**
      * @Route("/admin/saveRepas", name="admin_save_repas")
      */
-    public function saveRepas(ValidatorInterface $validator, EntityManagerInterface $entityManager, Security $security): Response
+    public function saveRepas(ValidatorInterface $validator, EntityManagerInterface $entityManager, Security $security, Request $request): Response
     {
-        if (isset($_POST['nom']) && isset($_POST['repas_id']) && isset($_POST['recette'])) {
-            $_POST['nom'] = htmlspecialchars($_POST['nom']);
-            $_POST['repas_id'] = htmlspecialchars($_POST['repas_id']);
-            $user = $security->getUser();
-            if (empty($_POST['image'])) {
-                $_POST['image'] = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
-            } else {
-                $_POST['image'] = htmlspecialchars($_POST['image']);
-            }
-            if ($_POST['repas_id'] == "new") {
-                $sqlRepas = new Repas();
-                $sqlRepas->setNom($_POST['nom'])
-                    ->setImage($_POST['image'])
-                    ->setRecette($_POST['recette'])
-                    ->setPostedBy($user->getUsername())
-                    ->setCreatedAt(new \DateTime());
-                $entityManager->persist($sqlRepas);
-                $entityManager->flush();
-                $errors = $validator->validate($sqlRepas);
-                $id = $sqlRepas->getId();
-                $success = "Le repas à bien été créer !";
-            } else {
-                $repas = $entityManager->getRepository(Repas::class)->find($_POST['repas_id']);
-                $repas->setNom($_POST['nom'])
-                    ->setRecette($_POST['recette'])
-                    ->setImage($_POST['image']);
-                $entityManager->flush();
-                $errors = $validator->validate($repas);
-                $id = $_POST['repas_id'];
-                $success = "Le repas à bien été mis à jour !";
-            }
-            if (!empty($_POST['nom']) && !empty($_POST['repas_id'])) {
-                if (count($errors) == 0) {
-                    return $this->json(['code' => 200, 'message' => $success, 'repasId' => $id], 200);
+        if ($request->isXmlHttpRequest()) {
+            $submittedToken = $request->request->get('csrfData');
+            if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
+                if (!empty($request->request->get('nom')) && !empty($request->request->get('repas_id')) && !empty($_POST['recette'])) {
+                    $user = $security->getUser();
+                    if (empty($request->request->get('image'))) {
+                        $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
+                    }
+                    if ($request->request->get('repas_id') == "new") {
+                        $sqlRepas = new Repas();
+                        $sqlRepas->setNom($request->request->get('nom'))
+                            ->setImage($image)
+                            ->setRecette($_POST['recette'])
+                            ->setPostedBy($user)
+                            ->setCreatedAt(new \DateTime());
+                        $entityManager->persist($sqlRepas);
+                        $entityManager->flush();
+                        $errors = $validator->validate($sqlRepas);
+                        $id = $sqlRepas->getId();
+                        $success = "Le repas à bien été créer !";
+                    } else {
+                        $repas = $entityManager->getRepository(Repas::class)->find($request->request->get('repas_id'));
+                        $repas->setNom($request->request->get('nom'))
+                            ->setRecette($_POST['recette'])
+                            ->setImage($request->request->get('image'));
+                        $entityManager->flush();
+                        $errors = $validator->validate($repas);
+                        $id = $request->request->get('repas_id');
+                        $success = "Le repas à bien été mis à jour !";
+                    }
+                    if (!empty($request->request->get('nom')) && !empty($request->request->get('repas_id'))) {
+                        if (count($errors) == 0) {
+                            return $this->json(['code' => 200, 'message' => $success, 'repasId' => $id], 200);
+                        } else {
+                            return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                        }
+                    } else {
+                        return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
+                    }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour du repas...'], 200);
                 }
-            } else {
-                return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
             }
-        } else {
-            return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour du repas...'], 200);
         }
     }
 

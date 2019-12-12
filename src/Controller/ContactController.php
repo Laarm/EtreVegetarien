@@ -15,7 +15,7 @@ class ContactController extends AbstractController
      */
     public function index(ArticleRepository $repo)
     {
-        $articles = $repo->findBy(array(), null, "5", null);
+        $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
         return $this->render('contact/index.html.twig', [
             'controller_name' => 'ContactController',
             'articles' => $articles,

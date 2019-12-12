@@ -19,7 +19,7 @@ class UserController extends AbstractController
      */
     public function index(int $id, EntityManagerInterface $entityManager, UserRepository $repo, ProduitRepository $produitrepo, RepasRepository $repasrepo, RestaurantRepository $restaurantrepo, ArticleRepository $articlerepo): Response
     {
-        $articles = $articlerepo->findBy(array(), null, "5", null);
+        $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
         $user = $repo->find($id);
         $produit = $produitrepo->findAll();
         $repas = $repasrepo->findAll();

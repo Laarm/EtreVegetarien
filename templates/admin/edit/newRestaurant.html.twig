@@ -68,7 +68,8 @@
                     ville: $("#ville").val(),
                     restaurant_id: 'new',
                     image: $("#image").val(),
-                    contenu: $("#editeur").val()
+                    contenu: $("#editeur").val(),
+                    csrfData: "{{ csrf_token('save-item') }}"
                 },
                 function (data) {
                     if (data.code == 200) {

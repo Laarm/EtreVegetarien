@@ -13,7 +13,7 @@ class MotDePasseOublieController extends AbstractController
      */
     public function index(ArticleRepository $repo)
     {
-        $articles = $repo->findBy(array(), null, "5", null);
+        $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
         return $this->render('mot_de_passe_oublie/index.html.twig', [
             'controller_name' => 'MotDePasseOublieController',
             'articles' => $articles,

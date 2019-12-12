@@ -60,7 +60,8 @@
                     nom: $("#nom").val(),
                     recette: $("#editeur").val(),
                     repas_id: 'new',
-                    image: $("#image").val()
+                    image: $("#image").val(),
+                    csrfData: "{{ csrf_token('save-item') }}"
                 },
                 function (data) {
                     if (data.code == 200) {

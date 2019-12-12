@@ -1,194 +1,326 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ restaurant.nom }} - Être Végétarien!{% endblock %}
+{% block title %}
+	{{ restaurant.nom }}
+	- Être Végétarien!
+{% endblock %}
 {% block stylesheets %}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
-    integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
-    crossorigin="" />
-<link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.Default.css">
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin=""/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.Default.css">
 {% endblock %}
 {% block body %}
 
-<style>
-    #restaurant h1 {
-        color: #4e4e56;
-        font-size: 2em;
-        font-weight: bold;
-    }
+	<style>
+		#restaurant h1 {
+			color: #4e4e56;
+			font-size: 2em;
+			font-weight: bold;
+		}
 
-    #restaurant p {
-        color: #939396;
-    }
+		#restaurant p {
+			color: #939396;
+		}
 
-    #restaurant h2 {
-        color: #939396;
-        font-size: 1.2em;
-        margin-top: 20px
-    }
+		#restaurant h2 {
+			color: #939396;
+			font-size: 1.2em;
+			margin-top: 20px
+		}
 
-    #restaurant .left .flex.flex-between {
-        align-items: center;
-    }
+		#restaurant .left .flex.flex-between {
+			align-items: center;
+		}
 
-    #restaurant h1.titre {
-        font-size: 1.4em
-    }
+		#restaurant h1.titre {
+			font-size: 1.4em
+		}
 
-    #restaurant .left .note span {
-        font-size: 2em;
-        font-weight: bold;
-    }
+		#restaurant .left .note span {
+			font-size: 2em;
+			font-weight: bold;
+		}
 
-    #restaurant .left .note span {
-        font-size: 2em;
-        font-weight: bold;
-        color: #4e4e56;
-    }
+		#restaurant .left .note span {
+			font-size: 2em;
+			font-weight: bold;
+			color: #4e4e56;
+		}
 
-    #restaurant .left .avis {
-        margin-top: -8px
-    }
+		#restaurant .left .avis {
+			margin-top: -8px
+		}
 
-    .tab-pane.fade {
-        padding-top: 40px
-    }
+		.tab-pane.fade {
+			padding-top: 40px
+		}
 
-    .nav.nav-tabs {
-        padding-top: 40px
-    }
+		.nav.nav-tabs {
+			padding-top: 40px
+		}
 
-    .nav.nav-tabs {
-        border: none
-    }
+		.nav.nav-tabs {
+			border: none
+		}
 
-    .nav.nav-tabs li.nav-item a {
-        border: none;
-        color: #4e4e56;
-    }
+		.nav.nav-tabs li.nav-item a {
+			border: none;
+			color: #4e4e56;
+		}
 
-    .nav.nav-tabs li.nav-item a.active {
-        border: none;
-        border-bottom: #58D68D 6px solid
-    }
+		.nav.nav-tabs li.nav-item a.active {
+			border: none;
+			border-bottom: #58D68D 6px solid
+		}
 
-    #restaurant .avis span.date {
-        color: #58D68D;
-        margin-top: -13px;
-        display: block;
-    }
+		#restaurant .avis span.date {
+			color: #58D68D;
+			margin-top: -13px;
+			display: block;
+		}
 
-    #restaurant .avis .message {
-        padding: 7.5px 0px 7.5px 15px;
-        border-left: #939396 1px solid;
-        margin-top: 13px
-    }
+		#restaurant .avis .message {
+			padding: 7.5px 0 7.5px 15px;
+			border-left: #939396 1px solid;
+			margin-top: 13px
+		}
 
-    #restaurant .avis .username {
-        font-weight: bold;
-    }
+		#restaurant .avis .username {
+			font-weight: bold;
+		}
 
-    #restaurant #avis hr {
-        margin: 40px 0
-    }
+		#restaurant #avis hr {
+			margin: 40px 0
+		}
 
-    #map {
-        height: 300px;
-        width: 100%;
-    }
-</style>
-<section id="restaurant" class="container paddingSeperateur flex">
-    <div class="left col-7">
-        <div class="flex flex-between">
-            <h1 class="mtb-auto">{{ restaurant.nom }}</h1>
-            <p class="note mtb-auto"><span>10</span>/10</p>
-        </div>
-        <div class="flex flex-between">
-            <h2 class="mtb-auto">{{ restaurant.adresse }}</h2>
-            <p class="avis mtb-auto">4 avis</p>
-        </div>
-        <div class="w-100">
-            <ul class="nav nav-tabs" id="tab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="infospratiques-tab" data-toggle="tab" href="#infospratiques"
-                        role="tab" aria-controls="infospratiques" aria-selected="true">INFOS PRATIQUES</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="avis-tab" data-toggle="tab" href="#avis" role="tab" aria-controls="avis"
-                        aria-selected="false">AVIS</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="plan-tab" data-toggle="tab" href="#plan" role="tab" aria-controls="plan"
-                        aria-selected="false">PLAN</a>
-                </li>
-            </ul>
-            <div class="tab-content" id="tabContent">
-                <div class="tab-pane fade show active" id="infospratiques" role="tabpanel"
-                    aria-labelledby="infospratiques-tab">
-                    {{ restaurant.contenu | raw }}
-                </div>
-                <div class="tab-pane fade" id="avis" role="tabpanel" aria-labelledby="avis-tab">
-                    <div class="avis">
-                        <p class="username">Arnaud</p>
-                        <span class="date">publié le 14 avril 2000</span>
-                        <p class="message">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
-                            doloremque laudantium, totam rem aperiam,
-                            eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt
-                            explicabo. Nemo enim ipsam
-                            voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni
-                            dolores
-                            eos qui ratione
-                            voluptatem sequi nesciunt.</p>
-                    </div>
-                    <hr>
-                    <div class="avis">
-                        <p class="username">Arnaud</p>
-                        <span class="date">publié le 14 avril 2000</span>
-                        <p class="message">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
-                            doloremque laudantium, totam rem aperiam,
-                            eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt
-                            explicabo. Nemo enim ipsam
-                            voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni
-                            dolores
-                            eos qui ratione
-                            voluptatem sequi nesciunt.</p>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="plan" role="tabpanel" aria-labelledby="plan-tab">
-                    <div id="map"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="right col-5">
-        <h1>
-            <h1 class="titre"><span>Autres restaurants</span></h1>
-        </h1>
-    </div>
-</section>
+		#map {
+			height: 300px;
+			width: 100%;
+		}
+
+		.container .right .content .restaurant a {
+			text-decoration: none
+		}
+
+		.container .right .content .restaurant {
+			/* border-bottom: 1px solid #ECEEF2; */
+			width: 100%;
+			padding-bottom: 10px;
+			margin-top: 20px
+		}
+
+		.container .right .content .restaurant h1 {
+			margin-top: 2.5%;
+			font-size: 1rem !important;
+			font-weight: bold !important;
+			color: #58D68D !important
+		}
+
+		.container .right .content .restaurant h2 {
+			margin-top: 2.5%;
+			font-size: 0.8rem !important;
+			font-weight: bold !important
+		}
+
+		.container .right .content .note span {
+			font-size: 1.9rem !important;
+			font-weight: bold !important
+		}
+
+		@media(max-width: 991px) {}
+	</style>
+	<section id="restaurant" class="container paddingSeperateur flex">
+		<div class="left col-7">
+			<div class="flex flex-between">
+				<h1 class="mtb-auto">{{ restaurant.nom }}</h1>
+				<p class="note mtb-auto">
+					<span>10</span>/10</p>
+			</div>
+			<div class="flex flex-between">
+				<h2 class="mtb-auto">{{ restaurant.adresse }}</h2>
+				<p class="avis mtb-auto">4 avis</p>
+			</div>
+			<div class="w-100">
+				<ul class="nav nav-tabs" id="tab" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active" id="infospratiques-tab" data-toggle="tab" href="#infospratiques" role="tab" aria-controls="infospratiques" aria-selected="true">INFOS PRATIQUES</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" id="avis-tab" data-toggle="tab" href="#avis" role="tab" aria-controls="avis" aria-selected="false">AVIS</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" id="plan-tab" data-toggle="tab" href="#plan" role="tab" aria-controls="plan" aria-selected="false">PLAN</a>
+					</li>
+				</ul>
+				<div class="tab-content" id="tabContent">
+					<div class="tab-pane fade show active" id="infospratiques" role="tabpanel" aria-labelledby="infospratiques-tab">
+						{{ restaurant.contenu | raw }}
+					</div>
+					<div class="tab-pane fade" id="avis" role="tabpanel" aria-labelledby="avis-tab">
+						<div class="avisContent">
+							<div class="avis">
+								<p class="username">Arnaud</p>
+								<span class="date">publié le 14 avril 2000</span>
+								<p class="message">Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+									                                accusantium
+									                                doloremque laudantium, totam rem aperiam,
+									                                eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt
+									                                explicabo. Nemo enim ipsam
+									                                voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni
+									                                dolores
+									                                eos qui ratione
+									                                voluptatem sequi nesciunt.</p>
+							</div>
+							<hr>
+							<div class="avis">
+								<p class="username">Arnaud</p>
+								<span class="date">publié le 14 avril 2000</span>
+								<p class="message">Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+									                                accusantium
+									                                doloremque laudantium, totam rem aperiam,
+									                                eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt
+									                                explicabo. Nemo enim ipsam
+									                                voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni
+									                                dolores
+									                                eos qui ratione
+									                                voluptatem sequi nesciunt.</p>
+							</div>
+						</div>
+						<style>
+							.ratings {
+								list-style-type: none;
+								margin: 0;
+								padding: 0;
+								width: 100%;
+								direction: rtl;
+								text-align: left;
+							}
+
+							.star {
+								position: relative;
+								line-height: 60px;
+								display: inline-block;
+								transition: color 0.2s ease;
+								color: #ebebeb;
+							}
+
+							.star:hover,
+							.star.selected,
+							.star:hover~.star,
+							.star.selected~.star {
+								transition: color 0.8s ease;
+								color: #58D68D;
+							}
+						</style>
+						<div class="form-group">
+							<label for="note">Note</label>
+							<ul id="note" class="ratings">
+								<li class="star">
+									<i class="fad fa-star"></i>
+								</li>
+								<li class="star">
+									<i class="fad fa-star"></i>
+								</li>
+								<li class="star">
+									<i class="fad fa-star"></i>
+								</li>
+								<li class="star">
+									<i class="fad fa-star"></i>
+								</li>
+								<li class="star">
+									<i class="fad fa-star"></i>
+								</li>
+							</ul>
+						</div>
+						<div class="form-group">
+							<label for="exampleFormControlTextarea1">Message (optionnel)</label>
+							<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+						</div>
+						<button id="btnEnvoieNote" type="button" class="btn btn-primary">Envoyer</button>
+						<div id="resultat"></div>
+					</div>
+					<div class="tab-pane fade" id="plan" role="tabpanel" aria-labelledby="plan-tab">
+						<div id="map"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="right col-5">
+			<h1>
+				<h1 class="titre">
+					<span>Autres restaurants</span>
+				</h1>
+			</h1>
+			<div class="content">
+				{% for restaurant in autresrestaurants %}
+					{% if loop.index != 1 %}
+						<hr>
+					{% endif %}
+					<div class="restaurant flex flex-between">
+						<div class="left">
+							<a href="{{ path('restaurant_show', {'id': restaurant.id}) }}">
+								<h1 class="cds">{{ restaurant.nom }}</h1>
+								<h2 class="gris">{{ restaurant.ville }}, Végétarien</h2>
+							</a>
+						</div>
+						<div class="right mtb-auto flex">
+							<p class="mtb-auto note">
+								<span>10</span>/10</p>
+						</div>
+					</div>
+				{% else %}
+					<em>Aucun restaurant</em>
+				{% endfor %}
+			</div>
+		</div>
+	</section>
 {% endblock %}
 {% block javascript %}
-<script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
-    integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
-    crossorigin=""></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
-<script>
-    $.getJSON("https://api-adresse.data.gouv.fr/search/?q={{ restaurant.adresse }}&limit=1")
-        .then((restaurant) => {
-            lat = restaurant.features[0]['geometry']['coordinates'][1];
-            lon = restaurant.features[0]['geometry']['coordinates'][0];
-            initMap();
-        });
-    var macarte = null;
-    function initMap() {
-        macarte = L.map('map').setView([lat, lon], 16);
-        macarte.panTo(L.latLng(lat, lon));
-        L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
-            attribution: 'données © <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>',
-            minZoom: 1,
-            maxZoom: 20
-        }).addTo(macarte);
-        var marker = L.marker([lat, lon]).addTo(macarte);
-    }
-</script>
+	<script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
+	<script>
+		$.getJSON("https://api-adresse.data.gouv.fr/search/?q= {{ restaurant.adresse }}&limit=1").then((restaurant) => {
+lat = restaurant.features[0]['geometry']['coordinates'][1];
+lon = restaurant.features[0]['geometry']['coordinates'][0];
+initMap();
+});
+var macarte = null;
+function initMap() {
+macarte = L.map('map').setView([
+lat, lon
+], 16);
+macarte.panTo(L.latLng(lat, lon));
+L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+attribution: 'données © <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>',
+minZoom: 1,
+maxZoom: 20
+}).addTo(macarte);
+var marker = L.marker([lat, lon]).addTo(macarte);
+}
+$(function () {
+var star = '.star',
+selected = '.selected';
+
+$(star).on('click', function () {
+$(selected).each(function () {
+$(this).removeClass('selected');
+});
+$(this).addClass('selected');
+});
+});
+$("#btnEnvoieNote").click(function (e) {
+e.preventDefault();
+$.post('/ajax/restaurant/sendNote', {
+note: $(".star.selected").length,
+message: $("#message").val(),
+restaurant_id: '{{ restaurant.id }}'
+}, function (data) {
+if (data.code == '200') {
+$("#resultat").html("<div class='content'><p>" + data.message + "</p></div>");
+$("#avis").load("{{ path('admin_edit_restaurant', {'id': restaurant.id}) }}#avis .avisContent");
+} else {
+$("#resultat").html("<div class='content red'><p>" + data.message + "</p></div>");
+}
+}, 'text');
+});
+	</script>
 {% endblock %}

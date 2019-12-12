@@ -118,3 +118,6 @@ restaurantSearch:
 magasinSearch:
     path: /magasins/search
     controller: App\Controller\MagasinController::magasinSearch
+sendNoteRestaurant:
+    path: /ajax/restaurant/sendNote
+    controller: App\Controller\RestaurantController::sendNote

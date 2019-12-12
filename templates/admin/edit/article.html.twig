@@ -55,7 +55,8 @@
                     nom: $("#nom").val(),
                     contenu: $("#editeur").val(),
                     article_id: '{{ article.id }}',
-                    image: $("#image").val()
+                    image: $("#image").val(),
+                    csrfData: "{{ csrf_token('save-item') }}"
                 },
                 function (data) {
                     if (data.code == 200) {

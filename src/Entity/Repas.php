@@ -32,14 +32,15 @@ class Repas
     private $image;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $postedBy;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="repas")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     */
+    private $postedBy;
 
     public function getId(): ?int
     {
@@ -82,18 +83,6 @@ class Repas
         return $this;
     }
 
-    public function getPostedBy(): ?string
-    {
-        return $this->postedBy;
-    }
-
-    public function setPostedBy(string $postedBy): self
-    {
-        $this->postedBy = $postedBy;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
@@ -102,6 +91,18 @@ class Repas
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getPostedBy(): ?User
+    {
+        return $this->postedBy;
+    }
+
+    public function setPostedBy(?User $postedBy): self
+    {
+        $this->postedBy = $postedBy;
 
         return $this;
     }

@@ -48,7 +48,8 @@
                 {
                     nom: $("#nom").val(),
                     image: $("#image").val(),
-                    produit_id: "new"
+                    produit_id: "new",
+                    csrfData: "{{ csrf_token('save-item') }}"
                 },
                 function (data) {
                     if (data.code == 200) {

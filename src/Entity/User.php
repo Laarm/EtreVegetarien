@@ -84,10 +84,16 @@ class User implements UserInterface
      */
     private $role;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Repas", mappedBy="postedBy", orphanRemoval=true)
+     */
+    private $repas;
+
     public function __construct()
     {
         $this->magasinAvis = new ArrayCollection();
         $this->restaurantAvis = new ArrayCollection();
+        $this->repas = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -278,19 +284,14 @@ class User implements UserInterface
     }
 
     public function eraseCredentials()
-    {
-        
-    }
+    { }
 
     public function getSalt()
-    {
-        
-    }
+    { }
 
     public function getRoles()
     {
-        // return ['ROLE_USER'];
-        if($this->role==null){
+        if ($this->role == null) {
             return ['ROLE_USER'];
         }
         return [$this->role];
@@ -304,6 +305,37 @@ class User implements UserInterface
     public function setRole(?string $role): self
     {
         $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Repas[]
+     */
+    public function getRepas(): Collection
+    {
+        return $this->repas;
+    }
+
+    public function addRepa(Repas $repa): self
+    {
+        if (!$this->repas->contains($repa)) {
+            $this->repas[] = $repa;
+            $repa->setPostedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRepa(Repas $repa): self
+    {
+        if ($this->repas->contains($repa)) {
+            $this->repas->removeElement($repa);
+            // set the owning side to null (unless already changed)
+            if ($repa->getPostedBy() === $this) {
+                $repa->setPostedBy(null);
+            }
+        }
 
         return $this;
     }
