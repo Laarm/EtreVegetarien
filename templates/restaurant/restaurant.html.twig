@@ -5,6 +5,7 @@
 - Être Végétarien!
 {% endblock %}
 {% block stylesheets %}
+<script src="{{ asset('/js/pagination.js') }}"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
 	integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
 	crossorigin="" />
@@ -22,6 +23,17 @@
 
 	#restaurant p {
 		color: #939396;
+	}
+
+	#restaurant a {
+		color: #939396
+	}
+
+	#restaurant .avis .right {
+		height: 24px;
+		margin-left: auto;
+		margin-top: -9px;
+		zoom: .8
 	}
 
 	#restaurant h2 {
@@ -91,8 +103,10 @@
 		font-weight: bold;
 	}
 
-	#restaurant #avis hr {
-		margin: 40px 0
+	#restaurant #avis .avis {
+		margin-bottom: 40px;
+		padding-bottom: 20px;
+		border-bottom: 1px solid rgba(0, 0, 0, .1);
 	}
 
 	#map {
@@ -129,6 +143,36 @@
 		font-weight: bold !important
 	}
 
+	.page-item.active a {
+		background-color: #58D68D !important;
+		border-color: #61ed9c !important;
+	}
+
+	.ratings {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		width: 100%;
+		direction: rtl;
+		text-align: left;
+	}
+
+	.star {
+		position: relative;
+		line-height: 60px;
+		display: inline-block;
+		transition: color 0.2s ease;
+		color: #ebebeb;
+	}
+
+	.star:hover,
+	.star.selected,
+	.star:hover~.star,
+	.star.selected~.star {
+		transition: color 0.8s ease;
+		color: #58D68D;
+	}
+
 	@media(max-width: 991px) {}
 </style>
 <section id="restaurant" class="container paddingSeperateur flex">
@@ -163,61 +207,31 @@
 					{{ restaurant.contenu | raw }}
 				</div>
 				<div class="tab-pane fade" id="avis" role="tabpanel" aria-labelledby="avis-tab">
-					<div class="avisContent">
-						<div class="avis">
-							<p class="username">Arnaud</p>
-							<span class="date">publié le 14 avril 2000</span>
-							<p class="message">Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-								accusantium
-								doloremque laudantium, totam rem aperiam,
-								eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt
-								explicabo. Nemo enim ipsam
-								voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni
-								dolores
-								eos qui ratione
-								voluptatem sequi nesciunt.</p>
-						</div>
-						<hr>
-						<div class="avis">
-							<p class="username">Arnaud</p>
-							<span class="date">publié le 14 avril 2000</span>
-							<p class="message">Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-								accusantium
-								doloremque laudantium, totam rem aperiam,
-								eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt
-								explicabo. Nemo enim ipsam
-								voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni
-								dolores
-								eos qui ratione
-								voluptatem sequi nesciunt.</p>
+					<div paginationView="avis" class="avisCont">
+						<div class="avisContent contentPagination">
+							{% for restaurantAvis in restaurantAvisAll %}
+							<div paginationName="avis" class="avis" paginationId="{{ loop.index }}">
+								<div class="username flex">
+									<p class="left">
+										<a
+											href="{{ path('user', {'id': restaurantAvis.postedBy.id}) }}">{{restaurantAvis.postedBy.username}}</a>
+									</p>
+									<p class="right note mtb-auto">
+										<span>{{restaurantAvis.note}}</span>/5
+									</p>
+								</div>
+								<span class="date">publié le {{restaurantAvis.createdAt|date("d/m/Y")}}</span>
+								<p class="message">{{restaurantAvis.message}}</p>
+							</div>
+							{% else %}
+							<p class="text-center">Aucun avis</p>
+							{% endfor %}
 						</div>
 					</div>
-					<style>
-						.ratings {
-							list-style-type: none;
-							margin: 0;
-							padding: 0;
-							width: 100%;
-							direction: rtl;
-							text-align: left;
-						}
-
-						.star {
-							position: relative;
-							line-height: 60px;
-							display: inline-block;
-							transition: color 0.2s ease;
-							color: #ebebeb;
-						}
-
-						.star:hover,
-						.star.selected,
-						.star:hover~.star,
-						.star.selected~.star {
-							transition: color 0.8s ease;
-							color: #58D68D;
-						}
-					</style>
+					<div paginationBtn="avis" class="pagination justify-content-end">
+						<div class="btnPagination flex mr-4">
+						</div>
+					</div>
 					<div class="form-group">
 						<label for="note">Note</label>
 						<ul id="note" class="ratings">
@@ -240,7 +254,8 @@
 					</div>
 					<div class="form-group">
 						<label for="exampleFormControlTextarea1">Message (optionnel)</label>
-						<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+						<textarea id="message" class="form-control" id="exampleFormControlTextarea1"
+							rows="3"></textarea>
 					</div>
 					<button id="btnEnvoieNote" type="button" class="btn btn-primary">Envoyer</button>
 					<div id="resultat"></div>
@@ -287,6 +302,9 @@
 	crossorigin=""></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
 <script>
+	addEventListener("load", () => {
+		new pagination("avis", 3, 10, "block");
+	})
 	$.getJSON("https://api-adresse.data.gouv.fr/search/?q= {{ restaurant.adresse }}&limit=1").then((restaurant) => {
 		lat = restaurant.features[0]['geometry']['coordinates'][1];
 		lon = restaurant.features[0]['geometry']['coordinates'][0];
@@ -319,17 +337,18 @@
 	$("#btnEnvoieNote").click(function (e) {
 		e.preventDefault();
 		$.post('/ajax/restaurant/sendNote', {
-			note: $(".star.selected").length,
+			note: $(".star.selected~.star").length + 1,
 			message: $("#message").val(),
-			restaurant_id: '{{ restaurant.id }}'
+			restaurant_id: '{{ restaurant.id }}',
+			csrfData: "{{ csrf_token('send-note') }}"
 		}, function (data) {
 			if (data.code == '200') {
 				$("#resultat").html("<div class='content'><p>" + data.message + "</p></div>");
-				$("#avis").load("{{ path('admin_edit_restaurant', {'id': restaurant.id}) }}#avis .avisContent");
+				$("#avis .avisCont").load("{{ path('restaurant_show', {'id': restaurant.id}) }}?view=0&maxView=3 #avis .avisContent");
 			} else {
 				$("#resultat").html("<div class='content red'><p>" + data.message + "</p></div>");
 			}
-		}, 'text');
+		}, 'json');
 	});
 </script>
 {% endblock %}
