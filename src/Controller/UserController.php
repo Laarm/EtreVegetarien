@@ -19,17 +19,17 @@ class UserController extends AbstractController
      */
     public function index(int $id, EntityManagerInterface $entityManager, UserRepository $repo, ProduitRepository $produitrepo, RepasRepository $repasrepo, RestaurantRepository $restaurantrepo, ArticleRepository $articlerepo): Response
     {
-        $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
+        $articles = $articlerepo->findBy(array(), array('id' => 'DESC'), "4", null);
         $user = $repo->find($id);
         $produit = $produitrepo->findAll();
         $repas = $repasrepo->findAll();
         $restaurant = $restaurantrepo->findAll();
         return $this->render('user/index.html.twig', [
+            'articles' => $articles,
             'user' => $user,
             'produits' => $produit,
             'repas' => $repas,
             'restaurants' => $restaurant,
-            'articles' => $articles,
         ]);
     }
 }
