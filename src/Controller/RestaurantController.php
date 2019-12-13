@@ -38,17 +38,6 @@ class RestaurantController extends AbstractController
     {
         $articles = $repo->findBy(array(), null, "5", null);
         $autresrestaurants = $repoRestaurant->findBy(array('ville' => $restaurant->getVille()), null, "10", null);
-        // $restaurantAvis = $this->getDoctrine()
-        //     ->getRepository(Restaurant::class)
-        //     ->find($restaurant->getId());
-        // $result = $em->getRepository(RestaurantAvis::class)->createQueryBuilder('r')
-        //     ->select('r')
-        //     ->where('r.restaurant_id = :restaurantId')
-        //     ->setParameter('restaurantId', $restaurant->getId())
-        //     ->orderBy('r.created_at', 'ASC')
-        //     ->getQuery();
-        // $restaurantAvis = $result->getResult();
-
         if ($request->get('view') !== null) {
             $view = $request->get('view');
             $maxView = $request->get('maxView');
@@ -56,13 +45,21 @@ class RestaurantController extends AbstractController
             $view = null;
             $maxView = 100;
         }
+        $count = $this->getDoctrine()
+            ->getRepository(RestaurantAvis::class)->createQueryBuilder('r')
+            ->select('avg(r.note)', 'count(r)')
+            ->where('r.restaurant = :restaurantId')
+            ->setParameter('restaurantId', $restaurant)
+            ->getQuery();
+        $restaurantsSom = $count->getResult();
         $restaurantAvis = $repoRestaurantAvis->findBy(array('restaurant' => $restaurant), null, $maxView, $view);
-
         return $this->render('restaurant/restaurant.html.twig', [
             'restaurant' => $restaurant,
             'articles' => $articles,
             'autresrestaurants' => $autresrestaurants,
             'restaurantAvisAll' => $restaurantAvis,
+            'restaurantNote' => $restaurantsSom[0][1],
+            'restaurantAvisCount' => $restaurantsSom[0][2],
         ]);
     }
 
