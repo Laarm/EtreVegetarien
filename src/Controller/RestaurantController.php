@@ -93,7 +93,7 @@ class RestaurantController extends AbstractController
     /**
      * @Route("/ajax/restaurant/sendNote", name="send_note_restaurant")
      */
-    public function sendNote(ValidatorInterface $validator, EntityManagerInterface $entityManager, Security $security, Request $request, RestaurantAvisRepository $repoRestaurantAvis): Response
+    public function sendNote(ValidatorInterface $validator, EntityManagerInterface $entityManager, Security $security, Request $request, RestaurantRepository $repoRestaurant): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->request->get('csrfData');
@@ -106,9 +106,11 @@ class RestaurantController extends AbstractController
                         $message = $request->request->get('message');
                     }
                     $user = $security->getUser();
+                    $restaurant = $repoRestaurant->findBy(array('id' => $request->request->get('restaurant_id')), null, "10", null);
                     $verif = $this->getDoctrine()
                         ->getRepository(RestaurantAvis::class)
                         ->findOneBy([
+                            'restaurant' => $restaurant,
                             'postedBy' => $user,
                         ]);
                     if (!$verif) {

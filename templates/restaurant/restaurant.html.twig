@@ -180,7 +180,7 @@
 		<div class="flex flex-between">
 			<h1 class="mtb-auto">{{ restaurant.nom }}</h1>
 			<p class="note mtb-auto">
-				<span>{{restaurantNote}}</span>/5</p>
+				{% if restaurantNote %}<span>{{restaurantNote}}</span>/5</p>{% endif %}
 		</div>
 		<div class="flex flex-between">
 			<h2 class="mtb-auto">{{ restaurant.adresse }}</h2>
@@ -277,6 +277,10 @@
 			{% if loop.index != 1 %}
 			<hr>
 			{% endif %}
+			{% set avisFinal = null %}
+			{% for avis in restaurant.restaurantAvis %}
+			{% set avisFinal = avisFinal + avis.note %}
+			{% endfor %}
 			<div class="restaurant flex flex-between">
 				<div class="left">
 					<a href="{{ path('restaurant_show', {'id': restaurant.id}) }}">
@@ -286,7 +290,7 @@
 				</div>
 				<div class="right mtb-auto flex">
 					<p class="mtb-auto note">
-						<span>10</span>/10</p>
+						{% if avisFinal %}<span>{{ avisFinal }}</span>/5</p>{% else %}<p>Aucun avis</p>{% endif %}
 				</div>
 			</div>
 			{% else %}
