@@ -36,7 +36,7 @@ class RestaurantController extends AbstractController
      */
     public function showRestaurant(Restaurant $restaurant, ArticleRepository $repo, RestaurantRepository $repoRestaurant, RestaurantAvisRepository $repoRestaurantAvis, Request $request)
     {
-        $articles = $repo->findBy(array(), null, "5", null);
+        $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
         $autresrestaurants = $repoRestaurant->findBy(array('ville' => $restaurant->getVille()), null, "10", null);
         if ($request->get('view') !== null) {
             $view = $request->get('view');

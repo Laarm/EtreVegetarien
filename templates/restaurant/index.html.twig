@@ -129,7 +129,7 @@
                         $('.produit-list-design').html("<p class='margin-auto'>Aucun restaurant trouvé</p>")
                     }
                     restaurants.forEach((restaurant) => {
-                        $(".produit-list-design").append('<a class="item" href="/restaurant/' + restaurant.nom + '"><div class= "top"><img alt="' + restaurant.nom + '" src="' + restaurant.image + '" /></div><div class="bottom"><p>' + restaurant.nom + '</p></div></a>')
+                        $(".produit-list-design").append('<a class="item" href="/restaurant/' + restaurant.id + '"><div class= "top"><img alt="' + restaurant.nom + '" src="' + restaurant.image + '" /></div><div class="bottom"><p>' + restaurant.nom + '</p></div></a>')
                     })
                 });
         });

@@ -18,6 +18,7 @@ class ArticleController extends AbstractController
             'controller_name' => 'ArticleController',
         ]);
     }
+
     /**
      * @Route("/article/{id}", name="article_show")
      */

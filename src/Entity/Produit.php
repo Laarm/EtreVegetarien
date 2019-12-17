@@ -38,9 +38,15 @@ class Produit
      */
     private $produitFavoris;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ProduitSync", mappedBy="Produit", orphanRemoval=true)
+     */
+    private $produitSyncs;
+
     public function __construct()
     {
         $this->produitFavoris = new ArrayCollection();
+        $this->produitSyncs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -109,6 +115,37 @@ class Produit
             // set the owning side to null (unless already changed)
             if ($produitFavori->getProduitId() === $this) {
                 $produitFavori->setProduitId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProduitSync[]
+     */
+    public function getProduitSyncs(): Collection
+    {
+        return $this->produitSyncs;
+    }
+
+    public function addProduitSync(ProduitSync $produitSync): self
+    {
+        if (!$this->produitSyncs->contains($produitSync)) {
+            $this->produitSyncs[] = $produitSync;
+            $produitSync->setProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduitSync(ProduitSync $produitSync): self
+    {
+        if ($this->produitSyncs->contains($produitSync)) {
+            $this->produitSyncs->removeElement($produitSync);
+            // set the owning side to null (unless already changed)
+            if ($produitSync->getProduit() === $this) {
+                $produitSync->setProduit(null);
             }
         }
 

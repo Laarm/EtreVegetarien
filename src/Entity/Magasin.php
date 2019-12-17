@@ -53,9 +53,15 @@ class Magasin
      */
     private $magasinAvis;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ProduitSync", mappedBy="Magasin", orphanRemoval=true)
+     */
+    private $produitSyncs;
+
     public function __construct()
     {
         $this->magasinAvis = new ArrayCollection();
+        $this->produitSyncs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -160,6 +166,37 @@ class Magasin
             // set the owning side to null (unless already changed)
             if ($magasinAvi->getMagasin() === $this) {
                 $magasinAvi->setMagasin(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProduitSync[]
+     */
+    public function getProduitSyncs(): Collection
+    {
+        return $this->produitSyncs;
+    }
+
+    public function addProduitSync(ProduitSync $produitSync): self
+    {
+        if (!$this->produitSyncs->contains($produitSync)) {
+            $this->produitSyncs[] = $produitSync;
+            $produitSync->setMagasin($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduitSync(ProduitSync $produitSync): self
+    {
+        if ($this->produitSyncs->contains($produitSync)) {
+            $this->produitSyncs->removeElement($produitSync);
+            // set the owning side to null (unless already changed)
+            if ($produitSync->getMagasin() === $this) {
+                $produitSync->setMagasin(null);
             }
         }
 

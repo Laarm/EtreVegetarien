@@ -7,6 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\MagasinRepository;
 use App\Repository\ArticleRepository;
 use App\Entity\Magasin;
+use App\Entity\ProduitSync;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,6 +25,28 @@ class MagasinController extends AbstractController
             'controller_name' => 'MagasinController',
             'magasins' => $magasin,
             'articles' => $articles,
+        ]);
+    }
+
+    /**
+     * @Route("/magasin/{id}", name="magasin_show")
+     */
+    public function show(Magasin $magasin, ArticleRepository $repo, Request $request, MagasinRepository $magasinRepo)
+    {
+        $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
+        $magasinId = $magasinRepo->find($request->get('id'));
+        $result = $this->getDoctrine()
+            ->getRepository(ProduitSync::class)->createQueryBuilder('m')
+            ->select('m')
+            ->where('m.Magasin = :magasinId')
+            ->setParameter('magasinId', $magasin)
+            ->orderBy('m.createdAt', 'DESC')
+            ->getQuery();
+        $produits = $result->getResult();
+        return $this->render('magasin/magasin.html.twig', [
+            'magasin' => $magasin,
+            'articles' => $articles,
+            'produits' => $produits,
         ]);
     }
 

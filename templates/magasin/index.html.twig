@@ -102,12 +102,14 @@
     <div class="produit-list-design flex flex-wrap flex-between">
         {% for magasin in magasins %}
         <div class="item">
-            <div class="top">
-                <img alt="{{ magasin.nom }}" src="{{ magasin.image }}" />
-            </div>
-            <div class="bottom">
-                <p>{{ magasin.nom }}</p>
-            </div>
+            <a href="{{ path('magasin_show', {'id': magasin.id}) }}">
+                <div class="top">
+                    <img alt="{{ magasin.nom }}" src="{{ magasin.image }}" />
+                </div>
+                <div class="bottom">
+                    <p>{{ magasin.nom }}</p>
+                </div>
+            </a>
         </div>
         {% endfor %}
     </div>
@@ -125,7 +127,7 @@
                         $('.produit-list-design').html("<p class='margin-auto'>Aucun restaurant trouvé</p>")
                     }
                     magasins.forEach((magasin) => {
-                        $(".produit-list-design").append('<a class="item" href="/magasin/' + magasin.nom + '"><div class= "top"><img alt="' + magasin.nom + '" src="' + magasin.image + '" /></div><div class="bottom"><p>' + magasin.nom + '</p></div></a>')
+                        $(".produit-list-design").append('<a class="item" href="/magasin/' + magasin.id + '"><div class= "top"><img alt="' + magasin.nom + '" src="' + magasin.image + '" /></div><div class="bottom"><p>' + magasin.nom + '</p></div></a>')
                     })
                 });
         });

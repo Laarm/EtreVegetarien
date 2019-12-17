@@ -627,3 +627,8 @@ footer .bottom .container p a {
         font-size: 3.5vw
     }
 }
+
+/* OTHER */
+.produit-list-design a {
+    text-decoration: none;
+}
