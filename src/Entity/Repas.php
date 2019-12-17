@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -41,6 +43,16 @@ class Repas
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $postedBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\RepasFavoris", mappedBy="Repas", orphanRemoval=true)
+     */
+    private $repasFavoris;
+
+    public function __construct()
+    {
+        $this->repasFavoris = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -103,6 +115,37 @@ class Repas
     public function setPostedBy(?User $postedBy): self
     {
         $this->postedBy = $postedBy;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|RepasFavoris[]
+     */
+    public function getRepasFavoris(): Collection
+    {
+        return $this->repasFavoris;
+    }
+
+    public function addRepasFavori(RepasFavoris $repasFavori): self
+    {
+        if (!$this->repasFavoris->contains($repasFavori)) {
+            $this->repasFavoris[] = $repasFavori;
+            $repasFavori->setRepas($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRepasFavori(RepasFavoris $repasFavori): self
+    {
+        if ($this->repasFavoris->contains($repasFavori)) {
+            $this->repasFavoris->removeElement($repasFavori);
+            // set the owning side to null (unless already changed)
+            if ($repasFavori->getRepas() === $this) {
+                $repasFavori->setRepas(null);
+            }
+        }
 
         return $this;
     }

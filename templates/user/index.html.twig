@@ -79,10 +79,11 @@
                             {% for restaurant in restaurants %}
                             <div class="item">
                                 <div class="top">
-                                    <img alt="{{ restaurant.nom }}" src="{{ restaurant.image }}" />
+                                    <img alt="{{ restaurant.Restaurant.nom }}"
+                                        src="{{ restaurant.Restaurant.image }}" />
                                 </div>
                                 <div class="bottom">
-                                    <p>{{ restaurant.nom }}</p>
+                                    <p>{{ restaurant.Restaurant.nom }}</p>
                                 </div>
                             </div>
                             {% endfor %}
@@ -92,10 +93,10 @@
                             {% for repa in repas %}
                             <div class="item">
                                 <div class="top">
-                                    <img alt="{{ repa.nom }}" src="{{ repa.image }}" />
+                                    <img alt="{{ repa.Repas.nom }}" src="{{ repa.Repas.image }}" />
                                 </div>
                                 <div class="bottom">
-                                    <p>{{ repa.nom }}</p>
+                                    <p>{{ repa.Repas.nom }}</p>
                                 </div>
                             </div>
                             {% endfor %}
@@ -105,10 +106,10 @@
                             {% for produit in produits %}
                             <div class="item">
                                 <div class="top">
-                                    <img alt="{{ produit.nom }}" src="{{ produit.image }}" />
+                                    <img alt="{{ produit.produitId.nom }}" src="{{ produit.produitId.image }}" />
                                 </div>
                                 <div class="bottom">
-                                    <p>{{ produit.nom }}</p>
+                                    <p>{{ produit.produitId.nom }}</p>
                                 </div>
                             </div>
                             {% endfor %}

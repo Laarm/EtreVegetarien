@@ -104,12 +104,18 @@ class User implements UserInterface
      */
     private $avatar;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\RepasFavoris", mappedBy="postedBy", orphanRemoval=true)
+     */
+    private $repasFavoris;
+
     public function __construct()
     {
         $this->magasinAvis = new ArrayCollection();
         $this->restaurantAvis = new ArrayCollection();
         $this->repas = new ArrayCollection();
         $this->produitFavoris = new ArrayCollection();
+        $this->repasFavoris = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -407,6 +413,37 @@ class User implements UserInterface
     public function setAvatar(?string $avatar): self
     {
         $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|RepasFavoris[]
+     */
+    public function getRepasFavoris(): Collection
+    {
+        return $this->repasFavoris;
+    }
+
+    public function addRepasFavori(RepasFavoris $repasFavori): self
+    {
+        if (!$this->repasFavoris->contains($repasFavori)) {
+            $this->repasFavoris[] = $repasFavori;
+            $repasFavori->setPostedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRepasFavori(RepasFavoris $repasFavori): self
+    {
+        if ($this->repasFavoris->contains($repasFavori)) {
+            $this->repasFavoris->removeElement($repasFavori);
+            // set the owning side to null (unless already changed)
+            if ($repasFavori->getPostedBy() === $this) {
+                $repasFavori->setPostedBy(null);
+            }
+        }
 
         return $this;
     }

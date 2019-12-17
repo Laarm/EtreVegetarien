@@ -147,9 +147,15 @@ main {
 }
 
 #timeline .container .bottom .col-7 .produit-list-design .item .top img {
-    width: 80%;
+    width: 10vw;
     margin: auto;
     transition-duration: .3s;
+}
+
+@media(max-width: 991px) {
+    #timeline .container .bottom .col-7 .produit-list-design .item .top img {
+        width: 18vh
+    }
 }
 
 #timeline .container .bottom .col-7 .produit-list-design .item .bottom {
