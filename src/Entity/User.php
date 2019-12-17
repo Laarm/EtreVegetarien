@@ -89,11 +89,27 @@ class User implements UserInterface
      */
     private $repas;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ProduitFavoris", mappedBy="postedById", orphanRemoval=true)
+     */
+    private $produitFavoris;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $PreferenceCreatedAt;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $avatar;
+
     public function __construct()
     {
         $this->magasinAvis = new ArrayCollection();
         $this->restaurantAvis = new ArrayCollection();
         $this->repas = new ArrayCollection();
+        $this->produitFavoris = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -336,6 +352,61 @@ class User implements UserInterface
                 $repa->setPostedBy(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProduitFavoris[]
+     */
+    public function getProduitFavoris(): Collection
+    {
+        return $this->produitFavoris;
+    }
+
+    public function addProduitFavori(ProduitFavoris $produitFavori): self
+    {
+        if (!$this->produitFavoris->contains($produitFavori)) {
+            $this->produitFavoris[] = $produitFavori;
+            $produitFavori->setPostedById($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduitFavori(ProduitFavoris $produitFavori): self
+    {
+        if ($this->produitFavoris->contains($produitFavori)) {
+            $this->produitFavoris->removeElement($produitFavori);
+            // set the owning side to null (unless already changed)
+            if ($produitFavori->getPostedById() === $this) {
+                $produitFavori->setPostedById(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPreferenceCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->PreferenceCreatedAt;
+    }
+
+    public function setPreferenceCreatedAt(?\DateTimeInterface $PreferenceCreatedAt): self
+    {
+        $this->PreferenceCreatedAt = $PreferenceCreatedAt;
+
+        return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): self
+    {
+        $this->avatar = $avatar;
 
         return $this;
     }

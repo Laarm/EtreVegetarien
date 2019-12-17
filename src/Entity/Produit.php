@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -30,6 +32,16 @@ class Produit
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ProduitFavoris", mappedBy="produitId", orphanRemoval=true)
+     */
+    private $produitFavoris;
+
+    public function __construct()
+    {
+        $this->produitFavoris = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -68,6 +80,37 @@ class Produit
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProduitFavoris[]
+     */
+    public function getProduitFavoris(): Collection
+    {
+        return $this->produitFavoris;
+    }
+
+    public function addProduitFavori(ProduitFavoris $produitFavori): self
+    {
+        if (!$this->produitFavoris->contains($produitFavori)) {
+            $this->produitFavoris[] = $produitFavori;
+            $produitFavori->setProduitId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduitFavori(ProduitFavoris $produitFavori): self
+    {
+        if ($this->produitFavoris->contains($produitFavori)) {
+            $this->produitFavoris->removeElement($produitFavori);
+            // set the owning side to null (unless already changed)
+            if ($produitFavori->getProduitId() === $this) {
+                $produitFavori->setProduitId(null);
+            }
+        }
 
         return $this;
     }

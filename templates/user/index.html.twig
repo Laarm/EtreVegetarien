@@ -13,16 +13,17 @@
             <h1>{{user.username}}</h1>
             {% if user.preference is not empty %}
             <h2>{{user.preference}}</h2>
-            <span>(Depuis 2 ans)</span>
+            <span>({{ user.preferenceCreatedAt.date|timeDiff("now", false, "Depuis ") }})</span>
             {% else %}
             <h2>Membre</h2>
-            <span>(Depuis hier)</span>
+            <span>({{ user.createdAt.date|timeDiff("now", false, "Il y a ") }})</span>
             {% endif %}
             <button id="btnParametre" type="button" class="btn btn-primary mr-1"><i class="fad fa-cog"></i>
                 Paramètre</button>
         </div>
         <div class="right">
-            <div class="avatar flex"><img class="mtb-auto" src="https://arnaudjacques.ovh/img/photo.png"
+            <div class="avatar flex"><img class="mtb-auto"
+                    src="{% if user.avatar %}{{ user.avatar }}{% else %}https://iupac.org/wp-content/uploads/2018/05/default-avatar.png{% endif %}"
                     alt="Avatar de {{user.username}}" /></div>
             <div class="badge">
                 <div class="flex"><i class="fas fa-carrot margin-auto"></i></div>
