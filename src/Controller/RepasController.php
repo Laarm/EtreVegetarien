@@ -3,13 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\Repas;
+use App\Entity\RepasFavoris;
+use App\Entity\Restaurant;
+use App\Entity\RestaurantAvis;
 use App\Repository\RepasRepository;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\RepasFavorisRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class RepasController extends AbstractController
@@ -57,8 +62,9 @@ class RepasController extends AbstractController
     /**
      * @Route("/repas/{id}", name="repas_show")
      */
-    public function showRepas(Repas $repas, ArticleRepository $repo, RepasRepository $repoRepas, RepasFavorisRepository $repoRepasFavoris, Request $request)
+    public function showRepas(Repas $repas, ArticleRepository $repo, RepasRepository $repoRepas, RepasFavorisRepository $repoRepasFavoris, Security $security)
     {
+        $user = $security->getUser();
         $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
         $autresrepas = $repoRepas->findBy(array('postedBy' => $repas->getPostedBy()), null, "8", null);
         $repasFavoris = $repoRepasFavoris->findBy(array('Repas' => $repas), null, "100", null);
@@ -68,5 +74,56 @@ class RepasController extends AbstractController
             'autresrepas' => $autresrepas,
             'repasFavoris' => $repasFavoris,
         ]);
+    }
+
+    /**
+     * @Route("/ajax/repasFavoris", name="repas_favoris")
+     */
+    public function repasFavoris(ValidatorInterface $validator, EntityManagerInterface $entityManager, Security $security, RepasFavorisRepository $repoRepasFavoris, Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $submittedToken = $request->get('csrfData');
+            if ($this->isCsrfTokenValid('repas-favoris', $submittedToken)) {
+                if (!empty($request->get('repas_id'))) {
+                    $user = $security->getUser();
+                    $repas = $repoRepasFavoris->find($request->get('repas_id'));
+                    $verif = $repoRepasFavoris->findBy(array('postedBy' => $user, 'Repas' => $request->get('repas_id')));
+                    if (!$verif) {
+                        $sqlRepasFavoris = new RepasFavoris();
+                        $repas = $this->getDoctrine()
+                            ->getRepository(Repas::class)
+                            ->find($request->get('repas_id'));
+                        $sqlRepasFavoris->setRepas($repas)
+                            ->setPostedBy($user)
+                            ->setCreatedAt(new \DateTime());
+                        $entityManager->persist($sqlRepasFavoris);
+                        $entityManager->flush();
+                        $errors = $validator->validate($sqlRepasFavoris);
+                        if (count($errors) == 0) {
+                            return $this->json(['code' => 200, 'message' => "Vous avez bien ajouter ce repas en favoris", 'id' => $request->get('repas_id')], 200);
+                        }
+                    } else {
+                        $result = $this->getDoctrine()->getRepository(RepasFavoris::class)->createQueryBuilder('r')
+                            ->select('r.id')
+                            ->where('r.postedBy = ' . $this->getUser()->getId())
+                            ->andwhere('r.Repas = ' . $request->get('repas_id'))
+                            ->getQuery();
+                        $repasFavorisId = $result->getResult();
+                        $deleteFavoris = $entityManager->getRepository(RepasFavoris::class)->find($repasFavorisId[0]['id']);
+                        $entityManager->remove($deleteFavoris);
+                        $entityManager->flush();
+                        $errors = $validator->validate($deleteFavoris);
+                        if (count($errors) == 0) {
+                            return $this->json(['code' => 201, 'message' => "Vous avez bien supprimer ce repas en favoris", 'id' => $request->get('repas_id')], 200);
+                        } else {
+                            return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                        }
+                    }
+                } else {
+                    return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                }
+            }
+            return $this->json(['code' => 400, 'message' => 'Token invalide, veuillez contacter un administrateur !'], 200);
+        }
     }
 }

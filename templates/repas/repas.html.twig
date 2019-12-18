@@ -180,6 +180,27 @@
         text-decoration: none;
     }
 
+    [btnFavoris] {
+        font-size: 25px;
+        transition-duration: 1s;
+    }
+
+    [btnFavoris]:hover,
+    [btnFavoris]:focus,
+    [btnFavoris]:active,
+    [btnFavoris].active {
+        color: #58D68D;
+    }
+
+    [btnFavoris]:active {
+        transition-duration: 0.1s;
+        transform: scale(1.5);
+    }
+
+    [btnFavoris].f-20 {
+        font-size: 20px
+    }
+
     @media(max-width: 991px) {}
 </style>
 <section id="repas" class="container paddingSeperateur flex">
@@ -187,7 +208,8 @@
         <div class="flex flex-between">
             <h1 class="mtb-auto">{{ repas.nom }}</h1>
             <p class="note mtb-auto">
-                <i class="fad fa-star"></i>
+                <i btnFavoris="{{repas.id}}"
+                    class="{% for favoris in repas.repasFavoris %}{% if favoris.postedBy.id == app.user.id %}active{% endif %}{% endfor %} cursor-pointer fad fa-star"></i>
         </div>
         <div class="flex flex-between">
             <h2 class="mtb-auto">Publié le <strong>{{repas.createdAt|date("d/m/Y")}}</strong>
@@ -272,7 +294,8 @@
                 </div>
                 <div class="right mtb-auto flex">
                     <p class="mtb-auto note">
-                        <i class="fad fa-star"></i>
+                        <i btnFavoris="{{repas.id}}"
+                            class="{% for favoris in repas.repasFavoris %}{% if favoris.postedBy.id == app.user.id %}active{% endif %}{% endfor %} f-20 cursor-pointer fad fa-star"></i>
                 </div>
             </div>
             {% else %}
@@ -291,19 +314,17 @@
     addEventListener("load", () => {
         new pagination("avis", 3, 10, "block");
     })
-    $("#btnEnvoieNote").click(function (e) {
+    $("[btnFavoris]").click(function (e) {
         e.preventDefault();
-        $.post('/ajax/repas/sendNote', {
-            note: $(".star.selected~.star").length + 1,
-            message: $("#message").val(),
-            repas_id: '{{ repas.id }}',
-            csrfData: "{{ csrf_token('send-note') }}"
+        $.post("{{ path('repas_favoris') }}", {
+            repas_id: $(this).attr('btnFavoris'),
+            csrfData: "{{ csrf_token('repas-favoris') }}"
         }, function (data) {
             if (data.code == '200') {
-                $("#resultat").html("<div class='content'><p>" + data.message + "</p></div>");
-                $("#avis .avisCont").load("{{ path('repas_show', {'id': repas.id}) }}?view=0&maxView=3 #avis .avisContent");
-            } else {
-                $("#resultat").html("<div class='content red'><p>" + data.message + "</p></div>");
+                $('[btnFavoris = "' + data.id + '"]').addClass('active')
+            }
+            if (data.code == '201') {
+                $('[btnFavoris = "' + data.id + '"]').removeClass('active')
             }
         }, 'json');
     });
