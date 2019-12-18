@@ -36,7 +36,8 @@
     <div class="container flex flex-column rond-2 p-4 shadow-1">
         <div class="top">
             <h1><i class="fad fa-user"></i> Biographie</h1>
-            <p>{% if app.user.bio %}{{ app.user.bio}}{% else %}Aucune biographie{% endif %}</p>
+            <p>{% if user.bio %}{% if user.role == "ROLE_ADMIN" %}{{ user.bio|raw }}{% else %}{{ user.bio }}{% endif %}{% else %}Aucune
+                biographie{% endif %}</p>
         </div>
         <div class="bottom">
             <div class="row">

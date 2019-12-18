@@ -1,13 +1,20 @@
 <!DOCTYPE html>
 <div lang="fr">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>{% block title %}Admin - Être Végétarien{% endblock %}</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
         <script src="https://kit.fontawesome.com/97fb64c932.js" crossorigin="anonymous"></script>
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet">
         <link href="{{ asset('/css/main.css') }}" rel="stylesheet" />
@@ -16,40 +23,51 @@
         {% block stylesheets %}
         {% endblock %}
     </head>
+
     <body>
         <header>
             <nav class="navbar navbar-expand-lg">
-                <a class="navbar-brand" href="{{ path('index') }}"><img class="logo" src="{{ asset('/img/logo/etrevegetariensur-min-min.png') }}" alt="Logo Être Végétarien" /></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" href="{{ path('index') }}"><img class="logo"
+                        src="{{ asset('/img/logo/etrevegetariensur-min-min.png') }}" alt="Logo Être Végétarien" /></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"><i class="fad fa-bars"></i></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown active">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdown-test" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Articles
+                            <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdown-test"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Articles
                             </a>
                             <div aria-labelledby="menu-1" class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ path('adminGestionArticles') }}">Gestion des articles</a>
-                                <a class="dropdown-item" href="{{ path('adminGestionArticlesCommentaires') }}">Gestion des commentaires</a>
+                                <a class="dropdown-item" href="{{ path('adminGestionArticles') }}">Gestion des
+                                    articles</a>
+                                <a class="dropdown-item" href="{{ path('adminGestionArticlesCommentaires') }}">Gestion
+                                    des commentaires</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdown-test" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Magasins
+                            <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdown-test"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Magasins
                             </a>
                             <div aria-labelledby="menu-1" class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ path('adminGestionMagasins') }}">Gestion des magasins</a>
-                                <a class="dropdown-item" href="{{ path('adminGestionMagasinsAvis') }}">Gestion des avis</a>
+                                <a class="dropdown-item" href="{{ path('adminGestionMagasins') }}">Gestion des
+                                    magasins</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdown-test" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Restaurants
+                            <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdown-test"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Restaurants
                             </a>
                             <div aria-labelledby="menu-1" class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ path('adminGestionRestaurants') }}">Gestion des restaurants</a>
-                                <a class="dropdown-item" href="{{ path('adminGestionRestaurantsAvis') }}">Gestion des avis</a>
+                                <a class="dropdown-item" href="{{ path('adminGestionRestaurants') }}">Gestion des
+                                    restaurants</a>
+                                <a class="dropdown-item" href="{{ path('adminGestionRestaurantsAvis') }}">Gestion des
+                                    avis</a>
                             </div>
                         </li>
                         <li class="nav-item">

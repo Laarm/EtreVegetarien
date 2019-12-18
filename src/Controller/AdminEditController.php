@@ -2,18 +2,20 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use App\Entity\User;
+use App\Entity\Repas;
 use App\Entity\Article;
 use App\Entity\Magasin;
-use App\Entity\Restaurant;
 use App\Entity\Produit;
-use App\Entity\Repas;
-use Symfony\Component\HttpFoundation\Response;
+use App\Entity\Restaurant;
+use App\Entity\RestaurantAvis;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminEditController extends AbstractController
 {
@@ -45,15 +47,15 @@ class AdminEditController extends AbstractController
     public function deleteArticle(ValidatorInterface $validator, EntityManagerInterface $entityManager, Request $request): Response
     {
         if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->request->get('csrfData');
+            $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
-                if (!empty($request->request->get('id'))) {
-                    $article = $entityManager->getRepository(Article::class)->find($request->request->get('id'));
+                if (!empty($request->get('id'))) {
+                    $article = $entityManager->getRepository(Article::class)->find($request->get('id'));
                     $entityManager->remove($article);
                     $entityManager->flush();
                     $errors = $validator->validate($article);
                     if (count($errors) == 0) {
-                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer cet article", 'id' => $request->request->get('id')], 200);
+                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer cet article", 'id' => $request->get('id')], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
                     }
@@ -70,18 +72,18 @@ class AdminEditController extends AbstractController
     public function saveArticle(ValidatorInterface $validator, EntityManagerInterface $entityManager, Request $request): Response
     {
         if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->request->get('csrfData');
+            $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
-                if (!empty($request->request->get('nom')) && !empty($request->request->get('contenu')) && !empty($request->request->get('article_id'))) {
-                    if (empty($request->request->get('image'))) {
+                if (!empty($request->get('nom')) && !empty($request->get('contenu')) && !empty($request->get('article_id'))) {
+                    if (empty($request->get('image'))) {
                         $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
                     } else {
-                        $image = htmlspecialchars($request->request->get('image'));
+                        $image = htmlspecialchars($request->get('image'));
                     }
-                    if ($request->request->get('article_id') == "new") {
+                    if ($request->get('article_id') == "new") {
                         $sqlArticle = new Article();
-                        $sqlArticle->setNom($request->request->get('nom'))
-                            ->setContenu($request->request->get('contenu'))
+                        $sqlArticle->setNom($request->get('nom'))
+                            ->setContenu($request->get('contenu'))
                             ->setImage($image)
                             ->setCreatedAt(new \DateTime());
                         $entityManager->persist($sqlArticle);
@@ -90,16 +92,16 @@ class AdminEditController extends AbstractController
                         $id = $sqlArticle->getId();
                         $success = "L'article à bien été créer !";
                     } else {
-                        $article = $entityManager->getRepository(Article::class)->find($request->request->get('article_id'));
-                        $article->setNom($request->request->get('nom'))
-                            ->setContenu($request->request->get('contenu'))
-                            ->setImage($request->request->get('image'));
+                        $article = $entityManager->getRepository(Article::class)->find($request->get('article_id'));
+                        $article->setNom($request->get('nom'))
+                            ->setContenu($request->get('contenu'))
+                            ->setImage($request->get('image'));
                         $entityManager->flush();
                         $errors = $validator->validate($article);
-                        $id = $request->request->get('article_id');
+                        $id = $request->get('article_id');
                         $success = "L'article à bien été mis à jour !";
                     }
-                    if (!empty($request->request->get('nom')) && !empty($request->request->get('article_id'))) {
+                    if (!empty($request->get('nom')) && !empty($request->get('article_id'))) {
                         if (count($errors) == 0) {
                             return $this->json(['code' => 200, 'message' => $success, 'articleId' => $id], 200);
                         } else {
@@ -139,15 +141,15 @@ class AdminEditController extends AbstractController
     public function deleteMagasin(ValidatorInterface $validator, EntityManagerInterface $entityManager, Request $request): Response
     {
         if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->request->get('csrfData');
+            $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
-                if (!empty($request->request->get('id'))) {
-                    $article = $entityManager->getRepository(Magasin::class)->find($request->request->get('id'));
+                if (!empty($request->get('id'))) {
+                    $article = $entityManager->getRepository(Magasin::class)->find($request->get('id'));
                     $entityManager->remove($article);
                     $entityManager->flush();
                     $errors = $validator->validate($article);
                     if (count($errors) == 0) {
-                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce magasin", 'id' => $request->request->get('id')], 200);
+                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce magasin", 'id' => $request->get('id')], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
                     }
@@ -164,21 +166,21 @@ class AdminEditController extends AbstractController
     public function saveMagasin(ValidatorInterface $validator, EntityManagerInterface $entityManager, Request $request): Response
     {
         if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->request->get('csrfData');
+            $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
-                if (!empty($request->request->get('nom')) && !empty($request->request->get('ville')) && !empty($request->request->get('magasin_id'))) {
-                    if (empty($request->request->get('image'))) {
+                if (!empty($request->get('nom')) && !empty($request->get('ville')) && !empty($request->get('magasin_id'))) {
+                    if (empty($request->get('image'))) {
                         $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
                     } else {
-                        $image = htmlspecialchars($request->request->get('image'));
+                        $image = htmlspecialchars($request->get('image'));
                     }
-                    if ($request->request->get('magasin_id') == "new") {
+                    if ($request->get('magasin_id') == "new") {
                         $sqlMagasin = new Magasin();
-                        $sqlMagasin->setNom($request->request->get('nom'))
+                        $sqlMagasin->setNom($request->get('nom'))
                             ->setImage($image)
                             ->setLocation("null")
-                            ->setAdresse($request->request->get('adresse'))
-                            ->setVille($request->request->get('ville'))
+                            ->setAdresse($request->get('adresse'))
+                            ->setVille($request->get('ville'))
                             ->setCreatedAt(new \DateTime());
                         $entityManager->persist($sqlMagasin);
                         $entityManager->flush();
@@ -186,17 +188,17 @@ class AdminEditController extends AbstractController
                         $id = $sqlMagasin->getId();
                         $success = "Le magasin à bien été créer !";
                     } else {
-                        $magasin = $entityManager->getRepository(Magasin::class)->find($request->request->get('magasin_id'));
-                        $magasin->setNom($request->request->get('nom'))
-                            ->setImage($request->request->get('image'))
-                            ->setAdresse($request->request->get('adresse'))
-                            ->setVille($request->request->get('ville'));
+                        $magasin = $entityManager->getRepository(Magasin::class)->find($request->get('magasin_id'));
+                        $magasin->setNom($request->get('nom'))
+                            ->setImage($request->get('image'))
+                            ->setAdresse($request->get('adresse'))
+                            ->setVille($request->get('ville'));
                         $entityManager->flush();
                         $errors = $validator->validate($magasin);
-                        $id = $request->request->get('magasin_id');
+                        $id = $request->get('magasin_id');
                         $success = "Le magasin à bien été mis à jour !";
                     }
-                    if (!empty($request->request->get('nom')) && !empty($request->request->get('magasin_id'))) {
+                    if (!empty($request->get('nom')) && !empty($request->get('magasin_id'))) {
                         if (count($errors) == 0) {
                             return $this->json(['code' => 200, 'message' => $success, 'magasinId' => $id], 200);
                         } else {
@@ -236,15 +238,15 @@ class AdminEditController extends AbstractController
     public function deleteRestaurant(ValidatorInterface $validator, EntityManagerInterface $entityManager, Request $request): Response
     {
         if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->request->get('csrfData');
+            $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
-                if (!empty($request->request->get('id'))) {
-                    $article = $entityManager->getRepository(Restaurant::class)->find($request->request->get('id'));
+                if (!empty($request->get('id'))) {
+                    $article = $entityManager->getRepository(Restaurant::class)->find($request->get('id'));
                     $entityManager->remove($article);
                     $entityManager->flush();
                     $errors = $validator->validate($article);
                     if (count($errors) == 0) {
-                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce restaurant", 'id' => $request->request->get('id')], 200);
+                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce restaurant", 'id' => $request->get('id')], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
                     }
@@ -261,22 +263,22 @@ class AdminEditController extends AbstractController
     public function saveRestaurant(ValidatorInterface $validator, EntityManagerInterface $entityManager, Request $request): Response
     {
         if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->request->get('csrfData');
+            $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
-                if (!empty($request->request->get('nom')) && !empty($request->request->get('ville')) && !empty($request->request->get('restaurant_id')) && !empty($request->request->get('contenu'))) {
-                    if (empty($request->request->get('image'))) {
+                if (!empty($request->get('nom')) && !empty($request->get('ville')) && !empty($request->get('restaurant_id')) && !empty($request->get('contenu'))) {
+                    if (empty($request->get('image'))) {
                         $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
                     } else {
-                        $image = htmlspecialchars($request->request->get('image'));
+                        $image = htmlspecialchars($request->get('image'));
                     }
-                    if ($request->request->get('restaurant_id') == "new") {
+                    if ($request->get('restaurant_id') == "new") {
                         $sqlRestaurant = new Restaurant();
-                        $sqlRestaurant->setNom($request->request->get('nom'))
+                        $sqlRestaurant->setNom($request->get('nom'))
                             ->setImage($image)
                             ->setLocation("null")
-                            ->setAdresse($request->request->get('adresse'))
-                            ->setVille($request->request->get('ville'))
-                            ->setContenu($request->request->get('contenu'))
+                            ->setAdresse($request->get('adresse'))
+                            ->setVille($request->get('ville'))
+                            ->setContenu($request->get('contenu'))
                             ->setCreatedAt(new \DateTime());
                         $entityManager->persist($sqlRestaurant);
                         $entityManager->flush();
@@ -284,18 +286,18 @@ class AdminEditController extends AbstractController
                         $id = $sqlRestaurant->getId();
                         $success = "Le restaurant à bien été créer !";
                     } else {
-                        $restaurant = $entityManager->getRepository(Restaurant::class)->find($request->request->get('restaurant_id'));
-                        $restaurant->setNom($request->request->get('nom'))
-                            ->setImage($request->request->get('image'))
-                            ->setAdresse($request->request->get('adresse'))
-                            ->setContenu($request->request->get('contenu'))
-                            ->setVille($request->request->get('ville'));
+                        $restaurant = $entityManager->getRepository(Restaurant::class)->find($request->get('restaurant_id'));
+                        $restaurant->setNom($request->get('nom'))
+                            ->setImage($request->get('image'))
+                            ->setAdresse($request->get('adresse'))
+                            ->setContenu($request->get('contenu'))
+                            ->setVille($request->get('ville'));
                         $entityManager->flush();
                         $errors = $validator->validate($restaurant);
-                        $id = $request->request->get('restaurant_id');
+                        $id = $request->get('restaurant_id');
                         $success = "Le restaurant à bien été mis à jour !";
                     }
-                    if (!empty($request->request->get('nom')) && !empty($request->request->get('restaurant_id')) && !empty($request->request->get('contenu'))) {
+                    if (!empty($request->get('nom')) && !empty($request->get('restaurant_id')) && !empty($request->get('contenu'))) {
                         if (count($errors) == 0) {
                             return $this->json(['code' => 200, 'message' => $success, 'restaurantId' => $id], 200);
                         } else {
@@ -335,15 +337,15 @@ class AdminEditController extends AbstractController
     public function deleteProduit(ValidatorInterface $validator, EntityManagerInterface $entityManager, Request $request): Response
     {
         if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->request->get('csrfData');
+            $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
-                if (!empty($request->request->get('id'))) {
-                    $article = $entityManager->getRepository(Produit::class)->find($request->request->get('id'));
+                if (!empty($request->get('id'))) {
+                    $article = $entityManager->getRepository(Produit::class)->find($request->get('id'));
                     $entityManager->remove($article);
                     $entityManager->flush();
                     $errors = $validator->validate($article);
                     if (count($errors) == 0) {
-                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce produit", 'id' => $request->request->get('id')], 200);
+                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce produit", 'id' => $request->get('id')], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
                     }
@@ -360,17 +362,17 @@ class AdminEditController extends AbstractController
     public function saveProduit(ValidatorInterface $validator, EntityManagerInterface $entityManager, Request $request): Response
     {
         if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->request->get('csrfData');
+            $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
-                if (!empty($request->request->get('nom')) && !empty($request->request->get('produit_id'))) {
-                    if (empty($request->request->get('image'))) {
+                if (!empty($request->get('nom')) && !empty($request->get('produit_id'))) {
+                    if (empty($request->get('image'))) {
                         $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
                     } else {
-                        $image = htmlspecialchars($request->request->get('image'));
+                        $image = htmlspecialchars($request->get('image'));
                     }
-                    if ($request->request->get('produit_id') == "new") {
+                    if ($request->get('produit_id') == "new") {
                         $sqlProduit = new Produit();
-                        $sqlProduit->setNom($request->request->get('nom'))
+                        $sqlProduit->setNom($request->get('nom'))
                             ->setImage($image)
                             ->setCreatedAt(new \DateTime());
                         $entityManager->persist($sqlProduit);
@@ -379,15 +381,15 @@ class AdminEditController extends AbstractController
                         $id = $sqlProduit->getId();
                         $success = "Le produit à bien été créer !";
                     } else {
-                        $produit = $entityManager->getRepository(Produit::class)->find($request->request->get('produit_id'));
-                        $produit->setNom($request->request->get('nom'))
-                            ->setImage($request->request->get('image'));
+                        $produit = $entityManager->getRepository(Produit::class)->find($request->get('produit_id'));
+                        $produit->setNom($request->get('nom'))
+                            ->setImage($request->get('image'));
                         $entityManager->flush();
                         $errors = $validator->validate($produit);
-                        $id = $request->request->get('produit_id');
+                        $id = $request->get('produit_id');
                         $success = "Le produit à bien été mis à jour !";
                     }
-                    if (!empty($request->request->get('nom')) && !empty($request->request->get('produit_id'))) {
+                    if (!empty($request->get('nom')) && !empty($request->get('produit_id'))) {
                         if (count($errors) == 0) {
                             return $this->json(['code' => 200, 'message' => $success, 'produitId' => $id], 200);
                         } else {
@@ -427,15 +429,15 @@ class AdminEditController extends AbstractController
     public function deleteRepas(ValidatorInterface $validator, EntityManagerInterface $entityManager, Request $request): Response
     {
         if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->request->get('csrfData');
+            $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
-                if (!empty($request->request->get('id'))) {
-                    $article = $entityManager->getRepository(Repas::class)->find($request->request->get('id'));
+                if (!empty($request->get('id'))) {
+                    $article = $entityManager->getRepository(Repas::class)->find($request->get('id'));
                     $entityManager->remove($article);
                     $entityManager->flush();
                     $errors = $validator->validate($article);
                     if (count($errors) == 0) {
-                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce repas", 'id' => $request->request->get('id')], 200);
+                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce repas", 'id' => $request->get('id')], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
                     }
@@ -452,18 +454,18 @@ class AdminEditController extends AbstractController
     public function saveRepas(ValidatorInterface $validator, EntityManagerInterface $entityManager, Security $security, Request $request): Response
     {
         if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->request->get('csrfData');
+            $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
-                if (!empty($request->request->get('nom')) && !empty($request->request->get('repas_id')) && !empty($_POST['recette'])) {
+                if (!empty($request->get('nom')) && !empty($request->get('repas_id')) && !empty($request->get('recette'))) {
                     $user = $security->getUser();
-                    if (empty($request->request->get('image'))) {
+                    if (empty($request->get('image'))) {
                         $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
                     }
-                    if ($request->request->get('repas_id') == "new") {
+                    if ($request->get('repas_id') == "new") {
                         $sqlRepas = new Repas();
-                        $sqlRepas->setNom($request->request->get('nom'))
+                        $sqlRepas->setNom($request->get('nom'))
                             ->setImage($image)
-                            ->setRecette($_POST['recette'])
+                            ->setRecette($request->get('recette'))
                             ->setPostedBy($user)
                             ->setCreatedAt(new \DateTime());
                         $entityManager->persist($sqlRepas);
@@ -472,16 +474,16 @@ class AdminEditController extends AbstractController
                         $id = $sqlRepas->getId();
                         $success = "Le repas à bien été créer !";
                     } else {
-                        $repas = $entityManager->getRepository(Repas::class)->find($request->request->get('repas_id'));
-                        $repas->setNom($request->request->get('nom'))
-                            ->setRecette($_POST['recette'])
-                            ->setImage($request->request->get('image'));
+                        $repas = $entityManager->getRepository(Repas::class)->find($request->get('repas_id'));
+                        $repas->setNom($request->get('nom'))
+                            ->setRecette($request->get('recette'))
+                            ->setImage($request->get('image'));
                         $entityManager->flush();
                         $errors = $validator->validate($repas);
-                        $id = $request->request->get('repas_id');
+                        $id = $request->get('repas_id');
                         $success = "Le repas à bien été mis à jour !";
                     }
-                    if (!empty($request->request->get('nom')) && !empty($request->request->get('repas_id'))) {
+                    if (!empty($request->get('nom')) && !empty($request->get('repas_id'))) {
                         if (count($errors) == 0) {
                             return $this->json(['code' => 200, 'message' => $success, 'repasId' => $id], 200);
                         } else {
@@ -525,6 +527,71 @@ class AdminEditController extends AbstractController
                 }
             }
             return $this->json(['code' => 400, 'message' => 'Erreur'], 200);
+        }
+    }
+
+    /**
+     * @Route("/admin/deleteRestaurantAvis", name="admin_delete_restaurantavis")
+     */
+    public function deleteRestaurantAvis(ValidatorInterface $validator, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        if ($request->isXmlHttpRequest()) {
+            $submittedToken = $request->get('csrfData');
+            if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
+                if (!empty($request->get('id'))) {
+                    $deleteRestaurantAvis = $entityManager->getRepository(RestaurantAvis::class)->find($request->get('id'));
+                    $entityManager->remove($deleteRestaurantAvis);
+                    $entityManager->flush();
+                    $errors = $validator->validate($deleteRestaurantAvis);
+                    if (count($errors) == 0) {
+                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer cet avis", 'id' => $request->get('id')], 200);
+                    } else {
+                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                    }
+                } else {
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression de l\'avis...'], 200);
+                }
+            }
+        }
+    }
+
+    /**
+     * @Route("/admin/user/{id}/edit", name="admin_edit_user")
+     */
+    public function editUser(User $user)
+    {
+        return $this->render('admin/edit/user.html.twig', [
+            'user' => $user,
+        ]);
+    }
+
+    /**
+     * @Route("/admin/saveUser", name="admin_save_user")
+     */
+    public function saveUser(ValidatorInterface $validator, EntityManagerInterface $entityManager, Security $security, Request $request): Response
+    {
+        if ($request->isXmlHttpRequest()) {
+            $submittedToken = $request->get('csrfData');
+            if ($this->isCsrfTokenValid('save-user', $submittedToken)) {
+                if (!empty($request->get('username')) && !empty($request->get('email')) && !empty($request->get('role')) && !empty($request->get('bio'))) {
+                    $userSql = $entityManager->getRepository(User::class)->find($request->get('user_id'));
+                    $userSql->setUsername($request->get('username'))
+                        ->setEmail($request->get('email'))
+                        ->setRole($request->get('role'))
+                        ->setBio($request->get('bio'));
+                    $entityManager->flush();
+                    $errors = $validator->validate($userSql);
+                    $id = $request->get('user_id');
+                    $success = "L'utilisateur à bien été mis à jour !";
+                    if (count($errors) == 0) {
+                        return $this->json(['code' => 200, 'message' => $success, 'userId' => $id], 200);
+                    } else {
+                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                    }
+                } else {
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour de l\'utilisateur...'], 200);
+                }
+            }
         }
     }
 }

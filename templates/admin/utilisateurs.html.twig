@@ -10,8 +10,8 @@
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Nom</th>
-                        <th scope="col">Contenu</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Role</th>
                         <th scope="col">Options</th>
                     </tr>
                 </thead>
@@ -22,8 +22,10 @@
                         <td>{{ utilisateur.username }}</td>
                         <td>{{ utilisateur.role }}</td>
                         <td class="btnOption">
-                            <a target="_BLANK" href="{{ path('article_show', {'id': utilisateur.id}) }}"><i class="fad fa-eye"></i></a>
-                            <a href="" class="blue"><i class="fad fa-edit"></i></a>
+                            <a target="_BLANK" href="{{ path('user', {'id': utilisateur.id}) }}"><i
+                                    class="fad fa-eye"></i></a>
+                            <a href="{{ path('admin_edit_user', {'id': utilisateur.id}) }}" class="blue"><i
+                                    class="fad fa-edit"></i></a>
                             <a class="red"><i class="fad fa-times"></i></a>
                         </td>
                     </tr>
@@ -40,8 +42,8 @@
     </div>
 </section>
 <script>
-addEventListener("load", () => {
-    new pagination("utilisateur", 7, 10, "table-row");
-})
+    addEventListener("load", () => {
+        new pagination("utilisateur", 7, 10, "table-row");
+    })
 </script>
 {% endblock %}

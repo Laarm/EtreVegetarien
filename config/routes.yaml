@@ -64,9 +64,6 @@ adminGestionArticlesCommentaires:
 adminGestionMagasins:
     path: /admin/GestionMagasins
     controller: App\Controller\AdminController::gestionMagasins
-adminGestionMagasinsAvis:
-    path: /admin/GestionMagasinsAvis
-    controller: App\Controller\AdminController::gestionMagasinsAvis
 adminGestionRestaurants:
     path: /admin/GestionRestaurants
     controller: App\Controller\AdminController::gestionRestaurants

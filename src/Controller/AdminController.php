@@ -75,21 +75,6 @@ class AdminController extends AbstractController
             'magasins' => $magasins,
         ]);
     }
-    public function gestionMagasinsAvis(MagasinAvisRepository $gestionMagasinsAvisRepo, Request $request)
-    {
-        if ($request->get('view') !== null) {
-            $view = $request->get('view');
-            $maxView = $request->get('maxView');
-        } else {
-            $view = null;
-            $maxView = 100;
-        }
-        $magasinsAvis = $gestionMagasinsAvisRepo->findBy(array(), null, $maxView, $view);
-
-        return $this->render('admin/gestionMagasinsAvis.html.twig', [
-            'magasins_avis' => $magasinsAvis,
-        ]);
-    }
     public function gestionRestaurants(RestaurantRepository $gestionRestaurantRepo, Request $request)
     {
         if ($request->get('view') !== null) {
@@ -114,10 +99,10 @@ class AdminController extends AbstractController
             $view = null;
             $maxView = 100;
         }
-        $magasinsAvis = $gestionRestaurantAvisRepo->findBy(array(), null, $maxView, $view);
+        $restaurantsAvis = $gestionRestaurantAvisRepo->findBy(array(), null, $maxView, $view);
 
         return $this->render('admin/gestionRestaurantsAvis.html.twig', [
-            'restaurants_avis' => $magasinsAvis,
+            'restaurants_avis' => $restaurantsAvis,
         ]);
     }
     public function produits(ProduitRepository $gestionProduitRepo, Request $request)

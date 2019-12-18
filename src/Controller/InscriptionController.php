@@ -72,25 +72,25 @@ class InscriptionController extends AbstractController
                         return new Response('Error,L\'email est déjà utilisé !');
                     }
                 } else {
-                    if (strlen($request->request->get('username')) > 5) {
+                    if (strlen($request->request->get('username')) < 5) {
                         return new Response('Error,Votre pseudonyme est trop court !');
                     }
-                    if (strlen($request->request->get('username')) < 20) {
-                        return new Response('Error,Votre pseudonyme est trop long !' . $request->request->get('username'));
+                    if (strlen($request->request->get('username')) > 20) {
+                        return new Response('Error,Votre pseudonyme est trop long !');
                     }
-                    if (strlen($request->request->get('email')) > 5) {
+                    if (strlen($request->request->get('email')) < 5) {
                         return new Response('Error,Votre email est trop court !');
                     }
-                    if (strlen($request->request->get('email')) < 20) {
+                    if (strlen($request->request->get('email')) > 20) {
                         return new Response('Error,Votre email est trop long !');
                     }
                     if (preg_match('#^(([a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+\.?)*[a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+)@(([a-z0-9-_]+\.?)*[a-z0-9-_]+)\.[a-z]{2,}$#i', $request->request->get('email'))) {
                         return new Response('Error,Votre email n\'est pas conforme (exemple : exemple@exemple.fr) !');
                     }
-                    if (strlen($request->request->get('password')) > 6) {
+                    if (strlen($request->request->get('password')) < 6) {
                         return new Response('Error,Votre mot de passe est trop court !');
                     }
-                    if (strlen($request->request->get('password')) < 70) {
+                    if (strlen($request->request->get('password')) > 70) {
                         return new Response('Error,Votre mot de passe est trop long !');
                     }
                     return new Response('Error,Veuillez remplir tout les champs !');
