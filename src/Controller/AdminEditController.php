@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AdminEditController extends AbstractController
 {
@@ -568,18 +569,30 @@ class AdminEditController extends AbstractController
     /**
      * @Route("/admin/saveUser", name="admin_save_user")
      */
-    public function saveUser(ValidatorInterface $validator, EntityManagerInterface $entityManager, Security $security, Request $request): Response
+    public function saveUser(ValidatorInterface $validator, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, Security $security, Request $request): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('save-user', $submittedToken)) {
-                if (!empty($request->get('username')) && !empty($request->get('email')) && !empty($request->get('role')) && !empty($request->get('bio'))) {
+                if (!empty($request->get('username')) && !empty($request->get('email'))) {
                     $userSql = $entityManager->getRepository(User::class)->find($request->get('user_id'));
                     $userSql->setUsername($request->get('username'))
                         ->setEmail($request->get('email'))
                         ->setRole($request->get('role'))
                         ->setBio($request->get('bio'));
                     $entityManager->flush();
+                    if ($request->get('deleteAvatar') == true) {
+                        $userSql = $entityManager->getRepository(User::class)->find($request->get('user_id'));
+                        $userSql->setAvatar("");
+                        $entityManager->flush();
+                    }
+                    if (!empty($request->get('motdepasse'))) {
+                        $sqlUser = new User();
+                        $password = $passwordEncoder->encodePassword($sqlUser, $request->get('motdepasse'));
+                        $userSql = $entityManager->getRepository(User::class)->find($request->get('user_id'));
+                        $userSql->setPassword($password);
+                        $entityManager->flush();
+                    }
                     $errors = $validator->validate($userSql);
                     $id = $request->get('user_id');
                     $success = "L'utilisateur à bien été mis à jour !";
@@ -590,6 +603,31 @@ class AdminEditController extends AbstractController
                     }
                 } else {
                     return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour de l\'utilisateur...'], 200);
+                }
+            }
+        }
+    }
+
+    /**
+     * @Route("/admin/deleteUser", name="admin_delete_user")
+     */
+    public function deleteUser(ValidatorInterface $validator, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        if ($request->isXmlHttpRequest()) {
+            $submittedToken = $request->get('csrfData');
+            if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
+                if (!empty($request->get('id'))) {
+                    $deleteUser = $entityManager->getRepository(User::class)->find($request->get('id'));
+                    $entityManager->remove($deleteUser);
+                    $entityManager->flush();
+                    $errors = $validator->validate($deleteUser);
+                    if (count($errors) == 0) {
+                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer cet avis", 'id' => $request->get('id')], 200);
+                    } else {
+                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                    }
+                } else {
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression de l\'avis...'], 200);
                 }
             }
         }

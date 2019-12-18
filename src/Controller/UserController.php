@@ -20,7 +20,7 @@ class UserController extends AbstractController
     public function index(int $id, Security $security, UserRepository $repo, ArticleRepository $articlerepo): Response
     {
         $articles = $articlerepo->findBy(array(), array('id' => 'DESC'), "4", null);
-        $user = $security->getUser();
+        $user = $repo->find($id);
         $result = $this->getDoctrine()
             ->getRepository(RepasFavoris::class)->createQueryBuilder('r')
             ->select('r')
@@ -45,7 +45,6 @@ class UserController extends AbstractController
             ->orderBy('r.note', 'DESC')
             ->getQuery();
         $restaurant = $result->getResult();
-        $user = $repo->find($id);
         return $this->render('user/index.html.twig', [
             'articles' => $articles,
             'user' => $user,

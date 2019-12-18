@@ -56,7 +56,6 @@
     });
     $(document).ready(function () {
         $("#btnSaveUser").click(function (e) {
-            console.log($("#deleteAvatar").val())
             e.preventDefault();
             $.post(
                 "{{ path('admin_save_user') }}",
@@ -66,7 +65,7 @@
                     email: $("#email").val(),
                     role: $("#role").val(),
                     bio: $("#editeur").val(),
-                    deleteAvatar: $("#deleteAvatar").val(),
+                    deleteAvatar: $("#deleteAvatar").prop('checked'),
                     motdepasse: $("#motdepasse").val(),
                     csrfData: "{{ csrf_token('save-user') }}"
                 },
