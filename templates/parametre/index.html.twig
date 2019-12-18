@@ -1,0 +1,225 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paramètre - Être végétarien!{% endblock %}
+
+{% block stylesheets %}
+<style>
+    #params .flex-fill {
+        width: 200px;
+        text-align: right;
+        margin-right: 50px;
+    }
+
+    a.nav-link {
+        color: #58D68D
+    }
+
+    .nav-pills .nav-link.active,
+    .nav-pills .show>.nav-link {
+        background-color: #58D68D;
+    }
+
+    #params #v-pills-home form {
+        margin-top: -57px;
+        margin-left: -57px;
+        opacity: 0;
+    }
+
+    @media(max-width: 991px) {
+        #params .flex .row.w-100 {
+            flex-direction: column;
+            margin-right: 0;
+            margin-left: 0;
+        }
+
+        #params .flex {
+            flex-direction: column
+        }
+
+        #params .flex .col-3,
+        #params .flex .col-9 {
+            width: 100%;
+            max-width: 100%;
+            margin-bottom: 20px
+        }
+
+        #params .flex .d-flex.bd-highlight {
+            flex-direction: column;
+        }
+
+        #params .flex .d-flex.bd-highlight .p-2.flex-fill.bd-highlight {
+            width: 100%;
+            text-align: center;
+            margin-right: initial;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<section id="params" class="container paddingSeperateur">
+    <div class="container rond-2 p-4 shadow-1">
+        <div id="resultat"></div>
+        <div class="flex">
+            <div class="row w-100">
+                <div class="col-3">
+                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home"
+                            role="tab" aria-controls="v-pills-home" aria-selected="true">Modifier le profil</a>
+                        <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile"
+                            role="tab" aria-controls="v-pills-profile" aria-selected="false">Changer le mot de passe</a>
+                        <a class="nav-link" id="v-pills-rs-tab" data-toggle="pill" href="#v-pills-rs" role="tab"
+                            aria-controls="v-pills-rs" aria-selected="false">Réseaux sociaux</a>
+                    </div>
+                </div>
+                <div class="col-9">
+                    <div class="tab-content" id="v-pills-tabContent">
+                        <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
+                            aria-labelledby="v-pills-home-tab">
+                            <div class="media cursor-pointer">
+                                <img id="avatar" class="mr-3 rond"
+                                    src="{% if app.user.avatar %}{{ app.user.avatar }}{% else %}https://iupac.org/wp-content/uploads/2018/05/default-avatar.png{% endif %}"
+                                    alt="Votre avatar" style="height: 40px;width: 40px">
+                                <div class="media-body">
+                                    <p>{{ app.user.username }}</p>
+                                    <p class="mt--20 cds">Modifier la photo de profil</p>
+                                    <form method="post" class="w-100" action="" enctype="multipart/form-data"
+                                        id="uploadImage">
+                                        <div class="input-group mb-3 w-100">
+                                            <div class="custom-file w-100">
+                                                <input type="file" class="custom-file-input" id="file">
+                                                <label class="custom-file-label" for="file">Choisir l'image de
+                                                    présentation</label>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="d-flex bd-highlight">
+                                <div class="p-2 flex-fill bd-highlight">Pseudonyme</div>
+                                <input type="name" class="form-control" id="username" placeholder="Votre pseudonyme"
+                                    value="{{ app.user.username }}">
+                            </div>
+                            <div class="d-flex bd-highlight mt-3">
+                                <div class="p-2 flex-fill bd-highlight">E-mail</div>
+                                <input type="email" class="form-control" id="email" placeholder="Votre e-mail"
+                                    value="{{ app.user.email }}">
+                            </div>
+                            <div class="d-flex bd-highlight mt-3">
+                                <div class="p-2 flex-fill bd-highlight">Bio</div>
+                                <textarea id="bio" class="w-100 p-2"
+                                    placeholder="Votre bio">{{ app.user.bio }}</textarea>
+                            </div>
+                            <div class="flex">
+                                <p style="color: #99a6c4;" class="mt-3 margin-auto"><strong>Information privée</strong>
+                                </p>
+                            </div>
+                            <div class="d-flex bd-highlight mt-3">
+                                <div class="p-2 flex-fill bd-highlight">Préférence</div>
+                                <select class="form-control" id="preference">
+                                    <option {% if app.user.preference == "Végétarien" %}selected{% endif %}>Végétarien
+                                    </option>
+                                    <option {% if app.user.preference == "Pesco-végétarien" %}selected{% endif %}>
+                                        Pesco-végétarien</option>
+                                    <option {% if app.user.preference == "Végan" %}selected{% endif %}>Végan</option>
+                                    <option {% if app.user.preference == "Flexitarien" %}selected{% endif %}>Flexitarien
+                                    </option>
+                                    <option {% if app.user.preference == "Semi-végétarien" %}selected{% endif %}>
+                                        Semi-végétarien</option>
+                                    <option {% if app.user.preference == "L'ovo-végétarien" %}selected{% endif %}>
+                                        L'ovo-végétarien</option>
+                                    <option {% if app.user.preference == "Lacto-végétarien" %}selected{% endif %}>
+                                        Lacto-végétarien</option>
+                                    <option {% if app.user.preference == "L'ovo-lacto-végétarien" %}selected{% endif %}>
+                                        L'ovo-lacto-végétarien</option>
+                                    <option {% if app.user.preference == "Pollo-végétarien" %}selected{% endif %}>
+                                        Pollo-végétarien</option>
+                                    <option {% if app.user.preference == "Crudivorien" %}selected{% endif %}>Crudivorien
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="d-flex bd-highlight mt-3">
+                                <div class="p-2 flex-fill bd-highlight">Depuis</div>
+                                <input type="date" class="form-control" id="depuis"
+                                    value="{{ app.user.PreferenceCreatedAt.date|date("Y-m-d") }}">
+                            </div>
+                            <div class="d-flex bd-highlight mt-3">
+                                <button id="btnSave" class="btn btn-primary ml-auto">Envoyer</button>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel"
+                            aria-labelledby="v-pills-profile-tab">
+                            <div class="d-flex bd-highlight mt-3">
+                                <div class="p-2 flex-fill bd-highlight">Ancien mot de passe</div>
+                                <input type="password" class="form-control" id="ancien_motdepasse"
+                                    placeholder="Ancien mot de passe">
+                            </div>
+                            <div class="d-flex bd-highlight mt-3">
+                                <div class="p-2 flex-fill bd-highlight">Nouveau mot de passe</div>
+                                <input type="password" class="form-control" id="nouveau_motdepasse"
+                                    placeholder="Nouveau mot de passe">
+                            </div>
+                            <div class="d-flex bd-highlight mt-3">
+                                <div class="p-2 flex-fill bd-highlight">Confirmer le nouveau mot de passe</div>
+                                <input type="password" class="form-control" id="confirmer_nouveau_motdepasse"
+                                    placeholder="Confirmer le nouveau mot de passe">
+                            </div>
+                            <div class="d-flex bd-highlight mt-3">
+                                <button class="btn btn-primary ml-auto">Envoyer</button>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="v-pills-rs" role="tabpanel" aria-labelledby="v-pills-rs-tab">
+                            <div class="d-flex bd-highlight mt-3">
+                                <button class="btn btn-primary ml-auto">Envoyer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block javascript %}
+<script>
+    $("#btnSave").click(function () {
+        if ($('#file')[0].files[0]) {
+            var fd = new FormData();
+            var files = $('#file')[0].files[0];
+            fd.append('file', files);
+            $.ajax({
+                url: "{{ path('upload_avatar') }}?_token={{ csrf_token('upload-avatar') }}",
+                type: 'POST',
+                data: fd,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    $("#avatar").attr("src", response.location)
+                    $("#resultat").html('<div class="alert alert-success alert-dismissible fade show" role="alert">' + response.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');
+                    document.getElementById("file").value = '';
+                },
+            });
+        }
+        $.post(
+            "{{ path('save_profil') }}",
+            {
+                username: $("#username").val(),
+                email: $("#email").val(),
+                bio: $("#bio").val(),
+                preference: $("#preference").val(),
+                depuis: $("#depuis").val(),
+                csrfData: "{{ csrf_token('save-profil') }}"
+            },
+            function (data) {
+                if (data.code == 200) {
+                    $("#resultat").html('<div class="alert alert-success alert-dismissible fade show" role="alert">' + data.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');
+                }
+                else {
+                    $("#resultat").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' + data.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');
+                }
+            },
+            'json'
+        );
+    });
+</script>
+{% endblock %}

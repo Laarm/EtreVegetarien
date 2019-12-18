@@ -358,7 +358,8 @@ header .sous-menu .item.dropdown .dropdown-item:hover {
 }
 
 #nosArticles .item .content img {
-    width: 100%
+    width: 100%;
+    max-height: 135px
 }
 
 #nosArticles .item .content .bottom {
@@ -464,6 +465,12 @@ footer .bottom .container p a {
     box-shadow: 0px 0px 17px 0px rgba(0, 0, 0, 0.40);
 }
 
+.rond {
+    border-radius: 100%;
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+}
+
 .rond-2 {
     border-radius: 25px;
     -moz-border-radius: 25px;
@@ -500,6 +507,22 @@ footer .bottom .container p a {
     display: none;
 }
 
+.ml-auto {
+    margin-left: auto
+}
+
+.mr-auto {
+    margin-right: auto
+}
+
+.mt-auto {
+    margin-top: auto
+}
+
+.mb-auto {
+    margin-bottom: auto
+}
+
 .mtb-auto {
     margin-top: auto;
     margin-bottom: auto
@@ -531,6 +554,10 @@ footer .bottom .container p a {
 .btn-primary:focus {
     background-color: #43b071;
     border-color: #43b071
+}
+
+.mt--20 {
+    margin-top: -20px
 }
 
 /*

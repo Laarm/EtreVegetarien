@@ -500,25 +500,31 @@ class AdminEditController extends AbstractController
     /**
      * @Route("/admin/uploadImage", name="admin_upload_image")
      */
-    public function uploadImage(): Response
+    public function uploadImage(Request $request): Response
     {
-        $filename = $_FILES['file']['name'];
-        $location = "../public/img/uploads/" . time() . "-" . $filename;
-        $locationRenvoie = "img/uploads/" . time() . "-" . $filename;
-        $uploadOk = 1;
-        $imageFileType = pathinfo($location, PATHINFO_EXTENSION);
-        $valid_extensions = array("jpg", "jpeg", "png");
-        if (!in_array(strtolower($imageFileType), $valid_extensions)) {
-            $uploadOk = 0;
-        }
-        if ($uploadOk == 0) {
-            return $this->json(['code' => 400, 'message' => 'L\'extension n\'est pas valide !'], 200);
-        } else {
-            if (move_uploaded_file($_FILES['file']['tmp_name'], $location)) {
-                return $this->json(['code' => 200, 'message' => 'Vous avez bien envoyer l\'image !', 'location' => $locationRenvoie], 200);
-            } else {
-                return $this->json(['code' => 400, 'message' => 'Erreur'], 200);
+        if ($request->isXmlHttpRequest()) {
+            $submittedToken = $request->get('_token');
+            if ($this->isCsrfTokenValid('upload-image', $submittedToken)) {
+                $filename = $_FILES['file']['name'];
+                $location = "../public/img/uploads/" . time() . "-" . $filename;
+                $locationRenvoie = "img/uploads/" . time() . "-" . $filename;
+                $uploadOk = 1;
+                $imageFileType = pathinfo($location, PATHINFO_EXTENSION);
+                $valid_extensions = array("jpg", "jpeg", "png");
+                if (!in_array(strtolower($imageFileType), $valid_extensions)) {
+                    $uploadOk = 0;
+                }
+                if ($uploadOk == 0) {
+                    return $this->json(['code' => 400, 'message' => 'L\'extension n\'est pas valide !'], 200);
+                } else {
+                    if (move_uploaded_file($_FILES['file']['tmp_name'], $location)) {
+                        return $this->json(['code' => 200, 'message' => 'Vous avez bien envoyer l\'image !', 'location' => $locationRenvoie], 200);
+                    } else {
+                        return $this->json(['code' => 400, 'message' => 'Erreur'], 200);
+                    }
+                }
             }
+            return $this->json(['code' => 400, 'message' => 'Erreur'], 200);
         }
     }
 }

@@ -109,6 +109,11 @@ class User implements UserInterface
      */
     private $repasFavoris;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $bio;
+
     public function __construct()
     {
         $this->magasinAvis = new ArrayCollection();
@@ -444,6 +449,18 @@ class User implements UserInterface
                 $repasFavori->setPostedBy(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBio(): ?string
+    {
+        return $this->bio;
+    }
+
+    public function setBio(?string $bio): self
+    {
+        $this->bio = $bio;
 
         return $this;
     }

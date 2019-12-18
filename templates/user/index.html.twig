@@ -18,12 +18,13 @@
             <h2>Membre</h2>
             <span>({{ user.createdAt.date|timeDiff("now", false, "Il y a ") }})</span>
             {% endif %}
-            <button id="btnParametre" type="button" class="btn btn-primary mr-1"><i class="fad fa-cog"></i>
-                Paramètre</button>
+            <a href="{{ path('parametre') }}"><button id="btnParametre" type="button" class="btn btn-primary mr-1"><i
+                        class="fad fa-cog"></i>
+                    Paramètre</button></a>
         </div>
         <div class="right">
             <div class="avatar flex"><img class="mtb-auto"
-                    src="{% if user.avatar %}{{ user.avatar }}{% else %}https://iupac.org/wp-content/uploads/2018/05/default-avatar.png{% endif %}"
+                    src="{% if user.avatar %}{{ asset(user.avatar) }}{% else %}https://iupac.org/wp-content/uploads/2018/05/default-avatar.png{% endif %}"
                     alt="Avatar de {{user.username}}" /></div>
             <div class="badge">
                 <div class="flex"><i class="fas fa-carrot margin-auto"></i></div>
@@ -35,17 +36,7 @@
     <div class="container flex flex-column rond-2 p-4 shadow-1">
         <div class="top">
             <h1><i class="fad fa-user"></i> Biographie</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Proin mollis eros ac efficitur placerat.
-                Suspendisse et pellentesque tortor.
-                Morbi vel blandit eros.
-                Phasellus gravida lorem sit amet nisl feugiat, non dictum mauris fringilla.
-                Aenean sollicitudin felis ac posuere porttitor.
-                In ut sapien pharetra, egestas tortor non, commodo ligula.
-                Vivamus a risus eget orci interdum cursus ut a orci.
-                Aliquam in egestas nisi. Ut id euismod mi.
-                Duis maximus ac risus id dapibus.
-                Donec quis nibh sed justo vehicula imperdiet.</p>
+            <p>{% if app.user.bio %}{{ app.user.bio}}{% else %}Aucune biographie{% endif %}</p>
         </div>
         <div class="bottom">
             <div class="row">
