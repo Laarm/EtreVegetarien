@@ -37,6 +37,9 @@ contactSendMessage:
 restaurants:
     path: /restaurants
     controller: App\Controller\RestaurantController::index
+repas:
+    path: /repas
+    controller: App\Controller\RepasController::index
 magasins:
     path: /magasins
     controller: App\Controller\MagasinController::index

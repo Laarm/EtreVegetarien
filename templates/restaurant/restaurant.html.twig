@@ -173,6 +173,10 @@
 		color: #58D68D;
 	}
 
+	#restaurant a.btn-primary {
+		color: #FFF
+	}
+
 	@media(max-width: 991px) {}
 </style>
 <section id="restaurant" class="container paddingSeperateur flex">
@@ -232,6 +236,7 @@
 						<div class="btnPagination flex mr-4">
 						</div>
 					</div>
+					{% if app.user %}
 					<div class="form-group">
 						<label for="note">Note</label>
 						<ul id="note" class="ratings">
@@ -258,6 +263,10 @@
 							rows="3"></textarea>
 					</div>
 					<button id="btnEnvoieNote" type="button" class="btn btn-primary">Envoyer</button>
+					{% else %}
+					<a href="{{ path('connexion') }}" class="btn btn-primary w-100">Se
+						connecter</a>
+					{% endif %}
 					<div id="resultat"></div>
 				</div>
 				<div class="tab-pane fade" id="plan" role="tabpanel" aria-labelledby="plan-tab">

@@ -18,9 +18,9 @@
             <h2>Membre</h2>
             <span>({{ user.createdAt.date|timeDiff("now", false, "Il y a ") }})</span>
             {% endif %}
-            <a href="{{ path('parametre') }}"><button id="btnParametre" type="button" class="btn btn-primary mr-1"><i
-                        class="fad fa-cog"></i>
-                    Paramètre</button></a>
+            {% if app.user %}{% if app.user.id == user.id %}<a href="{{ path('parametre') }}"><button id="btnParametre"
+                    type="button" class="btn btn-primary mr-1"><i class="fad fa-cog"></i>
+                    Paramètre</button></a>{% endif %}{% endif %}
         </div>
         <div class="right">
             <div class="avatar flex"><img class="mtb-auto"
@@ -70,13 +70,15 @@
                             aria-labelledby="restaurant-tab">
                             {% for restaurant in restaurants %}
                             <div class="item">
-                                <div class="top">
-                                    <img alt="{{ restaurant.Restaurant.nom }}"
-                                        src="{{ restaurant.Restaurant.image }}" />
-                                </div>
-                                <div class="bottom">
-                                    <p>{{ restaurant.Restaurant.nom }}</p>
-                                </div>
+                                <a href="{{ path('restaurant_show', {'id': restaurant.Restaurant.id}) }}">
+                                    <div class="top">
+                                        <img alt="{{ restaurant.Restaurant.nom }}"
+                                            src="{{ restaurant.Restaurant.image }}" />
+                                    </div>
+                                    <div class="bottom">
+                                        <p>{{ restaurant.Restaurant.nom }}</p>
+                                    </div>
+                                </a>
                             </div>
                             {% endfor %}
                         </div>

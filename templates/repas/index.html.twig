@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Repas - Être Végétarien!{% endblock %}
+
+{% block body %}
+<style>
+    #repas .nav-search i {
+        position: absolute;
+        padding: 10px;
+        margin-top: 2px;
+        color: #aaabae;
+        z-index: 2;
+    }
+
+    .nav-search input {
+        background-color: transparent !important;
+        padding-left: 30px;
+        border-radius: 200px !important;
+        -moz-border-radius: 200px !important;
+        -webkit-border-radius: 200px 200px 200px 200px !important;
+    }
+
+    #repas .produit-list-design {
+        margin-top: 5%
+    }
+
+    #repas .produit-list-design .item {
+        width: 30%;
+        margin-bottom: 5%;
+        -webkit-box-shadow: 0px 0px 48px -20px rgba(0, 0, 0, 0.75);
+        -moz-box-shadow: 0px 0px 48px -20px rgba(0, 0, 0, 0.75);
+        box-shadow: 0px 0px 48px -20px rgba(0, 0, 0, 0.75);
+    }
+
+    #repas .produit-list-design .item .top {
+        transition-duration: .3s;
+        background-color: #58D68D;
+        display: flex;
+        padding: 30px
+    }
+
+    #repas .produit-list-design .item .top img {
+        width: 80%;
+        margin: auto;
+        transition-duration: .3s;
+    }
+
+    #repas .produit-list-design .item .bottom {
+        transition-duration: .3s;
+        background-color: #FFF;
+        text-align: center;
+        color: #000;
+        padding: 5px 10px;
+        height: 60px;
+        display: flex;
+    }
+
+    #repas .produit-list-design .item .bottom p {
+        margin: auto;
+        font-weight: bolder;
+    }
+
+    #repas .produit-list-design .item:hover .top {
+        transition-duration: .3s;
+        background-color: #FFF;
+    }
+
+    #repas .produit-list-design .item:hover .top img {
+        transition-duration: .3s;
+        transform: scale(0.9);
+    }
+
+    #repas .produit-list-design .item:hover .bottom {
+        transition-duration: .3s;
+        background-color: #58D68D;
+        height: 160px;
+        margin-top: -100px;
+    }
+
+    #repas .produit-list-design .item:hover .bottom p {
+        margin: auto auto 13px auto;
+    }
+
+    a.item:hover {
+        text-decoration: none;
+    }
+
+    @media(max-width: 991px) {
+        #repas .produit-list-design .item {
+            width: 90%;
+            margin: auto;
+            margin-bottom: 5%
+        }
+
+        #repas .nav-search {
+            width: 80%;
+            margin-left: 10%
+        }
+    }
+</style>
+<section id="repas" class="container paddingSeperateur">
+    <div class="input-group nav-search">
+        <i class="fas fa-search"></i>
+        <input type="text" name="search" class="form-control" placeholder="Rechercher un repas" value="">
+    </div>
+    <div class="produit-list-design flex flex-wrap flex-between">
+        {% for repas in repas %}
+        <a class="item" href="{{ path('repas_show', {'id': repas.id}) }}">
+            <div class="top">
+                <img alt="{{ repas.nom }}" src="{{ repas.image }}" />
+            </div>
+            <div class="bottom">
+                <p>{{ repas.nom }}</p>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
+{% block javascript %}
+<script>
+    i = 0;
+    $(document).ready(function () {
+        $('[name="search"]').keypress(function (e) {
+            $.getJSON("/repas/search?search=" + $('[name="search"]').val())
+                .then((repas) => {
+                    $('.produit-list-design').html("")
+                    if (repas.length == 0) {
+                        $('.produit-list-design').html("<p class='margin-auto'>Aucun repas trouvé</p>")
+                    }
+                    repas.forEach((repas) => {
+                        $(".produit-list-design").append('<a class="item" href="/repas/' + repas.id + '"><div class= "top"><img alt="' + repas.nom + '" src="' + repas.image + '" /></div><div class="bottom"><p>' + repas.nom + '</p></div></a>')
+                    })
+                });
+        });
+    });
+</script>
+{% endblock %}
