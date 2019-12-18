@@ -3,8 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,37 +17,65 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class UserRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
         parent::__construct($registry, User::class);
+        $this->passwordEncoder = $passwordEncoder;
+        $this->entityManager = $entityManager;
+        $this->validator = $validator;
     }
 
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function saveUserProfil($userId, $username, $email, $role, $bio)
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $sqlUser = $this->find($userId);
+        $sqlUser->setUsername($username)
+            ->setEmail($email)
+            ->setRole($role)
+            ->setBio($bio);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlUser);
+        if (count($errors) == 0) {
+            return "good";
+        } else {
+            return "not good";
+        }
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?User
+    public function saveUserAvatar($userId, $avatar)
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $sqlUser = $this->find($userId);
+        $sqlUser->setAvatar($avatar);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlUser);
+        if (count($errors) == 0) {
+            return "good";
+        } else {
+            return "not good";
+        }
     }
-    */
+    public function saveUserPassword($userId, $password)
+    {
+        $sqlUser = new User();
+        $password = $this->passwordEncoder->encodePassword($sqlUser, $password);
+        $sqlUser = $this->find($userId);
+        $sqlUser->setPassword($password);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlUser);
+        if (count($errors) == 0) {
+            return "good";
+        } else {
+            return "not good";
+        }
+    }
+    public function deleteUser($userId)
+    {
+        $sqlUser = $this->find($userId);
+        $this->entityManager->remove($sqlUser);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlUser);
+        if (count($errors) == 0) {
+            return "good";
+        } else {
+            return "not good";
+        }
+    }
 }

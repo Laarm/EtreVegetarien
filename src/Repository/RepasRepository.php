@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Repas;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Repas|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,37 +16,54 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class RepasRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
         parent::__construct($registry, Repas::class);
+        $this->entityManager = $entityManager;
+        $this->validator = $validator;
     }
-
-    // /**
-    //  * @return Repas[] Returns an array of Repas objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function createRepas($nom, $image, $recette, $user)
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $sqlRepas = new Repas();
+        $sqlRepas->setNom($nom)
+            ->setImage($image)
+            ->setRecette($recette)
+            ->setPostedBy($user)
+            ->setCreatedAt(new \DateTime());
+        $this->entityManager->persist($sqlRepas);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlRepas);
+        if (count($errors) == 0) {
+            return $sqlRepas->getId();
+        } else {
+            return "not good";
+        }
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Repas
+    public function saveRepas($repasId, $nom, $image, $recette, $user)
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $sqlRepas = $this->find($repasId);
+        $sqlRepas->setNom($nom)
+            ->setImage($image)
+            ->setRecette($recette)
+            ->setPostedBy($user);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlRepas);
+        if (count($errors) == 0) {
+            return $repasId;
+        } else {
+            return "not good";
+        }
     }
-    */
+    public function deleteRepas($repasId)
+    {
+        $sqlRepas = $this->find($repasId);
+        $this->entityManager->remove($sqlRepas);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlRepas);
+        if (count($errors) == 0) {
+            return "good";
+        } else {
+            return "not good";
+        }
+    }
 }

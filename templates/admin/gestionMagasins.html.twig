@@ -22,7 +22,7 @@
                         <td>{{ magasin.nom }}</td>
                         <td>{{ magasin.location }}, {{ magasin.ville }}</td>
                         <td class="btnOption">
-                            <a target="_BLANK" href="{{ path('article_show', {'id': magasin.id}) }}"><i
+                            <a target="_BLANK" href="{{ path('magasin_show', {'id': magasin.id}) }}"><i
                                     class="fad fa-eye"></i></a>
                             <a href="{{ path('admin_edit_magasin', {'id': magasin.id}) }}" class="blue"><i
                                     class="fad fa-edit"></i></a>

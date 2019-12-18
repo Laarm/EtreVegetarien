@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Produit;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Produit|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,37 +16,50 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class ProduitRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
         parent::__construct($registry, Produit::class);
+        $this->entityManager = $entityManager;
+        $this->validator = $validator;
     }
-
-    // /**
-    //  * @return Produit[] Returns an array of Produit objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function createProduit($nom, $image)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $sqlProduit = new Produit();
+        $sqlProduit->setNom($nom)
+            ->setImage($image)
+            ->setCreatedAt(new \DateTime());
+        $this->entityManager->persist($sqlProduit);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlProduit);
+        if (count($errors) == 0) {
+            return $sqlProduit->getId();
+        } else {
+            return "not good";
+        }
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Produit
+    public function saveProduit($produitId, $nom, $image)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $sqlProduit = $this->find($produitId);
+        $sqlProduit->setNom($nom)
+            ->setImage($image);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlProduit);
+        if (count($errors) == 0) {
+            return $produitId;
+        } else {
+            return "not good";
+        }
     }
-    */
+    public function deleteProduit($produitId)
+    {
+        $sqlProduit = $this->find($produitId);
+        $this->entityManager->remove($sqlProduit);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlProduit);
+        if (count($errors) == 0) {
+            return "good";
+        } else {
+            return "not good";
+        }
+    }
 }

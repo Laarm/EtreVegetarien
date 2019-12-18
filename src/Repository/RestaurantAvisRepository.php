@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\RestaurantAvis;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method RestaurantAvis|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,37 +16,22 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class RestaurantAvisRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
         parent::__construct($registry, RestaurantAvis::class);
+        $this->entityManager = $entityManager;
+        $this->validator = $validator;
     }
-
-    // /**
-    //  * @return RestaurantAvis[] Returns an array of RestaurantAvis objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function deleteRestaurantAvis($restaurantId)
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $sqlRestaurant = $this->find($restaurantId);
+        $this->entityManager->remove($sqlRestaurant);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlRestaurant);
+        if (count($errors) == 0) {
+            return "good";
+        } else {
+            return "not good";
+        }
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?RestaurantAvis
-    {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

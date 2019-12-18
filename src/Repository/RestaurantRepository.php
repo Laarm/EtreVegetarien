@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Restaurant;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Restaurant|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,37 +16,57 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class RestaurantRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
         parent::__construct($registry, Restaurant::class);
+        $this->entityManager = $entityManager;
+        $this->validator = $validator;
     }
-
-    // /**
-    //  * @return Restaurant[] Returns an array of Restaurant objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function createRestaurant($nom, $image, $location, $adresse, $ville, $contenu)
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $sqlRestaurant = new Restaurant();
+        $sqlRestaurant->setNom($nom)
+            ->setImage($image)
+            ->setLocation($location)
+            ->setAdresse($adresse)
+            ->setVille($ville)
+            ->setContenu($contenu)
+            ->setCreatedAt(new \DateTime());
+        $this->entityManager->persist($sqlRestaurant);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlRestaurant);
+        if (count($errors) == 0) {
+            return $sqlRestaurant->getId();
+        } else {
+            return "not good";
+        }
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Restaurant
+    public function saveRestaurant($restaurantId, $nom, $image, $adresse, $ville, $contenu)
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $sqlRestaurant = $this->find($restaurantId);
+        $sqlRestaurant->setNom($nom)
+            ->setImage($image)
+            ->setAdresse($adresse)
+            ->setVille($ville)
+            ->setContenu($contenu);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlRestaurant);
+        if (count($errors) == 0) {
+            return $restaurantId;
+        } else {
+            return "not good";
+        }
     }
-    */
+    public function deleteRestaurant($restaurantId)
+    {
+        $sqlRestaurant = $this->find($restaurantId);
+        $this->entityManager->remove($sqlRestaurant);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlRestaurant);
+        if (count($errors) == 0) {
+            return "good";
+        } else {
+            return "not good";
+        }
+    }
 }

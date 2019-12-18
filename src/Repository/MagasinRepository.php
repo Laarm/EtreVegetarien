@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Magasin;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Magasin|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,37 +16,56 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class MagasinRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
         parent::__construct($registry, Magasin::class);
+        $this->entityManager = $entityManager;
+        $this->validator = $validator;
     }
-
-    // /**
-    //  * @return Magasin[] Returns an array of Magasin objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function createMagasin($nom, $image, $location, $adresse, $ville)
     {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $sqlMagasin = new Magasin();
+        $sqlMagasin->setNom($nom)
+            ->setImage($image)
+            ->setLocation($location)
+            ->setAdresse($adresse)
+            ->setVille($ville)
+            ->setCreatedAt(new \DateTime());
+        $this->entityManager->persist($sqlMagasin);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlMagasin);
+        if (count($errors) == 0) {
+            return $sqlMagasin->getId();
+        } else {
+            return "not good";
+        }
+        return $sqlMagasin->getId();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Magasin
+    public function saveMagasin($magasinId, $nom, $image, $adresse, $ville)
     {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $sqlMagasin = $this->find($magasinId);
+        $sqlMagasin->setNom($nom)
+            ->setImage($image)
+            ->setAdresse($adresse)
+            ->setVille($ville);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlMagasin);
+        if (count($errors) == 0) {
+            return $magasinId;
+        } else {
+            return "not good";
+        }
     }
-    */
+    public function deleteMagasin($magasinId)
+    {
+        $sqlMagasin = $this->find($magasinId);
+        $this->entityManager->remove($sqlMagasin);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlMagasin);
+        if (count($errors) == 0) {
+            return "good";
+        } else {
+            return "not good";
+        }
+    }
 }

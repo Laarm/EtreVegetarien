@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Article;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Article|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,37 +16,52 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class ArticleRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
         parent::__construct($registry, Article::class);
+        $this->entityManager = $entityManager;
+        $this->validator = $validator;
     }
-
-    // /**
-    //  * @return Article[] Returns an array of Article objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function createArticle($nom, $contenu, $image)
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $sqlArticle = new Article();
+        $sqlArticle->setNom($nom)
+            ->setContenu($contenu)
+            ->setImage($image)
+            ->setCreatedAt(new \DateTime());
+        $this->entityManager->persist($sqlArticle);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlArticle);
+        if (count($errors) == 0) {
+            return $sqlArticle->getId();
+        } else {
+            return "not good";
+        }
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Article
+    public function saveArticle($articleId, $nom, $contenu, $image)
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $sqlArticle = $this->find($articleId);
+        $sqlArticle->setNom($nom)
+            ->setContenu($contenu)
+            ->setImage($image);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlArticle);
+        if (count($errors) == 0) {
+            return $articleId;
+        } else {
+            return "not good";
+        }
     }
-    */
+    public function deleteArticle($articleId)
+    {
+        $sqlArticle = $this->find($articleId);
+        $this->entityManager->remove($sqlArticle);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlArticle);
+        if (count($errors) == 0) {
+            return "good";
+        } else {
+            return "not good";
+        }
+    }
 }
