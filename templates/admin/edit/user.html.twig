@@ -56,29 +56,33 @@
     });
     $(document).ready(function () {
         $("#btnSaveUser").click(function (e) {
-            e.preventDefault();
-            $.post(
-                "{{ path('admin_save_user') }}",
-                {
-                    username: $("#username").val(),
-                    user_id: '{{ user.id }}',
-                    email: $("#email").val(),
-                    role: $("#role").val(),
-                    bio: $("#editeur").val(),
-                    deleteAvatar: $("#deleteAvatar").prop('checked'),
-                    motdepasse: $("#motdepasse").val(),
-                    csrfData: "{{ csrf_token('save-user') }}"
-                },
-                function (data) {
-                    if (data.code == 200) {
-                        $("#resultat").html("<p>" + data.message + "</p>");
-                    }
-                    else {
-                        $("#resultat").html("<p>" + data.message + "</p>");
-                    }
-                },
-                'json'
-            );
+            if ($('#username').val().length !== 0 && $('#email').val().length !== 0) {
+                e.preventDefault();
+                $.post(
+                    "{{ path('admin_save_user') }}",
+                    {
+                        username: $("#username").val(),
+                        user_id: '{{ user.id }}',
+                        email: $("#email").val(),
+                        role: $("#role").val(),
+                        bio: $("#editeur").val(),
+                        deleteAvatar: $("#deleteAvatar").prop('checked'),
+                        motdepasse: $("#motdepasse").val(),
+                        csrfData: "{{ csrf_token('save-user') }}"
+                    },
+                    function (data) {
+                        if (data.code == 200) {
+                            $("#resultat").html("<p>" + data.message + "</p>");
+                        }
+                        else {
+                            $("#resultat").html("<p>" + data.message + "</p>");
+                        }
+                    },
+                    'json'
+                );
+            } else {
+                $("#resultat").html("<p>Veuillez remplir les champs principaux (Pseudonyme, Email)</p>");
+            }
         });
     });
 </script>

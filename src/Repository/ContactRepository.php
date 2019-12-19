@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Contact;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Contact|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,37 +16,39 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class ContactRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
         parent::__construct($registry, Contact::class);
+        $this->entityManager = $entityManager;
+        $this->validator = $validator;
     }
-
-    // /**
-    //  * @return Contact[] Returns an array of Contact objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function sendMessage($nom, $email, $sujet, $message)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $sql = new Contact();
+        $sql->setNom($nom)
+            ->setEmail($email)
+            ->setSujet($sujet)
+            ->setMessage($message)
+            ->setCreatedAt(new \DateTime());
+        $this->entityManager->persist($sql);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sql);
+        if (count($errors) == 0) {
+            return "good";
+        } else {
+            return "not good";
+        }
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Contact
+    public function deleteContact($contactId)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $sqlContact = $this->find($contactId);
+        $this->entityManager->remove($sqlContact);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlContact);
+        if (count($errors) == 0) {
+            return "good";
+        } else {
+            return "not good";
+        }
     }
-    */
 }

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Repas;
 use App\Entity\Article;
+use App\Entity\Contact;
 use App\Entity\Magasin;
 use App\Entity\Produit;
 use App\Entity\Restaurant;
@@ -641,5 +642,27 @@ class AdminEditController extends AbstractController
             return $this->json($produits, 200);
         }
         return $this->json([], 200);
+    }
+
+    /**
+     * @Route("/admin/deleteContact", name="admin_delete_contact")
+     */
+    public function deleteContact(Request $request, Filesystem $filesystem): Response
+    {
+        if ($request->isXmlHttpRequest()) {
+            $submittedToken = $request->get('csrfData');
+            if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
+                if (!empty($request->get('id'))) {
+                    $article = $this->getDoctrine()->getRepository(Contact::class)->deleteContact($request->get('id'));
+                    if ($article == "good") {
+                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce message", 'id' => $request->get('id')], 200);
+                    } else {
+                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                    }
+                } else {
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression de du contact...'], 200);
+                }
+            }
+        }
     }
 }
