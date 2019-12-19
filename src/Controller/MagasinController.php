@@ -22,7 +22,6 @@ class MagasinController extends AbstractController
         $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
         $magasin = $magasinrepo->findAll();
         return $this->render('magasin/index.html.twig', [
-            'controller_name' => 'MagasinController',
             'magasins' => $magasin,
             'articles' => $articles,
         ]);
@@ -31,18 +30,10 @@ class MagasinController extends AbstractController
     /**
      * @Route("/magasin/{id}", name="magasin_show")
      */
-    public function show(Magasin $magasin, ArticleRepository $repo, Request $request, MagasinRepository $magasinRepo)
+    public function show(Magasin $magasin, ArticleRepository $repo)
     {
         $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
-        $magasinId = $magasinRepo->find($request->get('id'));
-        $result = $this->getDoctrine()
-            ->getRepository(ProduitSync::class)->createQueryBuilder('m')
-            ->select('m')
-            ->where('m.Magasin = :magasinId')
-            ->setParameter('magasinId', $magasin)
-            ->orderBy('m.createdAt', 'DESC')
-            ->getQuery();
-        $produits = $result->getResult();
+        $produits = $this->getDoctrine()->getRepository(ProduitSync::class)->getProduitOfMagasin($magasin);
         return $this->render('magasin/magasin.html.twig', [
             'magasin' => $magasin,
             'articles' => $articles,
@@ -53,25 +44,15 @@ class MagasinController extends AbstractController
     /**
      * @Route("/magasins/search", name="magasin_search")
      */
-    public function searchMagasin(EntityManagerInterface $em, Request $request): Response
+    public function searchMagasin(Request $request): Response
     {
         $search = htmlspecialchars($request->get('search'));
         if (!empty($search)) {
-            $result = $em->getRepository(Magasin::class)->createQueryBuilder('m')
-                ->select('m.id', 'm.nom', 'm.image')
-                ->where('m.nom LIKE :search')
-                ->setParameter('search', '%' . $search . '%')
-                ->orderBy('m.nom', 'ASC')
-                ->getQuery();
-            $magasins = $result->getResult();
+            $magasins = $this->getDoctrine()->getRepository(Magasin::class)->searchMagasin($search);
             return $this->json($magasins, 200);
         }
         if ($search == "") {
-            $result = $em->getRepository(Magasin::class)->createQueryBuilder('m')
-                ->select('m.id', 'm.nom', 'm.image')
-                ->orderBy('m.nom', 'ASC')
-                ->getQuery();
-            $magasins = $result->getResult();
+            $magasins = $this->getDoctrine()->getRepository(Magasin::class)->getAllMagasin();
             return $this->json($magasins, 200);
         }
         return $this->json([], 200);

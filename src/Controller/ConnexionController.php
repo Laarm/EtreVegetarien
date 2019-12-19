@@ -12,7 +12,6 @@ class ConnexionController extends AbstractController
     {
         $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
         return $this->render('connexion.html.twig', [
-            'user_first_name' => "test",
             'articles' => $articles,
         ]);
     }

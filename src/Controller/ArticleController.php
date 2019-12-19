@@ -27,7 +27,6 @@ class ArticleController extends AbstractController
         $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
 
         return $this->render('article/index.html.twig', [
-            'controller_name' => 'ArticleController',
             'article' => $article,
             'articles' => $articles,
         ]);

@@ -10,11 +10,8 @@ use App\Repository\RestaurantAvisRepository;
 use App\Repository\ArticleRepository;
 use App\Entity\Restaurant;
 use App\Entity\RestaurantAvis;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Response;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class RestaurantController extends AbstractController
 {
@@ -45,13 +42,7 @@ class RestaurantController extends AbstractController
             $view = null;
             $maxView = 100;
         }
-        $count = $this->getDoctrine()
-            ->getRepository(RestaurantAvis::class)->createQueryBuilder('r')
-            ->select('avg(r.note)', 'count(r)')
-            ->where('r.restaurant = :restaurantId')
-            ->setParameter('restaurantId', $restaurant)
-            ->getQuery();
-        $restaurantsSom = $count->getResult();
+        $restaurantsSom = $this->getDoctrine()->getRepository(RestaurantAvis::class)->getCountAvis($restaurant->getId());
         $restaurantAvis = $repoRestaurantAvis->findBy(array('restaurant' => $restaurant), null, $maxView, $view);
         return $this->render('restaurant/restaurant.html.twig', [
             'restaurant' => $restaurant,
@@ -66,25 +57,16 @@ class RestaurantController extends AbstractController
     /**
      * @Route("/restaurants/search", name="restaurant_search")
      */
-    public function searchRestaurant(EntityManagerInterface $em, Request $request): Response
+    public function searchRestaurant(Request $request): Response
     {
         $search = htmlspecialchars($request->get('search'));
         if (!empty($search)) {
-            $result = $em->getRepository(Restaurant::class)->createQueryBuilder('r')
-                ->select('r.id', 'r.nom', 'r.image')
-                ->where('r.nom LIKE :search')
-                ->setParameter('search', '%' . $search . '%')
-                ->orderBy('r.nom', 'ASC')
-                ->getQuery();
-            $restaurants = $result->getResult();
+            $restaurants = $this->getDoctrine()->getRepository(Restaurant::class)->searchRestaurant($search);
             return $this->json($restaurants, 200);
         }
         if ($search == "") {
-            $result = $em->getRepository(Restaurant::class)->createQueryBuilder('r')
-                ->select('r.id', 'r.nom', 'r.image')
-                ->orderBy('r.nom', 'ASC')
-                ->getQuery();
-            $restaurants = $result->getResult();
+
+            $restaurants = $this->getDoctrine()->getRepository(Restaurant::class)->getAllRestaurant($search);
             return $this->json($restaurants, 200);
         }
         return $this->json([], 200);
@@ -93,40 +75,23 @@ class RestaurantController extends AbstractController
     /**
      * @Route("/ajax/restaurant/sendNote", name="send_note_restaurant")
      */
-    public function sendNote(ValidatorInterface $validator, EntityManagerInterface $entityManager, Security $security, Request $request, RestaurantRepository $repoRestaurant): Response
+    public function sendNote(Security $security, Request $request): Response
     {
         if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->request->get('csrfData');
+            $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('send-note', $submittedToken)) {
-                $note = $request->request->get('note');
-                if (!empty($note) && !empty($request->request->get('restaurant_id'))) {
-                    if ($request->request->get('message') == "") {
+                $note = $request->get('note');
+                if (!empty($note) && !empty($request->get('restaurant_id'))) {
+                    if ($request->get('message') == "") {
                         $message = null;
                     } else {
-                        $message = $request->request->get('message');
+                        $message = $request->get('message');
                     }
                     $user = $security->getUser();
-                    $restaurant = $repoRestaurant->findBy(array('id' => $request->request->get('restaurant_id')), null, "10", null);
-                    $verif = $this->getDoctrine()
-                        ->getRepository(RestaurantAvis::class)
-                        ->findOneBy([
-                            'restaurant' => $restaurant,
-                            'postedBy' => $user,
-                        ]);
+                    $verif = $this->getDoctrine()->getRepository(RestaurantAvis::class)->getAvisOfUser($this->getUser()->getId(), $request->get('restaurant_id'));
                     if (!$verif) {
-                        $sqlRestaurantAvis = new RestaurantAvis();
-                        $restaurant = $this->getDoctrine()
-                            ->getRepository(Restaurant::class)
-                            ->find($request->request->get('restaurant_id'));
-                        $sqlRestaurantAvis->setRestaurant($restaurant)
-                            ->setPostedBy($user)
-                            ->setMessage($message)
-                            ->setNote($note)
-                            ->setCreatedAt(new \DateTime());
-                        $entityManager->persist($sqlRestaurantAvis);
-                        $entityManager->flush();
-                        $errors = $validator->validate($sqlRestaurantAvis);
-                        if (count($errors) == 0) {
+                        $verif = $this->getDoctrine()->getRepository(RestaurantAvis::class)->addAvis($request->get('restaurant_id'), $user, $message, $note);
+                        if ($verif == "good") {
                             return $this->json(['code' => 200, 'message' => 'Merci d\'avoir donné votre avis !'], 200);
                         }
                     } else {

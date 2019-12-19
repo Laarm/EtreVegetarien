@@ -2,9 +2,13 @@
 
 namespace App\Repository;
 
+use App\Entity\Repas;
 use App\Entity\RepasFavoris;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Security;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method RepasFavoris|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,37 +18,58 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class RepasFavorisRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, ValidatorInterface $validator, Security $security)
     {
         parent::__construct($registry, RepasFavoris::class);
+        $this->entityManager = $entityManager;
+        $this->validator = $validator;
+        $this->security = $security;
     }
-
-    // /**
-    //  * @return RepasFavoris[] Returns an array of RepasFavoris objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function addRepasFavoris($repasId)
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $user = $this->security->getUser();
+        $sqlRepasFavoris = new RepasFavoris();
+        $repas = $this->entityManager
+            ->getRepository(Repas::class)
+            ->find($repasId);
+        $sqlRepasFavoris->setRepas($repas)
+            ->setPostedBy($user)
+            ->setCreatedAt(new \DateTime());
+        $this->entityManager->persist($sqlRepasFavoris);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlRepasFavoris);
+        if (count($errors) == 0) {
+            return "good";
+        } else {
+            return "not good";
+        }
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?RepasFavoris
+    public function removeRepasFavoris($repasId, $userId)
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $result = $this->createQueryBuilder('r')
+            ->select('r.id')
+            ->where('r.postedBy = ' . $userId)
+            ->andwhere('r.Repas = ' . $repasId)
+            ->getQuery();
+        $repasFavorisId = $result->getResult();
+        $deleteFavoris = $this->find($repasFavorisId[0]['id']);
+        $this->entityManager->remove($deleteFavoris);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($deleteFavoris);
+        if (count($errors) == 0) {
+            return "good";
+        } else {
+            return "not good";
+        }
     }
-    */
+    public function getAllRepasAvisForUser($user)
+    {
+        $result = $this->createQueryBuilder('r')
+            ->select('r')
+            ->where('r.postedBy = :user')
+            ->setParameter('user', $user)
+            ->orderBy('r.createdAt', 'DESC')
+            ->getQuery();
+        return $result->getResult();
+    }
 }

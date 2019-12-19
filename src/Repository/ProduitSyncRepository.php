@@ -18,33 +18,14 @@ class ProduitSyncRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ProduitSync::class);
     }
-
-    // /**
-    //  * @return ProduitSync[] Returns an array of ProduitSync objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getProduitOfMagasin($magasin)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $result = $this->createQueryBuilder('m')
+            ->select('m')
+            ->where('m.Magasin = :magasinId')
+            ->setParameter('magasinId', $magasin)
+            ->orderBy('m.createdAt', 'DESC')
+            ->getQuery();
+        return $result->getResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?ProduitSync
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

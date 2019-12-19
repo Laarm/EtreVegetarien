@@ -68,4 +68,22 @@ class MagasinRepository extends ServiceEntityRepository
             return "not good";
         }
     }
+    public function searchMagasin($search)
+    {
+        $result = $this->createQueryBuilder('m')
+            ->select('m.id', 'm.nom', 'm.image')
+            ->where('m.nom LIKE :search')
+            ->setParameter('search', '%' . $search . '%')
+            ->orderBy('m.nom', 'ASC')
+            ->getQuery();
+        return $result->getResult();
+    }
+    public function getAllMagasin()
+    {
+        $result = $this->createQueryBuilder('m')
+            ->select('m.id', 'm.nom', 'm.image')
+            ->orderBy('m.nom', 'ASC')
+            ->getQuery();
+        return $result->getResult();
+    }
 }

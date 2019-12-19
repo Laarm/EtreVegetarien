@@ -18,33 +18,14 @@ class ProduitFavorisRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ProduitFavoris::class);
     }
-
-    // /**
-    //  * @return ProduitFavoris[] Returns an array of ProduitFavoris objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getAllProduitsAvisForUser($user)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $result = $this->createQueryBuilder('r')
+            ->select('r')
+            ->where('r.postedById = :user')
+            ->setParameter('user', $user)
+            ->orderBy('r.createdAt', 'DESC')
+            ->getQuery();
+        return $result->getResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?ProduitFavoris
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

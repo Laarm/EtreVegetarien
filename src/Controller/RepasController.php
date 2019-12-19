@@ -4,8 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Repas;
 use App\Entity\RepasFavoris;
-use App\Entity\Restaurant;
-use App\Entity\RestaurantAvis;
 use App\Repository\RepasRepository;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -35,25 +33,15 @@ class RepasController extends AbstractController
     /**
      * @Route("/repas/search", name="repas_search")
      */
-    public function searchRepas(EntityManagerInterface $em, Request $request): Response
+    public function searchRepas(Request $request): Response
     {
         $search = htmlspecialchars($request->get('search'));
         if (!empty($search)) {
-            $result = $em->getRepository(Repas::class)->createQueryBuilder('r')
-                ->select('r.id', 'r.nom', 'r.image')
-                ->where('r.nom LIKE :search')
-                ->setParameter('search', '%' . $search . '%')
-                ->orderBy('r.nom', 'ASC')
-                ->getQuery();
-            $repas = $result->getResult();
+            $repas = $this->getDoctrine()->getRepository(Repas::class)->searchRepas($search);
             return $this->json($repas, 200);
         }
         if ($search == "") {
-            $result = $em->getRepository(Repas::class)->createQueryBuilder('r')
-                ->select('r.id', 'r.nom', 'r.image')
-                ->orderBy('r.nom', 'ASC')
-                ->getQuery();
-            $repas = $result->getResult();
+            $repas = $this->getDoctrine()->getRepository(Repas::class)->getAllRepas($search);
             return $this->json($repas, 200);
         }
         return $this->json([], 200);
@@ -64,7 +52,6 @@ class RepasController extends AbstractController
      */
     public function showRepas(Repas $repas, ArticleRepository $repo, RepasRepository $repoRepas, RepasFavorisRepository $repoRepasFavoris, Security $security)
     {
-        $user = $security->getUser();
         $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
         $autresrepas = $repoRepas->findBy(array('postedBy' => $repas->getPostedBy()), null, "8", null);
         $repasFavoris = $repoRepasFavoris->findBy(array('Repas' => $repas), null, "100", null);
@@ -79,41 +66,22 @@ class RepasController extends AbstractController
     /**
      * @Route("/ajax/repasFavoris", name="repas_favoris")
      */
-    public function repasFavoris(ValidatorInterface $validator, EntityManagerInterface $entityManager, Security $security, RepasFavorisRepository $repoRepasFavoris, Request $request)
+    public function repasFavoris(Security $security, RepasFavorisRepository $repoRepasFavoris, Request $request)
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('repas-favoris', $submittedToken)) {
                 if (!empty($request->get('repas_id'))) {
                     $user = $security->getUser();
-                    $repas = $repoRepasFavoris->find($request->get('repas_id'));
                     $verif = $repoRepasFavoris->findBy(array('postedBy' => $user, 'Repas' => $request->get('repas_id')));
                     if (!$verif) {
-                        $sqlRepasFavoris = new RepasFavoris();
-                        $repas = $this->getDoctrine()
-                            ->getRepository(Repas::class)
-                            ->find($request->get('repas_id'));
-                        $sqlRepasFavoris->setRepas($repas)
-                            ->setPostedBy($user)
-                            ->setCreatedAt(new \DateTime());
-                        $entityManager->persist($sqlRepasFavoris);
-                        $entityManager->flush();
-                        $errors = $validator->validate($sqlRepasFavoris);
-                        if (count($errors) == 0) {
+                        $sqlRepasFavoris = $this->getDoctrine()->getRepository(RepasFavoris::class)->addRepasFavoris($request->get('repas_id'));
+                        if ($sqlRepasFavoris == "good") {
                             return $this->json(['code' => 200, 'message' => "Vous avez bien ajouter ce repas en favoris", 'id' => $request->get('repas_id')], 200);
                         }
                     } else {
-                        $result = $this->getDoctrine()->getRepository(RepasFavoris::class)->createQueryBuilder('r')
-                            ->select('r.id')
-                            ->where('r.postedBy = ' . $this->getUser()->getId())
-                            ->andwhere('r.Repas = ' . $request->get('repas_id'))
-                            ->getQuery();
-                        $repasFavorisId = $result->getResult();
-                        $deleteFavoris = $entityManager->getRepository(RepasFavoris::class)->find($repasFavorisId[0]['id']);
-                        $entityManager->remove($deleteFavoris);
-                        $entityManager->flush();
-                        $errors = $validator->validate($deleteFavoris);
-                        if (count($errors) == 0) {
+                        $sqlRepasFavoris = $this->getDoctrine()->getRepository(RepasFavoris::class)->removeRepasFavoris($request->get('repas_id'), $this->getUser()->getId());
+                        if ($sqlRepasFavoris == "good") {
                             return $this->json(['code' => 201, 'message' => "Vous avez bien supprimer ce repas en favoris", 'id' => $request->get('repas_id')], 200);
                         } else {
                             return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);

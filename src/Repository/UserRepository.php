@@ -78,4 +78,22 @@ class UserRepository extends ServiceEntityRepository
             return "not good";
         }
     }
+    public function createUser($username, $password, $email)
+    {
+        $sqlUser = new User();
+        $password = $this->passwordEncoder->encodePassword($sqlUser, $password);
+        $sqlUser->setUsername($username)
+            ->setPassword($password)
+            ->setEmail($email)
+            ->setCreatedAt(new \DateTime());
+        $this->entityManager->persist($sqlUser);
+        $this->entityManager->flush();
+        $errors = $this->validator->validate($sqlUser);
+        $return = array("password" => $password, "id" => $sqlUser->getId());
+        if (count($errors) == 0) {
+            return $return;
+        } else {
+            return "not good";
+        }
+    }
 }

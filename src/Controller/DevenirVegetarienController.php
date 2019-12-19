@@ -15,7 +15,6 @@ class DevenirVegetarienController extends AbstractController
     {
         $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
         return $this->render('devenir_vegetarien/index.html.twig', [
-            'controller_name' => 'DevenirVegetarienController',
             'articles' => $articles,
         ]);
     }
