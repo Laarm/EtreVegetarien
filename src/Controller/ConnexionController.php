@@ -2,17 +2,20 @@
 
 namespace App\Controller;
 
+use App\Repository\ArticleRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Repository\ArticleRepository;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class ConnexionController extends AbstractController
 {
-    public function index(ArticleRepository $repo)
+    public function index(ArticleRepository $repo, AuthenticationUtils $authenticationUtils)
     {
         $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
+        $error = $authenticationUtils->getLastAuthenticationError();
         return $this->render('connexion.html.twig', [
             'articles' => $articles,
+            'error'         => $error,
         ]);
     }
 

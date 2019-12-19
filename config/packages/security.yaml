@@ -21,6 +21,10 @@ security:
             form_login:
                 login_path: connexion
                 check_path: connexion
+                # csrf token options
+                csrf_parameter:       _csrf_token
+                csrf_token_id:        authenticate
+                csrf_token_generator: security.csrf.token_manager
 
             logout:
                 path: deconnexion
@@ -35,4 +39,6 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/connexion$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/parametre$, roles: IS_AUTHENTICATED_FULLY }
         # - { path: ^/profile, roles: ROLE_USER }
