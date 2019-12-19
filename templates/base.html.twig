@@ -97,6 +97,23 @@
                 </div>
                 <a class="item" href="{{ path('magasins') }}">Trouver des magasins</a>
                 <a class="item" href="{{ path('devenirVegetarien') }}">Devenir Végétarien</a>
+                {% if not app.user %}
+                <a class="item computer-hidden" href="{{ path('connexion') }}"><i class="fad fa-sign-in"></i>
+                    Connexion</a>
+                <a class="item computer-hidden" href="{{ path('inscription') }}"><i class="fad fa-user-plus"></i>
+                    Inscription</a>
+                {% else %}
+                <a class="item computer-hidden" href="{{ path('user', {'id': app.user.id}) }}"><i
+                        class="fad fa-user"></i> Mon profil</a>
+                {% if app.user.role == "ROLE_ADMIN" %}
+                <a class="item computer-hidden" href="{{ path('admin') }}"><i class="fad fa-tools"></i>
+                    Panel</a>
+                {% endif %}
+                <a class="item computer-hidden" href="{{ path('parametre') }}"><i class="fad fa-user-cog"></i>
+                    Parametres</a>
+                <a class="item computer-hidden" href="{{ path('deconnexion') }}"><i class="fad fa-sign-out"></i>
+                    Déconnexion</a>
+                {% endif %}
             </div>
         </header>
         <main>

@@ -564,6 +564,12 @@ footer .bottom .container p a {
     font-size: 20px
 }
 
+@media(min-width: 991px) {
+    .computer-hidden {
+        display: none;
+    }
+}
+
 /*
 *
 *   Mobile
