@@ -12,6 +12,8 @@ class AppExtension extends AbstractExtension
         return [
             new TwigFilter('reducContent', [$this, 'reducContent']),
             new TwigFilter('timeDiff', [$this, 'timeDiff']),
+            new TwigFilter('badgePreferenceIcon', [$this, 'badgePreferenceIcon']),
+            new TwigFilter('badgeIcon', [$this, 'badgeIcon']),
         ];
     }
 
@@ -21,10 +23,56 @@ class AppExtension extends AbstractExtension
         return substr($content, 0, $max);
     }
 
+    public function badgeIcon($content): string
+    {
+        if ($content == "ROLE_ADMIN") {
+            return '<i class="cds ml-1 fad fa-badge-check"></i>';
+        }
+        if ($content == "") {
+            return '';
+        }
+    }
+
+    public function badgePreferenceIcon($content): string
+    {
+        if ($content == "Normal") {
+            return '<i class="fad fa-user margin-auto"></i>';
+        }
+        if ($content == "Végétarien") {
+            return '<i class="fad fa-seedling margin-auto"></i>';
+        }
+        if ($content == "Pesco-végétarien") {
+            return '<i class="fad fa-fish margin-auto"></i>';
+        }
+        if ($content == "Végan") {
+            return '<i class="fad fa-leaf margin-auto"></i>';
+        }
+        if ($content == "Flexitarien") {
+            return '<i class="fad fa-steak margin-auto"></i>';
+        }
+        if ($content == "L'ovo-végétarien") {
+            return '<i class="fad fa-egg margin-auto"></i>';
+        }
+        if ($content == "Lacto-végétarien") {
+            return '<i class="fad fa-cheese-swiss margin-auto"></i>';
+        }
+        if ($content == "L'ovo-lacto-végétarien") {
+            return '<i class="fad fa-cheese-swiss margin-auto"></i>';
+        }
+        if ($content == "Pollo-végétarien") {
+            return '<i class="fad fa-drumstick margin-auto"></i>';
+        }
+        if ($content == "Crudivorien") {
+            return '<i class="fas fa-carrot margin-auto"></i>';
+        }
+        if ($content == "") {
+            return '<i class="fad fa-user margin-auto"></i>';
+        }
+    }
+
     public function timeDiff($oneTime, $twoTime, $full, $phrase): string
     {
         $oneTime = new \DateTime($oneTime);
-        // $twoTime = new \DateTime();
         if ($twoTime == "now") {
             $twoTime = new \DateTime();
         }
