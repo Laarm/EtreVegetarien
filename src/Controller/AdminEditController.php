@@ -7,6 +7,7 @@ use App\Entity\Repas;
 use App\Entity\Article;
 use App\Entity\Magasin;
 use App\Entity\Produit;
+use App\Entity\ProduitSync;
 use App\Entity\Restaurant;
 use App\Entity\RestaurantAvis;
 use Symfony\Component\HttpFoundation\Request;
@@ -531,5 +532,66 @@ class AdminEditController extends AbstractController
                 }
             }
         }
+    }
+
+    /**
+     * @Route("/admin/deleteProduitMagasin", name="admin_delete_produit_magasin")
+     */
+    public function deleteProduitMagasin(Request $request): Response
+    {
+        if ($request->isXmlHttpRequest()) {
+            $submittedToken = $request->get('csrfData');
+            if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
+                if (!empty($request->get('id'))) {
+                    $magasin = $this->getDoctrine()->getRepository(ProduitSync::class)->deleteProduitMagasin($request->get('id'));
+                    if ($magasin == "good") {
+                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce produit du magasin", 'id' => $request->get('id')], 200);
+                    } else {
+                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                    }
+                } else {
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du magasin...'], 200);
+                }
+            }
+        }
+    }
+
+    /**
+     * @Route("/admin/addProduitSync", name="admin_add_produit_magasin")
+     */
+    public function addProduitSync(Security $security, Request $request): Response
+    {
+        if ($request->isXmlHttpRequest()) {
+            $submittedToken = $request->get('csrfData');
+            if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
+                if (!empty($request->get('magasinId')) && !empty($request->get('produitId'))) {
+                    $sqlProduit = $this->getDoctrine()->getRepository(ProduitSync::class)->createProduitMagasin($request->get('magasinId'), $request->get('produitId'));
+                    if ($sqlProduit !== "not good") {
+                        return $this->json(['code' => 200, 'message' => "Le produit à bien été ajouter au magasin !", 'repasId' => $sqlProduit], 200);
+                    } else {
+                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                    }
+                } else {
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour du repas...'], 200);
+                }
+            }
+        }
+    }
+
+    /**
+     * @Route("/produits/search", name="produit_search")
+     */
+    public function searchProduit(Request $request): Response
+    {
+        $search = htmlspecialchars($request->get('search'));
+        if (!empty($search)) {
+            $produits = $this->getDoctrine()->getRepository(Produit::class)->searchProduit($search, 3);
+            return $this->json($produits, 200);
+        }
+        if ($search == "") {
+            $produits = $this->getDoctrine()->getRepository(Produit::class)->getAllProduit($search, 3);
+            return $this->json($produits, 200);
+        }
+        return $this->json([], 200);
     }
 }

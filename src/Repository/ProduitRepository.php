@@ -62,4 +62,24 @@ class ProduitRepository extends ServiceEntityRepository
             return "not good";
         }
     }
+    public function searchProduit($search, $limit)
+    {
+        $result = $this->createQueryBuilder('m')
+            ->select('m.id', 'm.nom', 'm.image')
+            ->where('m.nom LIKE :search')
+            ->setParameter('search', '%' . $search . '%')
+            ->orderBy('m.nom', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery();
+        return $result->getResult();
+    }
+    public function getAllProduit($limit)
+    {
+        $result = $this->createQueryBuilder('m')
+            ->select('m.id', 'm.nom', 'm.image')
+            ->orderBy('m.nom', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery();
+        return $result->getResult();
+    }
 }

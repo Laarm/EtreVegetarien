@@ -68,21 +68,23 @@ class MagasinRepository extends ServiceEntityRepository
             return "not good";
         }
     }
-    public function searchMagasin($search)
+    public function searchMagasin($search, $limit)
     {
         $result = $this->createQueryBuilder('m')
             ->select('m.id', 'm.nom', 'm.image')
             ->where('m.nom LIKE :search')
             ->setParameter('search', '%' . $search . '%')
             ->orderBy('m.nom', 'ASC')
+            ->setMaxResults($limit)
             ->getQuery();
         return $result->getResult();
     }
-    public function getAllMagasin()
+    public function getAllMagasin($limit)
     {
         $result = $this->createQueryBuilder('m')
             ->select('m.id', 'm.nom', 'm.image')
             ->orderBy('m.nom', 'ASC')
+            ->setMaxResults($limit)
             ->getQuery();
         return $result->getResult();
     }

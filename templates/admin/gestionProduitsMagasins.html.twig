@@ -1,0 +1,204 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Gestion des produits dans les magasins - Être Végétarien{% endblock %}
+
+{% block body %}
+<section id="panel" class="flex">
+    <div class="w-100">
+        <div paginationView="magasin">
+            <table class="table table-hover contentPagination">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Contenu</th>
+                        <th scope="col">Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for produit in produits %}
+                    <tr paginationName="magasin" paginationId="{{ loop.index }}">
+                        <th scope="row">{{ produit.id }}</th>
+                        <td>{{ produit.Produit.nom }}</td>
+                        <td>{{ produit.Magasin.nom }}</td>
+                        <td class="btnOption">
+                            <a target="_BLANK" href="{{ path('magasin_show', {'id': produit.Magasin.id}) }}"
+                                class="blue"><i class="fad fa-store-alt"></i></a>
+                            <a class="red cursor-pointer" value="{{ produit.id }}" data-toggle="modal"
+                                data-target="#deleteModal"><i class="fad fa-times"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="flex justify-flex-end">
+            <a href="#" class="new btn btn-primary" role="button" data-toggle="modal" data-target="#addModal"><i
+                    class="fad fa-plus"></i>
+                Nouveau
+            </a>
+            <ul paginationBtn="magasin" class="pagination justify-content-end">
+                <div class="btnPagination flex mr-4">
+                </div>
+            </ul>
+        </div>
+    </div>
+</section>
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Êtes-vous sûr de supprimer cet article ?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                <button deleteMagasin="0" csrf-data="{{ csrf_token('delete-item') }}" type="button"
+                    class="btn btn-primary">Oui</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">Veuillez choisir</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group mb-3 mt-3 produit-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Produit : </span>
+                    </div>
+                    <input type="text" name="search" class="form-control" id="produit">
+                    <div class="input-group-append">
+                        <span class="input-group-text"><i class="fad fa-times"></i></span>
+                    </div>
+                </div>
+                <div id="search-produit">
+                </div>
+                <div class="input-group mb-3 mt-3 magasin-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Magasin : </span>
+                    </div>
+                    <input type="text" name="search" class="form-control" id="magasin">
+                    <div class="input-group-append">
+                        <span class="input-group-text"><i class="fad fa-times"></i></span>
+                    </div>
+                </div>
+                <div id="search-magasin">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                <button addProduitMagasin="0" produit="0" magasin="0" csrf-data="{{ csrf_token('save-item') }}"
+                    type="button" class="btn btn-primary">Oui</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    i = 0;
+    $(document).ready(function () {
+        $('[name="search"]#produit').keypress(function (e) {
+            $.getJSON("/produits/search?search=" + $('[name="search"]#produit').val() + "&limit=3")
+                .then((produits) => {
+                    $('#search-produit').html("")
+                    if (produits.length == 0) {
+                        $('#search-produit').html("<p class='margin-auto'>Aucun produit trouvé</p>")
+                    }
+                    produits.forEach((produit) => {
+                        $("#search-produit").append('<div class="flex" addProduit="' + produit.id + '"><div class="w-33 flex"><img class="mr-3 rond margin-auto"src="' + produit.image + '"style="height: 40px;width: 40px"></div><div class="w-33 flex"><p class="margin-auto">' + produit.nom + '</p></div><div class="w-33"></div></div>')
+                    })
+                });
+        });
+    });
+    $(document).ready(function () {
+        $('[name="search"]#magasin').keypress(function (e) {
+            $.getJSON("/magasins/search?search=" + $('[name="search"]#magasin').val() + "&limit=3")
+                .then((magasins) => {
+                    $('#search-magasin').html("")
+                    if (magasins.length == 0) {
+                        $('#search-magasin').html("<p class='margin-auto'>Aucun magasin trouvé</p>")
+                    }
+                    magasins.forEach((magasin) => {
+                        $("#search-magasin").append('<div class="flex" addMagasin="' + magasin.id + '"><div class="w-33 flex"><img class="mr-3 rond margin-auto"src="' + magasin.image + '"style="height: 40px;width: 40px"></div><div class="w-33 flex"><p class="margin-auto">' + magasin.nom + '</p></div><div class="w-33"></div></div>')
+                    })
+                });
+        });
+    });
+    $(document).on('click', '[addProduit]', function (e) {
+        id = $([this]).attr('addProduit')
+        $('[addProduitMagasin]').attr('produit', id)
+        $('[name="search"]#produit').attr('value', id)
+        $('.produit-group .input-group-append').html('<span class="input-group-text"><i class="cds fad fa-check"></i></span>')
+        $('#search-produit').html("")
+    })
+    $(document).on('click', '[addMagasin]', function (e) {
+        id = $([this]).attr('addMagasin')
+        $('[addProduitMagasin]').attr('magasin', id)
+        $('[name="search"]#magasin').attr('value', id)
+        $('.magasin-group .input-group-append').html('<span class="input-group-text"><i class="cds fad fa-check"></i></span>')
+        $('#search-magasin').html("")
+    })
+    $(document).on('click', '[addProduitMagasin]', function (e) {
+        csrfData = $(this).attr('csrf-data')
+        e.preventDefault();
+        $.post(
+            "{{ path('admin_add_produit_magasin') }}",
+            {
+                magasinId: $([this]).attr('magasin'),
+                produitId: $([this]).attr('produit'),
+                csrfData: $(this).attr('csrf-data')
+            },
+            function (data) {
+                if (data.code == '200') {
+                    location.reload();
+                }
+                else {
+                    console.log(data)
+                }
+            },
+            'json'
+        );
+    });
+    addEventListener("load", () => {
+        new pagination("magasin", 7, 10, "table-row");
+    })
+
+    $(document).on('click', '[data-target="#deleteModal"]', function (e) {
+        $('[deleteMagasin]').attr("deleteMagasin", $(this).attr('value'))
+    });
+
+    $(document).on('click', '[deleteMagasin]', function (e) {
+        id = $(this).attr('deleteMagasin')
+        csrfData = $(this).attr('csrf-data')
+        e.preventDefault();
+        $.post(
+            "{{ path('admin_delete_produit_magasin') }}",
+            {
+                id: id,
+                csrfData: $(this).attr('csrf-data')
+            },
+            function (data) {
+                if (data.code == '200') {
+                    location.reload();
+                }
+                else {
+                    console.log(data)
+                }
+            },
+            'json'
+        );
+    });
+</script>
+{% endblock %}

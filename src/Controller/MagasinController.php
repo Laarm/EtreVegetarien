@@ -46,13 +46,18 @@ class MagasinController extends AbstractController
      */
     public function searchMagasin(Request $request): Response
     {
+        if (!empty($request->get('limit'))) {
+            $limit = $request->get('limit');
+        } else {
+            $limit = "100";
+        }
         $search = htmlspecialchars($request->get('search'));
         if (!empty($search)) {
-            $magasins = $this->getDoctrine()->getRepository(Magasin::class)->searchMagasin($search);
+            $magasins = $this->getDoctrine()->getRepository(Magasin::class)->searchMagasin($search, $limit);
             return $this->json($magasins, 200);
         }
         if ($search == "") {
-            $magasins = $this->getDoctrine()->getRepository(Magasin::class)->getAllMagasin();
+            $magasins = $this->getDoctrine()->getRepository(Magasin::class)->getAllMagasin($limit);
             return $this->json($magasins, 200);
         }
         return $this->json([], 200);

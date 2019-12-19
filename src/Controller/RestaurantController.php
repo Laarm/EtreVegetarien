@@ -59,14 +59,19 @@ class RestaurantController extends AbstractController
      */
     public function searchRestaurant(Request $request): Response
     {
+        if (!empty($request->get('limit'))) {
+            $limit = $request->get('limit');
+        } else {
+            $limit = "100";
+        }
         $search = htmlspecialchars($request->get('search'));
         if (!empty($search)) {
-            $restaurants = $this->getDoctrine()->getRepository(Restaurant::class)->searchRestaurant($search);
+            $restaurants = $this->getDoctrine()->getRepository(Restaurant::class)->searchRestaurant($search, $limit);
             return $this->json($restaurants, 200);
         }
         if ($search == "") {
 
-            $restaurants = $this->getDoctrine()->getRepository(Restaurant::class)->getAllRestaurant($search);
+            $restaurants = $this->getDoctrine()->getRepository(Restaurant::class)->getAllRestaurant($limit);
             return $this->json($restaurants, 200);
         }
         return $this->json([], 200);

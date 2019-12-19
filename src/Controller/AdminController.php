@@ -2,19 +2,20 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\ArticleRepository;
-use App\Repository\ArticleCommentaireRepository;
-use App\Repository\MagasinRepository;
-use App\Repository\MagasinAvisRepository;
-use App\Repository\RestaurantRepository;
-use App\Repository\RestaurantAvisRepository;
-use App\Repository\RepasRepository;
-use App\Repository\ProduitRepository;
-use App\Repository\ContactRepository;
 use App\Repository\UserRepository;
+use App\Repository\RepasRepository;
+use App\Repository\ArticleRepository;
+use App\Repository\ContactRepository;
+use App\Repository\MagasinRepository;
+use App\Repository\ProduitRepository;
+use App\Repository\RestaurantRepository;
+use App\Repository\MagasinAvisRepository;
+use App\Repository\ProduitSyncRepository;
+use App\Repository\RestaurantAvisRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\ArticleCommentaireRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminController extends AbstractController
 {
@@ -73,6 +74,21 @@ class AdminController extends AbstractController
 
         return $this->render('admin/gestionMagasins.html.twig', [
             'magasins' => $magasins,
+        ]);
+    }
+    public function gestionProduitsMagasins(ProduitSyncRepository $gestionProduitsMagasinsRepo, Request $request)
+    {
+        if ($request->get('view') !== null) {
+            $view = $request->get('view');
+            $maxView = $request->get('maxView');
+        } else {
+            $view = null;
+            $maxView = 100;
+        }
+        $produits = $gestionProduitsMagasinsRepo->findBy(array(), null, $maxView, $view);
+
+        return $this->render('admin/gestionProduitsMagasins.html.twig', [
+            'produits' => $produits,
         ]);
     }
     public function gestionRestaurants(RestaurantRepository $gestionRestaurantRepo, Request $request)
