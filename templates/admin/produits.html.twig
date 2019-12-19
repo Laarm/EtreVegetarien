@@ -20,10 +20,8 @@
                     <tr paginationName="produit" paginationId="{{ loop.index }}">
                         <th scope="row">{{ produit.id }}</th>
                         <td>{{ produit.nom }}</td>
-                        <td><img height="40" width="40" src="{{ produit.image }}" /></td>
+                        <td><img height="40" width="40" src="{{ asset(produit.image) }}" /></td>
                         <td class="btnOption">
-                            <a target="_BLANK" href="{{ path('article_show', {'id': produit.id}) }}"><i
-                                    class="fad fa-eye"></i></a>
                             <a href="{{ path('admin_edit_produit', {'id': produit.id}) }}" class="blue"><i
                                     class="fad fa-edit"></i></a>
                             <a class="red cursor-pointer" value="{{ produit.id }}" data-toggle="modal"

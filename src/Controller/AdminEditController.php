@@ -7,9 +7,10 @@ use App\Entity\Repas;
 use App\Entity\Article;
 use App\Entity\Magasin;
 use App\Entity\Produit;
-use App\Entity\ProduitSync;
 use App\Entity\Restaurant;
+use App\Entity\ProduitSync;
 use App\Entity\RestaurantAvis;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,12 +44,16 @@ class AdminEditController extends AbstractController
     /**
      * @Route("/admin/deleteArticle", name="admin_delete_article")
      */
-    public function deleteArticle(Request $request): Response
+    public function deleteArticle(Request $request, Filesystem $filesystem): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
                 if (!empty($request->get('id'))) {
+                    $ancienneImage = $this->getDoctrine()->getRepository(Article::class)->find($request->get('id'));
+                    if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
+                        $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
+                    }
                     $article = $this->getDoctrine()->getRepository(Article::class)->deleteArticle($request->get('id'));
                     if ($article == "good") {
                         return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer cet article", 'id' => $request->get('id')], 200);
@@ -65,7 +70,7 @@ class AdminEditController extends AbstractController
     /**
      * @Route("/admin/saveArticle", name="admin_save_article")
      */
-    public function saveArticle(Request $request): Response
+    public function saveArticle(Request $request, Filesystem $filesystem): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
@@ -78,9 +83,12 @@ class AdminEditController extends AbstractController
                     }
                     if ($request->get('article_id') == "new") {
                         $sqlArticle = $this->getDoctrine()->getRepository(Article::class)->createArticle($request->get('nom'), $request->get('contenu'), $image);
-                        $id = $sqlArticle;
                         $success = "L'article à bien été créer !";
                     } else {
+                        $ancienneImage = $this->getDoctrine()->getRepository(Article::class)->find($request->get('article_id'));
+                        if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
+                            $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
+                        }
                         $sqlArticle = $this->getDoctrine()->getRepository(Article::class)->saveArticle($request->get('article_id'), $request->get('nom'), $request->get('contenu'), $image);
                         $success = "L'article à bien été mis à jour !";
                     }
@@ -121,12 +129,16 @@ class AdminEditController extends AbstractController
     /**
      * @Route("/admin/deleteMagasin", name="admin_delete_magasin")
      */
-    public function deleteMagasin(Request $request): Response
+    public function deleteMagasin(Request $request, Filesystem $filesystem): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
                 if (!empty($request->get('id'))) {
+                    $ancienneImage = $this->getDoctrine()->getRepository(Magasin::class)->find($request->get('id'));
+                    if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
+                        $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
+                    }
                     $magasin = $this->getDoctrine()->getRepository(Magasin::class)->deleteMagasin($request->get('id'));
                     if ($magasin == "good") {
                         return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce magasin", 'id' => $request->get('id')], 200);
@@ -143,7 +155,7 @@ class AdminEditController extends AbstractController
     /**
      * @Route("/admin/saveMagasin", name="admin_save_magasin")
      */
-    public function saveMagasin(Request $request): Response
+    public function saveMagasin(Request $request, Filesystem $filesystem): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
@@ -158,6 +170,10 @@ class AdminEditController extends AbstractController
                         $sqlMagasin = $this->getDoctrine()->getRepository(Magasin::class)->createMagasin($request->get('nom'), $image, "null", $request->get('adresse'), $request->get('ville'));
                         $success = "Le magasin à bien été créer !";
                     } else {
+                        $ancienneImage = $this->getDoctrine()->getRepository(Magasin::class)->find($request->get('magasin_id'));
+                        if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
+                            $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
+                        }
                         $sqlMagasin = $this->getDoctrine()->getRepository(Magasin::class)->saveMagasin($request->get('magasin_id'), $request->get('nom'), $request->get('image'), $request->get('adresse'), $request->get('ville'));
                         $success = "Le magasin à bien été mis à jour !";
                     }
@@ -198,12 +214,16 @@ class AdminEditController extends AbstractController
     /**
      * @Route("/admin/deleteRestaurant", name="admin_delete_restaurant")
      */
-    public function deleteRestaurant(Request $request): Response
+    public function deleteRestaurant(Request $request, Filesystem $filesystem): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
                 if (!empty($request->get('id'))) {
+                    $ancienneImage = $this->getDoctrine()->getRepository(Restaurant::class)->find($request->get('id'));
+                    if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
+                        $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
+                    }
                     $restaurant = $this->getDoctrine()->getRepository(Restaurant::class)->deleteRestaurant($request->get('id'));
                     if ($restaurant == "good") {
                         return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce restaurant", 'id' => $request->get('id')], 200);
@@ -220,7 +240,7 @@ class AdminEditController extends AbstractController
     /**
      * @Route("/admin/saveRestaurant", name="admin_save_restaurant")
      */
-    public function saveRestaurant(Request $request): Response
+    public function saveRestaurant(Request $request, Filesystem $filesystem): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
@@ -235,6 +255,10 @@ class AdminEditController extends AbstractController
                         $sqlRestaurant = $this->getDoctrine()->getRepository(Restaurant::class)->createRestaurant($request->get('nom'), $image, "null", $request->get('adresse'), $request->get('ville'), $request->get('contenu'));
                         $success = "Le restaurant à bien été créer !";
                     } else {
+                        $ancienneImage = $this->getDoctrine()->getRepository(Restaurant::class)->find($request->get('restaurant_id'));
+                        if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
+                            $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
+                        }
                         $sqlRestaurant = $this->getDoctrine()->getRepository(Restaurant::class)->saveRestaurant($request->get('restaurant_id'), $request->get('nom'), $request->get('image'), $request->get('adresse'), $request->get('ville'), $request->get('contenu'));
                         $success = "Le restaurant à bien été mis à jour !";
                     }
@@ -275,12 +299,16 @@ class AdminEditController extends AbstractController
     /**
      * @Route("/admin/deleteProduit", name="admin_delete_produit")
      */
-    public function deleteProduit(Request $request): Response
+    public function deleteProduit(Request $request, Filesystem $filesystem): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
                 if (!empty($request->get('id'))) {
+                    $ancienneImage = $this->getDoctrine()->getRepository(Produit::class)->find($request->get('id'));
+                    if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
+                        $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
+                    }
                     $produit = $this->getDoctrine()->getRepository(Produit::class)->deleteProduit($request->get('id'));
                     if ($produit == "good") {
                         return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce produit", 'id' => $request->get('id')], 200);
@@ -297,7 +325,7 @@ class AdminEditController extends AbstractController
     /**
      * @Route("/admin/saveProduit", name="admin_save_produit")
      */
-    public function saveProduit(Request $request): Response
+    public function saveProduit(Request $request, Filesystem $filesystem): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
@@ -312,6 +340,10 @@ class AdminEditController extends AbstractController
                         $sqlProduit = $this->getDoctrine()->getRepository(Produit::class)->createProduit($request->get('nom'), $image);
                         $success = "Le produit à bien été créer !";
                     } else {
+                        $ancienneImage = $this->getDoctrine()->getRepository(Produit::class)->find($request->get('produit_id'));
+                        if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
+                            $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
+                        }
                         $sqlProduit = $this->getDoctrine()->getRepository(Produit::class)->saveProduit($request->get('produit_id'), $request->get('nom'), $image);
                         $success = "Le produit à bien été mis à jour !";
                     }
@@ -352,12 +384,16 @@ class AdminEditController extends AbstractController
     /**
      * @Route("/admin/deleteRepas", name="admin_delete_repas")
      */
-    public function deleteRepas(Request $request): Response
+    public function deleteRepas(Request $request, Filesystem $filesystem): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
                 if (!empty($request->get('id'))) {
+                    $ancienneImage = $this->getDoctrine()->getRepository(Repas::class)->find($request->get('id'));
+                    if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
+                        $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
+                    }
                     $repas = $this->getDoctrine()->getRepository(Repas::class)->deleteRepas($request->get('id'));
                     if ($repas == "good") {
                         return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce repas", 'id' => $request->get('id')], 200);
@@ -374,7 +410,7 @@ class AdminEditController extends AbstractController
     /**
      * @Route("/admin/saveRepas", name="admin_save_repas")
      */
-    public function saveRepas(Security $security, Request $request): Response
+    public function saveRepas(Security $security, Request $request, Filesystem $filesystem): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
@@ -390,6 +426,10 @@ class AdminEditController extends AbstractController
                         $sqlRepas = $this->getDoctrine()->getRepository(Repas::class)->createRepas($request->get('nom'), $image, $request->get('recette'), $user);
                         $success = "Le repas à bien été créer !";
                     } else {
+                        $ancienneImage = $this->getDoctrine()->getRepository(Repas::class)->find($request->get('repas_id'));
+                        if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
+                            $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
+                        }
                         $sqlRepas = $this->getDoctrine()->getRepository(Repas::class)->saveRepas($request->get('repas_id'), $request->get('nom'), $image, $request->get('recette'), $user);
                         $success = "Le repas à bien été mis à jour !";
                     }
@@ -475,7 +515,7 @@ class AdminEditController extends AbstractController
     /**
      * @Route("/admin/saveUser", name="admin_save_user")
      */
-    public function saveUser(Request $request): Response
+    public function saveUser(Request $request, Filesystem $filesystem): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
@@ -487,6 +527,10 @@ class AdminEditController extends AbstractController
                         $erreur = true;
                     }
                     if ($request->get('deleteAvatar') == true) {
+                        $ancienneImage = $this->getDoctrine()->getRepository(User::class)->find($request->get('user_id'));
+                        if (substr($ancienneImage->getAvatar(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getAvatar()) {
+                            $filesystem->remove(['symlink', "../public/" . $ancienneImage->getAvatar(), 'activity.log']);
+                        }
                         $userSql = $this->getDoctrine()->getRepository(User::class)->saveUserAvatar($request->get('user_id'), "");
                         if ($userSql !== "good") {
                             $erreur = true;
@@ -515,12 +559,16 @@ class AdminEditController extends AbstractController
     /**
      * @Route("/admin/deleteUser", name="admin_delete_user")
      */
-    public function deleteUser(Request $request): Response
+    public function deleteUser(Request $request, Filesystem $filesystem): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
                 if (!empty($request->get('id'))) {
+                    $ancienneImage = $this->getDoctrine()->getRepository(User::class)->find($request->get('id'));
+                    if (substr($ancienneImage->getAvatar(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getAvatar()) {
+                        $filesystem->remove(['symlink', "../public/" . $ancienneImage->getAvatar(), 'activity.log']);
+                    }
                     $deleteUser = $this->getDoctrine()->getRepository(User::class)->deleteUser($request->get('id'));
                     if ($deleteUser == "good") {
                         return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer cet avis", 'id' => $request->get('id')], 200);

@@ -37,7 +37,6 @@
                             <label class="custom-file-label" for="file">Choisir l'image de présentation</label>
                         </div>
                     </div>
-                    <button id="btnUploadImage" type="button" class="btn btn-primary w-100">Envoyer l'image</button>
                 </form>
             </div>
             <button id="btnSaveMagasin" type="button" class="btn btn-primary">Sauvegarder</button>
@@ -52,43 +51,54 @@
 <script>
     $(document).ready(function () {
         $("#btnSaveMagasin").click(function (e) {
-            e.preventDefault();
-            $.post(
-                "{{ path('admin_save_magasin') }}",
-                {
-                    nom: $("#nom").val(),
-                    adresse: $("#adresse").val(),
-                    ville: $("#ville").val(),
-                    magasin_id: 'new',
-                    image: $("#image").val(),
-                    csrfData: "{{ csrf_token('save-item') }}"
-                },
-                function (data) {
-                    if (data.code == 200) {
-                        $("#resultat").html("<p>" + data.message + "</p>");
-                    }
-                    else {
-                        $("#resultat").html("<p>" + data.message + "</p>");
-                    }
-                },
-                'json'
-            );
-        });
-        $("#btnUploadImage").click(function () {
+            let stop = "non"
             var fd = new FormData();
-            var files = $('#file')[0].files[0];
-            fd.append('file', files);
-            $.ajax({
-                url: "{{ path('admin_upload_image') }}?_token={{ csrf_token('upload-image') }}",
-                type: 'post',
-                data: fd,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    $("#image").attr("value", response.location)
-                    $("#resultat").html("<p>" + response.message + "</p>");
-                },
-            });
+            if ($('#file').val().length !== 0) {
+                stop = "oui"
+                var files = $('#file')[0].files[0];
+                fd.append('file', files);
+                $.ajax({
+                    url: "{{ path('admin_upload_image') }}?_token={{ csrf_token('upload-image') }}",
+                    type: 'post',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        $("#image").attr("value", response.location)
+                        $("#resultat").html("<p>" + response.message + "</p>");
+                        document.getElementById("file").value = '';
+                        $("#btnSaveMagasin").click()
+                    },
+                });
+            }
+            if ($('#nom').val().length !== 0 && $('#adresse').val().length !== 0 && $('#ville').val().length !== 0) {
+                if (stop == "non") {
+                    e.preventDefault();
+                    $.post(
+                        "{{ path('admin_save_magasin') }}",
+                        {
+                            nom: $("#nom").val(),
+                            adresse: $("#adresse").val(),
+                            ville: $("#ville").val(),
+                            magasin_id: 'new',
+                            image: $("#image").val(),
+                            csrfData: "{{ csrf_token('save-item') }}"
+                        },
+                        function (data) {
+                            if (data.code == 200) {
+                                $("#resultat").html("<p>" + data.message + "</p>");
+                                window.location.replace("/magasin/" + data.magasinId);
+                            }
+                            else {
+                                $("#resultat").html("<p>" + data.message + "</p>");
+                            }
+                        },
+                        'json'
+                    );
+                }
+            } else {
+                $("#resultat").html("<p>Veuillez remplir le nom, l'adresse ainsi que la ville</p>");
+            }
         });
     });
 </script>

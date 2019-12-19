@@ -20,9 +20,9 @@
                     <tr paginationName="repas" paginationId="{{ loop.index }}">
                         <th scope="row">{{ repas.id }}</th>
                         <td>{{ repas.nom }}</td>
-                        <td><img height="40" width="40" src="{{ repas.image }}" /></td>
+                        <td><img height="40" width="40" src="{{ asset(repas.image) }}" /></td>
                         <td class="btnOption">
-                            <a target="_BLANK" href="{{ path('article_show', {'id': repas.id}) }}"><i
+                            <a target="_BLANK" href="{{ path('repas_show', {'id': repas.id}) }}"><i
                                     class="fad fa-eye"></i></a>
                             <a href="{{ path('admin_edit_repas', {'id': repas.id}) }}" class="blue"><i
                                     class="fad fa-edit"></i></a>

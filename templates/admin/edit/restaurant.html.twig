@@ -39,7 +39,6 @@
                             <label class="custom-file-label" for="file">Choisir l'image de présentation</label>
                         </div>
                     </div>
-                    <button id="btnUploadImage" type="button" class="btn btn-primary w-100">Envoyer l'image</button>
                 </form>
             </div>
             <button id="btnSaveRestaurant" type="button" class="btn btn-primary">Sauvegarder</button>
@@ -57,47 +56,56 @@
     $('#editeur').trumbowyg({
         lang: 'fr'
     });
-    $.getJSON("https://api-adresse.data.gouv.fr/search/?q=74%20avenue%20de%20limoges,%2087920&limit=1", function (emp) { console.log(emp) })
     $(document).ready(function () {
         $("#btnSaveRestaurant").click(function (e) {
-            e.preventDefault();
-            $.post(
-                "{{ path('admin_save_restaurant') }}",
-                {
-                    nom: $("#nom").val(),
-                    adresse: $("#adresse").val(),
-                    ville: $("#ville").val(),
-                    restaurant_id: '{{ restaurant.id }}',
-                    image: $("#image").val(),
-                    contenu: $("#editeur").val(),
-                    csrfData: "{{ csrf_token('save-item') }}"
-                },
-                function (data) {
-                    if (data.code == 200) {
-                        $("#resultat").html("<p>" + data.message + "</p>");
-                    }
-                    else {
-                        $("#resultat").html("<p>" + data.message + "</p>");
-                    }
-                },
-                'json'
-            );
-        });
-        $("#btnUploadImage").click(function () {
+            let stop = "non"
             var fd = new FormData();
-            var files = $('#file')[0].files[0];
-            fd.append('file', files);
-            $.ajax({
-                url: "{{ path('admin_upload_image') }}?_token={{ csrf_token('upload-image') }}",
-                type: 'post',
-                data: fd,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    $("#image").attr("value", response.location)
-                    $("#resultat").html("<p>" + response.message + "</p>");
-                },
-            });
+            if ($('#file').val().length !== 0) {
+                stop = "oui"
+                var files = $('#file')[0].files[0];
+                fd.append('file', files);
+                $.ajax({
+                    url: "{{ path('admin_upload_image') }}?_token={{ csrf_token('upload-image') }}",
+                    type: 'post',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        $("#image").attr("value", response.location)
+                        $("#resultat").html("<p>" + response.message + "</p>");
+                        document.getElementById("file").value = '';
+                        $("#btnSaveRestaurant").click()
+                    },
+                });
+            }
+            if ($('#nom').val().length !== 0 && $('#editeur').val().length !== 0) {
+                if (stop == "non") {
+                    e.preventDefault();
+                    $.post(
+                        "{{ path('admin_save_restaurant') }}",
+                        {
+                            nom: $("#nom").val(),
+                            adresse: $("#adresse").val(),
+                            ville: $("#ville").val(),
+                            restaurant_id: '{{ restaurant.id }}',
+                            image: $("#image").val(),
+                            contenu: $("#editeur").val(),
+                            csrfData: "{{ csrf_token('save-item') }}"
+                        },
+                        function (data) {
+                            if (data.code == 200) {
+                                $("#resultat").html("<p>" + data.message + "</p>");
+                            }
+                            else {
+                                $("#resultat").html("<p>" + data.message + "</p>");
+                            }
+                        },
+                        'json'
+                    );
+                }
+            } else {
+                $("#resultat").html("<p>Veuillez remplir le nom et le contenu</p>");
+            }
         });
     });
 </script>

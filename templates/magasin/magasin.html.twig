@@ -130,7 +130,7 @@
 <section id="magasin" class="container paddingSeperateur">
     <h1>{{ magasin.nom }}</h1>
     <div class="banniere_magasin"
-        style="background-image: url('{{ magasin.image }}');background-size: 100% auto;background-position: center">
+        style="background-image: url('{{ asset(magasin.image) }}');background-size: 100% auto;background-position: center">
     </div>
     <div class="w-100">
         <ul class="nav nav-tabs" id="tab" role="tablist">
