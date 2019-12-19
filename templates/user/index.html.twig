@@ -73,7 +73,7 @@
                                 <a href="{{ path('restaurant_show', {'id': restaurant.Restaurant.id}) }}">
                                     <div class="top">
                                         <img alt="{{ restaurant.Restaurant.nom }}"
-                                            src="{{ restaurant.Restaurant.image }}" />
+                                            src="{{ asset(restaurant.Restaurant.image) }}" />
                                     </div>
                                     <div class="bottom">
                                         <p>{{ restaurant.Restaurant.nom }}</p>
@@ -87,7 +87,7 @@
                             {% for repa in repas %}
                             <div class="item">
                                 <div class="top">
-                                    <img alt="{{ repa.Repas.nom }}" src="{{ repa.Repas.image }}" />
+                                    <img alt="{{ repa.Repas.nom }}" src="{{ asset(repa.Repas.image) }}" />
                                 </div>
                                 <div class="bottom">
                                     <p>{{ repa.Repas.nom }}</p>
@@ -100,7 +100,7 @@
                             {% for produit in produits %}
                             <div class="item">
                                 <div class="top">
-                                    <img alt="{{ produit.produitId.nom }}" src="{{ produit.produitId.image }}" />
+                                    <img alt="{{ produit.produitId.nom }}" src="{{ asset(produit.produitId.image) }}" />
                                 </div>
                                 <div class="bottom">
                                     <p>{{ produit.produitId.nom }}</p>
@@ -127,4 +127,6 @@
         </div>
     </div>
 </section>
+{% endblock %}
+{% block javascript %}
 {% endblock %}

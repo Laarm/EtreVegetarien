@@ -669,3 +669,29 @@ footer .bottom .container p a {
 .produit-list-design a {
     text-decoration: none;
 }
+
+[btnFavoris] {
+    z-index: 9;
+    color: grey;
+    position: absolute;
+    margin-left: -9.5px;
+    margin-top: -20.5px;
+    font-size: 25px;
+    transition-duration: 1s;
+}
+
+[btnFavoris]:hover,
+[btnFavoris]:focus,
+[btnFavoris]:active,
+[btnFavoris].active {
+    color: #58D68D;
+}
+
+[btnFavoris]:active {
+    transition-duration: 0.1s;
+    transform: scale(1.5);
+}
+
+[btnFavoris].f-20 {
+    font-size: 20px
+}

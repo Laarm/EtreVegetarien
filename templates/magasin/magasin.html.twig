@@ -40,7 +40,7 @@
 
     #magasin .produit-list-design .item .top {
         transition-duration: .3s;
-        background-color: #58D68D;
+        background-color: #279156;
         display: flex;
         padding: 30px
     }
@@ -78,7 +78,7 @@
 
     #magasin .produit-list-design .item:hover .bottom {
         transition-duration: .3s;
-        background-color: #58D68D;
+        background-color: #279156;
         height: 160px;
         margin-top: -100px;
     }
@@ -154,12 +154,16 @@
                     <div class="item">
                         <a href="#">
                             <div class="top">
-                                <img alt="{{ produit.Produit.nom }}" src="{{ produit.Produit.image }}" />
+                                <img alt="{{ produit.Produit.nom }}" src="{{ asset(produit.Produit.image) }}" />
                             </div>
                             <div class="bottom">
                                 <p>{{ produit.Produit.nom }}</p>
                             </div>
                         </a>
+                        <div btnFavoris="{{produit.Produit.id}}"
+                            class="{% for favoris in produit.Produit.produitFavoris %}{% if favoris.postedById.id == app.user.id %}active{% endif %}{% endfor %}">
+                            <i class="cursor-pointer fad fa-star"></i>
+                        </div>
                     </div>
                     {% else %}
                     <p class="text-center">Aucun produit</p>
@@ -194,5 +198,19 @@
         }).addTo(macarte);
         var marker = L.marker([lat, lon]).addTo(macarte);
     }
+    $("[btnFavoris]").click(function (e) {
+        e.preventDefault();
+        $.post("{{ path('produit_favoris') }}", {
+            produit_id: $(this).attr('btnFavoris'),
+            csrfData: "{{ csrf_token('produit-favoris') }}"
+        }, function (data) {
+            if (data.code == '200') {
+                $('[btnFavoris = "' + data.id + '"]').addClass('active')
+            }
+            if (data.code == '201') {
+                $('[btnFavoris = "' + data.id + '"]').removeClass('active')
+            }
+        }, 'json');
+    });
 </script>
 {% endblock %}

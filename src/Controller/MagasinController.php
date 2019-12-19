@@ -9,7 +9,6 @@ use App\Repository\ArticleRepository;
 use App\Entity\Magasin;
 use App\Entity\ProduitSync;
 use Symfony\Component\HttpFoundation\Response;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class MagasinController extends AbstractController
