@@ -28,7 +28,6 @@
                             <label class="custom-file-label" for="file">Choisir l'image de présentation</label>
                         </div>
                     </div>
-                    <button id="btnUploadImage" type="button" class="btn btn-primary w-100">Envoyer l'image</button>
                 </form>
             </div>
             <button id="btnSaveArticle" type="button" class="btn btn-primary">Sauvegarder</button>
@@ -48,42 +47,52 @@
     });
     $(document).ready(function () {
         $("#btnSaveArticle").click(function (e) {
-            e.preventDefault();
-            $.post(
-                "{{ path('admin_save_article') }}",
-                {
-                    nom: $("#nom").val(),
-                    contenu: $("#editeur").val(),
-                    article_id: '{{ article.id }}',
-                    image: $("#image").val(),
-                    csrfData: "{{ csrf_token('save-item') }}"
-                },
-                function (data) {
-                    if (data.code == 200) {
-                        $("#resultat").html("<p>" + data.message + "</p>");
-                    }
-                    else {
-                        $("#resultat").html("<p>" + data.message + "</p>");
-                    }
-                },
-                'json'
-            );
-        });
-        $("#btnUploadImage").click(function () {
+            let stop = "non"
             var fd = new FormData();
-            var files = $('#file')[0].files[0];
-            fd.append('file', files);
-            $.ajax({
-                url: "{{ path('admin_upload_image') }}?_token={{ csrf_token('upload-image') }}",
-                type: 'post',
-                data: fd,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    $("#image").attr("value", response.location)
-                    $("#resultat").html("<p>" + response.message + "</p>");
-                },
-            });
+            if ($('#file').val().length !== 0) {
+                stop = "oui"
+                var files = $('#file')[0].files[0];
+                fd.append('file', files);
+                $.ajax({
+                    url: "{{ path('admin_upload_image') }}?_token={{ csrf_token('upload-image') }}",
+                    type: 'post',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        $("#image").attr("value", response.location)
+                        $("#resultat").html("<p>" + response.message + "</p>");
+                        document.getElementById("file").value = '';
+                        $("#btnSaveArticle").click()
+                    },
+                });
+            }
+            if ($('#nom').val().length !== 0 && $('#editeur').val().length) {
+                if (stop == "non") {
+                    e.preventDefault();
+                    $.post(
+                        "{{ path('admin_save_article') }}",
+                        {
+                            nom: $("#nom").val(),
+                            contenu: $("#editeur").val(),
+                            article_id: '{{ article.id }}',
+                            image: $("#image").val(),
+                            csrfData: "{{ csrf_token('save-item') }}"
+                        },
+                        function (data) {
+                            if (data.code == 200) {
+                                $("#resultat").html("<p>" + data.message + "</p>");
+                            }
+                            else {
+                                $("#resultat").html("<p>" + data.message + "</p>");
+                            }
+                        },
+                        'json'
+                    );
+                }
+            } else {
+                $("#resultat").html("<p>Veuillez remplir le nom et le contenu</p>");
+            }
         });
     });
 </script>

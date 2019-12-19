@@ -84,6 +84,9 @@ class InscriptionController extends AbstractController
                     if (strlen($request->get('password')) > 70) {
                         return new Response('Error,Votre mot de passe est trop long !');
                     }
+                    if (!preg_match('#^(([a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+\.?)*[a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+)@(([a-z0-9-_]+\.?)*[a-z0-9-_]+)\.[a-z]{2,}$#i', $request->get('email'))) {
+                        return new Response('Error,Votre e-mail est invalide !');
+                    }
                     return new Response('Error,Veuillez remplir tout les champs !');
                 }
             }
