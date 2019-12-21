@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\UserRepository;
-use App\Repository\RepasRepository;
+use App\Repository\MealRepository;
 use App\Repository\ArticleRepository;
 use App\Repository\ContactRepository;
 use App\Repository\StoreRepository;
@@ -30,9 +30,9 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin/GestionArticles", name="admin_gestion_article")
+     * @Route("/admin/ManagementArticles", name="admin_management_article")
      */
-    public function gestionArticles(ArticleRepository $repo, Request $request)
+    public function managementArticles(ArticleRepository $repo, Request $request)
     {
         if ($request->get('view') !== null) {
             $view = $request->get('view');
@@ -43,11 +43,11 @@ class AdminController extends AbstractController
         }
         $articles = $repo->findBy(array(), null, $maxView, $view);
 
-        return $this->render('admin/gestionArticles.html.twig', [
+        return $this->render('admin/managementArticles.html.twig', [
             'articles' => $articles,
         ]);
     }
-    public function gestionArticlesCommentaires(ArticleCommentaireRepository $articleCommentaireRepo, Request $request)
+    public function managementArticlesCommentaires(ArticleCommentaireRepository $articleCommentaireRepo, Request $request)
     {
         if ($request->get('view') !== null) {
             $view = $request->get('view');
@@ -57,11 +57,11 @@ class AdminController extends AbstractController
             $maxView = 100;
         }
         $articleCommentaire = $articleCommentaireRepo->findBy(array(), null, $maxView, $view);
-        return $this->render('admin/gestionArticlesCommentaires.html.twig', [
+        return $this->render('admin/managementArticlesCommentaires.html.twig', [
             'article_commentaire' => $articleCommentaire,
         ]);
     }
-    public function gestionStores(StoreRepository $gestionStoresRepo, Request $request)
+    public function managementStores(StoreRepository $managementStoresRepo, Request $request)
     {
         if ($request->get('view') !== null) {
             $view = $request->get('view');
@@ -70,13 +70,13 @@ class AdminController extends AbstractController
             $view = null;
             $maxView = 100;
         }
-        $stores = $gestionStoresRepo->findBy(array(), null, $maxView, $view);
+        $stores = $managementStoresRepo->findBy(array(), null, $maxView, $view);
 
-        return $this->render('admin/gestionStores.html.twig', [
+        return $this->render('admin/managementStores.html.twig', [
             'stores' => $stores,
         ]);
     }
-    public function gestionProductsStores(ProductSyncRepository $gestionProductsStoresRepo, Request $request)
+    public function managementProductsStores(ProductSyncRepository $managementProductsStoresRepo, Request $request)
     {
         if ($request->get('view') !== null) {
             $view = $request->get('view');
@@ -85,13 +85,13 @@ class AdminController extends AbstractController
             $view = null;
             $maxView = 100;
         }
-        $products = $gestionProductsStoresRepo->findBy(array(), null, $maxView, $view);
+        $products = $managementProductsStoresRepo->findBy(array(), null, $maxView, $view);
 
-        return $this->render('admin/gestionProductsStores.html.twig', [
+        return $this->render('admin/managementProductsStores.html.twig', [
             'products' => $products,
         ]);
     }
-    public function gestionRestaurants(RestaurantRepository $gestionRestaurantRepo, Request $request)
+    public function managementRestaurants(RestaurantRepository $managementRestaurantRepo, Request $request)
     {
         if ($request->get('view') !== null) {
             $view = $request->get('view');
@@ -100,13 +100,13 @@ class AdminController extends AbstractController
             $view = null;
             $maxView = 100;
         }
-        $restaurants = $gestionRestaurantRepo->findBy(array(), null, $maxView, $view);
+        $restaurants = $managementRestaurantRepo->findBy(array(), null, $maxView, $view);
 
-        return $this->render('admin/gestionRestaurants.html.twig', [
+        return $this->render('admin/managementRestaurants.html.twig', [
             'restaurants' => $restaurants,
         ]);
     }
-    public function gestionRestaurantsAvis(RestaurantAvisRepository $gestionRestaurantAvisRepo, Request $request)
+    public function managementRestaurantsAvis(RestaurantAvisRepository $managementRestaurantAvisRepo, Request $request)
     {
         if ($request->get('view') !== null) {
             $view = $request->get('view');
@@ -115,13 +115,13 @@ class AdminController extends AbstractController
             $view = null;
             $maxView = 100;
         }
-        $restaurantsAvis = $gestionRestaurantAvisRepo->findBy(array(), null, $maxView, $view);
+        $restaurantsAvis = $managementRestaurantAvisRepo->findBy(array(), null, $maxView, $view);
 
-        return $this->render('admin/gestionRestaurantsAvis.html.twig', [
+        return $this->render('admin/managementRestaurantsAvis.html.twig', [
             'restaurants_avis' => $restaurantsAvis,
         ]);
     }
-    public function products(ProductRepository $gestionProductRepo, Request $request)
+    public function products(ProductRepository $managementProductRepo, Request $request)
     {
         if ($request->get('view') !== null) {
             $view = $request->get('view');
@@ -130,13 +130,13 @@ class AdminController extends AbstractController
             $view = null;
             $maxView = 100;
         }
-        $products = $gestionProductRepo->findBy(array(), null, $maxView, $view);
+        $products = $managementProductRepo->findBy(array(), null, $maxView, $view);
 
         return $this->render('admin/products.html.twig', [
             'products' => $products,
         ]);
     }
-    public function utilisateurs(UserRepository $gestionUserRepo, Request $request)
+    public function users(UserRepository $managementUserRepo, Request $request)
     {
         if ($request->get('view') !== null) {
             $view = $request->get('view');
@@ -145,13 +145,13 @@ class AdminController extends AbstractController
             $view = null;
             $maxView = 100;
         }
-        $utilisateurs = $gestionUserRepo->findBy(array(), null, $maxView, $view);
+        $users = $managementUserRepo->findBy(array(), null, $maxView, $view);
 
-        return $this->render('admin/utilisateurs.html.twig', [
-            'utilisateurs' => $utilisateurs,
+        return $this->render('admin/users.html.twig', [
+            'users' => $users,
         ]);
     }
-    public function repas(RepasRepository $gestionRepasRepo, Request $request)
+    public function meal(MealRepository $managementMealRepo, Request $request)
     {
         if ($request->get('view') !== null) {
             $view = $request->get('view');
@@ -160,13 +160,13 @@ class AdminController extends AbstractController
             $view = null;
             $maxView = 100;
         }
-        $repas = $gestionRepasRepo->findBy(array(), null, $maxView, $view);
+        $meal = $managementMealRepo->findBy(array(), null, $maxView, $view);
 
-        return $this->render('admin/repas.html.twig', [
-            'repas' => $repas,
+        return $this->render('admin/meal.html.twig', [
+            'meal' => $meal,
         ]);
     }
-    public function contacts(ContactRepository $gestioncontactRepo, Request $request)
+    public function contacts(ContactRepository $managementcontactRepo, Request $request)
     {
         if ($request->get('view') !== null) {
             $view = $request->get('view');
@@ -175,7 +175,7 @@ class AdminController extends AbstractController
             $view = null;
             $maxView = 100;
         }
-        $contacts = $gestioncontactRepo->findBy(array(), null, $maxView, $view);
+        $contacts = $managementcontactRepo->findBy(array(), null, $maxView, $view);
 
         return $this->render('admin/contacts.html.twig', [
             'contacts' => $contacts,

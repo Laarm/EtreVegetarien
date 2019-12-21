@@ -37,9 +37,9 @@ contactSendMessage:
 restaurants:
     path: /restaurants
     controller: App\Controller\RestaurantController::index
-repas:
-    path: /repas
-    controller: App\Controller\RepasController::index
+meal:
+    path: /meal
+    controller: App\Controller\MealController::index
 stores:
     path: /stores
     controller: App\Controller\StoreController::index
@@ -58,33 +58,33 @@ deconnexion:
 admin:
     path: /admin
     controller: App\Controller\AdminController::index
-adminGestionArticles:
-    path: /admin/GestionArticles
-    controller: App\Controller\AdminController::gestionArticles
-adminGestionArticlesCommentaires:
-    path: /admin/GestionArticlesCommentaires
-    controller: App\Controller\AdminController::gestionArticlesCommentaires
-adminGestionStores:
-    path: /admin/GestionStores
-    controller: App\Controller\AdminController::gestionStores
-adminGestionProductsStores:
-    path: /admin/GestionProductsStores
-    controller: App\Controller\AdminController::gestionProductsStores
-adminGestionRestaurants:
-    path: /admin/GestionRestaurants
-    controller: App\Controller\AdminController::gestionRestaurants
-adminGestionRestaurantsAvis:
-    path: /admin/GestionRestaurantsAvis
-    controller: App\Controller\AdminController::gestionRestaurantsAvis
+adminManagementArticles:
+    path: /admin/ManagementArticles
+    controller: App\Controller\AdminController::managementArticles
+adminManagementArticlesCommentaires:
+    path: /admin/ManagementArticlesCommentaires
+    controller: App\Controller\AdminController::managementArticlesCommentaires
+adminManagementStores:
+    path: /admin/ManagementStores
+    controller: App\Controller\AdminController::managementStores
+adminManagementProductsStores:
+    path: /admin/ManagementProductsStores
+    controller: App\Controller\AdminController::managementProductsStores
+adminManagementRestaurants:
+    path: /admin/ManagementRestaurants
+    controller: App\Controller\AdminController::managementRestaurants
+adminManagementRestaurantsAvis:
+    path: /admin/ManagementRestaurantsAvis
+    controller: App\Controller\AdminController::managementRestaurantsAvis
 adminProducts:
     path: /admin/products
     controller: App\Controller\AdminController::products
-adminUtilisateurs:
-    path: /admin/utilisateurs
-    controller: App\Controller\AdminController::utilisateurs
-adminRepas:
-    path: /admin/repas
-    controller: App\Controller\AdminController::repas
+adminUsers:
+    path: /admin/users
+    controller: App\Controller\AdminController::users
+adminMeal:
+    path: /admin/meal
+    controller: App\Controller\AdminController::meal
 adminContacts:
     path: /admin/contacts
     controller: App\Controller\AdminController::contacts
@@ -112,12 +112,12 @@ adminNewProduct:
 adminEditProduct:
     path: /admin/product/{id}/edit
     controller: App\Controller\AdminEditController::editProduct
-adminNewRepas:
-    path: /admin/repas/new
-    controller: App\Controller\AdminEditController::newRepas
-adminEditRepas:
-    path: /admin/repas/{id}/edit
-    controller: App\Controller\AdminEditController::editRepas
+adminNewMeal:
+    path: /admin/meal/new
+    controller: App\Controller\AdminEditController::newMeal
+adminEditMeal:
+    path: /admin/meal/{id}/edit
+    controller: App\Controller\AdminEditController::editMeal
 restaurantSearch:
     path: /restaurant/search
     controller: App\Controller\RestaurantController::restaurantSearch

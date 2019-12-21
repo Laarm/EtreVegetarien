@@ -1,32 +1,32 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Gestion des utilisateurs - Être Végétarien{% endblock %}
+{% block title %}Management des restaurants - Être Végétarien{% endblock %}
 
 {% block body %}
 <section id="panel" class="flex">
     <div class="w-100">
-        <div paginationView="utilisateur">
+        <div paginationView="restaurant">
             <table class="table table-hover contentPagination">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Username</th>
-                        <th scope="col">Role</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Contenu</th>
                         <th scope="col">Options</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for utilisateur in utilisateurs %}
-                    <tr paginationName="utilisateur" paginationId="{{ loop.index }}">
-                        <th scope="row">{{ utilisateur.id }}</th>
-                        <td>{{ utilisateur.username }}</td>
-                        <td>{{ utilisateur.role }}</td>
+                    {% for restaurant in restaurants %}
+                    <tr paginationName="restaurant" paginationId="{{ loop.index }}">
+                        <th scope="row">{{ restaurant.id }}</th>
+                        <td>{{ restaurant.nom }}</td>
+                        <td>{{ restaurant.location }}, {{ restaurant.ville }}</td>
                         <td class="btnOption">
-                            <a target="_BLANK" href="{{ path('user', {'id': utilisateur.id}) }}"><i
+                            <a target="_BLANK" href="{{ path('restaurant_show', {'id': restaurant.id}) }}"><i
                                     class="fad fa-eye"></i></a>
-                            <a href="{{ path('admin_edit_user', {'id': utilisateur.id}) }}" class="blue"><i
+                            <a href="{{ path('admin_edit_restaurant', {'id': restaurant.id}) }}" class="blue"><i
                                     class="fad fa-edit"></i></a>
-                            <a class="red cursor-pointer" value="{{ utilisateur.id }}" data-toggle="modal"
+                            <a class="red cursor-pointer" value="{{ restaurant.id }}" data-toggle="modal"
                                 data-target="#deleteModal"><i class="fad fa-times"></i></a>
                         </td>
                     </tr>
@@ -34,8 +34,12 @@
                 </tbody>
             </table>
         </div>
-        <div aria-label="Page navigation example">
-            <ul paginationBtn="utilisateur" class="pagination justify-content-end">
+        <div class="flex justify-flex-end">
+            <a href="{{ path('adminNewRestaurant') }}" class="new btn btn-primary" role="button"><i
+                    class="fad fa-plus"></i>
+                Nouveau
+            </a>
+            <ul paginationBtn="restaurant" class="pagination justify-content-end">
                 <div class="btnPagination flex mr-4">
                 </div>
             </ul>
@@ -47,7 +51,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Êtes-vous sûr de supprimer cet utilisateur ?</h5>
+                <h5 class="modal-title" id="deleteModalLabel">Êtes-vous sûr de supprimer cet article ?</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -57,7 +61,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-                <button deleteUser="0" csrf-data="{{ csrf_token('delete-item') }}" type="button"
+                <button deleteRestaurant="0" csrf-data="{{ csrf_token('delete-item') }}" type="button"
                     class="btn btn-primary">Oui</button>
             </div>
         </div>
@@ -65,18 +69,18 @@
 </div>
 <script>
     addEventListener("load", () => {
-        new pagination("utilisateur", 7, 10, "table-row");
+        new pagination("restaurant", 7, 10, "table-row");
     })
 
     $(document).on('click', '[data-target="#deleteModal"]', function (e) {
-        $('[deleteUser]').attr("deleteUser", $(this).attr('value'))
+        $('[deleteRestaurant]').attr("deleteRestaurant", $(this).attr('value'))
     });
 
-    $(document).on('click', '[deleteUser]', function (e) {
-        id = $(this).attr('deleteUser')
+    $(document).on('click', '[deleteRestaurant]', function (e) {
+        id = $(this).attr('deleteRestaurant')
         e.preventDefault();
         $.post(
-            "{{ path('admin_delete_user') }}",
+            "{{ path('admin_delete_restaurant') }}",
             {
                 id: id,
                 csrfData: $(this).attr('csrf-data')

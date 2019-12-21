@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\UserRepository;
-use App\Entity\RepasFavoris;
+use App\Entity\MealFavoris;
 use App\Entity\ProductFavoris;
 use App\Entity\RestaurantAvis;
 use App\Repository\ArticleRepository;
@@ -20,14 +20,14 @@ class UserController extends AbstractController
     {
         $articles = $articlerepo->findBy(array(), array('id' => 'DESC'), "4", null);
         $user = $repo->find($id);
-        $repas = $this->getDoctrine()->getRepository(RepasFavoris::class)->getAllRepasAvisForUser($user);
+        $meal = $this->getDoctrine()->getRepository(MealFavoris::class)->getAllMealAvisForUser($user);
         $products = $this->getDoctrine()->getRepository(ProductFavoris::class)->getAllProductsAvisForUser($user);
         $restaurant = $this->getDoctrine()->getRepository(RestaurantAvis::class)->getAllRestaurantsAvisForUser($user);
         return $this->render('user/index.html.twig', [
             'articles' => $articles,
             'user' => $user,
             'products' => $products,
-            'repas' => $repas,
+            'meal' => $meal,
             'restaurants' => $restaurant,
         ]);
     }

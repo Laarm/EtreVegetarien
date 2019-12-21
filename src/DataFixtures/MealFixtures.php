@@ -4,9 +4,9 @@ namespace App\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use App\Entity\Repas;
+use App\Entity\Meal;
 
-class RepasFixtures extends Fixture
+class MealFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
@@ -14,14 +14,14 @@ class RepasFixtures extends Fixture
         // $manager->persist($product);
 
         for($i = 1; $i <= 10; $i++) {
-            $repas = new Repas();
-            $repas->setNom("Repas n°$i")
+            $meal = new Meal();
+            $meal->setNom("Meal n°$i")
                   ->setRecette("<p>Recette : Fromage</p>")
                   ->setImage("http://placehold.it/350x250")
                   ->setPostedBy("Admin")
                   ->setCreatedAt(new \DateTime());
 
-            $manager->persist($repas);
+            $manager->persist($meal);
         }
 
         $manager->flush();

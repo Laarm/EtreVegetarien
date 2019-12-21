@@ -1,132 +1,152 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{user.username}} - Être végétarien!{% endblock %}
+{% block title %}
+	{{user.username}}
+	- Être végétarien!
+{% endblock %}
 
 {% block stylesheets %}
-<link href="{{ asset('/css/user.css') }}" rel="stylesheet" />
+	<link href="{{ asset('/css/user.css') }}" rel="stylesheet"/>
 {% endblock %}
 
 {% block body %}
-<section id="profil" class="container paddingSeperateur">
-    <div class="container flex rond-2 p-4 shadow-1">
-        <div class="left mtb-auto">
-            <h1>{{user.username}}{{ user.role|badgeIcon|raw }}</h1>
-            {% if user.preference is not empty %}
-            <h2>{{user.preference}}</h2>
-            <span>({{ user.preferenceCreatedAt.date|timeDiff("now", false, "Depuis ") }})</span>
-            {% else %}
-            <h2>Membre</h2>
-            <span>({{ user.createdAt.date|timeDiff("now", false, "Il y a ") }})</span>
-            {% endif %}
-            {% if app.user %}{% if app.user.id == user.id %}<a href="{{ path('parametre') }}"><button id="btnParametre"
-                    type="button" class="btn btn-primary mr-1"><i class="fad fa-cog"></i>
-                    Paramètre</button></a>{% endif %}{% endif %}
-        </div>
-        <div class="right">
-            <div class="avatar flex"><img class="mtb-auto"
-                    src="{% if user.avatar %}{{ asset(user.avatar) }}{% else %}https://iupac.org/wp-content/uploads/2018/05/default-avatar.png{% endif %}"
-                    alt="Avatar de {{user.username}}" /></div>
-            <div class="badge">
-                <div class="flex">{{ user.preference|badgePreferenceIcon|raw }}</div>
-            </div>
-        </div>
-    </div>
-</section>
-<section id="timeline" class="container paddingSeperateur">
-    <div class="container flex flex-column rond-2 p-4 shadow-1">
-        <div class="top">
-            <h1><i class="fad fa-user"></i> Biographie</h1>
-            <p>{% if user.bio %}{% if user.role == "ROLE_ADMIN" %}{{ user.bio|raw }}{% else %}{{ user.bio }}{% endif %}{% else %}Aucune
-                biographie{% endif %}</p>
-        </div>
-        <div class="bottom">
-            <div class="row">
-                <div class="col-5">
-                    <div class="nav flex nav-pills flex-between" id="v-pills-tab" role="tablist"
-                        aria-orientation="vertical">
-                        <a class="p-4 flex nav-link active" id="restaurantfav-tab" data-toggle="pill"
-                            href="#restaurantfav" role="tab" aria-controls="restaurantfav" aria-selected="true">
-                            <div class="margin-auto"><span><i class="fad fa-utensils"></i></span>Restaurant favoris
-                            </div>
-                        </a>
-                        <a class="p-4 flex nav-link" id="repasfav-tab" data-toggle="pill" href="#repasfav" role="tab"
-                            aria-controls="repasfav" aria-selected="false">
-                            <div class="margin-auto"><span><i class="fad fa-hat-chef"></i></span>Repas favoris</div>
-                        </a>
-                        <a class="p-4 flex nav-link" id="nourriturefav-tab" data-toggle="pill" href="#v-nourriturefav"
-                            role="tab" aria-controls="v-nourriturefav" aria-selected="false">
-                            <div class="margin-auto"><span><i class="fad fa-apple-crate"></i></span>Nourriture favoris
-                            </div>
-                        </a>
-                        <a class="p-4 flex nav-link" id="rs-tab" data-toggle="pill" href="#v-rs" role="tab"
-                            aria-controls="v-rs" aria-selected="false">
-                            <div class="margin-auto"><span><i class="fad fa-globe"></i></span>Réseaux sociaux</div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-7">
-                    <div class="tab-content" id="v-pills-tabContent">
-                        <div class="product-list-design tab-pane fade show active" id="restaurantfav" role="tabpanel"
-                            aria-labelledby="restaurant-tab">
-                            {% for restaurant in restaurants %}
-                            <div class="item">
-                                <a href="{{ path('restaurant_show', {'id': restaurant.Restaurant.id}) }}">
-                                    <div class="top">
-                                        <img alt="{{ restaurant.Restaurant.nom }}"
-                                            src="{{ asset(restaurant.Restaurant.image) }}" />
-                                    </div>
-                                    <div class="bottom">
-                                        <p>{{ restaurant.Restaurant.nom }}</p>
-                                    </div>
-                                </a>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        <div class="product-list-design tab-pane fade" id="repasfav" role="tabpanel"
-                            aria-labelledby="repasfav-tab">
-                            {% for repa in repas %}
-                            <div class="item">
-                                <div class="top">
-                                    <img alt="{{ repa.Repas.nom }}" src="{{ asset(repa.Repas.image) }}" />
-                                </div>
-                                <div class="bottom">
-                                    <p>{{ repa.Repas.nom }}</p>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        <div class="product-list-design tab-pane fade" id="v-nourriturefav" role="tabpanel"
-                            aria-labelledby="v-nourriturefav-tab">
-                            {% for product in products %}
-                            <div class="item">
-                                <div class="top">
-                                    <img alt="{{ product.productId.nom }}" src="{{ asset(product.productId.image) }}" />
-                                </div>
-                                <div class="bottom">
-                                    <p>{{ product.productId.nom }}</p>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        <div class="tab-pane fade" id="v-rs" role="tabpanel" aria-labelledby="v-rs-tab">
-                            <div class="margin-auto">
-                                <a href="https://">
-                                    <i class="fab fa-instagram"></i>
-                                </a>
-                                <a href="https://">
-                                    <i class="fab fa-facebook-f"></i>
-                                </a>
-                                <a href="https://">
-                                    <i class="fab fa-youtube"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+	<section id="profil" class="container paddingSeperateur">
+		<div class="container flex rond-2 p-4 shadow-1">
+			<div class="left mtb-auto">
+				<h1>{{user.username}}{{ user.role|badgeIcon|raw }}</h1>
+				{% if user.preference is not empty %}
+					<h2>{{user.preference}}</h2>
+					<span>({{ user.preferenceCreatedAt.date|timeDiff("now", false, "Depuis ") }})</span>
+				{% else %}
+					<h2>Membre</h2>
+					<span>({{ user.createdAt.date|timeDiff("now", false, "Il y a ") }})</span>
+				{% endif %}
+				{% if app.user %}
+					{% if app.user.id == user.id %}
+						<a href="{{ path('parametre') }}">
+							<button id="btnParametre" type="button" class="btn btn-primary mr-1">
+								<i class="fad fa-cog"></i>
+								Paramètre</button>
+						</a>
+					{% endif %}
+				{% endif %}
+			</div>
+			<div class="right">
+				<div class="avatar flex"><img class="mtb-auto" src="{% if user.avatar %}{{ asset(user.avatar) }}{% else %}https://iupac.org/wp-content/uploads/2018/05/default-avatar.png{% endif %}" alt="Avatar de {{user.username}}"/></div>
+				<div class="badge">
+					<div class="flex">{{ user.preference|badgePreferenceIcon|raw }}</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section id="timeline" class="container paddingSeperateur">
+		<div class="container flex flex-column rond-2 p-4 shadow-1">
+			<div class="top">
+				<h1>
+					<i class="fad fa-user"></i>
+					Biographie</h1>
+				<p>
+					{% if user.bio %}
+						{% if user.role == "ROLE_ADMIN" %}
+							{{ user.bio|raw }}
+						{% else %}
+							{{ user.bio }}
+						{% endif %}
+						{% else %}Aucune
+						                biographie
+					{% endif %}
+				</p>
+			</div>
+			<div class="bottom">
+				<div class="row">
+					<div class="col-5">
+						<div class="nav flex nav-pills flex-between" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+							<a class="p-4 flex nav-link active" id="restaurantfav-tab" data-toggle="pill" href="#restaurantfav" role="tab" aria-controls="restaurantfav" aria-selected="true">
+								<div class="margin-auto">
+									<span>
+										<i class="fad fa-utensils"></i>
+									</span>Restaurant favoris
+								</div>
+							</a>
+							<a class="p-4 flex nav-link" id="mealfav-tab" data-toggle="pill" href="#mealfav" role="tab" aria-controls="mealfav" aria-selected="false">
+								<div class="margin-auto">
+									<span>
+										<i class="fad fa-hat-chef"></i>
+									</span>Meal favoris</div>
+							</a>
+							<a class="p-4 flex nav-link" id="nourriturefav-tab" data-toggle="pill" href="#v-nourriturefav" role="tab" aria-controls="v-nourriturefav" aria-selected="false">
+								<div class="margin-auto">
+									<span>
+										<i class="fad fa-apple-crate"></i>
+									</span>Nourriture favoris
+								</div>
+							</a>
+							<a class="p-4 flex nav-link" id="rs-tab" data-toggle="pill" href="#v-rs" role="tab" aria-controls="v-rs" aria-selected="false">
+								<div class="margin-auto">
+									<span>
+										<i class="fad fa-globe"></i>
+									</span>Réseaux sociaux</div>
+							</a>
+						</div>
+					</div>
+					<div class="col-7">
+						<div class="tab-content" id="v-pills-tabContent">
+							<div class="product-list-design tab-pane fade show active" id="restaurantfav" role="tabpanel" aria-labelledby="restaurant-tab">
+								{% for restaurant in restaurants %}
+									<div class="item">
+										<a href="{{ path('restaurant_show', {'id': restaurant.Restaurant.id}) }}">
+											<div class="top">
+												<img alt="{{ restaurant.Restaurant.nom }}" src="{{ asset(restaurant.Restaurant.image) }}"/>
+											</div>
+											<div class="bottom">
+												<p>{{ restaurant.Restaurant.nom }}</p>
+											</div>
+										</a>
+									</div>
+								{% endfor %}
+							</div>
+							<div class="product-list-design tab-pane fade" id="mealfav" role="tabpanel" aria-labelledby="mealfav-tab">
+								{% for mea in meal %}
+									<div class="item">
+										<div class="top">
+											<img alt="{{ mea.Meal.nom }}" src="{{ asset(mea.Meal.image) }}"/>
+										</div>
+										<div class="bottom">
+											<p>{{ mea.Meal.nom }}</p>
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+							<div class="product-list-design tab-pane fade" id="v-nourriturefav" role="tabpanel" aria-labelledby="v-nourriturefav-tab">
+								{% for product in products %}
+									<div class="item">
+										<div class="top">
+											<img alt="{{ product.productId.nom }}" src="{{ asset(product.productId.image) }}"/>
+										</div>
+										<div class="bottom">
+											<p>{{ product.productId.nom }}</p>
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+							<div class="tab-pane fade" id="v-rs" role="tabpanel" aria-labelledby="v-rs-tab">
+								<div class="margin-auto">
+									<a href="https://">
+										<i class="fab fa-instagram"></i>
+									</a>
+									<a href="https://">
+										<i class="fab fa-facebook-f"></i>
+									</a>
+									<a href="https://">
+										<i class="fab fa-youtube"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 {% endblock %}
-{% block javascript %}
-{% endblock %}
+{% block javascript %}{% endblock %}

@@ -1,32 +1,34 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Gestion des repas - Être Végétarien{% endblock %}
+{% block title %}Management des avis restaurants - Être Végétarien{% endblock %}
 
 {% block body %}
 <section id="panel" class="flex">
     <div class="w-100">
-        <div paginationView="repas">
+        <div paginationView="restaurant">
             <table class="table table-hover contentPagination">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Nom</th>
                         <th scope="col">Contenu</th>
+                        <th scope="col">Par</th>
                         <th scope="col">Options</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for repas in repas %}
-                    <tr paginationName="repas" paginationId="{{ loop.index }}">
-                        <th scope="row">{{ repas.id }}</th>
-                        <td>{{ repas.nom }}</td>
-                        <td><img height="40" width="40" src="{{ asset(repas.image) }}" /></td>
+                    {% for restaurant in restaurants_avis %}
+                    <tr paginationName="restaurant" paginationId="{{ loop.index }}">
+                        <th scope="row">{{restaurant.id}}</th>
+                        <td>{{restaurant.note}}/5</td>
+                        <td>{{restaurant.message}}</td>
+                        <td>{{restaurant.postedBy.username}}</td>
                         <td class="btnOption">
-                            <a target="_BLANK" href="{{ path('repas_show', {'id': repas.id}) }}"><i
+                            <a target="_BLANK" href="{{ path('restaurant_show', {'id': restaurant.restaurant.id}) }}"><i
                                     class="fad fa-eye"></i></a>
-                            <a href="{{ path('admin_edit_repas', {'id': repas.id}) }}" class="blue"><i
-                                    class="fad fa-edit"></i></a>
-                            <a class="red cursor-pointer" value="{{ repas.id }}" data-toggle="modal"
+                            <a target="_BLANK" class="blue" href="{{ path('user', {'id': restaurant.postedBy.id}) }}"><i
+                                    class="fad fa-user-alt"></i></a>
+                            <a class="red cursor-pointer" value="{{ restaurant.id }}" data-toggle="modal"
                                 data-target="#deleteModal"><i class="fad fa-times"></i></a>
                         </td>
                     </tr>
@@ -35,10 +37,7 @@
             </table>
         </div>
         <div class="flex justify-flex-end">
-            <a href="{{ path('adminNewRepas') }}" class="new btn btn-primary" role="button"><i class="fad fa-plus"></i>
-                Nouveau
-            </a>
-            <ul paginationBtn="repas" class="pagination justify-content-end">
+            <ul paginationBtn="restaurant" class="pagination justify-content-end">
                 <div class="btnPagination flex mr-4">
                 </div>
             </ul>
@@ -50,7 +49,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Êtes-vous sûr de supprimer cet article ?</h5>
+                <h5 class="modal-title" id="deleteModalLabel">Êtes-vous sûr de supprimer cet avis ?</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -60,7 +59,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-                <button deleteRepas="0" csrf-data="{{ csrf_token('delete-item') }}" type="button"
+                <button deleteRestaurantAvis="0" csrf-data="{{ csrf_token('delete-item') }}" type="button"
                     class="btn btn-primary">Oui</button>
             </div>
         </div>
@@ -68,18 +67,18 @@
 </div>
 <script>
     addEventListener("load", () => {
-        new pagination("repas", 7, 10, "table-row");
+        new pagination("restaurant", 7, 10, "table-row");
     })
 
     $(document).on('click', '[data-target="#deleteModal"]', function (e) {
-        $('[deleteRepas]').attr("deleteRepas", $(this).attr('value'))
+        $('[deleteRestaurantAvis]').attr("deleteRestaurantAvis", $(this).attr('value'))
     });
 
-    $(document).on('click', '[deleteRepas]', function (e) {
-        id = $(this).attr('deleteRepas')
+    $(document).on('click', '[deleteRestaurantAvis]', function (e) {
+        id = $(this).attr('deleteRestaurantAvis')
         e.preventDefault();
         $.post(
-            "{{ path('admin_delete_repas') }}",
+            "{{ path('admin_delete_restaurantavis') }}",
             {
                 id: id,
                 csrfData: $(this).attr('csrf-data')

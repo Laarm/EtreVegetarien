@@ -8,7 +8,7 @@
 {% endblock %}
 {% block body %}
 	<section class="container">
-		<a href="{{ path('admin_gestion_article') }}" class="btn btn-primary btnRetour mt-4">
+		<a href="{{ path('admin_management_article') }}" class="btn btn-primary btnRetour mt-4">
 			<i class="far fa-backspace" aria-hidden="true"></i>
 			Retour</a>
 	</section>
@@ -56,7 +56,7 @@ stop = "oui"
 var files = $('#file')[0].files[0];
 fd.append('file', files);
 $.ajax({
-url: "{{ path('admin_upload_image') }}?_token=  {{ csrf_token('upload-image') }}",
+url: "{{ path('admin_upload_image') }}?_token=   {{ csrf_token('upload-image') }}",
 type: 'post',
 data: fd,
 contentType: false,

@@ -1,18 +1,18 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Nouveau repas - Être Végétarien !{% endblock %}
+{% block title %}Nouveau meal - Être Végétarien !{% endblock %}
 {% block stylesheets %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/ui/trumbowyg.min.css">
 {% endblock %}
 {% block body %}
 <section class="container">
-    <a href="{{ path('adminRepas') }}" class="btn btn-primary btnRetour mt-4"><i class="far fa-backspace"
+    <a href="{{ path('adminMeal') }}" class="btn btn-primary btnRetour mt-4"><i class="far fa-backspace"
             aria-hidden="true"></i> Retour</a>
 </section>
 <section id="panel" class="container">
-    <div class="editRepas">
+    <div class="editMeal">
         <div class="flex">
-            <input id="nom" value="" placeholder="Nom du repas" class="margin-auto" />
+            <input id="nom" value="" placeholder="Nom du meal" class="margin-auto" />
         </div>
         <div class="btnForSaveAndCancel">
             <div class="input-group mb-3 mt-3">
@@ -35,8 +35,8 @@
                     </div>
                 </form>
             </div>
-            <button id="btnSaveRepas" type="button" class="btn btn-primary">Sauvegarder</button>
-            <button type="button" class="btn btn-secondary btnCancelRepas">Annuler</button>
+            <button id="btnSaveMeal" type="button" class="btn btn-primary">Sauvegarder</button>
+            <button type="button" class="btn btn-secondary btnCancelMeal">Annuler</button>
         </div>
     </div>
     <div id="resultat"></div>
@@ -51,7 +51,7 @@
         lang: 'fr'
     });
     $(document).ready(function () {
-        $("#btnSaveRepas").click(function (e) {
+        $("#btnSaveMeal").click(function (e) {
             let stop = "non"
             var fd = new FormData();
             if ($('#file').val().length !== 0) {
@@ -69,7 +69,7 @@
                             $("#image").attr("value", response.location)
                             $("#resultat").html("<p>" + response.message + "</p>");
                             document.getElementById("file").value = '';
-                            $("#btnSaveRepas").click()
+                            $("#btnSaveMeal").click()
                         },
                     });
                 }
@@ -78,18 +78,18 @@
                 if (stop == "non") {
                     e.preventDefault();
                     $.post(
-                        "{{ path('admin_save_repas') }}",
+                        "{{ path('admin_save_meal') }}",
                         {
                             nom: $("#nom").val(),
                             recette: $("#editeur").val(),
-                            repas_id: 'new',
+                            meal_id: 'new',
                             image: $("#image").val(),
                             csrfData: "{{ csrf_token('save-item') }}"
                         },
                         function (data) {
                             if (data.code == 200) {
                                 $("#resultat").html("<p>" + data.message + "</p>");
-                                window.location.replace("/repas/" + data.repasId);
+                                window.location.replace("/meal/" + data.mealId);
                             }
                             else {
                                 $("#resultat").html("<p>" + data.message + "</p>");

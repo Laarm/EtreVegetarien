@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\RepasFavorisRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\MealFavorisRepository")
  */
-class RepasFavoris
+class MealFavoris
 {
     /**
      * @ORM\Id()
@@ -17,16 +17,16 @@ class RepasFavoris
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="repasFavoris")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="mealFavoris")
      * @ORM\JoinColumn(nullable=false)
      */
     private $postedBy;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Repas", inversedBy="repasFavoris")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Meal", inversedBy="mealFavoris")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $Repas;
+    private $Meal;
 
     /**
      * @ORM\Column(type="datetime")
@@ -50,14 +50,14 @@ class RepasFavoris
         return $this;
     }
 
-    public function getRepas(): ?Repas
+    public function getMeal(): ?Meal
     {
-        return $this->Repas;
+        return $this->Meal;
     }
 
-    public function setRepas(?Repas $Repas): self
+    public function setMeal(?Meal $Meal): self
     {
-        $this->Repas = $Repas;
+        $this->Meal = $Meal;
 
         return $this;
     }

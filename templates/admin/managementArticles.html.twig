@@ -1,11 +1,11 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Gestion des restaurants - Être Végétarien{% endblock %}
+{% block title %}Management des articles - Être Végétarien{% endblock %}
 
 {% block body %}
 <section id="panel" class="flex">
     <div class="w-100">
-        <div paginationView="restaurant">
+        <div paginationView="article">
             <table class="table table-hover contentPagination">
                 <thead>
                     <tr>
@@ -16,17 +16,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for restaurant in restaurants %}
-                    <tr paginationName="restaurant" paginationId="{{ loop.index }}">
-                        <th scope="row">{{ restaurant.id }}</th>
-                        <td>{{ restaurant.nom }}</td>
-                        <td>{{ restaurant.location }}, {{ restaurant.ville }}</td>
+                    {% for article in articles %}
+                    <tr paginationName="article" paginationId="{{ loop.index }}">
+                        <th scope="row">{{ article.id }}</th>
+                        <td>{{ article.nom }}</td>
+                        <td>{{ article.contenu|reducContent(60) }}...</td>
                         <td class="btnOption">
-                            <a target="_BLANK" href="{{ path('restaurant_show', {'id': restaurant.id}) }}"><i
+                            <a target="_BLANK" href="{{ path('article_show', {'id': article.id}) }}"><i
                                     class="fad fa-eye"></i></a>
-                            <a href="{{ path('admin_edit_restaurant', {'id': restaurant.id}) }}" class="blue"><i
+                            <a href="{{ path('admin_edit_article', {'id': article.id}) }}" class="blue"><i
                                     class="fad fa-edit"></i></a>
-                            <a class="red cursor-pointer" value="{{ restaurant.id }}" data-toggle="modal"
+                            <a class="red cursor-pointer" value="{{ article.id }}" data-toggle="modal"
                                 data-target="#deleteModal"><i class="fad fa-times"></i></a>
                         </td>
                     </tr>
@@ -35,11 +35,11 @@
             </table>
         </div>
         <div class="flex justify-flex-end">
-            <a href="{{ path('adminNewRestaurant') }}" class="new btn btn-primary" role="button"><i
+            <a href="{{ path('adminNewArticle') }}" class="new btn btn-primary" role="button"><i
                     class="fad fa-plus"></i>
                 Nouveau
             </a>
-            <ul paginationBtn="restaurant" class="pagination justify-content-end">
+            <ul paginationBtn="article" class="pagination justify-content-end">
                 <div class="btnPagination flex mr-4">
                 </div>
             </ul>
@@ -61,7 +61,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-                <button deleteRestaurant="0" csrf-data="{{ csrf_token('delete-item') }}" type="button"
+                <button deleteArticle="0" csrf-data="{{ csrf_token('delete-item') }}" type="button"
                     class="btn btn-primary">Oui</button>
             </div>
         </div>
@@ -69,18 +69,18 @@
 </div>
 <script>
     addEventListener("load", () => {
-        new pagination("restaurant", 7, 10, "table-row");
+        new pagination("article", 7, 10, "table-row");
     })
 
     $(document).on('click', '[data-target="#deleteModal"]', function (e) {
-        $('[deleteRestaurant]').attr("deleteRestaurant", $(this).attr('value'))
+        $('[deleteArticle]').attr("deleteArticle", $(this).attr('value'))
     });
 
-    $(document).on('click', '[deleteRestaurant]', function (e) {
-        id = $(this).attr('deleteRestaurant')
+    $(document).on('click', '[deleteArticle]', function (e) {
+        id = $(this).attr('deleteArticle')
         e.preventDefault();
         $.post(
-            "{{ path('admin_delete_restaurant') }}",
+            "{{ path('admin_delete_article') }}",
             {
                 id: id,
                 csrfData: $(this).attr('csrf-data')

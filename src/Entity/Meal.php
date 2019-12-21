@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\RepasRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\MealRepository")
  */
-class Repas
+class Meal
 {
     /**
      * @ORM\Id()
@@ -39,19 +39,19 @@ class Repas
     private $createdAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="repas")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="meal")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $postedBy;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\RepasFavoris", mappedBy="Repas", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\MealFavoris", mappedBy="Meal", orphanRemoval=true)
      */
-    private $repasFavoris;
+    private $mealFavoris;
 
     public function __construct()
     {
-        $this->repasFavoris = new ArrayCollection();
+        $this->mealFavoris = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -120,30 +120,30 @@ class Repas
     }
 
     /**
-     * @return Collection|RepasFavoris[]
+     * @return Collection|MealFavoris[]
      */
-    public function getRepasFavoris(): Collection
+    public function getMealFavoris(): Collection
     {
-        return $this->repasFavoris;
+        return $this->mealFavoris;
     }
 
-    public function addRepasFavori(RepasFavoris $repasFavori): self
+    public function addMealFavori(MealFavoris $mealFavori): self
     {
-        if (!$this->repasFavoris->contains($repasFavori)) {
-            $this->repasFavoris[] = $repasFavori;
-            $repasFavori->setRepas($this);
+        if (!$this->mealFavoris->contains($mealFavori)) {
+            $this->mealFavoris[] = $mealFavori;
+            $mealFavori->setMeal($this);
         }
 
         return $this;
     }
 
-    public function removeRepasFavori(RepasFavoris $repasFavori): self
+    public function removeMealFavori(MealFavoris $mealFavori): self
     {
-        if ($this->repasFavoris->contains($repasFavori)) {
-            $this->repasFavoris->removeElement($repasFavori);
+        if ($this->mealFavoris->contains($mealFavori)) {
+            $this->mealFavoris->removeElement($mealFavori);
             // set the owning side to null (unless already changed)
-            if ($repasFavori->getRepas() === $this) {
-                $repasFavori->setRepas(null);
+            if ($mealFavori->getMeal() === $this) {
+                $mealFavori->setMeal(null);
             }
         }
 

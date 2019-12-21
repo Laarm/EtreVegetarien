@@ -123,14 +123,14 @@ main {
     text-align: center;
 }
 
-#timeline .container .bottom .col-7 .product-list-design.active {
+#timeline .container .bottom .col-7 .produit-list-design.active {
     display: flex;
     min-height: 322px;
     overflow-x: scroll;
     overflow-y: hidden;
 }
 
-#timeline .container .bottom .col-7 .product-list-design .item {
+#timeline .container .bottom .col-7 .produit-list-design .item {
     min-width: calc(100vw / 4.5);
     max-width: calc(100vw / 4.5);
     margin: auto 5%;
@@ -139,26 +139,26 @@ main {
     box-shadow: 0px 0px 48px -20px rgba(0, 0, 0, 0.75);
 }
 
-#timeline .container .bottom .col-7 .product-list-design .item .top {
+#timeline .container .bottom .col-7 .produit-list-design .item .top {
     transition-duration: .3s;
     background-color: #58D68D;
     display: flex;
     padding: 30px
 }
 
-#timeline .container .bottom .col-7 .product-list-design .item .top img {
+#timeline .container .bottom .col-7 .produit-list-design .item .top img {
     width: 10vw;
     margin: auto;
     transition-duration: .3s;
 }
 
 @media(max-width: 991px) {
-    #timeline .container .bottom .col-7 .product-list-design .item .top img {
+    #timeline .container .bottom .col-7 .produit-list-design .item .top img {
         width: 18vh
     }
 }
 
-#timeline .container .bottom .col-7 .product-list-design .item .bottom {
+#timeline .container .bottom .col-7 .produit-list-design .item .bottom {
     transition-duration: .3s;
     background-color: #FFF;
     text-align: center;
@@ -168,29 +168,29 @@ main {
     display: flex;
 }
 
-#timeline .container .bottom .col-7 .product-list-design .item .bottom p {
+#timeline .container .bottom .col-7 .produit-list-design .item .bottom p {
     margin: auto;
     font-weight: bolder;
 }
 
-#timeline .container .bottom .col-7 .product-list-design .item:hover .top {
+#timeline .container .bottom .col-7 .produit-list-design .item:hover .top {
     transition-duration: .3s;
     background-color: #FFF;
 }
 
-#timeline .container .bottom .col-7 .product-list-design .item:hover .top img {
+#timeline .container .bottom .col-7 .produit-list-design .item:hover .top img {
     transition-duration: .3s;
     transform: scale(0.9);
 }
 
-#timeline .container .bottom .col-7 .product-list-design .item:hover .bottom {
+#timeline .container .bottom .col-7 .produit-list-design .item:hover .bottom {
     transition-duration: .3s;
     background-color: #58D68D;
     height: 160px;
     margin-top: -100px;
 }
 
-#timeline .container .bottom .col-7 .product-list-design .item:hover .bottom p {
+#timeline .container .bottom .col-7 .produit-list-design .item:hover .bottom p {
     margin: auto auto 13px auto;
 }
 
@@ -235,13 +235,13 @@ main {
         max-width: 100%
     }
 
-    #timeline .container .bottom .col-7 .product-list-design.active {
+    #timeline .container .bottom .col-7 .produit-list-design.active {
         height: 275px;
         padding-left: 18px;
         padding-right: 18px
     }
 
-    #timeline .container .bottom .col-7 .product-list-design .item {
+    #timeline .container .bottom .col-7 .produit-list-design .item {
         min-width: calc(100vw / 1.2) !important
     }
 

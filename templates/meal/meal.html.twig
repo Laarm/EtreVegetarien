@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-{{ repas.nom }} - Être Végétarien!
+{{ meal.nom }} - Être Végétarien!
 {% endblock %}
 {% block stylesheets %}
 <script src="{{ asset('/js/pagination.js') }}"></script>
@@ -14,53 +14,53 @@
 {% block body %}
 
 <style>
-    #repas h1 {
+    #meal h1 {
         color: #4e4e56;
         font-size: 2em;
         font-weight: bold;
     }
 
-    #repas p {
+    #meal p {
         color: #939396;
     }
 
-    #repas a {
+    #meal a {
         color: #939396
     }
 
-    #repas .avis .right {
+    #meal .avis .right {
         height: 24px;
         margin-left: auto;
         margin-top: -9px;
         zoom: .8
     }
 
-    #repas h2 {
+    #meal h2 {
         color: #939396;
         font-size: 1.2em;
         margin-top: 20px
     }
 
-    #repas .left .flex.flex-between {
+    #meal .left .flex.flex-between {
         align-items: center;
     }
 
-    #repas h1.titre {
+    #meal h1.titre {
         font-size: 1.4em
     }
 
-    #repas .left .note span {
+    #meal .left .note span {
         font-size: 2em;
         font-weight: bold;
     }
 
-    #repas .left .note span {
+    #meal .left .note span {
         font-size: 2em;
         font-weight: bold;
         color: #4e4e56;
     }
 
-    #repas .left .avis {
+    #meal .left .avis {
         margin-top: -8px
     }
 
@@ -86,23 +86,23 @@
         border-bottom: #58D68D 6px solid
     }
 
-    #repas .avis span.date {
+    #meal .avis span.date {
         color: #58D68D;
         margin-top: -13px;
         display: block;
     }
 
-    #repas .avis .message {
+    #meal .avis .message {
         padding: 7.5px 0 7.5px 15px;
         border-left: #939396 1px solid;
         margin-top: 13px
     }
 
-    #repas .avis .username {
+    #meal .avis .username {
         font-weight: bold;
     }
 
-    #repas #avis .avis {
+    #meal #avis .avis {
         margin-bottom: 40px;
         padding-bottom: 20px;
         border-bottom: 1px solid rgba(0, 0, 0, .1);
@@ -113,25 +113,25 @@
         width: 100%;
     }
 
-    .container .right .content .repas a {
+    .container .right .content .meal a {
         text-decoration: none
     }
 
-    .container .right .content .repas {
+    .container .right .content .meal {
         /* border-bottom: 1px solid #ECEEF2; */
         width: 100%;
         padding-bottom: 10px;
         margin-top: 20px
     }
 
-    .container .right .content .repas h1 {
+    .container .right .content .meal h1 {
         margin-top: 2.5%;
         font-size: 1rem !important;
         font-weight: bold !important;
         color: #58D68D !important
     }
 
-    .container .right .content .repas h2 {
+    .container .right .content .meal h2 {
         margin-top: 2.5%;
         font-size: 0.8rem !important;
         font-weight: bold !important
@@ -172,11 +172,11 @@
         color: #58D68D;
     }
 
-    #repas a.btn-primary {
+    #meal a.btn-primary {
         color: #FFF
     }
 
-    #repas .media {
+    #meal .media {
         text-decoration: none;
     }
 
@@ -203,16 +203,16 @@
 
     @media(max-width: 991px) {}
 </style>
-<section id="repas" class="container paddingSeperateur flex">
+<section id="meal" class="container paddingSeperateur flex">
     <div class="left col-7">
         <div class="flex flex-between">
-            <h1 class="mtb-auto">{{ repas.nom }}</h1>
+            <h1 class="mtb-auto">{{ meal.nom }}</h1>
             <p class="note mtb-auto">
-                <i btnFavoris="{{repas.id}}"
-                    class="{% for favoris in repas.repasFavoris %}{% if favoris.postedBy.id == app.user.id %}active{% endif %}{% endfor %} cursor-pointer fad fa-star"></i>
+                <i btnFavoris="{{meal.id}}"
+                    class="{% for favoris in meal.mealFavoris %}{% if favoris.postedBy.id == app.user.id %}active{% endif %}{% endfor %} cursor-pointer fad fa-star"></i>
         </div>
         <div class="flex flex-between">
-            <h2 class="mtb-auto">Publié le <strong>{{repas.createdAt|date("d/m/Y")}}</strong>
+            <h2 class="mtb-auto">Publié le <strong>{{meal.createdAt|date("d/m/Y")}}</strong>
             </h2>
         </div>
         <div class="w-100">
@@ -229,24 +229,24 @@
             <div class="tab-content" id="tabContent">
                 <div class="tab-pane fade show active" id="infospratiques" role="tabpanel"
                     aria-labelledby="infospratiques-tab">
-                    {{ repas.recette | raw }}
+                    {{ meal.recette | raw }}
                 </div>
                 <div class="tab-pane fade" id="avis" role="tabpanel" aria-labelledby="avis-tab">
                     <div paginationView="avis" class="avisCont">
                         <div class="avisContent contentPagination">
-                            {% for favoris in repasFavoris %}
-                            <a class="media" href="{{ path('user', {'id': favoris.Repas.PostedBy.id}) }}">
-                                <img id="avatar" class="mr-3 rond" src="{{ asset(favoris.Repas.PostedBy.avatar) }}"
+                            {% for favoris in mealFavoris %}
+                            <a class="media" href="{{ path('user', {'id': favoris.Meal.PostedBy.id}) }}">
+                                <img id="avatar" class="mr-3 rond" src="{{ asset(favoris.Meal.PostedBy.avatar) }}"
                                     alt="Votre avatar" style="height: 40px;width: 40px">
                                 <div class="media-body">
-                                    <p>{{ favoris.Repas.PostedBy.username }}</p>
+                                    <p>{{ favoris.Meal.PostedBy.username }}</p>
                                     <p class="mt--20 cds"><strong
-                                            class="cds">{{ favoris.Repas.PostedBy.preference }}</strong>
+                                            class="cds">{{ favoris.Meal.PostedBy.preference }}</strong>
                                     </p>
                                 </div>
                             </a>
                             {% else %}
-                            <p class="text-center">Aucune personne à ajouter ce repas en favoris</p>
+                            <p class="text-center">Aucune personne à ajouter ce meal en favoris</p>
                             {% endfor %}
                         </div>
                     </div>
@@ -266,40 +266,40 @@
             </h1>
         </h1>
         <div class="content">
-            <a class="media" href="{{ path('user', {'id': repas.PostedBy.id}) }}">
-                <img id="avatar" class="mr-3 rond" src="{{ asset(repas.PostedBy.avatar) }}" alt="Votre avatar"
+            <a class="media" href="{{ path('user', {'id': meal.PostedBy.id}) }}">
+                <img id="avatar" class="mr-3 rond" src="{{ asset(meal.PostedBy.avatar) }}" alt="Votre avatar"
                     style="height: 40px;width: 40px">
                 <div class="media-body">
                     <p>Arnaud</p>
-                    <p class="mt--20 cds"><strong class="cds">{{ repas.PostedBy.preference }}</strong></p>
+                    <p class="mt--20 cds"><strong class="cds">{{ meal.PostedBy.preference }}</strong></p>
                 </div>
             </a>
         </div>
         <h1>
             <h1 class="titre">
-                <span>Autres repas</span>
+                <span>Autres meal</span>
             </h1>
         </h1>
         <div class="content">
-            {% for repas in autresrepas %}
+            {% for meal in autresmeal %}
             {% if loop.index != 1 %}
             <hr>
             {% endif %}
-            <div class="repas flex flex-between">
+            <div class="meal flex flex-between">
                 <div class="left">
-                    <a href="{{ path('repas_show', {'id': repas.id}) }}">
-                        <h1 class="cds">{{ repas.nom }}</h1>
-                        <h2 class="gris">{{ repas.PostedBy.username }}, Végétarien</h2>
+                    <a href="{{ path('meal_show', {'id': meal.id}) }}">
+                        <h1 class="cds">{{ meal.nom }}</h1>
+                        <h2 class="gris">{{ meal.PostedBy.username }}, Végétarien</h2>
                     </a>
                 </div>
                 <div class="right mtb-auto flex">
                     <p class="mtb-auto note">
-                        <i btnFavoris="{{repas.id}}"
-                            class="{% for favoris in repas.repasFavoris %}{% if favoris.postedBy.id == app.user.id %}active{% endif %}{% endfor %} f-20 cursor-pointer fad fa-star"></i>
+                        <i btnFavoris="{{meal.id}}"
+                            class="{% for favoris in meal.mealFavoris %}{% if favoris.postedBy.id == app.user.id %}active{% endif %}{% endfor %} f-20 cursor-pointer fad fa-star"></i>
                 </div>
             </div>
             {% else %}
-            <em>Aucun repas</em>
+            <em>Aucun meal</em>
             {% endfor %}
         </div>
     </div>
@@ -316,9 +316,9 @@
     })
     $("[btnFavoris]").click(function (e) {
         e.preventDefault();
-        $.post("{{ path('repas_favoris') }}", {
-            repas_id: $(this).attr('btnFavoris'),
-            csrfData: "{{ csrf_token('repas-favoris') }}"
+        $.post("{{ path('meal_favoris') }}", {
+            meal_id: $(this).attr('btnFavoris'),
+            csrfData: "{{ csrf_token('meal-favoris') }}"
         }, function (data) {
             if (data.code == '200') {
                 $('[btnFavoris = "' + data.id + '"]').addClass('active')

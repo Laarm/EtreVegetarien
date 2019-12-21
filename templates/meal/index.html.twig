@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Repas - Être Végétarien!{% endblock %}
+{% block title %}Meal - Être Végétarien!{% endblock %}
 
 {% block body %}
 <style>
-    #repas .nav-search i {
+    #meal .nav-search i {
         position: absolute;
         padding: 10px;
         margin-top: 2px;
@@ -20,11 +20,11 @@
         -webkit-border-radius: 200px 200px 200px 200px !important;
     }
 
-    #repas .product-list-design {
+    #meal .product-list-design {
         margin-top: 5%
     }
 
-    #repas .product-list-design .item {
+    #meal .product-list-design .item {
         width: 30%;
         margin-bottom: 5%;
         -webkit-box-shadow: 0px 0px 48px -20px rgba(0, 0, 0, 0.75);
@@ -32,20 +32,20 @@
         box-shadow: 0px 0px 48px -20px rgba(0, 0, 0, 0.75);
     }
 
-    #repas .product-list-design .item .top {
+    #meal .product-list-design .item .top {
         transition-duration: .3s;
         background-color: #58D68D;
         display: flex;
         padding: 30px
     }
 
-    #repas .product-list-design .item .top img {
+    #meal .product-list-design .item .top img {
         width: 80%;
         margin: auto;
         transition-duration: .3s;
     }
 
-    #repas .product-list-design .item .bottom {
+    #meal .product-list-design .item .bottom {
         transition-duration: .3s;
         background-color: #FFF;
         text-align: center;
@@ -55,29 +55,29 @@
         display: flex;
     }
 
-    #repas .product-list-design .item .bottom p {
+    #meal .product-list-design .item .bottom p {
         margin: auto;
         font-weight: bolder;
     }
 
-    #repas .product-list-design .item:hover .top {
+    #meal .product-list-design .item:hover .top {
         transition-duration: .3s;
         background-color: #FFF;
     }
 
-    #repas .product-list-design .item:hover .top img {
+    #meal .product-list-design .item:hover .top img {
         transition-duration: .3s;
         transform: scale(0.9);
     }
 
-    #repas .product-list-design .item:hover .bottom {
+    #meal .product-list-design .item:hover .bottom {
         transition-duration: .3s;
         background-color: #58D68D;
         height: 160px;
         margin-top: -100px;
     }
 
-    #repas .product-list-design .item:hover .bottom p {
+    #meal .product-list-design .item:hover .bottom p {
         margin: auto auto 13px auto;
     }
 
@@ -86,31 +86,31 @@
     }
 
     @media(max-width: 991px) {
-        #repas .product-list-design .item {
+        #meal .product-list-design .item {
             width: 90%;
             margin: auto;
             margin-bottom: 5%
         }
 
-        #repas .nav-search {
+        #meal .nav-search {
             width: 80%;
             margin-left: 10%
         }
     }
 </style>
-<section id="repas" class="container paddingSeperateur">
+<section id="meal" class="container paddingSeperateur">
     <div class="input-group nav-search">
         <i class="fas fa-search"></i>
-        <input type="text" name="search" class="form-control" placeholder="Rechercher un repas" value="">
+        <input type="text" name="search" class="form-control" placeholder="Rechercher un meal" value="">
     </div>
     <div class="product-list-design flex flex-wrap flex-between">
-        {% for repas in repas %}
-        <a class="item" href="{{ path('repas_show', {'id': repas.id}) }}">
+        {% for meal in meal %}
+        <a class="item" href="{{ path('meal_show', {'id': meal.id}) }}">
             <div class="top">
-                <img alt="{{ repas.nom }}" src="{{ repas.image }}" />
+                <img alt="{{ meal.nom }}" src="{{ meal.image }}" />
             </div>
             <div class="bottom">
-                <p>{{ repas.nom }}</p>
+                <p>{{ meal.nom }}</p>
             </div>
         </a>
         {% endfor %}
@@ -122,14 +122,14 @@
     i = 0;
     $(document).ready(function () {
         $('[name="search"]').keypress(function (e) {
-            $.getJSON("/repas/search?search=" + $('[name="search"]').val())
-                .then((repas) => {
+            $.getJSON("/meal/search?search=" + $('[name="search"]').val())
+                .then((meal) => {
                     $('.product-list-design').html("")
-                    if (repas.length == 0) {
-                        $('.product-list-design').html("<p class='margin-auto'>Aucun repas trouvé</p>")
+                    if (meal.length == 0) {
+                        $('.product-list-design').html("<p class='margin-auto'>Aucun meal trouvé</p>")
                     }
-                    repas.forEach((repas) => {
-                        $(".product-list-design").append('<a class="item" href="/repas/' + repas.id + '"><div class= "top"><img alt="' + repas.nom + '" src="' + repas.image + '" /></div><div class="bottom"><p>' + repas.nom + '</p></div></a>')
+                    meal.forEach((meal) => {
+                        $(".product-list-design").append('<a class="item" href="/meal/' + meal.id + '"><div class= "top"><img alt="' + meal.nom + '" src="' + meal.image + '" /></div><div class="bottom"><p>' + meal.nom + '</p></div></a>')
                     })
                 });
         });

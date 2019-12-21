@@ -1,89 +1,86 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}{{ user.username }}!{% endblock %}
+{% block title %}
+	{{ user.username }}!
+{% endblock %}
 {% block stylesheets %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/ui/trumbowyg.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/ui/trumbowyg.min.css">
 {% endblock %}
 {% block body %}
-<section class="container">
-    <a href="{{ path('adminUtilisateurs') }}" class="btn btn-primary btnRetour mt-4"><i class="far fa-backspace"
-            aria-hidden="true"></i> Retour</a>
-</section>
-<section id="panel" class="container">
-    <div class="editUser">
-        <div class="btnForSaveAndCancel">
-            <div class="input-group mb-3 mt-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Pseudonyme : </span>
-                </div>
-                <input type="text" class="form-control" id="username" placeholder="{{ user.username }}"
-                    value="{{ user.username }}">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Email : </span>
-                </div>
-                <input type="email" class="form-control" id="email" placeholder="{{ user.email }}"
-                    value="{{ user.email }}">
-            </div>
-            <div class="input-group mb-3 mt-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Mot de passe : </span>
-                </div>
-                <input type="password" class="form-control" id="motdepasse" placeholder="">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Role : </span>
-                </div>
-                <input type="text" class="form-control" id="role" placeholder="{{ user.role }}" value="{{ user.role }}">
-            </div>
-            <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" id="deleteAvatar">
-                <label class="form-check-label" for="deleteAvatar">Supprimer son avatar</label>
-            </div>
-            <textarea id="editeur">{{ user.bio|raw }}</textarea>
-            <button id="btnSaveUser" type="button" class="btn btn-primary">Sauvegarder</button>
-            <button type="button" class="btn btn-secondary btnCancelUser">Annuler</button>
-        </div>
-    </div>
-    <div id="resultat"></div>
-</section>
+	<section class="container">
+		<a href="{{ path('adminUsers') }}" class="btn btn-primary btnRetour mt-4">
+			<i class="far fa-backspace" aria-hidden="true"></i>
+			Retour</a>
+	</section>
+	<section id="panel" class="container">
+		<div class="editUser">
+			<div class="btnForSaveAndCancel">
+				<div class="input-group mb-3 mt-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text">Pseudonyme :
+						</span>
+					</div>
+					<input type="text" class="form-control" id="username" placeholder="{{ user.username }}" value="{{ user.username }}">
+					<div class="input-group-prepend">
+						<span class="input-group-text">Email :
+						</span>
+					</div>
+					<input type="email" class="form-control" id="email" placeholder="{{ user.email }}" value="{{ user.email }}">
+				</div>
+				<div class="input-group mb-3 mt-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text">Mot de passe :
+						</span>
+					</div>
+					<input type="password" class="form-control" id="motdepasse" placeholder="">
+					<div class="input-group-prepend">
+						<span class="input-group-text">Role :
+						</span>
+					</div>
+					<input type="text" class="form-control" id="role" placeholder="{{ user.role }}" value="{{ user.role }}">
+				</div>
+				<div class="form-group form-check">
+					<input type="checkbox" class="form-check-input" id="deleteAvatar">
+					<label class="form-check-label" for="deleteAvatar">Supprimer son avatar</label>
+				</div>
+				<textarea id="editeur">{{ user.bio|raw }}</textarea>
+				<button id="btnSaveUser" type="button" class="btn btn-primary">Sauvegarder</button>
+				<button type="button" class="btn btn-secondary btnCancelUser">Annuler</button>
+			</div>
+		</div>
+		<div id="resultat"></div>
+	</section>
 {% endblock %}
 
 {% block javascript %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/trumbowyg.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/langs/fr.min.js"></script>
-<script>
-    $('#editeur').trumbowyg({
-        lang: 'fr'
-    });
-    $(document).ready(function () {
-        $("#btnSaveUser").click(function (e) {
-            if ($('#username').val().length !== 0 && $('#email').val().length !== 0) {
-                e.preventDefault();
-                $.post(
-                    "{{ path('admin_save_user') }}",
-                    {
-                        username: $("#username").val(),
-                        user_id: '{{ user.id }}',
-                        email: $("#email").val(),
-                        role: $("#role").val(),
-                        bio: $("#editeur").val(),
-                        deleteAvatar: $("#deleteAvatar").prop('checked'),
-                        motdepasse: $("#motdepasse").val(),
-                        csrfData: "{{ csrf_token('save-user') }}"
-                    },
-                    function (data) {
-                        if (data.code == 200) {
-                            $("#resultat").html("<p>" + data.message + "</p>");
-                        }
-                        else {
-                            $("#resultat").html("<p>" + data.message + "</p>");
-                        }
-                    },
-                    'json'
-                );
-            } else {
-                $("#resultat").html("<p>Veuillez remplir les champs principaux (Pseudonyme, Email)</p>");
-            }
-        });
-    });
-</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/trumbowyg.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/langs/fr.min.js"></script>
+	<script>
+		$('#editeur').trumbowyg({lang: 'fr'});
+$(document).ready(function () {
+$("#btnSaveUser").click(function (e) {
+if ($('#username').val().length !== 0 && $('#email').val().length !== 0) {
+e.preventDefault();
+$.post("{{ path('admin_save_user') }}", {
+username: $("#username").val(),
+user_id: '{{ user.id }}',
+email: $("#email").val(),
+role: $("#role").val(),
+bio: $("#editeur").val(),
+deleteAvatar: $("#deleteAvatar").prop('checked'),
+motdepasse: $("#motdepasse").val(),
+csrfData: "{{ csrf_token('save-user') }}"
+}, function (data) {
+if (data.code == 200) {
+$("#resultat").html("<p>" + data.message + "</p>");
+} else {
+$("#resultat").html("<p>" + data.message + "</p>");
+}
+}, 'json');
+} else {
+$("#resultat").html("<p>Veuillez remplir les champs principaux (Pseudonyme, Email)</p>");
+}
+});
+});
+	</script>
 {% endblock %}

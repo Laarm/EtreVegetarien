@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Entity\Repas;
+use App\Entity\Meal;
 use App\Entity\Article;
 use App\Entity\Contact;
 use App\Entity\Store;
@@ -351,77 +351,77 @@ class AdminEditController extends AbstractController
     }
 
     /**
-     * @Route("/admin/repas/{id}/edit", name="admin_edit_repas")
+     * @Route("/admin/meal/{id}/edit", name="admin_edit_meal")
      */
-    public function editRepas(Repas $repas)
+    public function editMeal(Meal $meal)
     {
-        return $this->render('admin/edit/repas.html.twig', [
-            'repas' => $repas,
+        return $this->render('admin/edit/meal.html.twig', [
+            'meal' => $meal,
         ]);
     }
 
     /**
-     * @Route("/admin/repas/new", name="admin_new_repas")
+     * @Route("/admin/meal/new", name="admin_new_meal")
      */
-    public function newRepas()
+    public function newMeal()
     {
-        return $this->render('admin/edit/newRepas.html.twig');
+        return $this->render('admin/edit/newMeal.html.twig');
     }
 
     /**
-     * @Route("/admin/deleteRepas", name="admin_delete_repas")
+     * @Route("/admin/deleteMeal", name="admin_delete_meal")
      */
-    public function deleteRepas(Request $request, Filesystem $filesystem): Response
+    public function deleteMeal(Request $request, Filesystem $filesystem): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
                 if (!empty($request->get('id'))) {
-                    $ancienneImage = $this->getDoctrine()->getRepository(Repas::class)->find($request->get('id'));
+                    $ancienneImage = $this->getDoctrine()->getRepository(Meal::class)->find($request->get('id'));
                     if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
                         $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
                     }
-                    $repas = $this->getDoctrine()->getRepository(Repas::class)->deleteRepas($request->get('id'));
-                    if ($repas) {
-                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce repas", 'id' => $request->get('id')], 200);
+                    $meal = $this->getDoctrine()->getRepository(Meal::class)->deleteMeal($request->get('id'));
+                    if ($meal) {
+                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce meal", 'id' => $request->get('id')], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du repas...'], 200);
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du meal...'], 200);
                 }
             }
         }
     }
 
     /**
-     * @Route("/admin/saveRepas", name="admin_save_repas")
+     * @Route("/admin/saveMeal", name="admin_save_meal")
      */
-    public function saveRepas(Security $security, Request $request, Filesystem $filesystem): Response
+    public function saveMeal(Security $security, Request $request, Filesystem $filesystem): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
-                if (!empty($request->get('nom')) && !empty($request->get('repas_id')) && !empty($request->get('recette'))) {
+                if (!empty($request->get('nom')) && !empty($request->get('meal_id')) && !empty($request->get('recette'))) {
                     $user = $security->getUser();
                     if (empty($request->get('image'))) {
                         $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
                     } else {
                         $image = $request->get('image');
                     }
-                    if ($request->get('repas_id') == "new") {
-                        $sqlRepas = $this->getDoctrine()->getRepository(Repas::class)->createRepas($request->get('nom'), $image, $request->get('recette'), $user);
-                        $success = "Le repas à bien été créer !";
+                    if ($request->get('meal_id') == "new") {
+                        $sqlMeal = $this->getDoctrine()->getRepository(Meal::class)->createMeal($request->get('nom'), $image, $request->get('recette'), $user);
+                        $success = "Le meal à bien été créer !";
                     } else {
-                        $ancienneImage = $this->getDoctrine()->getRepository(Repas::class)->find($request->get('repas_id'));
+                        $ancienneImage = $this->getDoctrine()->getRepository(Meal::class)->find($request->get('meal_id'));
                         if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
                             $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
                         }
-                        $sqlRepas = $this->getDoctrine()->getRepository(Repas::class)->saveRepas($request->get('repas_id'), $request->get('nom'), $image, $request->get('recette'), $user);
-                        $success = "Le repas à bien été mis à jour !";
+                        $sqlMeal = $this->getDoctrine()->getRepository(Meal::class)->saveMeal($request->get('meal_id'), $request->get('nom'), $image, $request->get('recette'), $user);
+                        $success = "Le meal à bien été mis à jour !";
                     }
-                    if ($sqlRepas) {
-                        return $this->json(['code' => 200, 'message' => $success, 'repasId' => $sqlRepas], 200);
+                    if ($sqlMeal) {
+                        return $this->json(['code' => 200, 'message' => $success, 'mealId' => $sqlMeal], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
                     }
@@ -526,14 +526,14 @@ class AdminEditController extends AbstractController
                         }
                     }
                     $id = $request->get('user_id');
-                    $success = "L'utilisateur à bien été mis à jour !";
+                    $success = "L'user à bien été mis à jour !";
                     if (!$erreur) {
                         return $this->json(['code' => 200, 'message' => $success, 'userId' => $id], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour de l\'utilisateur...'], 200);
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour de l\'user...'], 200);
                 }
             }
         }
@@ -598,12 +598,12 @@ class AdminEditController extends AbstractController
                 if (!empty($request->get('storeId')) && !empty($request->get('productId'))) {
                     $sqlProduct = $this->getDoctrine()->getRepository(ProductSync::class)->createProductStore($request->get('storeId'), $request->get('productId'));
                     if ($sqlProduct) {
-                        return $this->json(['code' => 200, 'message' => "Le product à bien été ajouter au store !", 'repasId' => $sqlProduct], 200);
+                        return $this->json(['code' => 200, 'message' => "Le product à bien été ajouter au store !", 'mealId' => $sqlProduct], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour du repas...'], 200);
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour du meal...'], 200);
                 }
             }
         }

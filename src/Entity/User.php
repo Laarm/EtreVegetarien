@@ -85,9 +85,9 @@ class User implements UserInterface
     private $role;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Repas", mappedBy="postedBy", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Meal", mappedBy="postedBy", orphanRemoval=true)
      */
-    private $repas;
+    private $meal;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ProductFavoris", mappedBy="postedById", orphanRemoval=true)
@@ -105,9 +105,9 @@ class User implements UserInterface
     private $avatar;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\RepasFavoris", mappedBy="postedBy", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\MealFavoris", mappedBy="postedBy", orphanRemoval=true)
      */
-    private $repasFavoris;
+    private $mealFavoris;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -118,9 +118,9 @@ class User implements UserInterface
     {
         $this->storeAvis = new ArrayCollection();
         $this->restaurantAvis = new ArrayCollection();
-        $this->repas = new ArrayCollection();
+        $this->meal = new ArrayCollection();
         $this->productFavoris = new ArrayCollection();
-        $this->repasFavoris = new ArrayCollection();
+        $this->mealFavoris = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -339,30 +339,30 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|Repas[]
+     * @return Collection|Meal[]
      */
-    public function getRepas(): Collection
+    public function getMeal(): Collection
     {
-        return $this->repas;
+        return $this->meal;
     }
 
-    public function addRepa(Repas $repa): self
+    public function addRepa(Meal $mea): self
     {
-        if (!$this->repas->contains($repa)) {
-            $this->repas[] = $repa;
-            $repa->setPostedBy($this);
+        if (!$this->meal->contains($mea)) {
+            $this->meal[] = $mea;
+            $mea->setPostedBy($this);
         }
 
         return $this;
     }
 
-    public function removeRepa(Repas $repa): self
+    public function removeRepa(Meal $mea): self
     {
-        if ($this->repas->contains($repa)) {
-            $this->repas->removeElement($repa);
+        if ($this->meal->contains($mea)) {
+            $this->meal->removeElement($mea);
             // set the owning side to null (unless already changed)
-            if ($repa->getPostedBy() === $this) {
-                $repa->setPostedBy(null);
+            if ($mea->getPostedBy() === $this) {
+                $mea->setPostedBy(null);
             }
         }
 
@@ -425,30 +425,30 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|RepasFavoris[]
+     * @return Collection|MealFavoris[]
      */
-    public function getRepasFavoris(): Collection
+    public function getMealFavoris(): Collection
     {
-        return $this->repasFavoris;
+        return $this->mealFavoris;
     }
 
-    public function addRepasFavori(RepasFavoris $repasFavori): self
+    public function addMealFavori(MealFavoris $mealFavori): self
     {
-        if (!$this->repasFavoris->contains($repasFavori)) {
-            $this->repasFavoris[] = $repasFavori;
-            $repasFavori->setPostedBy($this);
+        if (!$this->mealFavoris->contains($mealFavori)) {
+            $this->mealFavoris[] = $mealFavori;
+            $mealFavori->setPostedBy($this);
         }
 
         return $this;
     }
 
-    public function removeRepasFavori(RepasFavoris $repasFavori): self
+    public function removeMealFavori(MealFavoris $mealFavori): self
     {
-        if ($this->repasFavoris->contains($repasFavori)) {
-            $this->repasFavoris->removeElement($repasFavori);
+        if ($this->mealFavoris->contains($mealFavori)) {
+            $this->mealFavoris->removeElement($mealFavori);
             // set the owning side to null (unless already changed)
-            if ($repasFavori->getPostedBy() === $this) {
-                $repasFavori->setPostedBy(null);
+            if ($mealFavori->getPostedBy() === $this) {
+                $mealFavori->setPostedBy(null);
             }
         }
 

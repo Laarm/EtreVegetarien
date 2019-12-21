@@ -1,32 +1,35 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Management des products - Être Végétarien
+{% block title %}Management des users - Être Végétarien
 {% endblock %}
 
 {% block body %}
 	<section id="panel" class="flex">
 		<div class="w-100">
-			<div paginationview="product">
+			<div paginationview="user">
 				<table class="table table-hover contentPagination">
 					<thead>
 						<tr>
 							<th scope="col">#</th>
-							<th scope="col">Nom</th>
-							<th scope="col">Contenu</th>
+							<th scope="col">Username</th>
+							<th scope="col">Role</th>
 							<th scope="col">Options</th>
 						</tr>
 					</thead>
 					<tbody>
-						{% for product in products %}
-							<tr paginationname="product" paginationid="{{ loop.index }}">
-								<th scope="row">{{ product.id }}</th>
-								<td>{{ product.nom }}</td>
-								<td><img height="40" width="40" src="{{ asset(product.image) }}"/></td>
+						{% for user in users %}
+							<tr paginationname="user" paginationid="{{ loop.index }}">
+								<th scope="row">{{ user.id }}</th>
+								<td>{{ user.username }}</td>
+								<td>{{ user.role }}</td>
 								<td class="btnOption">
-									<a href="{{ path('admin_edit_product', {'id': product.id}) }}" class="blue">
+									<a target="_BLANK" href="{{ path('user', {'id': user.id}) }}">
+										<i class="fad fa-eye"></i>
+									</a>
+									<a href="{{ path('admin_edit_user', {'id': user.id}) }}" class="blue">
 										<i class="fad fa-edit"></i>
 									</a>
-									<a class="red cursor-pointer" value="{{ product.id }}" data-toggle="modal" data-target="#deleteModal">
+									<a class="red cursor-pointer" value="{{ user.id }}" data-toggle="modal" data-target="#deleteModal">
 										<i class="fad fa-times"></i>
 									</a>
 								</td>
@@ -35,12 +38,8 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="flex justify-flex-end">
-				<a href="{{ path('adminNewProduct') }}" class="new btn btn-primary" role="button">
-					<i class="fad fa-plus"></i>
-					Nouveau
-				</a>
-				<ul paginationbtn="product" class="pagination justify-content-end">
+			<div aria-label="Page navigation example">
+				<ul paginationbtn="user" class="pagination justify-content-end">
 					<div class="btnPagination flex mr-4"></div>
 				</ul>
 			</div>
@@ -50,7 +49,7 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="deleteModalLabel">Êtes-vous sûr de supprimer cet article ?</h5>
+					<h5 class="modal-title" id="deleteModalLabel">Êtes-vous sûr de supprimer cet user ?</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -58,24 +57,24 @@
 				<div class="modal-body"></div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-					<button deleteproduct="0" csrf-data="{{ csrf_token('delete-item') }}" type="button" class="btn btn-primary">Oui</button>
+					<button deleteuser="0" csrf-data="{{ csrf_token('delete-item') }}" type="button" class="btn btn-primary">Oui</button>
 				</div>
 			</div>
 		</div>
 	</div>
 	<script>
 		addEventListener("load", () => {
-new pagination("product", 7, 10, "table-row");
+new pagination("user", 7, 10, "table-row");
 })
 
 $(document).on('click', '[data-target="#deleteModal"]', function (e) {
-$('[deleteProduct]').attr("deleteProduct", $(this).attr('value'))
+$('[deleteUser]').attr("deleteUser", $(this).attr('value'))
 });
 
-$(document).on('click', '[deleteProduct]', function (e) {
-id = $(this).attr('deleteProduct')
+$(document).on('click', '[deleteUser]', function (e) {
+id = $(this).attr('deleteUser')
 e.preventDefault();
-$.post("{{ path('admin_delete_product') }}", {
+$.post("{{ path('admin_delete_user') }}", {
 id: id,
 csrfData: $(this).attr('csrf-data')
 }, function (data) {
