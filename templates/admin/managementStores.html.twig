@@ -11,7 +11,7 @@
 					<thead>
 						<tr>
 							<th scope="col">#</th>
-							<th scope="col">Nom</th>
+							<th scope="col">Name</th>
 							<th scope="col">Contenu</th>
 							<th scope="col">Options</th>
 						</tr>
@@ -20,7 +20,7 @@
 						{% for store in stores %}
 							<tr paginationname="store" paginationid="{{ loop.index }}">
 								<th scope="row">{{ store.id }}</th>
-								<td>{{ store.nom }}</td>
+								<td>{{ store.name }}</td>
 								<td>{{ store.location }},
 									{{ store.ville }}</td>
 								<td class="btnOption">

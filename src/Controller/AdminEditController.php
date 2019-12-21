@@ -74,21 +74,21 @@ class AdminEditController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
-                if (!empty($request->get('nom')) && !empty($request->get('contenu')) && !empty($request->get('article_id'))) {
+                if (!empty($request->get('name')) && !empty($request->get('contenu')) && !empty($request->get('article_id'))) {
                     if (empty($request->get('image'))) {
                         $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
                     } else {
                         $image = htmlspecialchars($request->get('image'));
                     }
                     if ($request->get('article_id') == "new") {
-                        $sqlArticle = $this->getDoctrine()->getRepository(Article::class)->createArticle($request->get('nom'), $request->get('contenu'), $image);
+                        $sqlArticle = $this->getDoctrine()->getRepository(Article::class)->createArticle($request->get('name'), $request->get('contenu'), $image);
                         $success = "L'article à bien été créer !";
                     } else {
                         $ancienneImage = $this->getDoctrine()->getRepository(Article::class)->find($request->get('article_id'));
                         if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
                             $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
                         }
-                        $sqlArticle = $this->getDoctrine()->getRepository(Article::class)->saveArticle($request->get('article_id'), $request->get('nom'), $request->get('contenu'), $image);
+                        $sqlArticle = $this->getDoctrine()->getRepository(Article::class)->saveArticle($request->get('article_id'), $request->get('name'), $request->get('contenu'), $image);
                         $success = "L'article à bien été mis à jour !";
                     }
                     if ($sqlArticle) {
@@ -155,21 +155,21 @@ class AdminEditController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
-                if (!empty($request->get('nom')) && !empty($request->get('ville')) && !empty($request->get('store_id'))) {
+                if (!empty($request->get('name')) && !empty($request->get('ville')) && !empty($request->get('store_id'))) {
                     if (empty($request->get('image'))) {
                         $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
                     } else {
                         $image = htmlspecialchars($request->get('image'));
                     }
                     if ($request->get('store_id') == "new") {
-                        $sqlStore = $this->getDoctrine()->getRepository(Store::class)->createStore($request->get('nom'), $image, "null", $request->get('adresse'), $request->get('ville'));
+                        $sqlStore = $this->getDoctrine()->getRepository(Store::class)->createStore($request->get('name'), $image, "null", $request->get('adresse'), $request->get('ville'));
                         $success = "Le magasin à bien été créer !";
                     } else {
                         $ancienneImage = $this->getDoctrine()->getRepository(Store::class)->find($request->get('store_id'));
                         if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
                             $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
                         }
-                        $sqlStore = $this->getDoctrine()->getRepository(Store::class)->saveStore($request->get('store_id'), $request->get('nom'), $request->get('image'), $request->get('adresse'), $request->get('ville'));
+                        $sqlStore = $this->getDoctrine()->getRepository(Store::class)->saveStore($request->get('store_id'), $request->get('name'), $request->get('image'), $request->get('adresse'), $request->get('ville'));
                         $success = "Le magasin à bien été mis à jour !";
                     }
                     if ($sqlStore) {
@@ -236,24 +236,24 @@ class AdminEditController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
-                if (!empty($request->get('nom')) && !empty($request->get('ville')) && !empty($request->get('restaurant_id')) && !empty($request->get('contenu'))) {
+                if (!empty($request->get('name')) && !empty($request->get('ville')) && !empty($request->get('restaurant_id')) && !empty($request->get('contenu'))) {
                     if (empty($request->get('image'))) {
                         $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
                     } else {
                         $image = htmlspecialchars($request->get('image'));
                     }
                     if ($request->get('restaurant_id') == "new") {
-                        $sqlRestaurant = $this->getDoctrine()->getRepository(Restaurant::class)->createRestaurant($request->get('nom'), $image, "null", $request->get('adresse'), $request->get('ville'), $request->get('contenu'));
+                        $sqlRestaurant = $this->getDoctrine()->getRepository(Restaurant::class)->createRestaurant($request->get('name'), $image, "null", $request->get('adresse'), $request->get('ville'), $request->get('contenu'));
                         $success = "Le restaurant à bien été créer !";
                     } else {
                         $ancienneImage = $this->getDoctrine()->getRepository(Restaurant::class)->find($request->get('restaurant_id'));
                         if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
                             $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
                         }
-                        $sqlRestaurant = $this->getDoctrine()->getRepository(Restaurant::class)->saveRestaurant($request->get('restaurant_id'), $request->get('nom'), $request->get('image'), $request->get('adresse'), $request->get('ville'), $request->get('contenu'));
+                        $sqlRestaurant = $this->getDoctrine()->getRepository(Restaurant::class)->saveRestaurant($request->get('restaurant_id'), $request->get('name'), $request->get('image'), $request->get('adresse'), $request->get('ville'), $request->get('contenu'));
                         $success = "Le restaurant à bien été mis à jour !";
                     }
-                    if (!empty($request->get('nom')) && !empty($request->get('restaurant_id')) && !empty($request->get('contenu'))) {
+                    if (!empty($request->get('name')) && !empty($request->get('restaurant_id')) && !empty($request->get('contenu'))) {
                         if ($sqlRestaurant) {
                             return $this->json(['code' => 200, 'message' => $success, 'restaurantId' => $sqlRestaurant], 200);
                         } else {
@@ -321,21 +321,21 @@ class AdminEditController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
-                if (!empty($request->get('nom')) && !empty($request->get('product_id'))) {
+                if (!empty($request->get('name')) && !empty($request->get('product_id'))) {
                     if (empty($request->get('image'))) {
                         $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
                     } else {
                         $image = htmlspecialchars($request->get('image'));
                     }
                     if ($request->get('product_id') == "new") {
-                        $sqlProduct = $this->getDoctrine()->getRepository(Product::class)->createProduct($request->get('nom'), $image);
+                        $sqlProduct = $this->getDoctrine()->getRepository(Product::class)->createProduct($request->get('name'), $image);
                         $success = "Le produit à bien été créer !";
                     } else {
                         $ancienneImage = $this->getDoctrine()->getRepository(Product::class)->find($request->get('product_id'));
                         if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
                             $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
                         }
-                        $sqlProduct = $this->getDoctrine()->getRepository(Product::class)->saveProduct($request->get('product_id'), $request->get('nom'), $image);
+                        $sqlProduct = $this->getDoctrine()->getRepository(Product::class)->saveProduct($request->get('product_id'), $request->get('name'), $image);
                         $success = "Le produit à bien été mis à jour !";
                     }
                     if ($sqlProduct) {
@@ -402,7 +402,7 @@ class AdminEditController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
-                if (!empty($request->get('nom')) && !empty($request->get('meal_id')) && !empty($request->get('recette'))) {
+                if (!empty($request->get('name')) && !empty($request->get('meal_id')) && !empty($request->get('recette'))) {
                     $user = $security->getUser();
                     if (empty($request->get('image'))) {
                         $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
@@ -410,14 +410,14 @@ class AdminEditController extends AbstractController
                         $image = $request->get('image');
                     }
                     if ($request->get('meal_id') == "new") {
-                        $sqlMeal = $this->getDoctrine()->getRepository(Meal::class)->createMeal($request->get('nom'), $image, $request->get('recette'), $user);
+                        $sqlMeal = $this->getDoctrine()->getRepository(Meal::class)->createMeal($request->get('name'), $image, $request->get('recette'), $user);
                         $success = "Le repas à bien été créer !";
                     } else {
                         $ancienneImage = $this->getDoctrine()->getRepository(Meal::class)->find($request->get('meal_id'));
                         if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
                             $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
                         }
-                        $sqlMeal = $this->getDoctrine()->getRepository(Meal::class)->saveMeal($request->get('meal_id'), $request->get('nom'), $image, $request->get('recette'), $user);
+                        $sqlMeal = $this->getDoctrine()->getRepository(Meal::class)->saveMeal($request->get('meal_id'), $request->get('name'), $image, $request->get('recette'), $user);
                         $success = "Le repas à bien été mis à jour !";
                     }
                     if ($sqlMeal) {

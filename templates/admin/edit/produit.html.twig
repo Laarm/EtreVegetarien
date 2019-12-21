@@ -1,6 +1,6 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}{{ product.nom }}!{% endblock %}
+{% block title %}{{ product.name }}!{% endblock %}
 {% block stylesheets %}
 
 {% endblock %}
@@ -12,7 +12,7 @@
 <section id="panel" class="container">
     <div class="editProduct">
         <div class="flex">
-            <input id="nom" value="{{ product.nom }}" placeholder="Nom du product" class="margin-auto" />
+            <input id="name" value="{{ product.name }}" placeholder="Name du product" class="margin-auto" />
         </div>
         <div class="btnForSaveAndCancel">
             <div class="input-group mb-3 mt-3">
@@ -61,13 +61,13 @@
                     },
                 });
             }
-            if ($('#nom').val().length !== 0) {
+            if ($('#name').val().length !== 0) {
                 if (stop == "non") {
                     e.preventDefault();
                     $.post(
                         "{{ path('admin_save_product') }}",
                         {
-                            nom: $("#nom").val(),
+                            name: $("#name").val(),
                             image: $("#image").val(),
                             product_id: "{{ product.id }}",
                             csrfData: "{{ csrf_token('save-item') }}"
@@ -84,7 +84,7 @@
                     );
                 }
             } else {
-                $("#resultat").html("<p>Veuillez remplir le nom</p>");
+                $("#resultat").html("<p>Veuillez remplir le name</p>");
             }
         });
     });

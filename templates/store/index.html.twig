@@ -104,10 +104,10 @@
         <div class="item">
             <a href="{{ path('store_show', {'id': store.id}) }}">
                 <div class="top">
-                    <img alt="{{ store.nom }}" src="{{ store.image }}" />
+                    <img alt="{{ store.name }}" src="{{ store.image }}" />
                 </div>
                 <div class="bottom">
-                    <p>{{ store.nom }}</p>
+                    <p>{{ store.name }}</p>
                 </div>
             </a>
         </div>
@@ -127,7 +127,7 @@
                         $('.product-list-design').html("<p class='margin-auto'>Aucun restaurant trouvé</p>")
                     }
                     stores.forEach((store) => {
-                        $(".product-list-design").append('<a class="item" href="/store/' + store.id + '"><div class= "top"><img alt="' + store.nom + '" src="' + store.image + '" /></div><div class="bottom"><p>' + store.nom + '</p></div></a>')
+                        $(".product-list-design").append('<a class="item" href="/store/' + store.id + '"><div class= "top"><img alt="' + store.name + '" src="' + store.image + '" /></div><div class="bottom"><p>' + store.name + '</p></div></a>')
                     })
                 });
         });

@@ -11,7 +11,7 @@
 					<thead>
 						<tr>
 							<th scope="col">#</th>
-							<th scope="col">Nom</th>
+							<th scope="col">Name</th>
 							<th scope="col">Contenu</th>
 							<th scope="col">Options</th>
 						</tr>
@@ -20,7 +20,7 @@
 						{% for meal in meal %}
 							<tr paginationname="meal" paginationid="{{ loop.index }}">
 								<th scope="row">{{ meal.id }}</th>
-								<td>{{ meal.nom }}</td>
+								<td>{{ meal.name }}</td>
 								<td><img height="40" width="40" src="{{ asset(meal.image) }}"/></td>
 								<td class="btnOption">
 									<a target="_BLANK" href="{{ path('meal_show', {'id': meal.id}) }}">

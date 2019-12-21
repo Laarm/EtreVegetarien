@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	{{ meal.nom }}
+	{{ meal.name }}
 	- Être Végétarien!
 {% endblock %}
 {% block stylesheets %}
@@ -204,7 +204,7 @@
 	<section id="meal" class="container paddingSeperateur flex">
 		<div class="left col-7">
 			<div class="flex flex-between">
-				<h1 class="mtb-auto">{{ meal.nom }}</h1>
+				<h1 class="mtb-auto">{{ meal.name }}</h1>
 				<p class="note mtb-auto">
 					<i btnfavorites="{{meal.id}}" class="{% for favorites in meal.mealFavorites %}{% if favorites.postedBy.id == app.user.id %}active{% endif %}{% endfor %} cursor-pointer fad fa-star"></i>
 				</p>
@@ -283,7 +283,7 @@
 					<div class="meal flex flex-between">
 						<div class="left">
 							<a href="{{ path('meal_show', {'id': meal.id}) }}">
-								<h1 class="cds">{{ meal.nom }}</h1>
+								<h1 class="cds">{{ meal.name }}</h1>
 								<h2 class="gris">{{ meal.PostedBy.username }}, Végétarien</h2>
 							</a>
 						</div>

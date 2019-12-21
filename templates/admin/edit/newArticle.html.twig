@@ -14,7 +14,7 @@
 	<section id="panel" class="container">
 		<div class="editArticle">
 			<div class="flex">
-				<input id="nom" placeholder="Nom de l'article" value="" class="margin-auto"/>
+				<input id="name" placeholder="Name de l'article" value="" class="margin-auto"/>
 			</div>
 			<textarea id="editeur"></textarea>
 			<div class="btnForSaveAndCancel">
@@ -70,11 +70,11 @@ $("#btnSaveArticle").click()
 });
 }
 }
-if ($('#nom').val().length !== 0 && $('#editeur').val().length !== 0) {
+if ($('#name').val().length !== 0 && $('#editeur').val().length !== 0) {
 if (stop == "non") {
 e.preventDefault();
 $.post("{{ path('admin_save_article') }}", {
-nom: $("#nom").val(),
+name: $("#name").val(),
 contenu: $("#editeur").val(),
 article_id: 'new',
 image: $("#image").val(),
@@ -89,7 +89,7 @@ $("#resultat").html("<p>" + data.message + "</p>");
 }, 'json');
 }
 } else {
-$("#resultat").html("<p>Veuillez remplir le nom et le contenu</p>");
+$("#resultat").html("<p>Veuillez remplir le name et le contenu</p>");
 }
 });
 });

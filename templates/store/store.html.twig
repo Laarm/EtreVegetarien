@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	{{ store.nom }}
+	{{ store.name }}
 	- Être Végétarien!
 {% endblock %}
 {% block stylesheets %}
@@ -127,7 +127,7 @@
 		}
 	</style>
 	<section id="store" class="container paddingSeperateur">
-		<h1>{{ store.nom }}</h1>
+		<h1>{{ store.name }}</h1>
 		<div class="banniere_store" style="background-image: url('{{ asset(store.image) }}');background-size: 100% auto;background-position: center"></div>
 		<div class="w-100">
 			<ul class="nav nav-tabs" id="tab" role="tablist">
@@ -148,10 +148,10 @@
 							<div class="item">
 								<a href="#">
 									<div class="top">
-										<img alt="{{ product.Product.nom }}" src="{{ asset(product.Product.image) }}"/>
+										<img alt="{{ product.Product.name }}" src="{{ asset(product.Product.image) }}"/>
 									</div>
 									<div class="bottom">
-										<p>{{ product.Product.nom }}</p>
+										<p>{{ product.Product.name }}</p>
 									</div>
 								</a>
 								<div btnfavorites="{{product.Product.id}}" class="{% for favorites in product.Product.productFavorites %}{% if favorites.postedById.id == app.user.id %}active{% endif %}{% endfor %}">

@@ -22,10 +22,10 @@ class RestaurantRepository extends ServiceEntityRepository
         $this->entityManager = $entityManager;
         $this->validator = $validator;
     }
-    public function createRestaurant($nom, $image, $location, $adresse, $ville, $contenu)
+    public function createRestaurant($name, $image, $location, $adresse, $ville, $contenu)
     {
         $sqlRestaurant = new Restaurant();
-        $sqlRestaurant->setNom($nom)
+        $sqlRestaurant->setName($name)
             ->setImage($image)
             ->setLocation($location)
             ->setAdresse($adresse)
@@ -41,10 +41,10 @@ class RestaurantRepository extends ServiceEntityRepository
             return false;
         }
     }
-    public function saveRestaurant($restaurantId, $nom, $image, $adresse, $ville, $contenu)
+    public function saveRestaurant($restaurantId, $name, $image, $adresse, $ville, $contenu)
     {
         $sqlRestaurant = $this->find($restaurantId);
-        $sqlRestaurant->setNom($nom)
+        $sqlRestaurant->setName($name)
             ->setImage($image)
             ->setAdresse($adresse)
             ->setVille($ville)
@@ -72,10 +72,10 @@ class RestaurantRepository extends ServiceEntityRepository
     public function searchRestaurant($search, $limit)
     {
         $result = $this->createQueryBuilder('m')
-            ->select('m.id', 'm.nom', 'm.image')
-            ->where('m.nom LIKE :search')
+            ->select('m.id', 'm.name', 'm.image')
+            ->where('m.name LIKE :search')
             ->setParameter('search', '%' . $search . '%')
-            ->orderBy('m.nom', 'ASC')
+            ->orderBy('m.name', 'ASC')
             ->setMaxResults($limit)
             ->getQuery();
         return $result->getResult();
@@ -83,8 +83,8 @@ class RestaurantRepository extends ServiceEntityRepository
     public function getAllRestaurant($limit)
     {
         $result = $this->createQueryBuilder('m')
-            ->select('m.id', 'm.nom', 'm.image')
-            ->orderBy('m.nom', 'ASC')
+            ->select('m.id', 'm.name', 'm.image')
+            ->orderBy('m.name', 'ASC')
             ->setMaxResults($limit)
             ->getQuery();
         return $result->getResult();

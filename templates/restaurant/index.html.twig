@@ -107,10 +107,10 @@
         {% for restaurant in restaurants %}
         <a class="item" href="{{ path('restaurant_show', {'id': restaurant.id}) }}">
             <div class="top">
-                <img alt="{{ restaurant.nom }}" src="{{ restaurant.image }}" />
+                <img alt="{{ restaurant.name }}" src="{{ restaurant.image }}" />
             </div>
             <div class="bottom">
-                <p>{{ restaurant.nom }}</p>
+                <p>{{ restaurant.name }}</p>
             </div>
         </a>
         {% endfor %}
@@ -129,7 +129,7 @@
                         $('.product-list-design').html("<p class='margin-auto'>Aucun restaurant trouvé</p>")
                     }
                     restaurants.forEach((restaurant) => {
-                        $(".product-list-design").append('<a class="item" href="/restaurant/' + restaurant.id + '"><div class= "top"><img alt="' + restaurant.nom + '" src="' + restaurant.image + '" /></div><div class="bottom"><p>' + restaurant.nom + '</p></div></a>')
+                        $(".product-list-design").append('<a class="item" href="/restaurant/' + restaurant.id + '"><div class= "top"><img alt="' + restaurant.name + '" src="' + restaurant.image + '" /></div><div class="bottom"><p>' + restaurant.name + '</p></div></a>')
                     })
                 });
         });

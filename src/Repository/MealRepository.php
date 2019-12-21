@@ -22,10 +22,10 @@ class MealRepository extends ServiceEntityRepository
         $this->entityManager = $entityManager;
         $this->validator = $validator;
     }
-    public function createMeal($nom, $image, $recette, $user)
+    public function createMeal($name, $image, $recette, $user)
     {
         $sqlMeal = new Meal();
-        $sqlMeal->setNom($nom)
+        $sqlMeal->setName($name)
             ->setImage($image)
             ->setRecette($recette)
             ->setPostedBy($user)
@@ -39,10 +39,10 @@ class MealRepository extends ServiceEntityRepository
             return false;
         }
     }
-    public function saveMeal($mealId, $nom, $image, $recette, $user)
+    public function saveMeal($mealId, $name, $image, $recette, $user)
     {
         $sqlMeal = $this->find($mealId);
-        $sqlMeal->setNom($nom)
+        $sqlMeal->setName($name)
             ->setImage($image)
             ->setRecette($recette)
             ->setPostedBy($user);
@@ -69,18 +69,18 @@ class MealRepository extends ServiceEntityRepository
     public function searchMeal($search)
     {
         $result = $this->createQueryBuilder('m')
-            ->select('m.id', 'm.nom', 'm.image')
-            ->where('m.nom LIKE :search')
+            ->select('m.id', 'm.name', 'm.image')
+            ->where('m.name LIKE :search')
             ->setParameter('search', '%' . $search . '%')
-            ->orderBy('m.nom', 'ASC')
+            ->orderBy('m.name', 'ASC')
             ->getQuery();
         return $result->getResult();
     }
     public function getAllMeal()
     {
         $result = $this->createQueryBuilder('m')
-            ->select('m.id', 'm.nom', 'm.image')
-            ->orderBy('m.nom', 'ASC')
+            ->select('m.id', 'm.name', 'm.image')
+            ->orderBy('m.name', 'ASC')
             ->getQuery();
         return $result->getResult();
     }

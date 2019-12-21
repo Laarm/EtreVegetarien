@@ -11,7 +11,7 @@
 					<thead>
 						<tr>
 							<th scope="col">#</th>
-							<th scope="col">Nom</th>
+							<th scope="col">Name</th>
 							<th scope="col">Contenu</th>
 							<th scope="col">Options</th>
 						</tr>
@@ -20,7 +20,7 @@
 						{% for product in products %}
 							<tr paginationname="product" paginationid="{{ loop.index }}">
 								<th scope="row">{{ product.id }}</th>
-								<td>{{ product.nom }}</td>
+								<td>{{ product.name }}</td>
 								<td><img height="40" width="40" src="{{ asset(product.image) }}"/></td>
 								<td class="btnOption">
 									<a href="{{ path('admin_edit_product', {'id': product.id}) }}" class="blue">

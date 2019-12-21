@@ -1,6 +1,6 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}{{ store.nom }}!{% endblock %}
+{% block title %}{{ store.name }}!{% endblock %}
 {% block stylesheets %}
 
 {% endblock %}
@@ -12,7 +12,7 @@
 <section id="panel" class="container">
     <div class="editstore">
         <div class="flex">
-            <input id="nom" value="{{ store.nom }}" class="margin-auto" />
+            <input id="name" value="{{ store.name }}" class="margin-auto" />
         </div>
         <div class="btnForSaveAndCancel">
             <div class="input-group mb-3 mt-3">
@@ -72,13 +72,13 @@
                     },
                 });
             }
-            if ($('#nom').val().length !== 0 && $('#adresse').val().length !== 0 && $('#ville').val().length !== 0) {
+            if ($('#name').val().length !== 0 && $('#adresse').val().length !== 0 && $('#ville').val().length !== 0) {
                 if (stop == "non") {
                     e.preventDefault();
                     $.post(
                         "{{ path('admin_save_store') }}",
                         {
-                            nom: $("#nom").val(),
+                            name: $("#name").val(),
                             adresse: $("#adresse").val(),
                             ville: $("#ville").val(),
                             store_id: '{{ store.id }}',
@@ -97,7 +97,7 @@
                     );
                 }
             } else {
-                $("#resultat").html("<p>Veuillez remplir le nom, l'adresse ainsi que la ville</p>");
+                $("#resultat").html("<p>Veuillez remplir le name, l'adresse ainsi que la ville</p>");
             }
         });
     })

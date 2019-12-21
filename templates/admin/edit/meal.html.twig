@@ -1,6 +1,6 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}{{ meal.nom }}!{% endblock %}
+{% block title %}{{ meal.name }}!{% endblock %}
 {% block stylesheets %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/ui/trumbowyg.min.css">
 {% endblock %}
@@ -12,7 +12,7 @@
 <section id="panel" class="container">
     <div class="editMeal">
         <div class="flex">
-            <input id="nom" value="{{ meal.nom }}" placeholder="Nom du meal" class="margin-auto" />
+            <input id="name" value="{{ meal.name }}" placeholder="Name du meal" class="margin-auto" />
         </div>
         <div class="btnForSaveAndCancel">
             <div class="input-group mb-3 mt-3">
@@ -74,13 +74,13 @@
                     });
                 }
             }
-            if ($('#nom').val().length !== 0 && $('#editeur').val().length !== 0) {
+            if ($('#name').val().length !== 0 && $('#editeur').val().length !== 0) {
                 if (stop == "non") {
                     e.preventDefault();
                     $.post(
                         "{{ path('admin_save_meal') }}",
                         {
-                            nom: $("#nom").val(),
+                            name: $("#name").val(),
                             recette: $("#editeur").val(),
                             meal_id: '{{ meal.id }}',
                             image: $("#image").val(),
@@ -98,7 +98,7 @@
                     );
                 }
             } else {
-                $("#resultat").html("<p>Veuillez remplir le nom et le contenu</p>");
+                $("#resultat").html("<p>Veuillez remplir le name et le contenu</p>");
             }
         });
     });

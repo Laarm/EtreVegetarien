@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-{{ restaurant.nom }}
+{{ restaurant.name }}
 - Être Végétarien!
 {% endblock %}
 {% block stylesheets %}
@@ -182,7 +182,7 @@
 <section id="restaurant" class="container paddingSeperateur flex">
 	<div class="left col-7">
 		<div class="flex flex-between">
-			<h1 class="mtb-auto">{{ restaurant.nom }}</h1>
+			<h1 class="mtb-auto">{{ restaurant.name }}</h1>
 			<p class="note mtb-auto">
 				{% if restaurantNote %}<span>{{restaurantNote}}</span>/5</p>{% endif %}
 		</div>
@@ -293,7 +293,7 @@
 			<div class="restaurant flex flex-between">
 				<div class="left">
 					<a href="{{ path('restaurant_show', {'id': restaurant.id}) }}">
-						<h1 class="cds">{{ restaurant.nom }}</h1>
+						<h1 class="cds">{{ restaurant.name }}</h1>
 						<h2 class="gris">{{ restaurant.ville }}, Végétarien</h2>
 					</a>
 				</div>

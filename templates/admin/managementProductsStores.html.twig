@@ -11,7 +11,7 @@
 					<thead>
 						<tr>
 							<th scope="col">#</th>
-							<th scope="col">Nom</th>
+							<th scope="col">Name</th>
 							<th scope="col">Contenu</th>
 							<th scope="col">Options</th>
 						</tr>
@@ -20,8 +20,8 @@
 						{% for product in products %}
 							<tr paginationname="store" paginationid="{{ loop.index }}">
 								<th scope="row">{{ product.id }}</th>
-								<td>{{ product.Product.nom }}</td>
-								<td>{{ product.Store.nom }}</td>
+								<td>{{ product.Product.name }}</td>
+								<td>{{ product.Store.name }}</td>
 								<td class="btnOption">
 									<a target="_BLANK" href="{{ path('store_show', {'id': product.Store.id}) }}" class="blue">
 										<i class="fad fa-store-alt"></i>
@@ -117,7 +117,7 @@ if (products.length == 0) {
 $('#search-product').html("<p class='margin-auto'>Aucun product trouvé</p>")
 }
 products.forEach((product) => {
-$("#search-product").append('<div class="flex" addProduct="' + product.id + '"><div class="w-33 flex"><img class="mr-3 rond margin-auto"src="' + product.image + '"style="height: 40px;width: 40px"></div><div class="w-33 flex"><p class="margin-auto">' + product.nom + '</p></div><div class="w-33"></div></div>')
+$("#search-product").append('<div class="flex" addProduct="' + product.id + '"><div class="w-33 flex"><img class="mr-3 rond margin-auto"src="' + product.image + '"style="height: 40px;width: 40px"></div><div class="w-33 flex"><p class="margin-auto">' + product.name + '</p></div><div class="w-33"></div></div>')
 })
 });
 });
@@ -130,7 +130,7 @@ if (stores.length == 0) {
 $('#search-store').html("<p class='margin-auto'>Aucun store trouvé</p>")
 }
 stores.forEach((store) => {
-$("#search-store").append('<div class="flex" addStore="' + store.id + '"><div class="w-33 flex"><img class="mr-3 rond margin-auto"src="' + store.image + '"style="height: 40px;width: 40px"></div><div class="w-33 flex"><p class="margin-auto">' + store.nom + '</p></div><div class="w-33"></div></div>')
+$("#search-store").append('<div class="flex" addStore="' + store.id + '"><div class="w-33 flex"><img class="mr-3 rond margin-auto"src="' + store.image + '"style="height: 40px;width: 40px"></div><div class="w-33 flex"><p class="margin-auto">' + store.name + '</p></div><div class="w-33"></div></div>')
 })
 });
 });

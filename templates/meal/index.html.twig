@@ -107,10 +107,10 @@
         {% for meal in meal %}
         <a class="item" href="{{ path('meal_show', {'id': meal.id}) }}">
             <div class="top">
-                <img alt="{{ meal.nom }}" src="{{ meal.image }}" />
+                <img alt="{{ meal.name }}" src="{{ meal.image }}" />
             </div>
             <div class="bottom">
-                <p>{{ meal.nom }}</p>
+                <p>{{ meal.name }}</p>
             </div>
         </a>
         {% endfor %}
@@ -129,7 +129,7 @@
                         $('.product-list-design').html("<p class='margin-auto'>Aucun meal trouvé</p>")
                     }
                     meal.forEach((meal) => {
-                        $(".product-list-design").append('<a class="item" href="/meal/' + meal.id + '"><div class= "top"><img alt="' + meal.nom + '" src="' + meal.image + '" /></div><div class="bottom"><p>' + meal.nom + '</p></div></a>')
+                        $(".product-list-design").append('<a class="item" href="/meal/' + meal.id + '"><div class= "top"><img alt="' + meal.name + '" src="' + meal.image + '" /></div><div class="bottom"><p>' + meal.name + '</p></div></a>')
                     })
                 });
         });

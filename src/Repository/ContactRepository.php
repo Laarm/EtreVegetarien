@@ -22,10 +22,10 @@ class ContactRepository extends ServiceEntityRepository
         $this->entityManager = $entityManager;
         $this->validator = $validator;
     }
-    public function sendMessage($nom, $email, $sujet, $message)
+    public function sendMessage($name, $email, $sujet, $message)
     {
         $sql = new Contact();
-        $sql->setNom($nom)
+        $sql->setName($name)
             ->setEmail($email)
             ->setSujet($sujet)
             ->setMessage($message)

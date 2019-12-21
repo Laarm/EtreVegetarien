@@ -15,7 +15,7 @@ class StoreFixtures extends Fixture
 
         for($i = 1; $i <= 10; $i++) {
             $store = new Store();
-            $store->setNom("Store n°$i")
+            $store->setName("Store n°$i")
                   ->setLocation("78 avenue de Paris")
                   ->setAdresse("78 avenue de Paris")
                   ->setImage("http://placehold.it/350x250")

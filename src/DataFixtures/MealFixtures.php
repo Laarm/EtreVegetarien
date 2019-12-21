@@ -15,7 +15,7 @@ class MealFixtures extends Fixture
 
         for($i = 1; $i <= 10; $i++) {
             $meal = new Meal();
-            $meal->setNom("Meal n°$i")
+            $meal->setName("Meal n°$i")
                   ->setRecette("<p>Recette : Fromage</p>")
                   ->setImage("http://placehold.it/350x250")
                   ->setPostedBy("Admin")

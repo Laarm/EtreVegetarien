@@ -15,7 +15,7 @@ class RestaurantFixtures extends Fixture
 
         for($i = 1; $i <= 10; $i++) {
             $restaurant = new Restaurant();
-            $restaurant->setNom("Restaurant n°$i")
+            $restaurant->setName("Restaurant n°$i")
                        ->setImage("http://placehold.it/350x250")
                        ->setLocation("74 avenue de France")
                        ->setAdresse("74 avenue de France")

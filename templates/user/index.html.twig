@@ -95,10 +95,10 @@
 									<div class="item">
 										<a href="{{ path('restaurant_show', {'id': restaurant.Restaurant.id}) }}">
 											<div class="top">
-												<img alt="{{ restaurant.Restaurant.nom }}" src="{{ asset(restaurant.Restaurant.image) }}"/>
+												<img alt="{{ restaurant.Restaurant.name }}" src="{{ asset(restaurant.Restaurant.image) }}"/>
 											</div>
 											<div class="bottom">
-												<p>{{ restaurant.Restaurant.nom }}</p>
+												<p>{{ restaurant.Restaurant.name }}</p>
 											</div>
 										</a>
 									</div>
@@ -108,10 +108,10 @@
 								{% for mea in meal %}
 									<div class="item">
 										<div class="top">
-											<img alt="{{ mea.Meal.nom }}" src="{{ asset(mea.Meal.image) }}"/>
+											<img alt="{{ mea.Meal.name }}" src="{{ asset(mea.Meal.image) }}"/>
 										</div>
 										<div class="bottom">
-											<p>{{ mea.Meal.nom }}</p>
+											<p>{{ mea.Meal.name }}</p>
 										</div>
 									</div>
 								{% endfor %}
@@ -120,10 +120,10 @@
 								{% for product in products %}
 									<div class="item">
 										<div class="top">
-											<img alt="{{ product.productId.nom }}" src="{{ asset(product.productId.image) }}"/>
+											<img alt="{{ product.productId.name }}" src="{{ asset(product.productId.image) }}"/>
 										</div>
 										<div class="bottom">
-											<p>{{ product.productId.nom }}</p>
+											<p>{{ product.productId.name }}</p>
 										</div>
 									</div>
 								{% endfor %}

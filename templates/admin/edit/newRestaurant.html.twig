@@ -12,7 +12,7 @@
 <section id="panel" class="container">
     <div class="editRestaurant">
         <div class="flex">
-            <input id="nom" value="" class="margin-auto" />
+            <input id="name" value="" class="margin-auto" />
         </div>
         <div class="btnForSaveAndCancel">
             <div class="input-group mb-3 mt-3">
@@ -79,13 +79,13 @@
                     },
                 });
             }
-            if ($('#nom').val().length !== 0 && $('#editeur').val().length !== 0) {
+            if ($('#name').val().length !== 0 && $('#editeur').val().length !== 0) {
                 if (stop == "non") {
                     e.preventDefault();
                     $.post(
                         "{{ path('admin_save_restaurant') }}",
                         {
-                            nom: $("#nom").val(),
+                            name: $("#name").val(),
                             adresse: $("#adresse").val(),
                             ville: $("#ville").val(),
                             restaurant_id: 'new',

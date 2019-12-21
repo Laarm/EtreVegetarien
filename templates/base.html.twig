@@ -92,7 +92,7 @@
 						</button>
 						<div class="dropdown-menu" aria-labelledby="menu-1">
 							{% for article in articles %}
-								<a class="dropdown-item" href="{{ path('article_show', {'id': article.id}) }}">{{ article.nom }}</a>
+								<a class="dropdown-item" href="{{ path('article_show', {'id': article.id}) }}">{{ article.name }}</a>
 							{% endfor %}
 						</div>
 					</div>

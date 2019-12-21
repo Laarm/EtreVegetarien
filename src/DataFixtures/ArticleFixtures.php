@@ -18,7 +18,7 @@ class ArticleFixtures extends Fixture
         // }
         for($i = 1; $i <= 10; $i++) {
             $article = new Article();
-            $article->setNom($faker->sentence())
+            $article->setName($faker->sentence())
                     ->setContenu("<p>".$faker->paragraph()."</p>")
                     ->setImage("http://placehold.it/303x201")
                     ->setCreatedAt(new \DateTime());

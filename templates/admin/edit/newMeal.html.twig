@@ -12,7 +12,7 @@
 <section id="panel" class="container">
     <div class="editMeal">
         <div class="flex">
-            <input id="nom" value="" placeholder="Nom du meal" class="margin-auto" />
+            <input id="name" value="" placeholder="Name du meal" class="margin-auto" />
         </div>
         <div class="btnForSaveAndCancel">
             <div class="input-group mb-3 mt-3">
@@ -74,13 +74,13 @@
                     });
                 }
             }
-            if ($('#nom').val().length !== 0 && $('#editeur').val().length !== 0) {
+            if ($('#name').val().length !== 0 && $('#editeur').val().length !== 0) {
                 if (stop == "non") {
                     e.preventDefault();
                     $.post(
                         "{{ path('admin_save_meal') }}",
                         {
-                            nom: $("#nom").val(),
+                            name: $("#name").val(),
                             recette: $("#editeur").val(),
                             meal_id: 'new',
                             image: $("#image").val(),
@@ -99,7 +99,7 @@
                     );
                 }
             } else {
-                $("#resultat").html("<p>Veuillez remplir le nom et le contenu</p>");
+                $("#resultat").html("<p>Veuillez remplir le name et le contenu</p>");
             }
         });
     });

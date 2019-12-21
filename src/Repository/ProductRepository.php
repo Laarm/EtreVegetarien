@@ -22,10 +22,10 @@ class ProductRepository extends ServiceEntityRepository
         $this->entityManager = $entityManager;
         $this->validator = $validator;
     }
-    public function createProduct($nom, $image)
+    public function createProduct($name, $image)
     {
         $sqlProduct = new Product();
-        $sqlProduct->setNom($nom)
+        $sqlProduct->setName($name)
             ->setImage($image)
             ->setCreatedAt(new \DateTime());
         $this->entityManager->persist($sqlProduct);
@@ -37,10 +37,10 @@ class ProductRepository extends ServiceEntityRepository
             return false;
         }
     }
-    public function saveProduct($productId, $nom, $image)
+    public function saveProduct($productId, $name, $image)
     {
         $sqlProduct = $this->find($productId);
-        $sqlProduct->setNom($nom)
+        $sqlProduct->setName($name)
             ->setImage($image);
         $this->entityManager->flush();
         $errors = $this->validator->validate($sqlProduct);
@@ -65,10 +65,10 @@ class ProductRepository extends ServiceEntityRepository
     public function searchProduct($search, $limit)
     {
         $result = $this->createQueryBuilder('m')
-            ->select('m.id', 'm.nom', 'm.image')
-            ->where('m.nom LIKE :search')
+            ->select('m.id', 'm.name', 'm.image')
+            ->where('m.name LIKE :search')
             ->setParameter('search', '%' . $search . '%')
-            ->orderBy('m.nom', 'ASC')
+            ->orderBy('m.name', 'ASC')
             ->setMaxResults($limit)
             ->getQuery();
         return $result->getResult();
@@ -76,8 +76,8 @@ class ProductRepository extends ServiceEntityRepository
     public function getAllProduct($limit)
     {
         $result = $this->createQueryBuilder('m')
-            ->select('m.id', 'm.nom', 'm.image')
-            ->orderBy('m.nom', 'ASC')
+            ->select('m.id', 'm.name', 'm.image')
+            ->orderBy('m.name', 'ASC')
             ->setMaxResults($limit)
             ->getQuery();
         return $result->getResult();
