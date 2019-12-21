@@ -77,7 +77,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $preferenceDate;
+    private $preferenceCreatedAt;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -93,11 +93,6 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\ProductFavorites", mappedBy="postedById", orphanRemoval=true)
      */
     private $productFavorites;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $PreferenceCreatedAt;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -298,18 +293,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getPreferenceDate(): ?\DateTimeInterface
-    {
-        return $this->preferenceDate;
-    }
-
-    public function setPreferenceDate(?\DateTimeInterface $preferenceDate): self
-    {
-        $this->preferenceDate = $preferenceDate;
-
-        return $this;
-    }
-
     public function eraseCredentials()
     {
     }
@@ -402,12 +385,12 @@ class User implements UserInterface
 
     public function getPreferenceCreatedAt(): ?\DateTimeInterface
     {
-        return $this->PreferenceCreatedAt;
+        return $this->preferenceCreatedAt;
     }
 
-    public function setPreferenceCreatedAt(?\DateTimeInterface $PreferenceCreatedAt): self
+    public function setPreferenceCreatedAt(?\DateTimeInterface $preferenceCreatedAt): self
     {
-        $this->PreferenceCreatedAt = $PreferenceCreatedAt;
+        $this->preferenceCreatedAt = $preferenceCreatedAt;
 
         return $this;
     }
