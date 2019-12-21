@@ -56,7 +56,7 @@ class Restaurant
     /**
      * @ORM\Column(type="text")
      */
-    private $contenu;
+    private $content;
 
     public function __construct()
     {
@@ -171,14 +171,14 @@ class Restaurant
         return $this;
     }
 
-    public function getContenu(): ?string
+    public function getContent(): ?string
     {
-        return $this->contenu;
+        return $this->content;
     }
 
-    public function setContenu(string $contenu): self
+    public function setContent(string $content): self
     {
-        $this->contenu = $contenu;
+        $this->content = $content;
 
         return $this;
     }

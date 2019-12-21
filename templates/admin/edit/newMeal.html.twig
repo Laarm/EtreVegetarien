@@ -1,107 +1,103 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Nouveau meal - Être Végétarien !{% endblock %}
+{% block title %}Nouveau meal - Être Végétarien !
+{% endblock %}
 {% block stylesheets %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/ui/trumbowyg.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/ui/trumbowyg.min.css">
 {% endblock %}
 {% block body %}
-<section class="container">
-    <a href="{{ path('adminMeal') }}" class="btn btn-primary btnRetour mt-4"><i class="far fa-backspace"
-            aria-hidden="true"></i> Retour</a>
-</section>
-<section id="panel" class="container">
-    <div class="editMeal">
-        <div class="flex">
-            <input id="name" value="" placeholder="Name du meal" class="margin-auto" />
-        </div>
-        <div class="btnForSaveAndCancel">
-            <div class="input-group mb-3 mt-3">
-                <div class="input-group-prepend hidden">
-                    <span class="input-group-text">URL de l'image : </span>
-                </div>
-                <input type="text" class="form-control hidden" id="image" value="">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Recette : </span>
-                </div>
-                <textarea id="editeur"></textarea>
-            </div>
-            <div class="input-group mb-3">
-                <form method="post" class="w-100" action="" enctype="multipart/form-data" id="uploadImage">
-                    <div class="input-group mb-3 w-100">
-                        <div class="custom-file w-100">
-                            <input type="file" class="custom-file-input" id="file">
-                            <label class="custom-file-label" for="file">Choisir l'image de présentation</label>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <button id="btnSaveMeal" type="button" class="btn btn-primary">Sauvegarder</button>
-            <button type="button" class="btn btn-secondary btnCancelMeal">Annuler</button>
-        </div>
-    </div>
-    <div id="resultat"></div>
-</section>
+	<section class="container">
+		<a href="{{ path('adminMeal') }}" class="btn btn-primary btnRetour mt-4">
+			<i class="far fa-backspace" aria-hidden="true"></i>
+			Retour</a>
+	</section>
+	<section id="panel" class="container">
+		<div class="editMeal">
+			<div class="flex">
+				<input id="name" value="" placeholder="Name du meal" class="margin-auto"/>
+			</div>
+			<div class="btnForSaveAndCancel">
+				<div class="input-group mb-3 mt-3">
+					<div class="input-group-prepend hidden">
+						<span class="input-group-text">URL de l'image :
+						</span>
+					</div>
+					<input type="text" class="form-control hidden" id="image" value="">
+					<div class="input-group-prepend">
+						<span class="input-group-text">Recette :
+						</span>
+					</div>
+					<textarea id="editeur"></textarea>
+				</div>
+				<div class="input-group mb-3">
+					<form method="post" class="w-100" action="" enctype="multipart/form-data" id="uploadImage">
+						<div class="input-group mb-3 w-100">
+							<div class="custom-file w-100">
+								<input type="file" class="custom-file-input" id="file">
+								<label class="custom-file-label" for="file">Choisir l'image de présentation</label>
+							</div>
+						</div>
+					</form>
+				</div>
+				<button id="btnSaveMeal" type="button" class="btn btn-primary">Sauvegarder</button>
+				<button type="button" class="btn btn-secondary btnCancelMeal">Annuler</button>
+			</div>
+		</div>
+		<div id="resultat"></div>
+	</section>
 {% endblock %}
 
 {% block javascript %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/trumbowyg.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/langs/fr.min.js"></script>
-<script>
-    $('#editeur').trumbowyg({
-        lang: 'fr'
-    });
-    $(document).ready(function () {
-        $("#btnSaveMeal").click(function (e) {
-            let stop = "non"
-            var fd = new FormData();
-            if ($('#file').val().length !== 0) {
-                stop = "oui"
-                if ($('#file').val().length !== 0) {
-                    var files = $('#file')[0].files[0];
-                    fd.append('file', files);
-                    $.ajax({
-                        url: "{{ path('admin_upload_image') }}?_token={{ csrf_token('upload-image') }}",
-                        type: 'post',
-                        data: fd,
-                        contentType: false,
-                        processData: false,
-                        success: function (response) {
-                            $("#image").attr("value", response.location)
-                            $("#resultat").html("<p>" + response.message + "</p>");
-                            document.getElementById("file").value = '';
-                            $("#btnSaveMeal").click()
-                        },
-                    });
-                }
-            }
-            if ($('#name').val().length !== 0 && $('#editeur').val().length !== 0) {
-                if (stop == "non") {
-                    e.preventDefault();
-                    $.post(
-                        "{{ path('admin_save_meal') }}",
-                        {
-                            name: $("#name").val(),
-                            recette: $("#editeur").val(),
-                            meal_id: 'new',
-                            image: $("#image").val(),
-                            csrfData: "{{ csrf_token('save-item') }}"
-                        },
-                        function (data) {
-                            if (data.code == 200) {
-                                $("#resultat").html("<p>" + data.message + "</p>");
-                                window.location.replace("/meal/" + data.mealId);
-                            }
-                            else {
-                                $("#resultat").html("<p>" + data.message + "</p>");
-                            }
-                        },
-                        'json'
-                    );
-                }
-            } else {
-                $("#resultat").html("<p>Veuillez remplir le name et le contenu</p>");
-            }
-        });
-    });
-</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/trumbowyg.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/langs/fr.min.js"></script>
+	<script>
+		$('#editeur').trumbowyg({lang: 'fr'});
+$(document).ready(function () {
+$("#btnSaveMeal").click(function (e) {
+let stop = "non"
+var fd = new FormData();
+if ($('#file').val().length !== 0) {
+stop = "oui"
+if ($('#file').val().length !== 0) {
+var files = $('#file')[0].files[0];
+fd.append('file', files);
+$.ajax({
+url: "{{ path('admin_upload_image') }}?_token= {{ csrf_token('upload-image') }}",
+type: 'post',
+data: fd,
+contentType: false,
+processData: false,
+success: function (response) {
+$("#image").attr("value", response.location)
+$("#resultat").html("<p>" + response.message + "</p>");
+document.getElementById("file").value = '';
+$("#btnSaveMeal").click()
+}
+});
+}
+}
+if ($('#name').val().length !== 0 && $('#editeur').val().length !== 0) {
+if (stop == "non") {
+e.preventDefault();
+$.post("{{ path('admin_save_meal') }}", {
+name: $("#name").val(),
+recette: $("#editeur").val(),
+meal_id: 'new',
+image: $("#image").val(),
+csrfData: "{{ csrf_token('save-item') }}"
+}, function (data) {
+if (data.code == 200) {
+$("#resultat").html("<p>" + data.message + "</p>");
+window.location.replace("/meal/" + data.mealId);
+} else {
+$("#resultat").html("<p>" + data.message + "</p>");
+}
+}, 'json');
+}
+} else {
+$("#resultat").html("<p>Veuillez remplir le name et le content</p>");
+}
+});
+});
+	</script>
 {% endblock %}

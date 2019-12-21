@@ -25,7 +25,7 @@ class ArticleComment
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $contenu;
+    private $content;
 
     /**
      * @ORM\Column(type="datetime")
@@ -55,14 +55,14 @@ class ArticleComment
         return $this;
     }
 
-    public function getContenu(): ?string
+    public function getContent(): ?string
     {
-        return $this->contenu;
+        return $this->content;
     }
 
-    public function setContenu(string $contenu): self
+    public function setContent(string $content): self
     {
-        $this->contenu = $contenu;
+        $this->content = $content;
 
         return $this;
     }

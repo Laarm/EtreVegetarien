@@ -26,7 +26,7 @@ class Article
     /**
      * @ORM\Column(type="text")
      */
-    private $contenu;
+    private $content;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -46,7 +46,7 @@ class Article
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $categorie;
+    private $category;
 
     public function __construct()
     {
@@ -70,14 +70,14 @@ class Article
         return $this;
     }
 
-    public function getContenu(): ?string
+    public function getContent(): ?string
     {
-        return $this->contenu;
+        return $this->content;
     }
 
-    public function setContenu(string $contenu): self
+    public function setContent(string $content): self
     {
-        $this->contenu = $contenu;
+        $this->content = $content;
 
         return $this;
     }
@@ -137,14 +137,14 @@ class Article
         return $this;
     }
 
-    public function getCategorie(): ?string
+    public function getCategory(): ?string
     {
-        return $this->categorie;
+        return $this->category;
     }
 
-    public function setCategorie(?string $categorie): self
+    public function setCategory(?string $category): self
     {
-        $this->categorie = $categorie;
+        $this->category = $category;
 
         return $this;
     }

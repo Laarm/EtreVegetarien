@@ -16,12 +16,12 @@ class ArticleFixtures extends Fixture
         // for($i =1; $i <= 3; $i++) {
         //     $comment = new ArticleComment();
         // }
-        for($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             $article = new Article();
             $article->setName($faker->sentence())
-                    ->setContenu("<p>".$faker->paragraph()."</p>")
-                    ->setImage("http://placehold.it/303x201")
-                    ->setCreatedAt(new \DateTime());
+                ->setContent("<p>" . $faker->paragraph() . "</p>")
+                ->setImage("http://placehold.it/303x201")
+                ->setCreatedAt(new \DateTime());
 
             $manager->persist($article);
         }

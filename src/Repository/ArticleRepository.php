@@ -22,11 +22,11 @@ class ArticleRepository extends ServiceEntityRepository
         $this->entityManager = $entityManager;
         $this->validator = $validator;
     }
-    public function createArticle($name, $contenu, $image)
+    public function createArticle($name, $content, $image)
     {
         $sqlArticle = new Article();
         $sqlArticle->setName($name)
-            ->setContenu($contenu)
+            ->setContent($content)
             ->setImage($image)
             ->setCreatedAt(new \DateTime());
         $this->entityManager->persist($sqlArticle);
@@ -38,11 +38,11 @@ class ArticleRepository extends ServiceEntityRepository
             return false;
         }
     }
-    public function saveArticle($articleId, $name, $contenu, $image)
+    public function saveArticle($articleId, $name, $content, $image)
     {
         $sqlArticle = $this->find($articleId);
         $sqlArticle->setName($name)
-            ->setContenu($contenu)
+            ->setContent($content)
             ->setImage($image);
         $this->entityManager->flush();
         $errors = $this->validator->validate($sqlArticle);

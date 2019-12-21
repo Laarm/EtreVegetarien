@@ -1,367 +1,363 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-{{ restaurant.name }}
-- Être Végétarien!
+	{{ restaurant.name }}
+	- Être Végétarien!
 {% endblock %}
 {% block stylesheets %}
-<script src="{{ asset('/js/pagination.js') }}"></script>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
-	integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
-	crossorigin="" />
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.Default.css">
+	<script src="{{ asset('/js/pagination.js') }}"></script>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin=""/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.Default.css">
 {% endblock %}
 {% block body %}
 
-<style>
-	#restaurant h1 {
-		color: #4e4e56;
-		font-size: 2em;
-		font-weight: bold;
-	}
+	<style>
+		#restaurant h1 {
+			color: #4e4e56;
+			font-size: 2em;
+			font-weight: bold;
+		}
 
-	#restaurant p {
-		color: #939396;
-	}
+		#restaurant p {
+			color: #939396;
+		}
 
-	#restaurant a {
-		color: #939396
-	}
+		#restaurant a {
+			color: #939396
+		}
 
-	#restaurant .feedback .right {
-		height: 24px;
-		margin-left: auto;
-		margin-top: -9px;
-		zoom: .8
-	}
+		#restaurant .feedback .right {
+			height: 24px;
+			margin-left: auto;
+			margin-top: -9px;
+			zoom: .8
+		}
 
-	#restaurant h2 {
-		color: #939396;
-		font-size: 1.2em;
-		margin-top: 20px
-	}
+		#restaurant h2 {
+			color: #939396;
+			font-size: 1.2em;
+			margin-top: 20px
+		}
 
-	#restaurant .left .flex.flex-between {
-		align-items: center;
-	}
+		#restaurant .left .flex.flex-between {
+			align-items: center;
+		}
 
-	#restaurant h1.titre {
-		font-size: 1.4em
-	}
+		#restaurant h1.titre {
+			font-size: 1.4em
+		}
 
-	#restaurant .left .note span {
-		font-size: 2em;
-		font-weight: bold;
-	}
+		#restaurant .left .note span {
+			font-size: 2em;
+			font-weight: bold;
+		}
 
-	#restaurant .left .note span {
-		font-size: 2em;
-		font-weight: bold;
-		color: #4e4e56;
-	}
+		#restaurant .left .note span {
+			font-size: 2em;
+			font-weight: bold;
+			color: #4e4e56;
+		}
 
-	#restaurant .left .feedback {
-		margin-top: -8px
-	}
+		#restaurant .left .feedback {
+			margin-top: -8px
+		}
 
-	.tab-pane.fade {
-		padding-top: 40px
-	}
+		.tab-pane.fade {
+			padding-top: 40px
+		}
 
-	.nav.nav-tabs {
-		padding-top: 40px
-	}
+		.nav.nav-tabs {
+			padding-top: 40px
+		}
 
-	.nav.nav-tabs {
-		border: none
-	}
+		.nav.nav-tabs {
+			border: none
+		}
 
-	.nav.nav-tabs li.nav-item a {
-		border: none;
-		color: #4e4e56;
-	}
+		.nav.nav-tabs li.nav-item a {
+			border: none;
+			color: #4e4e56;
+		}
 
-	.nav.nav-tabs li.nav-item a.active {
-		border: none;
-		border-bottom: #58D68D 6px solid
-	}
+		.nav.nav-tabs li.nav-item a.active {
+			border: none;
+			border-bottom: #58D68D 6px solid
+		}
 
-	#restaurant .feedback span.date {
-		color: #58D68D;
-		margin-top: -13px;
-		display: block;
-	}
+		#restaurant .feedback span.date {
+			color: #58D68D;
+			margin-top: -13px;
+			display: block;
+		}
 
-	#restaurant .feedback .message {
-		padding: 7.5px 0 7.5px 15px;
-		border-left: #939396 1px solid;
-		margin-top: 13px
-	}
+		#restaurant .feedback .message {
+			padding: 7.5px 0 7.5px 15px;
+			border-left: #939396 1px solid;
+			margin-top: 13px
+		}
 
-	#restaurant .feedback .username {
-		font-weight: bold;
-	}
+		#restaurant .feedback .username {
+			font-weight: bold;
+		}
 
-	#restaurant #feedback .feedback {
-		margin-bottom: 40px;
-		padding-bottom: 20px;
-		border-bottom: 1px solid rgba(0, 0, 0, .1);
-	}
+		#restaurant #feedback .feedback {
+			margin-bottom: 40px;
+			padding-bottom: 20px;
+			border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+		}
 
-	#map {
-		height: 300px;
-		width: 100%;
-	}
+		#map {
+			height: 300px;
+			width: 100%;
+		}
 
-	.container .right .content .restaurant a {
-		text-decoration: none
-	}
+		.container .right .content .restaurant a {
+			text-decoration: none
+		}
 
-	.container .right .content .restaurant {
-		/* border-bottom: 1px solid #ECEEF2; */
-		width: 100%;
-		padding-bottom: 10px;
-		margin-top: 20px
-	}
+		.container .right .content .restaurant {
+			/* border-bottom: 1px solid #ECEEF2; */
+			width: 100%;
+			padding-bottom: 10px;
+			margin-top: 20px
+		}
 
-	.container .right .content .restaurant h1 {
-		margin-top: 2.5%;
-		font-size: 1rem !important;
-		font-weight: bold !important;
-		color: #58D68D !important
-	}
+		.container .right .content .restaurant h1 {
+			margin-top: 2.5%;
+			font-size: 1rem !important;
+			font-weight: bold !important;
+			color: #58D68D !important
+		}
 
-	.container .right .content .restaurant h2 {
-		margin-top: 2.5%;
-		font-size: 0.8rem !important;
-		font-weight: bold !important
-	}
+		.container .right .content .restaurant h2 {
+			margin-top: 2.5%;
+			font-size: 0.8rem !important;
+			font-weight: bold !important
+		}
 
-	.container .right .content .note span {
-		font-size: 1.9rem !important;
-		font-weight: bold !important
-	}
+		.container .right .content .note span {
+			font-size: 1.9rem !important;
+			font-weight: bold !important
+		}
 
-	.page-item.active a {
-		background-color: #58D68D !important;
-		border-color: #61ed9c !important;
-	}
+		.page-item.active a {
+			background-color: #58D68D !important;
+			border-color: #61ed9c !important;
+		}
 
-	.ratings {
-		list-style-type: none;
-		margin: 0;
-		padding: 0;
-		width: 100%;
-		direction: rtl;
-		text-align: left;
-	}
+		.ratings {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+			width: 100%;
+			direction: rtl;
+			text-align: left;
+		}
 
-	.star {
-		position: relative;
-		line-height: 60px;
-		display: inline-block;
-		transition: color 0.2s ease;
-		color: #ebebeb;
-	}
+		.star {
+			position: relative;
+			line-height: 60px;
+			display: inline-block;
+			transition: color 0.2s ease;
+			color: #ebebeb;
+		}
 
-	.star:hover,
-	.star.selected,
-	.star:hover~.star,
-	.star.selected~.star {
-		transition: color 0.8s ease;
-		color: #58D68D;
-	}
+		.star:hover,
+		.star.selected,
+		.star:hover~.star,
+		.star.selected~.star {
+			transition: color 0.8s ease;
+			color: #58D68D;
+		}
 
-	#restaurant a.btn-primary {
-		color: #FFF
-	}
+		#restaurant a.btn-primary {
+			color: #FFF
+		}
 
-	@media(max-width: 991px) {}
-</style>
-<section id="restaurant" class="container paddingSeperateur flex">
-	<div class="left col-7">
-		<div class="flex flex-between">
-			<h1 class="mtb-auto">{{ restaurant.name }}</h1>
-			<p class="note mtb-auto">
-				{% if restaurantNote %}<span>{{restaurantNote}}</span>/5</p>{% endif %}
-		</div>
-		<div class="flex flex-between">
-			<h2 class="mtb-auto">{{ restaurant.adresse }}</h2>
-			<p class="feedback mtb-auto">{{restaurantFeedbackCount}} feedback</p>
-		</div>
-		<div class="w-100">
-			<ul class="nav nav-tabs" id="tab" role="tablist">
-				<li class="nav-item">
-					<a class="nav-link active" id="infospratiques-tab" data-toggle="tab" href="#infospratiques"
-						role="tab" aria-controls="infospratiques" aria-selected="true">INFOS PRATIQUES</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" id="feedback-tab" data-toggle="tab" href="#feedback" role="tab" aria-controls="feedback"
-						aria-selected="false">AVIS</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" id="plan-tab" data-toggle="tab" href="#plan" role="tab" aria-controls="plan"
-						aria-selected="false">PLAN</a>
-				</li>
-			</ul>
-			<div class="tab-content" id="tabContent">
-				<div class="tab-pane fade show active" id="infospratiques" role="tabpanel"
-					aria-labelledby="infospratiques-tab">
-					{{ restaurant.contenu | raw }}
-				</div>
-				<div class="tab-pane fade" id="feedback" role="tabpanel" aria-labelledby="feedback-tab">
-					<div paginationView="feedback" class="feedbackCont">
-						<div class="feedbackContent contentPagination">
-							{% for restaurantFeedback in restaurantFeedbackAll %}
-							<div paginationName="feedback" class="feedback" paginationId="{{ loop.index }}">
-								<div class="username flex">
-									<p class="left">
-										<a
-											href="{{ path('user', {'id': restaurantFeedback.postedBy.id}) }}">{{restaurantFeedback.postedBy.username}}</a>
-									</p>
-									<p class="right note mtb-auto">
-										<span>{{restaurantFeedback.note}}</span>/5
-									</p>
-								</div>
-								<span class="date">publié le {{restaurantFeedback.createdAt|date("d/m/Y")}}</span>
-								<p class="message">{{restaurantFeedback.message}}</p>
+		@media(max-width: 991px) {}
+	</style>
+	<section id="restaurant" class="container paddingSeperateur flex">
+		<div class="left col-7">
+			<div class="flex flex-between">
+				<h1 class="mtb-auto">{{ restaurant.name }}</h1>
+				<p class="note mtb-auto">
+					{% if restaurantNote %}
+						<span>{{restaurantNote}}</span>/5</p>
+				{% endif %}
+			</div>
+			<div class="flex flex-between">
+				<h2 class="mtb-auto">{{ restaurant.adresse }}</h2>
+				<p class="feedback mtb-auto">{{restaurantFeedbackCount}}
+					feedback</p>
+			</div>
+			<div class="w-100">
+				<ul class="nav nav-tabs" id="tab" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active" id="infospratiques-tab" data-toggle="tab" href="#infospratiques" role="tab" aria-controls="infospratiques" aria-selected="true">INFOS PRATIQUES</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" id="feedback-tab" data-toggle="tab" href="#feedback" role="tab" aria-controls="feedback" aria-selected="false">AVIS</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" id="plan-tab" data-toggle="tab" href="#plan" role="tab" aria-controls="plan" aria-selected="false">PLAN</a>
+					</li>
+				</ul>
+				<div class="tab-content" id="tabContent">
+					<div class="tab-pane fade show active" id="infospratiques" role="tabpanel" aria-labelledby="infospratiques-tab">
+						{{ restaurant.content | raw }}
+					</div>
+					<div class="tab-pane fade" id="feedback" role="tabpanel" aria-labelledby="feedback-tab">
+						<div paginationview="feedback" class="feedbackCont">
+							<div class="feedbackContent contentPagination">
+								{% for restaurantFeedback in restaurantFeedbackAll %}
+									<div paginationname="feedback" class="feedback" paginationid="{{ loop.index }}">
+										<div class="username flex">
+											<p class="left">
+												<a href="{{ path('user', {'id': restaurantFeedback.postedBy.id}) }}">{{restaurantFeedback.postedBy.username}}</a>
+											</p>
+											<p class="right note mtb-auto">
+												<span>{{restaurantFeedback.note}}</span>/5
+											</p>
+										</div>
+										<span class="date">publié le
+											{{restaurantFeedback.createdAt|date("d/m/Y")}}</span>
+										<p class="message">{{restaurantFeedback.message}}</p>
+									</div>
+								{% else %}
+									<p class="text-center">Aucun feedback</p>
+								{% endfor %}
 							</div>
-							{% else %}
-							<p class="text-center">Aucun feedback</p>
-							{% endfor %}
 						</div>
-					</div>
-					<div paginationBtn="feedback" class="pagination justify-content-end">
-						<div class="btnPagination flex mr-4">
+						<div paginationbtn="feedback" class="pagination justify-content-end">
+							<div class="btnPagination flex mr-4"></div>
 						</div>
+						{% if app.user %}
+							<div class="form-group">
+								<label for="note">Note</label>
+								<ul id="note" class="ratings">
+									<li class="star">
+										<i class="fad fa-star"></i>
+									</li>
+									<li class="star">
+										<i class="fad fa-star"></i>
+									</li>
+									<li class="star">
+										<i class="fad fa-star"></i>
+									</li>
+									<li class="star">
+										<i class="fad fa-star"></i>
+									</li>
+									<li class="star">
+										<i class="fad fa-star"></i>
+									</li>
+								</ul>
+							</div>
+							<div class="form-group">
+								<label for="exampleFormControlTextarea1">Message (optionnel)</label>
+								<textarea id="message" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+							</div>
+							<button id="btnEnvoieNote" type="button" class="btn btn-primary">Envoyer</button>
+						{% else %}
+							<a href="{{ path('connexion') }}" class="btn btn-primary w-100">Se
+														connecter</a>
+						{% endif %}
+						<div id="resultat"></div>
 					</div>
-					{% if app.user %}
-					<div class="form-group">
-						<label for="note">Note</label>
-						<ul id="note" class="ratings">
-							<li class="star">
-								<i class="fad fa-star"></i>
-							</li>
-							<li class="star">
-								<i class="fad fa-star"></i>
-							</li>
-							<li class="star">
-								<i class="fad fa-star"></i>
-							</li>
-							<li class="star">
-								<i class="fad fa-star"></i>
-							</li>
-							<li class="star">
-								<i class="fad fa-star"></i>
-							</li>
-						</ul>
+					<div class="tab-pane fade" id="plan" role="tabpanel" aria-labelledby="plan-tab">
+						<div id="map"></div>
 					</div>
-					<div class="form-group">
-						<label for="exampleFormControlTextarea1">Message (optionnel)</label>
-						<textarea id="message" class="form-control" id="exampleFormControlTextarea1"
-							rows="3"></textarea>
-					</div>
-					<button id="btnEnvoieNote" type="button" class="btn btn-primary">Envoyer</button>
-					{% else %}
-					<a href="{{ path('connexion') }}" class="btn btn-primary w-100">Se
-						connecter</a>
-					{% endif %}
-					<div id="resultat"></div>
-				</div>
-				<div class="tab-pane fade" id="plan" role="tabpanel" aria-labelledby="plan-tab">
-					<div id="map"></div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="right col-5">
-		<h1>
-			<h1 class="titre">
-				<span>Autres restaurants</span>
+		<div class="right col-5">
+			<h1>
+				<h1 class="titre">
+					<span>Autres restaurants</span>
+				</h1>
 			</h1>
-		</h1>
-		<div class="content">
-			{% for restaurant in autresrestaurants %}
-			{% if loop.index != 1 %}
-			<hr>
-			{% endif %}
-			{% set feedbackFinal = null %}
-			{% for feedback in restaurant.restaurantFeedback %}
-			{% set feedbackFinal = feedbackFinal + feedback.note %}
-			{% endfor %}
-			<div class="restaurant flex flex-between">
-				<div class="left">
-					<a href="{{ path('restaurant_show', {'id': restaurant.id}) }}">
-						<h1 class="cds">{{ restaurant.name }}</h1>
-						<h2 class="gris">{{ restaurant.ville }}, Végétarien</h2>
-					</a>
-				</div>
-				<div class="right mtb-auto flex">
-					<p class="mtb-auto note">
-						{% if feedbackFinal %}<span>{{ feedbackFinal }}</span>/5</p>{% else %}<p>Aucun feedback</p>{% endif %}
-				</div>
+			<div class="content">
+				{% for restaurant in autresrestaurants %}
+					{% if loop.index != 1 %}
+						<hr>
+					{% endif %}
+					{% set feedbackFinal = null %}
+					{% for feedback in restaurant.restaurantFeedback %}
+						{% set feedbackFinal = feedbackFinal + feedback.note %}
+					{% endfor %}
+					<div class="restaurant flex flex-between">
+						<div class="left">
+							<a href="{{ path('restaurant_show', {'id': restaurant.id}) }}">
+								<h1 class="cds">{{ restaurant.name }}</h1>
+								<h2 class="gris">{{ restaurant.ville }}, Végétarien</h2>
+							</a>
+						</div>
+						<div class="right mtb-auto flex">
+							<p class="mtb-auto note">
+								{% if feedbackFinal %}
+									<span>{{ feedbackFinal }}</span>/5</p>
+							{% else %}
+								<p>Aucun feedback</p>
+							{% endif %}
+						</div>
+					</div>
+				{% else %}
+					<em>Aucun restaurant</em>
+				{% endfor %}
 			</div>
-			{% else %}
-			<em>Aucun restaurant</em>
-			{% endfor %}
 		</div>
-	</div>
-</section>
+	</section>
 {% endblock %}
 {% block javascript %}
-<script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
-	integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
-	crossorigin=""></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
-<script>
-	addEventListener("load", () => {
-		new pagination("feedback", 3, 10, "block");
-	})
-	$.getJSON("https://api-adresse.data.gouv.fr/search/?q= {{ restaurant.adresse }}&limit=1").then((restaurant) => {
-		lat = restaurant.features[0]['geometry']['coordinates'][1];
-		lon = restaurant.features[0]['geometry']['coordinates'][0];
-		initMap();
-	});
-	var macarte = null;
-	function initMap() {
-		macarte = L.map('map').setView([
-			lat, lon
-		], 16);
-		macarte.panTo(L.latLng(lat, lon));
-		L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
-			attribution: 'données © <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>',
-			minZoom: 1,
-			maxZoom: 20
-		}).addTo(macarte);
-		var marker = L.marker([lat, lon]).addTo(macarte);
-	}
-	$(function () {
-		var star = '.star',
-			selected = '.selected';
+	<script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
+	<script>
+		addEventListener("load", () => {
+new pagination("feedback", 3, 10, "block");
+})
+$.getJSON("https://api-adresse.data.gouv.fr/search/?q=  {{ restaurant.adresse }}&limit=1").then((restaurant) => {
+lat = restaurant.features[0]['geometry']['coordinates'][1];
+lon = restaurant.features[0]['geometry']['coordinates'][0];
+initMap();
+});
+var macarte = null;
+function initMap() {
+macarte = L.map('map').setView([
+lat, lon
+], 16);
+macarte.panTo(L.latLng(lat, lon));
+L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+attribution: 'données © <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>',
+minZoom: 1,
+maxZoom: 20
+}).addTo(macarte);
+var marker = L.marker([lat, lon]).addTo(macarte);
+}
+$(function () {
+var star = '.star',
+selected = '.selected';
 
-		$(star).on('click', function () {
-			$(selected).each(function () {
-				$(this).removeClass('selected');
-			});
-			$(this).addClass('selected');
-		});
-	});
-	$("#btnEnvoieNote").click(function (e) {
-		e.preventDefault();
-		$.post('/ajax/restaurant/sendNote', {
-			note: $(".star.selected~.star").length + 1,
-			message: $("#message").val(),
-			restaurant_id: '{{ restaurant.id }}',
-			csrfData: "{{ csrf_token('send-note') }}"
-		}, function (data) {
-			if (data.code == '200') {
-				$("#resultat").html("<div class='content'><p>" + data.message + "</p></div>");
-				$("#feedback .feedbackCont").load("{{ path('restaurant_show', {'id': restaurant.id}) }}?view=0&maxView=3 #feedback .feedbackContent");
-			} else {
-				$("#resultat").html("<div class='content red'><p>" + data.message + "</p></div>");
-			}
-		}, 'json');
-	});
-</script>
+$(star).on('click', function () {
+$(selected).each(function () {
+$(this).removeClass('selected');
+});
+$(this).addClass('selected');
+});
+});
+$("#btnEnvoieNote").click(function (e) {
+e.preventDefault();
+$.post('/ajax/restaurant/sendNote', {
+note: $(".star.selected~.star").length + 1,
+message: $("#message").val(),
+restaurant_id: '{{ restaurant.id }}',
+csrfData: "{{ csrf_token('send-note') }}"
+}, function (data) {
+if (data.code == '200') {
+$("#resultat").html("<div class='content'><p>" + data.message + "</p></div>");
+$("#feedback .feedbackCont").load("{{ path('restaurant_show', {'id': restaurant.id}) }}?view=0&maxView=3 #feedback .feedbackContent");
+} else {
+$("#resultat").html("<div class='content red'><p>" + data.message + "</p></div>");
+}
+}, 'json');
+});
+	</script>
 {% endblock %}

@@ -12,7 +12,7 @@
 						<tr>
 							<th scope="col">#</th>
 							<th scope="col">Name</th>
-							<th scope="col">Contenu</th>
+							<th scope="col">Content</th>
 							<th scope="col">Options</th>
 						</tr>
 					</thead>
@@ -21,7 +21,7 @@
 							<tr paginationname="article" paginationid="{{ loop.index }}">
 								<th scope="row">{{comment.id}}</th>
 								<td>{{comment.article.name}}</td>
-								<td>{{comment.contenu}}</td>
+								<td>{{comment.content}}</td>
 								<td class="btnOption">
 									<a target="_BLANK" href="{{ path('article_show', {'id': comment.article.id}) }}">
 										<i class="fad fa-eye"></i>

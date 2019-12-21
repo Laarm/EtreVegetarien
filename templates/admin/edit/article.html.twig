@@ -17,7 +17,7 @@
 			<div class="flex">
 				<input id="name" value="{{ article.name }}" placeholder="Name de l'article" class="margin-auto"/>
 			</div>
-			<textarea id="editeur">{{ article.contenu }}</textarea>
+			<textarea id="editeur">{{ article.content }}</textarea>
 			<div class="btnForSaveAndCancel">
 				<div class="input-group mb-3">
 					<div class="input-group-prepend hidden">
@@ -56,7 +56,7 @@ stop = "oui"
 var files = $('#file')[0].files[0];
 fd.append('file', files);
 $.ajax({
-url: "{{ path('admin_upload_image') }}?_token=   {{ csrf_token('upload-image') }}",
+url: "{{ path('admin_upload_image') }}?_token=    {{ csrf_token('upload-image') }}",
 type: 'post',
 data: fd,
 contentType: false,
@@ -74,7 +74,7 @@ if (stop == "non") {
 e.preventDefault();
 $.post("{{ path('admin_save_article') }}", {
 name: $("#name").val(),
-contenu: $("#editeur").val(),
+content: $("#editeur").val(),
 article_id: '{{ article.id }}',
 image: $("#image").val(),
 csrfData: "{{ csrf_token('save-item') }}"
@@ -87,7 +87,7 @@ $("#resultat").html("<p>" + data.message + "</p>");
 }, 'json');
 }
 } else {
-$("#resultat").html("<p>Veuillez remplir le name et le contenu</p>");
+$("#resultat").html("<p>Veuillez remplir le name et le content</p>");
 }
 });
 });

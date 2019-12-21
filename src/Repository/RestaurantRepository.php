@@ -22,7 +22,7 @@ class RestaurantRepository extends ServiceEntityRepository
         $this->entityManager = $entityManager;
         $this->validator = $validator;
     }
-    public function createRestaurant($name, $image, $location, $adresse, $ville, $contenu)
+    public function createRestaurant($name, $image, $location, $adresse, $ville, $content)
     {
         $sqlRestaurant = new Restaurant();
         $sqlRestaurant->setName($name)
@@ -30,7 +30,7 @@ class RestaurantRepository extends ServiceEntityRepository
             ->setLocation($location)
             ->setAdresse($adresse)
             ->setVille($ville)
-            ->setContenu($contenu)
+            ->setContent($content)
             ->setCreatedAt(new \DateTime());
         $this->entityManager->persist($sqlRestaurant);
         $this->entityManager->flush();
@@ -41,14 +41,14 @@ class RestaurantRepository extends ServiceEntityRepository
             return false;
         }
     }
-    public function saveRestaurant($restaurantId, $name, $image, $adresse, $ville, $contenu)
+    public function saveRestaurant($restaurantId, $name, $image, $adresse, $ville, $content)
     {
         $sqlRestaurant = $this->find($restaurantId);
         $sqlRestaurant->setName($name)
             ->setImage($image)
             ->setAdresse($adresse)
             ->setVille($ville)
-            ->setContenu($contenu);
+            ->setContent($content);
         $this->entityManager->flush();
         $errors = $this->validator->validate($sqlRestaurant);
         if (count($errors) == 0) {
