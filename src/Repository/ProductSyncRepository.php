@@ -18,10 +18,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class ProductSyncRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, ValidatorInterface $validator)
+    public function __construct(ManagerRegistry $registry, ValidatorInterface $validator)
     {
         parent::__construct($registry, ProductSync::class);
-        $this->entityManager = $entityManager;
         $this->validator = $validator;
     }
     public function getProductOfStore($store)
@@ -37,8 +36,8 @@ class ProductSyncRepository extends ServiceEntityRepository
     public function deleteProductStore($storeId)
     {
         $sqlStore = $this->find($storeId);
-        $this->entityManager->remove($sqlStore);
-        $this->entityManager->flush();
+        $this->_em->remove($sqlStore);
+        $this->_em->flush();
         $errors = $this->validator->validate($sqlStore);
         if (count($errors) == 0) {
             return true;
@@ -48,14 +47,14 @@ class ProductSyncRepository extends ServiceEntityRepository
     }
     public function createProductStore($storeId, $productId)
     {
-        $storeId = $this->entityManager->getRepository(Store::class)->find($storeId);
-        $productId = $this->entityManager->getRepository(Product::class)->find($productId);
+        $storeId = $this->_em->getRepository(Store::class)->find($storeId);
+        $productId = $this->_em->getRepository(Product::class)->find($productId);
         $sqlProduct = new ProductSync();
         $sqlProduct->setStore($storeId)
             ->setProduct($productId)
             ->setCreatedAt(new \DateTime());
-        $this->entityManager->persist($sqlProduct);
-        $this->entityManager->flush();
+        $this->_em->persist($sqlProduct);
+        $this->_em->flush();
         $errors = $this->validator->validate($sqlProduct);
         if (count($errors) == 0) {
             return $sqlProduct->getId();

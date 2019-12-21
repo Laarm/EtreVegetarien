@@ -16,10 +16,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class MealRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, ValidatorInterface $validator)
+    public function __construct(ManagerRegistry $registry, ValidatorInterface $validator)
     {
         parent::__construct($registry, Meal::class);
-        $this->entityManager = $entityManager;
         $this->validator = $validator;
     }
     public function createMeal($name, $image, $recipe, $user)
@@ -30,8 +29,8 @@ class MealRepository extends ServiceEntityRepository
             ->setRecipe($recipe)
             ->setPostedBy($user)
             ->setCreatedAt(new \DateTime());
-        $this->entityManager->persist($sqlMeal);
-        $this->entityManager->flush();
+        $this->_em->persist($sqlMeal);
+        $this->_em->flush();
         $errors = $this->validator->validate($sqlMeal);
         if (count($errors) == 0) {
             return $sqlMeal->getId();
@@ -46,7 +45,7 @@ class MealRepository extends ServiceEntityRepository
             ->setImage($image)
             ->setRecipe($recipe)
             ->setPostedBy($user);
-        $this->entityManager->flush();
+        $this->_em->flush();
         $errors = $this->validator->validate($sqlMeal);
         if (count($errors) == 0) {
             return $mealId;
@@ -57,8 +56,8 @@ class MealRepository extends ServiceEntityRepository
     public function deleteMeal($mealId)
     {
         $sqlMeal = $this->find($mealId);
-        $this->entityManager->remove($sqlMeal);
-        $this->entityManager->flush();
+        $this->_em->remove($sqlMeal);
+        $this->_em->flush();
         $errors = $this->validator->validate($sqlMeal);
         if (count($errors) == 0) {
             return true;

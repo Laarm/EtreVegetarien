@@ -16,10 +16,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class ContactRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, ValidatorInterface $validator)
+    public function __construct(ManagerRegistry $registry, ValidatorInterface $validator)
     {
         parent::__construct($registry, Contact::class);
-        $this->entityManager = $entityManager;
         $this->validator = $validator;
     }
     public function sendMessage($name, $email, $subject, $message)
@@ -30,8 +29,8 @@ class ContactRepository extends ServiceEntityRepository
             ->setSubject($subject)
             ->setMessage($message)
             ->setCreatedAt(new \DateTime());
-        $this->entityManager->persist($sql);
-        $this->entityManager->flush();
+        $this->_em->persist($sql);
+        $this->_em->flush();
         $errors = $this->validator->validate($sql);
         if (count($errors) == 0) {
             return true;
@@ -42,8 +41,8 @@ class ContactRepository extends ServiceEntityRepository
     public function deleteContact($contactId)
     {
         $sqlContact = $this->find($contactId);
-        $this->entityManager->remove($sqlContact);
-        $this->entityManager->flush();
+        $this->_em->remove($sqlContact);
+        $this->_em->flush();
         $errors = $this->validator->validate($sqlContact);
         if (count($errors) == 0) {
             return true;

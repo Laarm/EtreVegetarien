@@ -17,17 +17,16 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class RestaurantFeedbackRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, ValidatorInterface $validator)
+    public function __construct(ManagerRegistry $registry, ValidatorInterface $validator)
     {
         parent::__construct($registry, RestaurantFeedback::class);
-        $this->entityManager = $entityManager;
         $this->validator = $validator;
     }
     public function deleteRestaurantFeedback($restaurantId)
     {
         $sqlRestaurant = $this->find($restaurantId);
-        $this->entityManager->remove($sqlRestaurant);
-        $this->entityManager->flush();
+        $this->_em->remove($sqlRestaurant);
+        $this->_em->flush();
         $errors = $this->validator->validate($sqlRestaurant);
         if (count($errors) == 0) {
             return true;
@@ -52,7 +51,7 @@ class RestaurantFeedbackRepository extends ServiceEntityRepository
     }
     public function addFeedback($restaurant, $user, $message, $note)
     {
-        $restaurant = $this->entityManager->getRepository(Restaurant::class)
+        $restaurant = $this->_em->getRepository(Restaurant::class)
             ->find($restaurant);
         $sqlRestaurantFeedback = new RestaurantFeedback();
         $sqlRestaurantFeedback->setRestaurant($restaurant)
@@ -60,8 +59,8 @@ class RestaurantFeedbackRepository extends ServiceEntityRepository
             ->setMessage($message)
             ->setNote($note)
             ->setCreatedAt(new \DateTime());
-        $this->entityManager->persist($sqlRestaurantFeedback);
-        $this->entityManager->flush();
+        $this->_em->persist($sqlRestaurantFeedback);
+        $this->_em->flush();
         $errors = $this->validator->validate($sqlRestaurantFeedback);
         if (count($errors) == 0) {
             return true;

@@ -16,10 +16,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class RestaurantRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, ValidatorInterface $validator)
+    public function __construct(ManagerRegistry $registry, ValidatorInterface $validator)
     {
         parent::__construct($registry, Restaurant::class);
-        $this->entityManager = $entityManager;
         $this->validator = $validator;
     }
     public function createRestaurant($name, $image, $location, $address, $city, $content)
@@ -32,8 +31,8 @@ class RestaurantRepository extends ServiceEntityRepository
             ->setCity($city)
             ->setContent($content)
             ->setCreatedAt(new \DateTime());
-        $this->entityManager->persist($sqlRestaurant);
-        $this->entityManager->flush();
+        $this->_em->persist($sqlRestaurant);
+        $this->_em->flush();
         $errors = $this->validator->validate($sqlRestaurant);
         if (count($errors) == 0) {
             return $sqlRestaurant->getId();
@@ -49,7 +48,7 @@ class RestaurantRepository extends ServiceEntityRepository
             ->setAddress($address)
             ->setCity($city)
             ->setContent($content);
-        $this->entityManager->flush();
+        $this->_em->flush();
         $errors = $this->validator->validate($sqlRestaurant);
         if (count($errors) == 0) {
             return $restaurantId;
@@ -60,8 +59,8 @@ class RestaurantRepository extends ServiceEntityRepository
     public function deleteRestaurant($restaurantId)
     {
         $sqlRestaurant = $this->find($restaurantId);
-        $this->entityManager->remove($sqlRestaurant);
-        $this->entityManager->flush();
+        $this->_em->remove($sqlRestaurant);
+        $this->_em->flush();
         $errors = $this->validator->validate($sqlRestaurant);
         if (count($errors) == 0) {
             return true;

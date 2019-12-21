@@ -16,10 +16,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class ArticleRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, ValidatorInterface $validator)
+    public function __construct(ManagerRegistry $registry, ValidatorInterface $validator)
     {
         parent::__construct($registry, Article::class);
-        $this->entityManager = $entityManager;
         $this->validator = $validator;
     }
     public function createArticle($name, $content, $image)
@@ -29,8 +28,8 @@ class ArticleRepository extends ServiceEntityRepository
             ->setContent($content)
             ->setImage($image)
             ->setCreatedAt(new \DateTime());
-        $this->entityManager->persist($sqlArticle);
-        $this->entityManager->flush();
+        $this->_em->persist($sqlArticle);
+        $this->_em->flush();
         $errors = $this->validator->validate($sqlArticle);
         if (count($errors) == 0) {
             return $sqlArticle->getId();
@@ -44,7 +43,7 @@ class ArticleRepository extends ServiceEntityRepository
         $sqlArticle->setName($name)
             ->setContent($content)
             ->setImage($image);
-        $this->entityManager->flush();
+        $this->_em->flush();
         $errors = $this->validator->validate($sqlArticle);
         if (count($errors) == 0) {
             return $articleId;
@@ -55,8 +54,8 @@ class ArticleRepository extends ServiceEntityRepository
     public function deleteArticle($articleId)
     {
         $sqlArticle = $this->find($articleId);
-        $this->entityManager->remove($sqlArticle);
-        $this->entityManager->flush();
+        $this->_em->remove($sqlArticle);
+        $this->_em->flush();
         $errors = $this->validator->validate($sqlArticle);
         if (count($errors) == 0) {
             return true;

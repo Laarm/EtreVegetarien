@@ -18,10 +18,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class ProductFavoritesRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, ValidatorInterface $validator, Security $security)
+    public function __construct(ManagerRegistry $registry, ValidatorInterface $validator, Security $security)
     {
         parent::__construct($registry, ProductFavorites::class);
-        $this->entityManager = $entityManager;
         $this->validator = $validator;
         $this->security = $security;
     }
@@ -38,15 +37,15 @@ class ProductFavoritesRepository extends ServiceEntityRepository
     public function addProductFavorites($productId)
     {
         $user = $this->security->getUser();
-        $product = $this->entityManager
+        $product = $this->_em
             ->getRepository(Product::class)
             ->find($productId);
         $sqlProductFavorites = new ProductFavorites();
         $sqlProductFavorites->setProductId($product)
             ->setPostedById($user)
             ->setCreatedAt(new \DateTime());
-        $this->entityManager->persist($sqlProductFavorites);
-        $this->entityManager->flush();
+        $this->_em->persist($sqlProductFavorites);
+        $this->_em->flush();
         $errors = $this->validator->validate($sqlProductFavorites);
         if (count($errors) == 0) {
             return true;
@@ -63,8 +62,8 @@ class ProductFavoritesRepository extends ServiceEntityRepository
             ->getQuery();
         $productFavoritesId = $result->getResult();
         $deleteFavorites = $this->find($productFavoritesId[0]['id']);
-        $this->entityManager->remove($deleteFavorites);
-        $this->entityManager->flush();
+        $this->_em->remove($deleteFavorites);
+        $this->_em->flush();
         $errors = $this->validator->validate($deleteFavorites);
         if (count($errors) == 0) {
             return true;

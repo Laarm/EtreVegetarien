@@ -16,10 +16,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class StoreRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, ValidatorInterface $validator)
+    public function __construct(ManagerRegistry $registry, ValidatorInterface $validator)
     {
         parent::__construct($registry, Store::class);
-        $this->entityManager = $entityManager;
         $this->validator = $validator;
     }
     public function createStore($name, $image, $location, $address, $city)
@@ -31,8 +30,8 @@ class StoreRepository extends ServiceEntityRepository
             ->setAddress($address)
             ->setCity($city)
             ->setCreatedAt(new \DateTime());
-        $this->entityManager->persist($sqlStore);
-        $this->entityManager->flush();
+        $this->_em->persist($sqlStore);
+        $this->_em->flush();
         $errors = $this->validator->validate($sqlStore);
         if (count($errors) == 0) {
             return $sqlStore->getId();
@@ -48,7 +47,7 @@ class StoreRepository extends ServiceEntityRepository
             ->setImage($image)
             ->setAddress($address)
             ->setCity($city);
-        $this->entityManager->flush();
+        $this->_em->flush();
         $errors = $this->validator->validate($sqlStore);
         if (count($errors) == 0) {
             return $storeId;
@@ -59,8 +58,8 @@ class StoreRepository extends ServiceEntityRepository
     public function deleteStore($storeId)
     {
         $sqlStore = $this->find($storeId);
-        $this->entityManager->remove($sqlStore);
-        $this->entityManager->flush();
+        $this->_em->remove($sqlStore);
+        $this->_em->flush();
         $errors = $this->validator->validate($sqlStore);
         if (count($errors) == 0) {
             return true;

@@ -16,10 +16,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class ProductRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, ValidatorInterface $validator)
+    public function __construct(ManagerRegistry $registry, ValidatorInterface $validator)
     {
         parent::__construct($registry, Product::class);
-        $this->entityManager = $entityManager;
         $this->validator = $validator;
     }
     public function createProduct($name, $image)
@@ -28,8 +27,8 @@ class ProductRepository extends ServiceEntityRepository
         $sqlProduct->setName($name)
             ->setImage($image)
             ->setCreatedAt(new \DateTime());
-        $this->entityManager->persist($sqlProduct);
-        $this->entityManager->flush();
+        $this->_em->persist($sqlProduct);
+        $this->_em->flush();
         $errors = $this->validator->validate($sqlProduct);
         if (count($errors) == 0) {
             return $sqlProduct->getId();
@@ -42,7 +41,7 @@ class ProductRepository extends ServiceEntityRepository
         $sqlProduct = $this->find($productId);
         $sqlProduct->setName($name)
             ->setImage($image);
-        $this->entityManager->flush();
+        $this->_em->flush();
         $errors = $this->validator->validate($sqlProduct);
         if (count($errors) == 0) {
             return $productId;
@@ -53,8 +52,8 @@ class ProductRepository extends ServiceEntityRepository
     public function deleteProduct($productId)
     {
         $sqlProduct = $this->find($productId);
-        $this->entityManager->remove($sqlProduct);
-        $this->entityManager->flush();
+        $this->_em->remove($sqlProduct);
+        $this->_em->flush();
         $errors = $this->validator->validate($sqlProduct);
         if (count($errors) == 0) {
             return true;
