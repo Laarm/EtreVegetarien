@@ -67,18 +67,18 @@ adminGestionArticlesCommentaires:
 adminGestionStores:
     path: /admin/GestionStores
     controller: App\Controller\AdminController::gestionStores
-adminGestionProduitsStores:
-    path: /admin/GestionProduitsStores
-    controller: App\Controller\AdminController::gestionProduitsStores
+adminGestionProductsStores:
+    path: /admin/GestionProductsStores
+    controller: App\Controller\AdminController::gestionProductsStores
 adminGestionRestaurants:
     path: /admin/GestionRestaurants
     controller: App\Controller\AdminController::gestionRestaurants
 adminGestionRestaurantsAvis:
     path: /admin/GestionRestaurantsAvis
     controller: App\Controller\AdminController::gestionRestaurantsAvis
-adminProduits:
-    path: /admin/produits
-    controller: App\Controller\AdminController::produits
+adminProducts:
+    path: /admin/products
+    controller: App\Controller\AdminController::products
 adminUtilisateurs:
     path: /admin/utilisateurs
     controller: App\Controller\AdminController::utilisateurs
@@ -106,12 +106,12 @@ adminNewRestaurant:
 adminEditRestaurant:
     path: /admin/restaurant/{id}/edit
     controller: App\Controller\AdminEditController::editRestaurant
-adminNewProduit:
-    path: /admin/produit/new
-    controller: App\Controller\AdminEditController::newProduit
-adminEditProduit:
-    path: /admin/produit/{id}/edit
-    controller: App\Controller\AdminEditController::editProduit
+adminNewProduct:
+    path: /admin/product/new
+    controller: App\Controller\AdminEditController::newProduct
+adminEditProduct:
+    path: /admin/product/{id}/edit
+    controller: App\Controller\AdminEditController::editProduct
 adminNewRepas:
     path: /admin/repas/new
     controller: App\Controller\AdminEditController::newRepas

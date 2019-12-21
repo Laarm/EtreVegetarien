@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ProduitSyncRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ProductSyncRepository")
  */
-class ProduitSync
+class ProductSync
 {
     /**
      * @ORM\Id()
@@ -17,13 +17,13 @@ class ProduitSync
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Produit", inversedBy="produitSyncs")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="productSyncs")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $Produit;
+    private $Product;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Store", inversedBy="produitSyncs")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Store", inversedBy="productSyncs")
      * @ORM\JoinColumn(nullable=false)
      */
     private $Store;
@@ -38,14 +38,14 @@ class ProduitSync
         return $this->id;
     }
 
-    public function getProduit(): ?Produit
+    public function getProduct(): ?Product
     {
-        return $this->Produit;
+        return $this->Product;
     }
 
-    public function setProduit(?Produit $Produit): self
+    public function setProduct(?Product $Product): self
     {
-        $this->Produit = $Produit;
+        $this->Product = $Product;
 
         return $this;
     }

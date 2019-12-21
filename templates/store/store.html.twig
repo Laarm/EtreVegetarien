@@ -26,11 +26,11 @@
         -webkit-border-radius: 200px 200px 200px 200px !important;
     }
 
-    #store .produit-list-design {
+    #store .product-list-design {
         margin-top: 5%
     }
 
-    #store .produit-list-design .item {
+    #store .product-list-design .item {
         width: 30%;
         margin-bottom: 5%;
         -webkit-box-shadow: 0px 0px 48px -20px rgba(0, 0, 0, 0.75);
@@ -38,20 +38,20 @@
         box-shadow: 0px 0px 48px -20px rgba(0, 0, 0, 0.75);
     }
 
-    #store .produit-list-design .item .top {
+    #store .product-list-design .item .top {
         transition-duration: .3s;
         background-color: #279156;
         display: flex;
         padding: 30px
     }
 
-    #store .produit-list-design .item .top img {
+    #store .product-list-design .item .top img {
         width: 80%;
         margin: auto;
         transition-duration: .3s;
     }
 
-    #store .produit-list-design .item .bottom {
+    #store .product-list-design .item .bottom {
         transition-duration: .3s;
         background-color: #FFF;
         text-align: center;
@@ -61,34 +61,34 @@
         display: flex;
     }
 
-    #store .produit-list-design .item .bottom p {
+    #store .product-list-design .item .bottom p {
         margin: auto;
         font-weight: bolder;
     }
 
-    #store .produit-list-design .item:hover .top {
+    #store .product-list-design .item:hover .top {
         transition-duration: .3s;
         background-color: #FFF;
     }
 
-    #store .produit-list-design .item:hover .top img {
+    #store .product-list-design .item:hover .top img {
         transition-duration: .3s;
         transform: scale(0.9);
     }
 
-    #store .produit-list-design .item:hover .bottom {
+    #store .product-list-design .item:hover .bottom {
         transition-duration: .3s;
         background-color: #279156;
         height: 160px;
         margin-top: -100px;
     }
 
-    #store .produit-list-design .item:hover .bottom p {
+    #store .product-list-design .item:hover .bottom p {
         margin: auto auto 13px auto;
     }
 
     @media(max-width: 991px) {
-        #store .produit-list-design .item {
+        #store .product-list-design .item {
             width: 90%;
             margin: auto;
             margin-bottom: 5%
@@ -149,24 +149,24 @@
                 <div id="map"></div>
             </div>
             <div class="tab-pane fade" id="avis" role="tabpanel" aria-labelledby="avis-tab">
-                <div class="produit-list-design flex flex-wrap flex-between">
-                    {% for produit in produits %}
+                <div class="product-list-design flex flex-wrap flex-between">
+                    {% for product in products %}
                     <div class="item">
                         <a href="#">
                             <div class="top">
-                                <img alt="{{ produit.Produit.nom }}" src="{{ asset(produit.Produit.image) }}" />
+                                <img alt="{{ product.Product.nom }}" src="{{ asset(product.Product.image) }}" />
                             </div>
                             <div class="bottom">
-                                <p>{{ produit.Produit.nom }}</p>
+                                <p>{{ product.Product.nom }}</p>
                             </div>
                         </a>
-                        <div btnFavoris="{{produit.Produit.id}}"
-                            class="{% for favoris in produit.Produit.produitFavoris %}{% if favoris.postedById.id == app.user.id %}active{% endif %}{% endfor %}">
+                        <div btnFavoris="{{product.Product.id}}"
+                            class="{% for favoris in product.Product.productFavoris %}{% if favoris.postedById.id == app.user.id %}active{% endif %}{% endfor %}">
                             <i class="cursor-pointer fad fa-star"></i>
                         </div>
                     </div>
                     {% else %}
-                    <p class="text-center">Aucun produit</p>
+                    <p class="text-center">Aucun product</p>
                     {% endfor %}
                 </div>
             </div>
@@ -200,9 +200,9 @@
     }
     $("[btnFavoris]").click(function (e) {
         e.preventDefault();
-        $.post("{{ path('produit_favoris') }}", {
-            produit_id: $(this).attr('btnFavoris'),
-            csrfData: "{{ csrf_token('produit-favoris') }}"
+        $.post("{{ path('product_favoris') }}", {
+            product_id: $(this).attr('btnFavoris'),
+            csrfData: "{{ csrf_token('product-favoris') }}"
         }, function (data) {
             if (data.code == '200') {
                 $('[btnFavoris = "' + data.id + '"]').addClass('active')

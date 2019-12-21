@@ -7,10 +7,10 @@ use App\Repository\RepasRepository;
 use App\Repository\ArticleRepository;
 use App\Repository\ContactRepository;
 use App\Repository\StoreRepository;
-use App\Repository\ProduitRepository;
+use App\Repository\ProductRepository;
 use App\Repository\RestaurantRepository;
 use App\Repository\StoreAvisRepository;
-use App\Repository\ProduitSyncRepository;
+use App\Repository\ProductSyncRepository;
 use App\Repository\RestaurantAvisRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -76,7 +76,7 @@ class AdminController extends AbstractController
             'stores' => $stores,
         ]);
     }
-    public function gestionProduitsStores(ProduitSyncRepository $gestionProduitsStoresRepo, Request $request)
+    public function gestionProductsStores(ProductSyncRepository $gestionProductsStoresRepo, Request $request)
     {
         if ($request->get('view') !== null) {
             $view = $request->get('view');
@@ -85,10 +85,10 @@ class AdminController extends AbstractController
             $view = null;
             $maxView = 100;
         }
-        $produits = $gestionProduitsStoresRepo->findBy(array(), null, $maxView, $view);
+        $products = $gestionProductsStoresRepo->findBy(array(), null, $maxView, $view);
 
-        return $this->render('admin/gestionProduitsStores.html.twig', [
-            'produits' => $produits,
+        return $this->render('admin/gestionProductsStores.html.twig', [
+            'products' => $products,
         ]);
     }
     public function gestionRestaurants(RestaurantRepository $gestionRestaurantRepo, Request $request)
@@ -121,7 +121,7 @@ class AdminController extends AbstractController
             'restaurants_avis' => $restaurantsAvis,
         ]);
     }
-    public function produits(ProduitRepository $gestionProduitRepo, Request $request)
+    public function products(ProductRepository $gestionProductRepo, Request $request)
     {
         if ($request->get('view') !== null) {
             $view = $request->get('view');
@@ -130,10 +130,10 @@ class AdminController extends AbstractController
             $view = null;
             $maxView = 100;
         }
-        $produits = $gestionProduitRepo->findBy(array(), null, $maxView, $view);
+        $products = $gestionProductRepo->findBy(array(), null, $maxView, $view);
 
-        return $this->render('admin/produits.html.twig', [
-            'produits' => $produits,
+        return $this->render('admin/products.html.twig', [
+            'products' => $products,
         ]);
     }
     public function utilisateurs(UserRepository $gestionUserRepo, Request $request)

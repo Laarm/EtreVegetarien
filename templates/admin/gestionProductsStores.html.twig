@@ -1,6 +1,6 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Gestion des produits dans les stores - Être Végétarien{% endblock %}
+{% block title %}Gestion des products dans les stores - Être Végétarien{% endblock %}
 
 {% block body %}
 <section id="panel" class="flex">
@@ -16,15 +16,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for produit in produits %}
+                    {% for product in products %}
                     <tr paginationName="store" paginationId="{{ loop.index }}">
-                        <th scope="row">{{ produit.id }}</th>
-                        <td>{{ produit.Produit.nom }}</td>
-                        <td>{{ produit.Store.nom }}</td>
+                        <th scope="row">{{ product.id }}</th>
+                        <td>{{ product.Product.nom }}</td>
+                        <td>{{ product.Store.nom }}</td>
                         <td class="btnOption">
-                            <a target="_BLANK" href="{{ path('store_show', {'id': produit.Store.id}) }}"
+                            <a target="_BLANK" href="{{ path('store_show', {'id': product.Store.id}) }}"
                                 class="blue"><i class="fad fa-store-alt"></i></a>
-                            <a class="red cursor-pointer" value="{{ produit.id }}" data-toggle="modal"
+                            <a class="red cursor-pointer" value="{{ product.id }}" data-toggle="modal"
                                 data-target="#deleteModal"><i class="fad fa-times"></i></a>
                         </td>
                     </tr>
@@ -75,16 +75,16 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="input-group mb-3 mt-3 produit-group">
+                <div class="input-group mb-3 mt-3 product-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text">Produit : </span>
+                        <span class="input-group-text">Product : </span>
                     </div>
-                    <input type="text" name="search" class="form-control" id="produit">
+                    <input type="text" name="search" class="form-control" id="product">
                     <div class="input-group-append">
                         <span class="input-group-text"><i class="fad fa-times"></i></span>
                     </div>
                 </div>
-                <div id="search-produit">
+                <div id="search-product">
                 </div>
                 <div class="input-group mb-3 mt-3 store-group">
                     <div class="input-group-prepend">
@@ -100,7 +100,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-                <button addProduitStore="0" produit="0" store="0" csrf-data="{{ csrf_token('save-item') }}"
+                <button addProductStore="0" product="0" store="0" csrf-data="{{ csrf_token('save-item') }}"
                     type="button" class="btn btn-primary">Oui</button>
             </div>
         </div>
@@ -109,15 +109,15 @@
 <script>
     i = 0;
     $(document).ready(function () {
-        $('[name="search"]#produit').keypress(function (e) {
-            $.getJSON("/produits/search?search=" + $('[name="search"]#produit').val() + "&limit=3")
-                .then((produits) => {
-                    $('#search-produit').html("")
-                    if (produits.length == 0) {
-                        $('#search-produit').html("<p class='margin-auto'>Aucun produit trouvé</p>")
+        $('[name="search"]#product').keypress(function (e) {
+            $.getJSON("/products/search?search=" + $('[name="search"]#product').val() + "&limit=3")
+                .then((products) => {
+                    $('#search-product').html("")
+                    if (products.length == 0) {
+                        $('#search-product').html("<p class='margin-auto'>Aucun product trouvé</p>")
                     }
-                    produits.forEach((produit) => {
-                        $("#search-produit").append('<div class="flex" addProduit="' + produit.id + '"><div class="w-33 flex"><img class="mr-3 rond margin-auto"src="' + produit.image + '"style="height: 40px;width: 40px"></div><div class="w-33 flex"><p class="margin-auto">' + produit.nom + '</p></div><div class="w-33"></div></div>')
+                    products.forEach((product) => {
+                        $("#search-product").append('<div class="flex" addProduct="' + product.id + '"><div class="w-33 flex"><img class="mr-3 rond margin-auto"src="' + product.image + '"style="height: 40px;width: 40px"></div><div class="w-33 flex"><p class="margin-auto">' + product.nom + '</p></div><div class="w-33"></div></div>')
                     })
                 });
         });
@@ -136,28 +136,28 @@
                 });
         });
     });
-    $(document).on('click', '[addProduit]', function (e) {
-        id = $([this]).attr('addProduit')
-        $('[addProduitStore]').attr('produit', id)
-        $('[name="search"]#produit').attr('value', id)
-        $('.produit-group .input-group-append').html('<span class="input-group-text"><i class="cds fad fa-check"></i></span>')
-        $('#search-produit').html("")
+    $(document).on('click', '[addProduct]', function (e) {
+        id = $([this]).attr('addProduct')
+        $('[addProductStore]').attr('product', id)
+        $('[name="search"]#product').attr('value', id)
+        $('.product-group .input-group-append').html('<span class="input-group-text"><i class="cds fad fa-check"></i></span>')
+        $('#search-product').html("")
     })
     $(document).on('click', '[addStore]', function (e) {
         id = $([this]).attr('addStore')
-        $('[addProduitStore]').attr('store', id)
+        $('[addProductStore]').attr('store', id)
         $('[name="search"]#store').attr('value', id)
         $('.store-group .input-group-append').html('<span class="input-group-text"><i class="cds fad fa-check"></i></span>')
         $('#search-store').html("")
     })
-    $(document).on('click', '[addProduitStore]', function (e) {
+    $(document).on('click', '[addProductStore]', function (e) {
         csrfData = $(this).attr('csrf-data')
         e.preventDefault();
         $.post(
-            "{{ path('admin_add_produit_store') }}",
+            "{{ path('admin_add_product_store') }}",
             {
                 storeId: $([this]).attr('store'),
-                produitId: $([this]).attr('produit'),
+                productId: $([this]).attr('product'),
                 csrfData: $(this).attr('csrf-data')
             },
             function (data) {
@@ -184,7 +184,7 @@
         csrfData = $(this).attr('csrf-data')
         e.preventDefault();
         $.post(
-            "{{ path('admin_delete_produit_store') }}",
+            "{{ path('admin_delete_product_store') }}",
             {
                 id: id,
                 csrfData: $(this).attr('csrf-data')

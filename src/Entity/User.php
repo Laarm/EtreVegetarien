@@ -90,9 +90,9 @@ class User implements UserInterface
     private $repas;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ProduitFavoris", mappedBy="postedById", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\ProductFavoris", mappedBy="postedById", orphanRemoval=true)
      */
-    private $produitFavoris;
+    private $productFavoris;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -119,7 +119,7 @@ class User implements UserInterface
         $this->storeAvis = new ArrayCollection();
         $this->restaurantAvis = new ArrayCollection();
         $this->repas = new ArrayCollection();
-        $this->produitFavoris = new ArrayCollection();
+        $this->productFavoris = new ArrayCollection();
         $this->repasFavoris = new ArrayCollection();
     }
 
@@ -370,30 +370,30 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|ProduitFavoris[]
+     * @return Collection|ProductFavoris[]
      */
-    public function getProduitFavoris(): Collection
+    public function getProductFavoris(): Collection
     {
-        return $this->produitFavoris;
+        return $this->productFavoris;
     }
 
-    public function addProduitFavori(ProduitFavoris $produitFavori): self
+    public function addProductFavori(ProductFavoris $productFavori): self
     {
-        if (!$this->produitFavoris->contains($produitFavori)) {
-            $this->produitFavoris[] = $produitFavori;
-            $produitFavori->setPostedById($this);
+        if (!$this->productFavoris->contains($productFavori)) {
+            $this->productFavoris[] = $productFavori;
+            $productFavori->setPostedById($this);
         }
 
         return $this;
     }
 
-    public function removeProduitFavori(ProduitFavoris $produitFavori): self
+    public function removeProductFavori(ProductFavoris $productFavori): self
     {
-        if ($this->produitFavoris->contains($produitFavori)) {
-            $this->produitFavoris->removeElement($produitFavori);
+        if ($this->productFavoris->contains($productFavori)) {
+            $this->productFavoris->removeElement($productFavori);
             // set the owning side to null (unless already changed)
-            if ($produitFavori->getPostedById() === $this) {
-                $produitFavori->setPostedById(null);
+            if ($productFavori->getPostedById() === $this) {
+                $productFavori->setPostedById(null);
             }
         }
 

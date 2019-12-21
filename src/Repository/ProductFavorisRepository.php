@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Entity\Produit;
-use App\Entity\ProduitFavoris;
+use App\Entity\Product;
+use App\Entity\ProductFavoris;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -11,21 +11,21 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
- * @method ProduitFavoris|null find($id, $lockMode = null, $lockVersion = null)
- * @method ProduitFavoris|null findOneBy(array $criteria, array $orderBy = null)
- * @method ProduitFavoris[]    findAll()
- * @method ProduitFavoris[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ProductFavoris|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ProductFavoris|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ProductFavoris[]    findAll()
+ * @method ProductFavoris[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ProduitFavorisRepository extends ServiceEntityRepository
+class ProductFavorisRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, ValidatorInterface $validator, Security $security)
     {
-        parent::__construct($registry, ProduitFavoris::class);
+        parent::__construct($registry, ProductFavoris::class);
         $this->entityManager = $entityManager;
         $this->validator = $validator;
         $this->security = $security;
     }
-    public function getAllProduitsAvisForUser($user)
+    public function getAllProductsAvisForUser($user)
     {
         $result = $this->createQueryBuilder('r')
             ->select('r')
@@ -35,34 +35,34 @@ class ProduitFavorisRepository extends ServiceEntityRepository
             ->getQuery();
         return $result->getResult();
     }
-    public function addProduitFavoris($produitId)
+    public function addProductFavoris($productId)
     {
         $user = $this->security->getUser();
-        $produit = $this->entityManager
-            ->getRepository(Produit::class)
-            ->find($produitId);
-        $sqlProduitFavoris = new ProduitFavoris();
-        $sqlProduitFavoris->setProduitId($produit)
+        $product = $this->entityManager
+            ->getRepository(Product::class)
+            ->find($productId);
+        $sqlProductFavoris = new ProductFavoris();
+        $sqlProductFavoris->setProductId($product)
             ->setPostedById($user)
             ->setCreatedAt(new \DateTime());
-        $this->entityManager->persist($sqlProduitFavoris);
+        $this->entityManager->persist($sqlProductFavoris);
         $this->entityManager->flush();
-        $errors = $this->validator->validate($sqlProduitFavoris);
+        $errors = $this->validator->validate($sqlProductFavoris);
         if (count($errors) == 0) {
             return true;
         } else {
             return false;
         }
     }
-    public function removeProduitFavoris($produitId, $userId)
+    public function removeProductFavoris($productId, $userId)
     {
         $result = $this->createQueryBuilder('r')
             ->select('r.id')
             ->where('r.postedById = ' . $userId)
-            ->andwhere('r.produitId = ' . $produitId)
+            ->andwhere('r.productId = ' . $productId)
             ->getQuery();
-        $produitFavorisId = $result->getResult();
-        $deleteFavoris = $this->find($produitFavorisId[0]['id']);
+        $productFavorisId = $result->getResult();
+        $deleteFavoris = $this->find($productFavorisId[0]['id']);
         $this->entityManager->remove($deleteFavoris);
         $this->entityManager->flush();
         $errors = $this->validator->validate($deleteFavoris);

@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\StoreRepository;
 use App\Repository\ArticleRepository;
 use App\Entity\Store;
-use App\Entity\ProduitSync;
+use App\Entity\ProductSync;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -32,11 +32,11 @@ class StoreController extends AbstractController
     public function show(Store $store, ArticleRepository $repo)
     {
         $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
-        $produits = $this->getDoctrine()->getRepository(ProduitSync::class)->getProduitOfStore($store);
+        $products = $this->getDoctrine()->getRepository(ProductSync::class)->getProductOfStore($store);
         return $this->render('store/store.html.twig', [
             'store' => $store,
             'articles' => $articles,
-            'produits' => $produits,
+            'products' => $products,
         ]);
     }
 

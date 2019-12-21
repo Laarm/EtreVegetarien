@@ -3,28 +3,28 @@
 namespace App\Repository;
 
 use App\Entity\Store;
-use App\Entity\Produit;
-use App\Entity\ProduitSync;
+use App\Entity\Product;
+use App\Entity\ProductSync;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
- * @method ProduitSync|null find($id, $lockMode = null, $lockVersion = null)
- * @method ProduitSync|null findOneBy(array $criteria, array $orderBy = null)
- * @method ProduitSync[]    findAll()
- * @method ProduitSync[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ProductSync|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ProductSync|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ProductSync[]    findAll()
+ * @method ProductSync[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ProduitSyncRepository extends ServiceEntityRepository
+class ProductSyncRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
-        parent::__construct($registry, ProduitSync::class);
+        parent::__construct($registry, ProductSync::class);
         $this->entityManager = $entityManager;
         $this->validator = $validator;
     }
-    public function getProduitOfStore($store)
+    public function getProductOfStore($store)
     {
         $result = $this->createQueryBuilder('m')
             ->select('m')
@@ -34,7 +34,7 @@ class ProduitSyncRepository extends ServiceEntityRepository
             ->getQuery();
         return $result->getResult();
     }
-    public function deleteProduitStore($storeId)
+    public function deleteProductStore($storeId)
     {
         $sqlStore = $this->find($storeId);
         $this->entityManager->remove($sqlStore);
@@ -46,19 +46,19 @@ class ProduitSyncRepository extends ServiceEntityRepository
             return false;
         }
     }
-    public function createProduitStore($storeId, $produitId)
+    public function createProductStore($storeId, $productId)
     {
         $storeId = $this->entityManager->getRepository(Store::class)->find($storeId);
-        $produitId = $this->entityManager->getRepository(Produit::class)->find($produitId);
-        $sqlProduit = new ProduitSync();
-        $sqlProduit->setStore($storeId)
-            ->setProduit($produitId)
+        $productId = $this->entityManager->getRepository(Product::class)->find($productId);
+        $sqlProduct = new ProductSync();
+        $sqlProduct->setStore($storeId)
+            ->setProduct($productId)
             ->setCreatedAt(new \DateTime());
-        $this->entityManager->persist($sqlProduit);
+        $this->entityManager->persist($sqlProduct);
         $this->entityManager->flush();
-        $errors = $this->validator->validate($sqlProduit);
+        $errors = $this->validator->validate($sqlProduct);
         if (count($errors) == 0) {
-            return $sqlProduit->getId();
+            return $sqlProduct->getId();
         } else {
             return false;
         }

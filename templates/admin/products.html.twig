@@ -1,0 +1,90 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Gestion des products - Être Végétarien
+{% endblock %}
+
+{% block body %}
+	<section id="panel" class="flex">
+		<div class="w-100">
+			<div paginationview="product">
+				<table class="table table-hover contentPagination">
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Nom</th>
+							<th scope="col">Contenu</th>
+							<th scope="col">Options</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for product in products %}
+							<tr paginationname="product" paginationid="{{ loop.index }}">
+								<th scope="row">{{ product.id }}</th>
+								<td>{{ product.nom }}</td>
+								<td><img height="40" width="40" src="{{ asset(product.image) }}"/></td>
+								<td class="btnOption">
+									<a href="{{ path('admin_edit_product', {'id': product.id}) }}" class="blue">
+										<i class="fad fa-edit"></i>
+									</a>
+									<a class="red cursor-pointer" value="{{ product.id }}" data-toggle="modal" data-target="#deleteModal">
+										<i class="fad fa-times"></i>
+									</a>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<div class="flex justify-flex-end">
+				<a href="{{ path('adminNewProduct') }}" class="new btn btn-primary" role="button">
+					<i class="fad fa-plus"></i>
+					Nouveau
+				</a>
+				<ul paginationbtn="product" class="pagination justify-content-end">
+					<div class="btnPagination flex mr-4"></div>
+				</ul>
+			</div>
+		</div>
+	</section>
+	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="deleteModalLabel">Êtes-vous sûr de supprimer cet article ?</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+					<button deleteproduct="0" csrf-data="{{ csrf_token('delete-item') }}" type="button" class="btn btn-primary">Oui</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		addEventListener("load", () => {
+new pagination("product", 7, 10, "table-row");
+})
+
+$(document).on('click', '[data-target="#deleteModal"]', function (e) {
+$('[deleteProduct]').attr("deleteProduct", $(this).attr('value'))
+});
+
+$(document).on('click', '[deleteProduct]', function (e) {
+id = $(this).attr('deleteProduct')
+e.preventDefault();
+$.post("{{ path('admin_delete_product') }}", {
+id: id,
+csrfData: $(this).attr('csrf-data')
+}, function (data) {
+if (data.code == '200') {
+location.reload();
+} else {
+console.log(data)
+}
+}, 'json');
+});
+	</script>
+{% endblock %}

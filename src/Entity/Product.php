@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\StoreRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
  */
-class Store
+class Product
 {
     /**
      * @ORM\Id()
@@ -29,38 +29,23 @@ class Store
     private $image;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $location;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $adresse;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $ville;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\StoreAvis", mappedBy="store", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\ProductFavoris", mappedBy="productId", orphanRemoval=true)
      */
-    private $storeAvis;
+    private $productFavoris;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ProductSync", mappedBy="Store", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\ProductSync", mappedBy="Product", orphanRemoval=true)
      */
     private $productSyncs;
 
     public function __construct()
     {
-        $this->storeAvis = new ArrayCollection();
+        $this->productFavoris = new ArrayCollection();
         $this->productSyncs = new ArrayCollection();
     }
 
@@ -93,42 +78,6 @@ class Store
         return $this;
     }
 
-    public function getLocation(): ?string
-    {
-        return $this->location;
-    }
-
-    public function setLocation(string $location): self
-    {
-        $this->location = $location;
-
-        return $this;
-    }
-
-    public function getAdresse(): ?string
-    {
-        return $this->adresse;
-    }
-
-    public function setAdresse(?string $adresse): self
-    {
-        $this->adresse = $adresse;
-
-        return $this;
-    }
-
-    public function getVille(): ?string
-    {
-        return $this->ville;
-    }
-
-    public function setVille(string $ville): self
-    {
-        $this->ville = $ville;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
@@ -142,30 +91,30 @@ class Store
     }
 
     /**
-     * @return Collection|StoreAvis[]
+     * @return Collection|ProductFavoris[]
      */
-    public function getStoreAvis(): Collection
+    public function getProductFavoris(): Collection
     {
-        return $this->storeAvis;
+        return $this->productFavoris;
     }
 
-    public function addStoreAvi(StoreAvis $storeAvi): self
+    public function addProductFavori(ProductFavoris $productFavori): self
     {
-        if (!$this->storeAvis->contains($storeAvi)) {
-            $this->storeAvis[] = $storeAvi;
-            $storeAvi->setStore($this);
+        if (!$this->productFavoris->contains($productFavori)) {
+            $this->productFavoris[] = $productFavori;
+            $productFavori->setProductId($this);
         }
 
         return $this;
     }
 
-    public function removeStoreAvi(StoreAvis $storeAvi): self
+    public function removeProductFavori(ProductFavoris $productFavori): self
     {
-        if ($this->storeAvis->contains($storeAvi)) {
-            $this->storeAvis->removeElement($storeAvi);
+        if ($this->productFavoris->contains($productFavori)) {
+            $this->productFavoris->removeElement($productFavori);
             // set the owning side to null (unless already changed)
-            if ($storeAvi->getStore() === $this) {
-                $storeAvi->setStore(null);
+            if ($productFavori->getProductId() === $this) {
+                $productFavori->setProductId(null);
             }
         }
 
@@ -184,7 +133,7 @@ class Store
     {
         if (!$this->productSyncs->contains($productSync)) {
             $this->productSyncs[] = $productSync;
-            $productSync->setStore($this);
+            $productSync->setProduct($this);
         }
 
         return $this;
@@ -195,8 +144,8 @@ class Store
         if ($this->productSyncs->contains($productSync)) {
             $this->productSyncs->removeElement($productSync);
             // set the owning side to null (unless already changed)
-            if ($productSync->getStore() === $this) {
-                $productSync->setStore(null);
+            if ($productSync->getProduct() === $this) {
+                $productSync->setProduct(null);
             }
         }
 

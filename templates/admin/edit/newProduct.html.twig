@@ -1,18 +1,18 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Nouveau produit - Être Végétarien !{% endblock %}
+{% block title %}Nouveau product - Être Végétarien !{% endblock %}
 {% block stylesheets %}
 
 {% endblock %}
 {% block body %}
 <section class="container">
-    <a href="{{ path('adminProduits') }}" class="btn btn-primary btnRetour mt-4"><i class="far fa-backspace"
+    <a href="{{ path('adminProducts') }}" class="btn btn-primary btnRetour mt-4"><i class="far fa-backspace"
             aria-hidden="true"></i> Retour</a>
 </section>
 <section id="panel" class="container">
-    <div class="editProduit">
+    <div class="editProduct">
         <div class="flex">
-            <input id="nom" value="" placeholder="Nom du produit" class="margin-auto" />
+            <input id="nom" value="" placeholder="Nom du product" class="margin-auto" />
         </div>
         <div class="btnForSaveAndCancel">
             <div class="input-group mb-3 mt-3">
@@ -29,8 +29,8 @@
                     </div>
                 </form>
             </div>
-            <button id="btnSaveProduit" type="button" class="btn btn-primary">Sauvegarder</button>
-            <button type="button" class="btn btn-secondary btnCancelProduit">Annuler</button>
+            <button id="btnSaveProduct" type="button" class="btn btn-primary">Sauvegarder</button>
+            <button type="button" class="btn btn-secondary btnCancelProduct">Annuler</button>
         </div>
     </div>
     <div id="resultat"></div>
@@ -40,7 +40,7 @@
 {% block javascript %}
 <script>
     $(document).ready(function () {
-        $("#btnSaveProduit").click(function (e) {
+        $("#btnSaveProduct").click(function (e) {
             let stop = "non"
             var fd = new FormData();
             if ($('#file').val().length !== 0) {
@@ -57,7 +57,7 @@
                         $("#image").attr("value", response.location)
                         $("#resultat").html("<p>" + response.message + "</p>");
                         document.getElementById("file").value = '';
-                        $("#btnSaveProduit").click()
+                        $("#btnSaveProduct").click()
                     },
                 });
             }
@@ -65,17 +65,17 @@
                 if (stop == "non") {
                     e.preventDefault();
                     $.post(
-                        "{{ path('admin_save_produit') }}",
+                        "{{ path('admin_save_product') }}",
                         {
                             nom: $("#nom").val(),
                             image: $("#image").val(),
-                            produit_id: "new",
+                            product_id: "new",
                             csrfData: "{{ csrf_token('save-item') }}"
                         },
                         function (data) {
                             if (data.code == 200) {
                                 $("#resultat").html("<p>" + data.message + "</p>");
-                                window.location.replace("{{ path('adminProduits') }}");
+                                window.location.replace("{{ path('adminProducts') }}");
                             }
                             else {
                                 $("#resultat").html("<p>" + data.message + "</p>");

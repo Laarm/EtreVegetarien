@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ProduitFavorisRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ProductFavorisRepository")
  */
-class ProduitFavoris
+class ProductFavoris
 {
     /**
      * @ORM\Id()
@@ -17,16 +17,16 @@ class ProduitFavoris
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="produitFavoris")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="productFavoris")
      * @ORM\JoinColumn(nullable=false)
      */
     private $postedById;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Produit", inversedBy="produitFavoris")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="productFavoris")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $produitId;
+    private $productId;
 
     /**
      * @ORM\Column(type="datetime")
@@ -50,14 +50,14 @@ class ProduitFavoris
         return $this;
     }
 
-    public function getProduitId(): ?Produit
+    public function getProductId(): ?Product
     {
-        return $this->produitId;
+        return $this->productId;
     }
 
-    public function setProduitId(?Produit $produitId): self
+    public function setProductId(?Product $productId): self
     {
-        $this->produitId = $produitId;
+        $this->productId = $productId;
 
         return $this;
     }

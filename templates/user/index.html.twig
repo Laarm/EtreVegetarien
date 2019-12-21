@@ -66,7 +66,7 @@
                 </div>
                 <div class="col-7">
                     <div class="tab-content" id="v-pills-tabContent">
-                        <div class="produit-list-design tab-pane fade show active" id="restaurantfav" role="tabpanel"
+                        <div class="product-list-design tab-pane fade show active" id="restaurantfav" role="tabpanel"
                             aria-labelledby="restaurant-tab">
                             {% for restaurant in restaurants %}
                             <div class="item">
@@ -82,7 +82,7 @@
                             </div>
                             {% endfor %}
                         </div>
-                        <div class="produit-list-design tab-pane fade" id="repasfav" role="tabpanel"
+                        <div class="product-list-design tab-pane fade" id="repasfav" role="tabpanel"
                             aria-labelledby="repasfav-tab">
                             {% for repa in repas %}
                             <div class="item">
@@ -95,15 +95,15 @@
                             </div>
                             {% endfor %}
                         </div>
-                        <div class="produit-list-design tab-pane fade" id="v-nourriturefav" role="tabpanel"
+                        <div class="product-list-design tab-pane fade" id="v-nourriturefav" role="tabpanel"
                             aria-labelledby="v-nourriturefav-tab">
-                            {% for produit in produits %}
+                            {% for product in products %}
                             <div class="item">
                                 <div class="top">
-                                    <img alt="{{ produit.produitId.nom }}" src="{{ asset(produit.produitId.image) }}" />
+                                    <img alt="{{ product.productId.nom }}" src="{{ asset(product.productId.image) }}" />
                                 </div>
                                 <div class="bottom">
-                                    <p>{{ produit.produitId.nom }}</p>
+                                    <p>{{ product.productId.nom }}</p>
                                 </div>
                             </div>
                             {% endfor %}
