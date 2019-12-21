@@ -11,7 +11,7 @@
 					<thead>
 						<tr>
 							<th scope="col">#</th>
-							<th scope="col">Sujet</th>
+							<th scope="col">Subject</th>
 							<th scope="col">Message</th>
 							<th scope="col">Options</th>
 						</tr>
@@ -20,7 +20,7 @@
 						{% for contact in contacts %}
 							<tr paginationname="contact" paginationid="{{ loop.index }}">
 								<th scope="row">{{ contact.id }}</th>
-								<td>{{ contact.sujet }}</td>
+								<td>{{ contact.subject }}</td>
 								<td>{{ contact.message }}</td>
 								<td class="btnOption">
 									<a href="mailto:{{ contact.email }}" class="blue">

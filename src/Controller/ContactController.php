@@ -29,8 +29,8 @@ class ContactController extends AbstractController
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('contact', $submittedToken) && $request->get('cgu') == true && !empty($request->get('namecomplet')) && !empty($request->get('email')) && !empty($request->get('sujet')) && !empty($request->get('message'))) {
-                $sql = $this->getDoctrine()->getRepository(Contact::class)->sendMessage($request->get('namecomplet'), $request->get('email'), $request->get('sujet'), $request->get('message'));
+            if ($this->isCsrfTokenValid('contact', $submittedToken) && $request->get('cgu') == true && !empty($request->get('namecomplet')) && !empty($request->get('email')) && !empty($request->get('subject')) && !empty($request->get('message'))) {
+                $sql = $this->getDoctrine()->getRepository(Contact::class)->sendMessage($request->get('namecomplet'), $request->get('email'), $request->get('subject'), $request->get('message'));
                 if ($sql) {
                     return $this->json(['code' => 200, 'message' => 'Merci de nous avoir contacter !'], 200);
                 } else {

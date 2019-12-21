@@ -29,12 +29,12 @@ class Contact
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $telephone;
+    private $phone;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $sujet;
+    private $subject;
 
     /**
      * @ORM\Column(type="text")
@@ -75,26 +75,26 @@ class Contact
         return $this;
     }
 
-    public function getTelephone(): ?string
+    public function getPhone(): ?string
     {
-        return $this->telephone;
+        return $this->phone;
     }
 
-    public function setTelephone(?string $telephone): self
+    public function setPhone(?string $phone): self
     {
-        $this->telephone = $telephone;
+        $this->phone = $phone;
 
         return $this;
     }
 
-    public function getSujet(): ?string
+    public function getSubject(): ?string
     {
-        return $this->sujet;
+        return $this->subject;
     }
 
-    public function setSujet(string $sujet): self
+    public function setSubject(string $subject): self
     {
-        $this->sujet = $sujet;
+        $this->subject = $subject;
 
         return $this;
     }

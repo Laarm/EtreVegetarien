@@ -1,71 +1,66 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Contact - Être Végétarien!{% endblock %}
+{% block title %}Contact - Être Végétarien!
+{% endblock %}
 
 {% block body %}
-<section id="contact">
-    <div class="container p-4">
-        <div id="resultat"></div>
-        <div class="form-group">
-            <label for="namecomplet">Name complet</label>
-            <input type="text" class="form-control" id="namecomplet" placeholder="Entrer votre name complet">
-        </div>
-        <div class="form-group">
-            <label for="email">E-mail</label>
-            <input type="email" class="form-control" id="email" placeholder="Entrer votre e-mail">
-        </div>
-        <div class="form-group">
-            <label for="sujet">Sujet</label>
-            <select class="form-control" id="sujet">
-                <option value="Autre">Autre</option>
-                <option value="Problème technique">Problème technique</option>
-                <option value="Partenariat">Partenariat</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="message">Message</label>
-            <textarea class="form-control" id="message" rows="3"></textarea>
-        </div>
-        <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" id="cgu">
-            <label class="form-check-label" for="cgu">J'ai lu les CGU</label>
-        </div>
-        <button id="btnContact" class="btn btn-primary">Envoyer</button>
-    </div>
-</section>
-<script>
-    $(document).ready(function () {
-        $("#btnContact").click(function (e) {
-            if ($("#cgu").prop('checked')) {
-                if ($('#namecomplet').val().length !== 0 && $('#email').val().length !== 0 && $('#sujet').val().length !== 0 && $('#message').val().length !== 0) {
-                    e.preventDefault();
-                    $.post(
-                        '/ajax/contact/sendMessage',
-                        {
-                            namecomplet: $("#namecomplet").val(),
-                            email: $("#email").val(),
-                            sujet: $("#sujet").val(),
-                            message: $("#message").val(),
-                            cgu: $("#cgu").prop('checked'),
-                            csrfData: "{{ csrf_token('contact') }}"
-                        },
-                        function (data) {
-                            if (data.code == 200) {
-                                $("#resultat").html('<div class="content"><p>' + data.message + '</p></div>');
-                            }
-                            else {
-                                $("#resultat").html('<div class="content"><p>' + data.message + '</p></div>');
-                            }
-                        },
-                        'json'
-                    );
-                } else {
-                    $("#resultat").html("<div class='content red'><p>Veuillez remplir tout les champs !</p></div>");
-                }
-            } else {
-                $("#resultat").html("<div class='content red'><p>Veuillez cocher la case \"J'ai lu les CGU\" !</p></div>");
-            }
-        });
-    });
-</script>
+	<section id="contact">
+		<div class="container p-4">
+			<div id="resultat"></div>
+			<div class="form-group">
+				<label for="namecomplet">Name complet</label>
+				<input type="text" class="form-control" id="namecomplet" placeholder="Entrer votre name complet">
+			</div>
+			<div class="form-group">
+				<label for="email">E-mail</label>
+				<input type="email" class="form-control" id="email" placeholder="Entrer votre e-mail">
+			</div>
+			<div class="form-group">
+				<label for="subject">Subject</label>
+				<select class="form-control" id="subject">
+					<option value="Autre">Autre</option>
+					<option value="Problème technique">Problème technique</option>
+					<option value="Partenariat">Partenariat</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="message">Message</label>
+				<textarea class="form-control" id="message" rows="3"></textarea>
+			</div>
+			<div class="form-group form-check">
+				<input type="checkbox" class="form-check-input" id="cgu">
+				<label class="form-check-label" for="cgu">J'ai lu les CGU</label>
+			</div>
+			<button id="btnContact" class="btn btn-primary">Envoyer</button>
+		</div>
+	</section>
+	<script>
+		$(document).ready(function () {
+$("#btnContact").click(function (e) {
+if ($("#cgu").prop('checked')) {
+if ($('#namecomplet').val().length !== 0 && $('#email').val().length !== 0 && $('#subject').val().length !== 0 && $('#message').val().length !== 0) {
+e.preventDefault();
+$.post('/ajax/contact/sendMessage', {
+namecomplet: $("#namecomplet").val(),
+email: $("#email").val(),
+subject: $("#subject").val(),
+message: $("#message").val(),
+cgu: $("#cgu").prop('checked'),
+csrfData: "{{ csrf_token('contact') }}"
+}, function (data) {
+if (data.code == 200) {
+$("#resultat").html('<div class="content"><p>' + data.message + '</p></div>');
+} else {
+$("#resultat").html('<div class="content"><p>' + data.message + '</p></div>');
+}
+}, 'json');
+} else {
+$("#resultat").html("<div class='content red'><p>Veuillez remplir tout les champs !</p></div>");
+}
+} else {
+$("#resultat").html("<div class='content red'><p>Veuillez cocher la case \"J'ai lu les CGU\" !</p></div>");
+}
+});
+});
+	</script>
 {% endblock %}
