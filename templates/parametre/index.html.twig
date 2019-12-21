@@ -140,7 +140,7 @@
                             </div>
                             <div class="d-flex bd-highlight mt-3">
                                 <div class="p-2 flex-fill bd-highlight">Depuis</div>
-                                <input type="date" class="form-control" id="depuis"
+                                <input type="date" class="form-control" id="date"
                                     value="{{ app.user.PreferenceCreatedAt ? app.user.PreferenceCreatedAt.date|date("Y-m-d") }}">
                             </div>
                             <div class="d-flex bd-highlight mt-3">
@@ -207,7 +207,7 @@
                 email: $("#email").val(),
                 bio: $("#bio").val(),
                 preference: $("#preference").val(),
-                depuis: $("#depuis").val(),
+                date: $("#date").val(),
                 csrfData: "{{ csrf_token('save-profil') }}"
             },
             function (data) {

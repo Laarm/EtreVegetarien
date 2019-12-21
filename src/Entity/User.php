@@ -77,7 +77,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $preferenceDepuis;
+    private $preferenceDate;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -298,14 +298,14 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getPreferenceDepuis(): ?\DateTimeInterface
+    public function getPreferenceDate(): ?\DateTimeInterface
     {
-        return $this->preferenceDepuis;
+        return $this->preferenceDate;
     }
 
-    public function setPreferenceDepuis(?\DateTimeInterface $preferenceDepuis): self
+    public function setPreferenceDate(?\DateTimeInterface $preferenceDate): self
     {
-        $this->preferenceDepuis = $preferenceDepuis;
+        $this->preferenceDate = $preferenceDate;
 
         return $this;
     }
