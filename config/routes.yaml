@@ -73,9 +73,9 @@ adminManagementProductsStores:
 adminManagementRestaurants:
     path: /admin/ManagementRestaurants
     controller: App\Controller\AdminController::managementRestaurants
-adminManagementRestaurantsAvis:
-    path: /admin/ManagementRestaurantsAvis
-    controller: App\Controller\AdminController::managementRestaurantsAvis
+adminManagementRestaurantsFeedback:
+    path: /admin/ManagementRestaurantsFeedback
+    controller: App\Controller\AdminController::managementRestaurantsFeedback
 adminProducts:
     path: /admin/products
     controller: App\Controller\AdminController::products

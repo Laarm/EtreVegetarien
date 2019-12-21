@@ -3,27 +3,27 @@
 namespace App\Repository;
 
 use App\Entity\Restaurant;
-use App\Entity\RestaurantAvis;
+use App\Entity\RestaurantFeedback;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
- * @method RestaurantAvis|null find($id, $lockMode = null, $lockVersion = null)
- * @method RestaurantAvis|null findOneBy(array $criteria, array $orderBy = null)
- * @method RestaurantAvis[]    findAll()
- * @method RestaurantAvis[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method RestaurantFeedback|null find($id, $lockMode = null, $lockVersion = null)
+ * @method RestaurantFeedback|null findOneBy(array $criteria, array $orderBy = null)
+ * @method RestaurantFeedback[]    findAll()
+ * @method RestaurantFeedback[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class RestaurantAvisRepository extends ServiceEntityRepository
+class RestaurantFeedbackRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
-        parent::__construct($registry, RestaurantAvis::class);
+        parent::__construct($registry, RestaurantFeedback::class);
         $this->entityManager = $entityManager;
         $this->validator = $validator;
     }
-    public function deleteRestaurantAvis($restaurantId)
+    public function deleteRestaurantFeedback($restaurantId)
     {
         $sqlRestaurant = $this->find($restaurantId);
         $this->entityManager->remove($sqlRestaurant);
@@ -35,7 +35,7 @@ class RestaurantAvisRepository extends ServiceEntityRepository
             return false;
         }
     }
-    public function getCountAvis($restaurant)
+    public function getCountFeedback($restaurant)
     {
         $result = $this->createQueryBuilder('r')
             ->select('avg(r.note)', 'count(r)')
@@ -43,33 +43,33 @@ class RestaurantAvisRepository extends ServiceEntityRepository
             ->getQuery();
         return $result->getResult();
     }
-    public function getAvisOfUser($user, $restaurant)
+    public function getFeedbackOfUser($user, $restaurant)
     {
         return $this->findOneBy([
             'restaurant' => $restaurant,
             'postedBy' => $user,
         ]);
     }
-    public function addAvis($restaurant, $user, $message, $note)
+    public function addFeedback($restaurant, $user, $message, $note)
     {
         $restaurant = $this->entityManager->getRepository(Restaurant::class)
             ->find($restaurant);
-        $sqlRestaurantAvis = new RestaurantAvis();
-        $sqlRestaurantAvis->setRestaurant($restaurant)
+        $sqlRestaurantFeedback = new RestaurantFeedback();
+        $sqlRestaurantFeedback->setRestaurant($restaurant)
             ->setPostedBy($user)
             ->setMessage($message)
             ->setNote($note)
             ->setCreatedAt(new \DateTime());
-        $this->entityManager->persist($sqlRestaurantAvis);
+        $this->entityManager->persist($sqlRestaurantFeedback);
         $this->entityManager->flush();
-        $errors = $this->validator->validate($sqlRestaurantAvis);
+        $errors = $this->validator->validate($sqlRestaurantFeedback);
         if (count($errors) == 0) {
             return true;
         } else {
             return false;
         }
     }
-    public function getAllRestaurantsAvisForUser($user)
+    public function getAllRestaurantsFeedbackForUser($user)
     {
         $result = $this->createQueryBuilder('r')
             ->select('r')

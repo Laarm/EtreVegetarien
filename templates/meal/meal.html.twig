@@ -26,7 +26,7 @@
 			color: #939396
 		}
 
-		#meal .avis .right {
+		#meal .feedback .right {
 			height: 24px;
 			margin-left: auto;
 			margin-top: -9px;
@@ -58,7 +58,7 @@
 			color: #4e4e56;
 		}
 
-		#meal .left .avis {
+		#meal .left .feedback {
 			margin-top: -8px
 		}
 
@@ -84,23 +84,23 @@
 			border-bottom: #58D68D 6px solid
 		}
 
-		#meal .avis span.date {
+		#meal .feedback span.date {
 			color: #58D68D;
 			margin-top: -13px;
 			display: block;
 		}
 
-		#meal .avis .message {
+		#meal .feedback .message {
 			padding: 7.5px 0 7.5px 15px;
 			border-left: #939396 1px solid;
 			margin-top: 13px
 		}
 
-		#meal .avis .username {
+		#meal .feedback .username {
 			font-weight: bold;
 		}
 
-		#meal #avis .avis {
+		#meal #feedback .feedback {
 			margin-bottom: 40px;
 			padding-bottom: 20px;
 			border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -206,7 +206,7 @@
 			<div class="flex flex-between">
 				<h1 class="mtb-auto">{{ meal.nom }}</h1>
 				<p class="note mtb-auto">
-					<i btnfavoritetes="{{meal.id}}" class="{% for favorites in meal.mealFavorites %}{% if favorites.postedBy.id == app.user.id %}active{% endif %}{% endfor %} cursor-pointer fad fa-star"></i>
+					<i btnfavorites="{{meal.id}}" class="{% for favorites in meal.mealFavorites %}{% if favorites.postedBy.id == app.user.id %}active{% endif %}{% endfor %} cursor-pointer fad fa-star"></i>
 				</p>
 			</div>
 			<div class="flex flex-between">
@@ -220,16 +220,16 @@
 						<a class="nav-link active" id="infospratiques-tab" data-toggle="tab" href="#infospratiques" role="tab" aria-controls="infospratiques" aria-selected="true">INFOS PRATIQUES</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" id="avis-tab" data-toggle="tab" href="#avis" role="tab" aria-controls="avis" aria-selected="false">FAVORIS</a>
+						<a class="nav-link" id="feedback-tab" data-toggle="tab" href="#feedback" role="tab" aria-controls="feedback" aria-selected="false">FAVORIS</a>
 					</li>
 				</ul>
 				<div class="tab-content" id="tabContent">
 					<div class="tab-pane fade show active" id="infospratiques" role="tabpanel" aria-labelledby="infospratiques-tab">
 						{{ meal.recette | raw }}
 					</div>
-					<div class="tab-pane fade" id="avis" role="tabpanel" aria-labelledby="avis-tab">
-						<div paginationview="avis" class="avisCont">
-							<div class="avisContent contentPagination">
+					<div class="tab-pane fade" id="feedback" role="tabpanel" aria-labelledby="feedback-tab">
+						<div paginationview="feedback" class="feedbackCont">
+							<div class="feedbackContent contentPagination">
 								{% for favorites in mealFavorites %}
 									<a class="media" href="{{ path('user', {'id': favorites.Meal.PostedBy.id}) }}">
 										<img id="avatar" class="mr-3 rond" src="{{ asset(favorites.Meal.PostedBy.avatar) }}" alt="Votre avatar" style="height: 40px;width: 40px">
@@ -245,7 +245,7 @@
 								{% endfor %}
 							</div>
 						</div>
-						<div paginationbtn="avis" class="pagination justify-content-end">
+						<div paginationbtn="feedback" class="pagination justify-content-end">
 							<div class="btnPagination flex mr-4"></div>
 						</div>
 						<div id="resultat"></div>
@@ -289,7 +289,7 @@
 						</div>
 						<div class="right mtb-auto flex">
 							<p class="mtb-auto note">
-								<i btnfavoritetes="{{meal.id}}" class="{% for favorites in meal.mealFavorites %}{% if favorites.postedBy.id == app.user.id %}active{% endif %}{% endfor %} f-20 cursor-pointer fad fa-star"></i>
+								<i btnfavorites="{{meal.id}}" class="{% for favorites in meal.mealFavorites %}{% if favorites.postedBy.id == app.user.id %}active{% endif %}{% endfor %} f-20 cursor-pointer fad fa-star"></i>
 							</p>
 						</div>
 					</div>
@@ -305,7 +305,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
 	<script>
 		addEventListener("load", () => {
-new pagination("avis", 3, 10, "block");
+new pagination("feedback", 3, 10, "block");
 })
 $("[btnFavorites]").click(function (e) {
 e.preventDefault();

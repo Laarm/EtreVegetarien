@@ -49,9 +49,9 @@ class Restaurant
     private $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\RestaurantAvis", mappedBy="restaurant", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\RestaurantFeedback", mappedBy="restaurant", orphanRemoval=true)
      */
-    private $restaurantAvis;
+    private $restaurantFeedback;
 
     /**
      * @ORM\Column(type="text")
@@ -60,7 +60,7 @@ class Restaurant
 
     public function __construct()
     {
-        $this->restaurantAvis = new ArrayCollection();
+        $this->restaurantFeedback = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -141,27 +141,27 @@ class Restaurant
     }
 
     /**
-     * @return Collection|RestaurantAvis[]
+     * @return Collection|RestaurantFeedback[]
      */
-    public function getRestaurantAvis(): Collection
+    public function getRestaurantFeedback(): Collection
     {
-        return $this->restaurantAvis;
+        return $this->restaurantFeedback;
     }
 
-    public function addRestaurantAvi(RestaurantAvis $restaurantAvi): self
+    public function addRestaurantAvi(RestaurantFeedback $restaurantAvi): self
     {
-        if (!$this->restaurantAvis->contains($restaurantAvi)) {
-            $this->restaurantAvis[] = $restaurantAvi;
+        if (!$this->restaurantFeedback->contains($restaurantAvi)) {
+            $this->restaurantFeedback[] = $restaurantAvi;
             $restaurantAvi->setRestaurant($this);
         }
 
         return $this;
     }
 
-    public function removeRestaurantAvi(RestaurantAvis $restaurantAvi): self
+    public function removeRestaurantAvi(RestaurantFeedback $restaurantAvi): self
     {
-        if ($this->restaurantAvis->contains($restaurantAvi)) {
-            $this->restaurantAvis->removeElement($restaurantAvi);
+        if ($this->restaurantFeedback->contains($restaurantAvi)) {
+            $this->restaurantFeedback->removeElement($restaurantAvi);
             // set the owning side to null (unless already changed)
             if ($restaurantAvi->getRestaurant() === $this) {
                 $restaurantAvi->setRestaurant(null);

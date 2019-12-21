@@ -49,9 +49,9 @@ class Store
     private $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\StoreAvis", mappedBy="store", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\StoreFeedback", mappedBy="store", orphanRemoval=true)
      */
-    private $storeAvis;
+    private $storeFeedback;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ProductSync", mappedBy="Store", orphanRemoval=true)
@@ -60,7 +60,7 @@ class Store
 
     public function __construct()
     {
-        $this->storeAvis = new ArrayCollection();
+        $this->storeFeedback = new ArrayCollection();
         $this->productSyncs = new ArrayCollection();
     }
 
@@ -142,27 +142,27 @@ class Store
     }
 
     /**
-     * @return Collection|StoreAvis[]
+     * @return Collection|StoreFeedback[]
      */
-    public function getStoreAvis(): Collection
+    public function getStoreFeedback(): Collection
     {
-        return $this->storeAvis;
+        return $this->storeFeedback;
     }
 
-    public function addStoreAvi(StoreAvis $storeAvi): self
+    public function addStoreAvi(StoreFeedback $storeAvi): self
     {
-        if (!$this->storeAvis->contains($storeAvi)) {
-            $this->storeAvis[] = $storeAvi;
+        if (!$this->storeFeedback->contains($storeAvi)) {
+            $this->storeFeedback[] = $storeAvi;
             $storeAvi->setStore($this);
         }
 
         return $this;
     }
 
-    public function removeStoreAvi(StoreAvis $storeAvi): self
+    public function removeStoreAvi(StoreFeedback $storeAvi): self
     {
-        if ($this->storeAvis->contains($storeAvi)) {
-            $this->storeAvis->removeElement($storeAvi);
+        if ($this->storeFeedback->contains($storeAvi)) {
+            $this->storeFeedback->removeElement($storeAvi);
             // set the owning side to null (unless already changed)
             if ($storeAvi->getStore() === $this) {
                 $storeAvi->setStore(null);

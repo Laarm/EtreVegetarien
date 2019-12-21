@@ -6,10 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use App\Repository\RestaurantRepository;
-use App\Repository\RestaurantAvisRepository;
+use App\Repository\RestaurantFeedbackRepository;
 use App\Repository\ArticleRepository;
 use App\Entity\Restaurant;
-use App\Entity\RestaurantAvis;
+use App\Entity\RestaurantFeedback;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -31,7 +31,7 @@ class RestaurantController extends AbstractController
     /**
      * @Route("/restaurant/{id}", name="restaurant_show")
      */
-    public function showRestaurant(Restaurant $restaurant, ArticleRepository $repo, RestaurantRepository $repoRestaurant, RestaurantAvisRepository $repoRestaurantAvis, Request $request)
+    public function showRestaurant(Restaurant $restaurant, ArticleRepository $repo, RestaurantRepository $repoRestaurant, RestaurantFeedbackRepository $repoRestaurantFeedback, Request $request)
     {
         $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
         $autresrestaurants = $repoRestaurant->findBy(array('ville' => $restaurant->getVille()), null, "10", null);
@@ -42,15 +42,15 @@ class RestaurantController extends AbstractController
             $view = null;
             $maxView = 100;
         }
-        $restaurantsSom = $this->getDoctrine()->getRepository(RestaurantAvis::class)->getCountAvis($restaurant->getId());
-        $restaurantAvis = $repoRestaurantAvis->findBy(array('restaurant' => $restaurant), null, $maxView, $view);
+        $restaurantsSom = $this->getDoctrine()->getRepository(RestaurantFeedback::class)->getCountFeedback($restaurant->getId());
+        $restaurantFeedback = $repoRestaurantFeedback->findBy(array('restaurant' => $restaurant), null, $maxView, $view);
         return $this->render('restaurant/restaurant.html.twig', [
             'restaurant' => $restaurant,
             'articles' => $articles,
             'autresrestaurants' => $autresrestaurants,
-            'restaurantAvisAll' => $restaurantAvis,
+            'restaurantFeedbackAll' => $restaurantFeedback,
             'restaurantNote' => $restaurantsSom[0][1],
-            'restaurantAvisCount' => $restaurantsSom[0][2],
+            'restaurantFeedbackCount' => $restaurantsSom[0][2],
         ]);
     }
 
@@ -93,14 +93,14 @@ class RestaurantController extends AbstractController
                         $message = $request->get('message');
                     }
                     $user = $security->getUser();
-                    $verif = $this->getDoctrine()->getRepository(RestaurantAvis::class)->getAvisOfUser($this->getUser()->getId(), $request->get('restaurant_id'));
+                    $verif = $this->getDoctrine()->getRepository(RestaurantFeedback::class)->getFeedbackOfUser($this->getUser()->getId(), $request->get('restaurant_id'));
                     if (!$verif) {
-                        $verif = $this->getDoctrine()->getRepository(RestaurantAvis::class)->addAvis($request->get('restaurant_id'), $user, $message, $note);
+                        $verif = $this->getDoctrine()->getRepository(RestaurantFeedback::class)->addFeedback($request->get('restaurant_id'), $user, $message, $note);
                         if ($verif) {
-                            return $this->json(['code' => 200, 'message' => 'Merci d\'avoir donné votre avis !'], 200);
+                            return $this->json(['code' => 200, 'message' => 'Merci d\'avoir donné votre feedback !'], 200);
                         }
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Vous avez déjà donné votre avis !'], 200);
+                        return $this->json(['code' => 400, 'message' => 'Vous avez déjà donné votre feedback !'], 200);
                     }
                 }
                 return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);

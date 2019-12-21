@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\RestaurantAvisRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\StoreFeedbackRepository")
  */
-class RestaurantAvis
+class StoreFeedback
 {
     /**
      * @ORM\Id()
@@ -17,21 +17,16 @@ class RestaurantAvis
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Restaurant", inversedBy="restaurantAvis")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Store", inversedBy="storeFeedback")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
-    private $restaurant;
+    private $store;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="restaurantAvis")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="storeFeedback")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $postedBy;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $note;
 
     /**
      * @ORM\Column(type="datetime")
@@ -39,23 +34,23 @@ class RestaurantAvis
     private $createdAt;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
-    private $message;
+    private $note;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getRestaurant(): ?Restaurant
+    public function getStore(): ?Store
     {
-        return $this->restaurant;
+        return $this->store;
     }
 
-    public function setRestaurant(?Restaurant $restaurant): self
+    public function setStore(?Store $store): self
     {
-        $this->restaurant = $restaurant;
+        $this->store = $store;
 
         return $this;
     }
@@ -72,18 +67,6 @@ class RestaurantAvis
         return $this;
     }
 
-    public function getNote(): ?string
-    {
-        return $this->note;
-    }
-
-    public function setNote(string $note): self
-    {
-        $this->note = $note;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
@@ -96,14 +79,14 @@ class RestaurantAvis
         return $this;
     }
 
-    public function getMessage(): ?string
+    public function getNote(): ?string
     {
-        return $this->message;
+        return $this->note;
     }
 
-    public function setMessage(?string $message): self
+    public function setNote(string $note): self
     {
-        $this->message = $message;
+        $this->note = $note;
 
         return $this;
     }

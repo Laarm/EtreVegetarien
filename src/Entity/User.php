@@ -45,14 +45,14 @@ class User implements UserInterface
     private $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\StoreAvis", mappedBy="postedBy")
+     * @ORM\OneToMany(targetEntity="App\Entity\StoreFeedback", mappedBy="postedBy")
      */
-    private $storeAvis;
+    private $storeFeedback;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\RestaurantAvis", mappedBy="postedBy")
+     * @ORM\OneToMany(targetEntity="App\Entity\RestaurantFeedback", mappedBy="postedBy")
      */
-    private $restaurantAvis;
+    private $restaurantFeedback;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -116,8 +116,8 @@ class User implements UserInterface
 
     public function __construct()
     {
-        $this->storeAvis = new ArrayCollection();
-        $this->restaurantAvis = new ArrayCollection();
+        $this->storeFeedback = new ArrayCollection();
+        $this->restaurantFeedback = new ArrayCollection();
         $this->meal = new ArrayCollection();
         $this->productFavorites = new ArrayCollection();
         $this->mealFavorites = new ArrayCollection();
@@ -189,27 +189,27 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|StoreAvis[]
+     * @return Collection|StoreFeedback[]
      */
-    public function getStoreAvis(): Collection
+    public function getStoreFeedback(): Collection
     {
-        return $this->storeAvis;
+        return $this->storeFeedback;
     }
 
-    public function addStoreAvi(StoreAvis $storeAvi): self
+    public function addStoreAvi(StoreFeedback $storeAvi): self
     {
-        if (!$this->storeAvis->contains($storeAvi)) {
-            $this->storeAvis[] = $storeAvi;
+        if (!$this->storeFeedback->contains($storeAvi)) {
+            $this->storeFeedback[] = $storeAvi;
             $storeAvi->setPostedBy($this);
         }
 
         return $this;
     }
 
-    public function removeStoreAvi(StoreAvis $storeAvi): self
+    public function removeStoreAvi(StoreFeedback $storeAvi): self
     {
-        if ($this->storeAvis->contains($storeAvi)) {
-            $this->storeAvis->removeElement($storeAvi);
+        if ($this->storeFeedback->contains($storeAvi)) {
+            $this->storeFeedback->removeElement($storeAvi);
             // set the owning side to null (unless already changed)
             if ($storeAvi->getPostedBy() === $this) {
                 $storeAvi->setPostedBy(null);
@@ -220,27 +220,27 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|RestaurantAvis[]
+     * @return Collection|RestaurantFeedback[]
      */
-    public function getRestaurantAvis(): Collection
+    public function getRestaurantFeedback(): Collection
     {
-        return $this->restaurantAvis;
+        return $this->restaurantFeedback;
     }
 
-    public function addRestaurantAvi(RestaurantAvis $restaurantAvi): self
+    public function addRestaurantAvi(RestaurantFeedback $restaurantAvi): self
     {
-        if (!$this->restaurantAvis->contains($restaurantAvi)) {
-            $this->restaurantAvis[] = $restaurantAvi;
+        if (!$this->restaurantFeedback->contains($restaurantAvi)) {
+            $this->restaurantFeedback[] = $restaurantAvi;
             $restaurantAvi->setPostedBy($this);
         }
 
         return $this;
     }
 
-    public function removeRestaurantAvi(RestaurantAvis $restaurantAvi): self
+    public function removeRestaurantAvi(RestaurantFeedback $restaurantAvi): self
     {
-        if ($this->restaurantAvis->contains($restaurantAvi)) {
-            $this->restaurantAvis->removeElement($restaurantAvi);
+        if ($this->restaurantFeedback->contains($restaurantAvi)) {
+            $this->restaurantFeedback->removeElement($restaurantAvi);
             // set the owning side to null (unless already changed)
             if ($restaurantAvi->getPostedBy() === $this) {
                 $restaurantAvi->setPostedBy(null);

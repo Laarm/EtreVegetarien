@@ -10,7 +10,7 @@ use App\Entity\Store;
 use App\Entity\Product;
 use App\Entity\Restaurant;
 use App\Entity\ProductSync;
-use App\Entity\RestaurantAvis;
+use App\Entity\RestaurantFeedback;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
@@ -464,22 +464,22 @@ class AdminEditController extends AbstractController
     }
 
     /**
-     * @Route("/admin/deleteRestaurantAvis", name="admin_delete_restaurantavis")
+     * @Route("/admin/deleteRestaurantFeedback", name="admin_delete_restaurantfeedback")
      */
-    public function deleteRestaurantAvis(Request $request): Response
+    public function deleteRestaurantFeedback(Request $request): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
                 if (!empty($request->get('id'))) {
-                    $restaurantAvis = $this->getDoctrine()->getRepository(RestaurantAvis::class)->deleteRestaurantAvis($request->get('id'));
-                    if ($restaurantAvis) {
-                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer cet avis", 'id' => $request->get('id')], 200);
+                    $restaurantFeedback = $this->getDoctrine()->getRepository(RestaurantFeedback::class)->deleteRestaurantFeedback($request->get('id'));
+                    if ($restaurantFeedback) {
+                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer cet feedback", 'id' => $request->get('id')], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression de l\'avis...'], 200);
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression de l\'feedback...'], 200);
                 }
             }
         }
@@ -554,12 +554,12 @@ class AdminEditController extends AbstractController
                     }
                     $deleteUser = $this->getDoctrine()->getRepository(User::class)->deleteUser($request->get('id'));
                     if ($deleteUser) {
-                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer cet avis", 'id' => $request->get('id')], 200);
+                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer cet feedback", 'id' => $request->get('id')], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression de l\'avis...'], 200);
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression de l\'feedback...'], 200);
                 }
             }
         }

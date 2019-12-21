@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\StoreAvis;
+use App\Entity\StoreFeedback;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
- * @method StoreAvis|null find($id, $lockMode = null, $lockVersion = null)
- * @method StoreAvis|null findOneBy(array $criteria, array $orderBy = null)
- * @method StoreAvis[]    findAll()
- * @method StoreAvis[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method StoreFeedback|null find($id, $lockMode = null, $lockVersion = null)
+ * @method StoreFeedback|null findOneBy(array $criteria, array $orderBy = null)
+ * @method StoreFeedback[]    findAll()
+ * @method StoreFeedback[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class StoreAvisRepository extends ServiceEntityRepository
+class StoreFeedbackRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, StoreAvis::class);
+        parent::__construct($registry, StoreFeedback::class);
     }
 
     // /**
-    //  * @return StoreAvis[] Returns an array of StoreAvis objects
+    //  * @return StoreFeedback[] Returns an array of StoreFeedback objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class StoreAvisRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?StoreAvis
+    public function findOneBySomeField($value): ?StoreFeedback
     {
         return $this->createQueryBuilder('m')
             ->andWhere('m.exampleField = :val')

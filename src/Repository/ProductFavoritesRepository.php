@@ -25,7 +25,7 @@ class ProductFavoritesRepository extends ServiceEntityRepository
         $this->validator = $validator;
         $this->security = $security;
     }
-    public function getAllProductsAvisForUser($user)
+    public function getAllProductsFeedbackForUser($user)
     {
         $result = $this->createQueryBuilder('r')
             ->select('r')

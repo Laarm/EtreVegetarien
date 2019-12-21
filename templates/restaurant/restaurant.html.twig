@@ -29,7 +29,7 @@
 		color: #939396
 	}
 
-	#restaurant .avis .right {
+	#restaurant .feedback .right {
 		height: 24px;
 		margin-left: auto;
 		margin-top: -9px;
@@ -61,7 +61,7 @@
 		color: #4e4e56;
 	}
 
-	#restaurant .left .avis {
+	#restaurant .left .feedback {
 		margin-top: -8px
 	}
 
@@ -87,23 +87,23 @@
 		border-bottom: #58D68D 6px solid
 	}
 
-	#restaurant .avis span.date {
+	#restaurant .feedback span.date {
 		color: #58D68D;
 		margin-top: -13px;
 		display: block;
 	}
 
-	#restaurant .avis .message {
+	#restaurant .feedback .message {
 		padding: 7.5px 0 7.5px 15px;
 		border-left: #939396 1px solid;
 		margin-top: 13px
 	}
 
-	#restaurant .avis .username {
+	#restaurant .feedback .username {
 		font-weight: bold;
 	}
 
-	#restaurant #avis .avis {
+	#restaurant #feedback .feedback {
 		margin-bottom: 40px;
 		padding-bottom: 20px;
 		border-bottom: 1px solid rgba(0, 0, 0, .1);
@@ -188,7 +188,7 @@
 		</div>
 		<div class="flex flex-between">
 			<h2 class="mtb-auto">{{ restaurant.adresse }}</h2>
-			<p class="avis mtb-auto">{{restaurantAvisCount}} avis</p>
+			<p class="feedback mtb-auto">{{restaurantFeedbackCount}} feedback</p>
 		</div>
 		<div class="w-100">
 			<ul class="nav nav-tabs" id="tab" role="tablist">
@@ -197,7 +197,7 @@
 						role="tab" aria-controls="infospratiques" aria-selected="true">INFOS PRATIQUES</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" id="avis-tab" data-toggle="tab" href="#avis" role="tab" aria-controls="avis"
+					<a class="nav-link" id="feedback-tab" data-toggle="tab" href="#feedback" role="tab" aria-controls="feedback"
 						aria-selected="false">AVIS</a>
 				</li>
 				<li class="nav-item">
@@ -210,29 +210,29 @@
 					aria-labelledby="infospratiques-tab">
 					{{ restaurant.contenu | raw }}
 				</div>
-				<div class="tab-pane fade" id="avis" role="tabpanel" aria-labelledby="avis-tab">
-					<div paginationView="avis" class="avisCont">
-						<div class="avisContent contentPagination">
-							{% for restaurantAvis in restaurantAvisAll %}
-							<div paginationName="avis" class="avis" paginationId="{{ loop.index }}">
+				<div class="tab-pane fade" id="feedback" role="tabpanel" aria-labelledby="feedback-tab">
+					<div paginationView="feedback" class="feedbackCont">
+						<div class="feedbackContent contentPagination">
+							{% for restaurantFeedback in restaurantFeedbackAll %}
+							<div paginationName="feedback" class="feedback" paginationId="{{ loop.index }}">
 								<div class="username flex">
 									<p class="left">
 										<a
-											href="{{ path('user', {'id': restaurantAvis.postedBy.id}) }}">{{restaurantAvis.postedBy.username}}</a>
+											href="{{ path('user', {'id': restaurantFeedback.postedBy.id}) }}">{{restaurantFeedback.postedBy.username}}</a>
 									</p>
 									<p class="right note mtb-auto">
-										<span>{{restaurantAvis.note}}</span>/5
+										<span>{{restaurantFeedback.note}}</span>/5
 									</p>
 								</div>
-								<span class="date">publié le {{restaurantAvis.createdAt|date("d/m/Y")}}</span>
-								<p class="message">{{restaurantAvis.message}}</p>
+								<span class="date">publié le {{restaurantFeedback.createdAt|date("d/m/Y")}}</span>
+								<p class="message">{{restaurantFeedback.message}}</p>
 							</div>
 							{% else %}
-							<p class="text-center">Aucun avis</p>
+							<p class="text-center">Aucun feedback</p>
 							{% endfor %}
 						</div>
 					</div>
-					<div paginationBtn="avis" class="pagination justify-content-end">
+					<div paginationBtn="feedback" class="pagination justify-content-end">
 						<div class="btnPagination flex mr-4">
 						</div>
 					</div>
@@ -286,9 +286,9 @@
 			{% if loop.index != 1 %}
 			<hr>
 			{% endif %}
-			{% set avisFinal = null %}
-			{% for avis in restaurant.restaurantAvis %}
-			{% set avisFinal = avisFinal + avis.note %}
+			{% set feedbackFinal = null %}
+			{% for feedback in restaurant.restaurantFeedback %}
+			{% set feedbackFinal = feedbackFinal + feedback.note %}
 			{% endfor %}
 			<div class="restaurant flex flex-between">
 				<div class="left">
@@ -299,7 +299,7 @@
 				</div>
 				<div class="right mtb-auto flex">
 					<p class="mtb-auto note">
-						{% if avisFinal %}<span>{{ avisFinal }}</span>/5</p>{% else %}<p>Aucun avis</p>{% endif %}
+						{% if feedbackFinal %}<span>{{ feedbackFinal }}</span>/5</p>{% else %}<p>Aucun feedback</p>{% endif %}
 				</div>
 			</div>
 			{% else %}
@@ -316,7 +316,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
 <script>
 	addEventListener("load", () => {
-		new pagination("avis", 3, 10, "block");
+		new pagination("feedback", 3, 10, "block");
 	})
 	$.getJSON("https://api-adresse.data.gouv.fr/search/?q= {{ restaurant.adresse }}&limit=1").then((restaurant) => {
 		lat = restaurant.features[0]['geometry']['coordinates'][1];
@@ -357,7 +357,7 @@
 		}, function (data) {
 			if (data.code == '200') {
 				$("#resultat").html("<div class='content'><p>" + data.message + "</p></div>");
-				$("#avis .avisCont").load("{{ path('restaurant_show', {'id': restaurant.id}) }}?view=0&maxView=3 #avis .avisContent");
+				$("#feedback .feedbackCont").load("{{ path('restaurant_show', {'id': restaurant.id}) }}?view=0&maxView=3 #feedback .feedbackContent");
 			} else {
 				$("#resultat").html("<div class='content red'><p>" + data.message + "</p></div>");
 			}

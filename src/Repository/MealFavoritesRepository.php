@@ -62,7 +62,7 @@ class MealFavoritesRepository extends ServiceEntityRepository
             return false;
         }
     }
-    public function getAllMealAvisForUser($user)
+    public function getAllMealFeedbackForUser($user)
     {
         $result = $this->createQueryBuilder('r')
             ->select('r')
