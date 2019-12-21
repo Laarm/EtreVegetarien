@@ -163,14 +163,14 @@ class AdminEditController extends AbstractController
                     }
                     if ($request->get('store_id') == "new") {
                         $sqlStore = $this->getDoctrine()->getRepository(Store::class)->createStore($request->get('nom'), $image, "null", $request->get('adresse'), $request->get('ville'));
-                        $success = "Le store à bien été créer !";
+                        $success = "Le magasin à bien été créer !";
                     } else {
                         $ancienneImage = $this->getDoctrine()->getRepository(Store::class)->find($request->get('store_id'));
                         if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
                             $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
                         }
                         $sqlStore = $this->getDoctrine()->getRepository(Store::class)->saveStore($request->get('store_id'), $request->get('nom'), $request->get('image'), $request->get('adresse'), $request->get('ville'));
-                        $success = "Le store à bien été mis à jour !";
+                        $success = "Le magasin à bien été mis à jour !";
                     }
                     if ($sqlStore) {
                         return $this->json(['code' => 200, 'message' => $success, 'storeId' => $sqlStore], 200);
@@ -329,14 +329,14 @@ class AdminEditController extends AbstractController
                     }
                     if ($request->get('product_id') == "new") {
                         $sqlProduct = $this->getDoctrine()->getRepository(Product::class)->createProduct($request->get('nom'), $image);
-                        $success = "Le product à bien été créer !";
+                        $success = "Le produit à bien été créer !";
                     } else {
                         $ancienneImage = $this->getDoctrine()->getRepository(Product::class)->find($request->get('product_id'));
                         if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
                             $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
                         }
                         $sqlProduct = $this->getDoctrine()->getRepository(Product::class)->saveProduct($request->get('product_id'), $request->get('nom'), $image);
-                        $success = "Le product à bien été mis à jour !";
+                        $success = "Le produit à bien été mis à jour !";
                     }
                     if ($sqlProduct) {
                         return $this->json(['code' => 200, 'message' => $success, 'productId' => $sqlProduct], 200);
@@ -411,14 +411,14 @@ class AdminEditController extends AbstractController
                     }
                     if ($request->get('meal_id') == "new") {
                         $sqlMeal = $this->getDoctrine()->getRepository(Meal::class)->createMeal($request->get('nom'), $image, $request->get('recette'), $user);
-                        $success = "Le meal à bien été créer !";
+                        $success = "Le repas à bien été créer !";
                     } else {
                         $ancienneImage = $this->getDoctrine()->getRepository(Meal::class)->find($request->get('meal_id'));
                         if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
                             $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
                         }
                         $sqlMeal = $this->getDoctrine()->getRepository(Meal::class)->saveMeal($request->get('meal_id'), $request->get('nom'), $image, $request->get('recette'), $user);
-                        $success = "Le meal à bien été mis à jour !";
+                        $success = "Le repas à bien été mis à jour !";
                     }
                     if ($sqlMeal) {
                         return $this->json(['code' => 200, 'message' => $success, 'mealId' => $sqlMeal], 200);
@@ -526,7 +526,7 @@ class AdminEditController extends AbstractController
                         }
                     }
                     $id = $request->get('user_id');
-                    $success = "L'user à bien été mis à jour !";
+                    $success = "L'utilisateur à bien été mis à jour !";
                     if (!$erreur) {
                         return $this->json(['code' => 200, 'message' => $success, 'userId' => $id], 200);
                     } else {
@@ -598,7 +598,7 @@ class AdminEditController extends AbstractController
                 if (!empty($request->get('storeId')) && !empty($request->get('productId'))) {
                     $sqlProduct = $this->getDoctrine()->getRepository(ProductSync::class)->createProductStore($request->get('storeId'), $request->get('productId'));
                     if ($sqlProduct) {
-                        return $this->json(['code' => 200, 'message' => "Le product à bien été ajouter au store !", 'mealId' => $sqlProduct], 200);
+                        return $this->json(['code' => 200, 'message' => "Le produit à bien été ajouter au store !", 'mealId' => $sqlProduct], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
                     }

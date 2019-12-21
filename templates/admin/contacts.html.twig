@@ -1,93 +1,86 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Management des contacts - Être Végétarien{% endblock %}
+{% block title %}Gestion des contacts - Être Végétarien
+{% endblock %}
 
 {% block body %}
-<section id="panel" class="flex">
-    <div class="w-100">
-        <div paginationView="contact">
-            <table class="table table-hover contentPagination">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Sujet</th>
-                        <th scope="col">Message</th>
-                        <th scope="col">Options</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for contact in contacts %}
-                    <tr paginationName="contact" paginationId="{{ loop.index }}">
-                        <th scope="row">{{ contact.id }}</th>
-                        <td>{{ contact.sujet }}</td>
-                        <td>{{ contact.message }}</td>
-                        <td class="btnOption">
-                            <a href="mailto:{{ contact.email }}" class="blue"><i class="fad fa-reply"></i></a>
-                            <a class="red cursor-pointer" value="{{ contact.id }}" data-toggle="modal"
-                                data-target="#deleteModal"><i class="fad fa-times"></i></a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <div aria-label="Page navigation example">
-            <ul paginationBtn="contact" class="pagination justify-content-end">
-                <div class="btnPagination flex mr-4">
-                </div>
-            </ul>
-        </div>
-    </div>
-</section>
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Êtes-vous sûr de supprimer ce message ?</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
+	<section id="panel" class="flex">
+		<div class="w-100">
+			<div paginationview="contact">
+				<table class="table table-hover contentPagination">
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Sujet</th>
+							<th scope="col">Message</th>
+							<th scope="col">Options</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for contact in contacts %}
+							<tr paginationname="contact" paginationid="{{ loop.index }}">
+								<th scope="row">{{ contact.id }}</th>
+								<td>{{ contact.sujet }}</td>
+								<td>{{ contact.message }}</td>
+								<td class="btnOption">
+									<a href="mailto:{{ contact.email }}" class="blue">
+										<i class="fad fa-reply"></i>
+									</a>
+									<a class="red cursor-pointer" value="{{ contact.id }}" data-toggle="modal" data-target="#deleteModal">
+										<i class="fad fa-times"></i>
+									</a>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<div aria-label="Page navigation example">
+				<ul paginationbtn="contact" class="pagination justify-content-end">
+					<div class="btnPagination flex mr-4"></div>
+				</ul>
+			</div>
+		</div>
+	</section>
+	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="deleteModalLabel">Êtes-vous sûr de supprimer ce message ?</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+					<button deletecontact="0" csrf-data="{{ csrf_token('delete-item') }}" type="button" class="btn btn-primary">Oui</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		addEventListener("load", () => {
+new pagination("contact", 7, 10, "table-row");
+})
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-                <button deleteContact="0" csrf-data="{{ csrf_token('delete-item') }}" type="button"
-                    class="btn btn-primary">Oui</button>
-            </div>
-        </div>
-    </div>
-</div>
-<script>
-    addEventListener("load", () => {
-        new pagination("contact", 7, 10, "table-row");
-    })
+$(document).on('click', '[data-target="#deleteModal"]', function (e) {
+$('[deleteContact]').attr("deleteContact", $(this).attr('value'))
+});
 
-    $(document).on('click', '[data-target="#deleteModal"]', function (e) {
-        $('[deleteContact]').attr("deleteContact", $(this).attr('value'))
-    });
-
-    $(document).on('click', '[deleteContact]', function (e) {
-        id = $(this).attr('deleteContact')
-        e.preventDefault();
-        $.post(
-            "{{ path('admin_delete_contact') }}",
-            {
-                id: id,
-                csrfData: $(this).attr('csrf-data')
-            },
-            function (data) {
-                if (data.code == '200') {
-                    location.reload();
-                }
-                else {
-                    console.log(data)
-                }
-            },
-            'json'
-        );
-    });
-</script>
+$(document).on('click', '[deleteContact]', function (e) {
+id = $(this).attr('deleteContact')
+e.preventDefault();
+$.post("{{ path('admin_delete_contact') }}", {
+id: id,
+csrfData: $(this).attr('csrf-data')
+}, function (data) {
+if (data.code == '200') {
+location.reload();
+} else {
+console.log(data)
+}
+}, 'json');
+});
+	</script>
 {% endblock %}

@@ -1,12 +1,15 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %}Admin - Être Végétarien!
+{% endblock %}
 
 {% block body %}
-<section id="panel" class="flex container">
-    <div class="m-text-center margin-auto">
-        <h1>Bienvenue <strong>{{ app.user.username }}</strong> !</h1>
-        <h3>Veuillez selectionner un menu pour commencer :).</h3>
-    </div>
-</section>
+	<section id="panel" class="flex container">
+		<div class="m-text-center margin-auto">
+			<h1>Bienvenue
+				<strong>{{ app.user.username }}</strong>
+				!</h1>
+			<h3>Veuillez selectionner un menu pour commencer :).</h3>
+		</div>
+	</section>
 {% endblock %}
