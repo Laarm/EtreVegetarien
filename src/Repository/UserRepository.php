@@ -25,12 +25,14 @@ class UserRepository extends ServiceEntityRepository
         $this->validator = $validator;
     }
 
-    public function saveUserProfil($userId, $username, $email, $role, $bio)
+    public function saveUserProfil($userId, $username, $email, $role, $bio, $preference, $preferenceCreatedAt)
     {
         $sqlUser = $this->find($userId);
         $sqlUser->setUsername($username)
             ->setEmail($email)
             ->setRole($role)
+            ->setPreference($preference)
+            ->setPreferenceCreatedAt(new \DateTime($preferenceCreatedAt))
             ->setBio($bio);
         $this->entityManager->flush();
         $errors = $this->validator->validate($sqlUser);

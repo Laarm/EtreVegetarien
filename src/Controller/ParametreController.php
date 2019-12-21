@@ -65,8 +65,8 @@ class ParametreController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('save-profil', $submittedToken)) {
-                $userSql = $this->getDoctrine()->getRepository(User::class)->saveUserProfil($this->getUser()->getId(), $request->get('username'), $request->get('email'), $this->getUser()->getRole(), $request->get('bio'));
-                if ($userSql == "good") {
+                $userSql = $this->getDoctrine()->getRepository(User::class)->saveUserProfil($this->getUser()->getId(), $request->get('username'), $request->get('email'), $this->getUser()->getRole(), $request->get('bio'), $request->get('preference'), $request->get('date'));
+                if ($userSql) {
                     return $this->json(['code' => 200, 'message' => 'Votre profil à bien été sauvegarder !'], 200);
                 } else {
                     return $this->json(['code' => 400, 'message' => 'Erreur, veuillez contacter un administrateur !'], 200);

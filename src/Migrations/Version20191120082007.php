@@ -28,7 +28,6 @@ final class Version20191120082007 extends AbstractMigration
         $this->addSql('ALTER TABLE contact CHANGE telephone telephone VARCHAR(255) DEFAULT NULL');
         $this->addSql('ALTER TABLE store_feedback CHANGE store_id store_id INT DEFAULT NULL, CHANGE posted_by_id posted_by_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE store CHANGE address address VARCHAR(255) DEFAULT NULL');
-        $this->addSql('ALTER TABLE article_comment CHANGE article_id article_id INT DEFAULT NULL, CHANGE posted_by_id posted_by_id INT DEFAULT NULL');
     }
 
     public function down(Schema $schema): void
