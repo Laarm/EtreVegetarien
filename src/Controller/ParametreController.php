@@ -40,21 +40,21 @@ class ParametreController extends AbstractController
                     $uploadOk = 0;
                 }
                 if ($uploadOk == 0) {
-                    return $this->json(['code' => 400, 'message' => 'L\'extension n\'est pas valide !'], 200);
+                    return $this->json(['message' => 'L\'extension n\'est pas valide !'], 200);
                 } else {
                     if (move_uploaded_file($_FILES['file']['tmp_name'], $location)) {
                         $userSql = $this->getDoctrine()->getRepository(User::class)->saveUserAvatar($this->getUser()->getId(), $locationRenvoie);
                         if ($userSql == "good") {
-                            return $this->json(['code' => 200, 'message' => 'Vous avez bien envoyer l\'image !', 'location' => $locationRenvoie], 200);
+                            return $this->json(['message' => 'Vous avez bien envoyer l\'image !', 'location' => $locationRenvoie], 200);
                         } else {
-                            return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur'], 200);
+                            return $this->json(['message' => 'Veuillez contacter un administrateur'], 400);
                         }
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Erreur'], 200);
+                        return $this->json(['message' => 'Erreur'], 400);
                     }
                 }
             }
-            return $this->json(['code' => 400, 'message' => 'Erreur'], 200);
+            return $this->json(['message' => 'Erreur'], 400);
         }
     }
     /**
@@ -67,12 +67,12 @@ class ParametreController extends AbstractController
             if ($this->isCsrfTokenValid('save-profil', $submittedToken)) {
                 $userSql = $this->getDoctrine()->getRepository(User::class)->saveUserProfil($this->getUser()->getId(), $request->get('username'), $request->get('email'), $this->getUser()->getRole(), $request->get('bio'), $request->get('preference'), $request->get('date'));
                 if ($userSql) {
-                    return $this->json(['code' => 200, 'message' => 'Votre profil à bien été sauvegarder !'], 200);
+                    return $this->json(['message' => 'Votre profil à bien été sauvegarder !'], 200);
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur, veuillez contacter un administrateur !'], 200);
+                    return $this->json(['message' => 'Erreur, veuillez contacter un administrateur !'], 400);
                 }
             }
-            return $this->json(['code' => 400, 'message' => 'Erreur'], 200);
+            return $this->json(['message' => 'Erreur'], 400);
         }
     }
 }

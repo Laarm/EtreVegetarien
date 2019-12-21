@@ -32,12 +32,12 @@ class ContactController extends AbstractController
             if ($this->isCsrfTokenValid('contact', $submittedToken) && $request->get('cgu') == true && !empty($request->get('namecomplet')) && !empty($request->get('email')) && !empty($request->get('subject')) && !empty($request->get('message'))) {
                 $sql = $this->getDoctrine()->getRepository(Contact::class)->sendMessage($request->get('namecomplet'), $request->get('email'), $request->get('subject'), $request->get('message'));
                 if ($sql) {
-                    return $this->json(['code' => 200, 'message' => 'Merci de nous avoir contacter !'], 200);
+                    return $this->json(['message' => 'Merci de nous avoir contacter !'], 200);
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur, veuillez contacter un administrateur !'], 200);
+                    return $this->json(['message' => 'Erreur, veuillez contacter un administrateur !'], 400);
                 }
             }
-            return $this->json(['code' => 400, 'message' => 'Erreur'], 200);
+            return $this->json(['message' => 'Erreur'], 400);
         }
     }
 }

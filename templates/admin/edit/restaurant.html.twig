@@ -47,7 +47,6 @@
 					</form>
 				</div>
 				<button id="btnSaveRestaurant" type="button" class="btn btn-primary">Sauvegarder</button>
-				<button type="button" class="btn btn-secondary btnCancelRestaurant">Annuler</button>
 			</div>
 		</div>
 		<div id="resultat"></div>
@@ -58,52 +57,53 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/trumbowyg.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/langs/fr.min.js"></script>
 	<script>
-		$('#editeur').trumbowyg({lang: 'fr'});
-$(document).ready(function () {
-$("#btnSaveRestaurant").click(function (e) {
-let stop = "non"
-var fd = new FormData();
-if ($('#file').val().length !== 0) {
-stop = "oui"
-var files = $('#file')[0].files[0];
-fd.append('file', files);
-$.ajax({
-url: "{{ path('admin_upload_image') }}?_token=    {{ csrf_token('upload-image') }}",
-type: 'post',
-data: fd,
-contentType: false,
-processData: false,
-success: function (response) {
-$("#image").attr("value", response.location)
-$("#resultat").html("<p>" + response.message + "</p>");
-document.getElementById("file").value = '';
-$("#btnSaveRestaurant").click()
-}
+$('#editeur').trumbowyg({
+    lang: 'fr'
 });
-}
-if ($('#name').val().length !== 0 && $('#editeur').val().length !== 0) {
-if (stop == "non") {
-e.preventDefault();
-$.post("{{ path('admin_save_restaurant') }}", {
-name: $("#name").val(),
-address: $("#address").val(),
-city: $("#city").val(),
-restaurant_id: '{{ restaurant.id }}',
-image: $("#image").val(),
-content: $("#editeur").val(),
-csrfData: "{{ csrf_token('save-item') }}"
-}, function (data) {
-if (data.code == 200) {
-$("#resultat").html("<p>" + data.message + "</p>");
-} else {
-$("#resultat").html("<p>" + data.message + "</p>");
-}
-}, 'json');
-}
-} else {
-$("#resultat").html("<p>Veuillez remplir le name et le content</p>");
-}
-});
+$(document).ready(function() {
+    $("#btnSaveRestaurant").click(function(e) {
+        let stop = "non"
+        var fd = new FormData();
+        if ($('#file').val().length !== 0) {
+            stop = "oui"
+            var files = $('#file')[0].files[0];
+            fd.append('file', files);
+            $.ajax({
+                url: "{{ path('admin_upload_image') }}?_token={{ csrf_token('upload-image') }}",
+                type: 'post',
+                data: fd,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    $("#image").attr("value", response.location)
+                    $("#resultat").html("<p>" + response.message + "</p>");
+                    document.getElementById("file").value = '';
+                    $("#btnSaveRestaurant").click()
+                },
+					error: function (data) {
+						$("#resultat").html("<p>" + data.responseJSON.message + "</p>");
+					}
+            });
+        }
+        if ($('#name').val().length !== 0 && $('#editeur').val().length !== 0) {
+            if (stop == "non") {
+                e.preventDefault();
+                $.post("{{ path('admin_save_restaurant') }}", {
+                    name: $("#name").val(),
+                    address: $("#address").val(),
+                    city: $("#city").val(),
+                    restaurant_id: '{{ restaurant.id }}',
+                    image: $("#image").val(),
+                    content: $("#editeur").val(),
+                    csrfData: "{{ csrf_token('save-item') }}"
+					}, function (data) {
+							$("#resultat").html("<p>" + data.message + "</p>");
+					}, 'json').fail(function(data) {$("#resultat").html("<p>" + data.responseJSON.message + "</p>");});
+            }
+        } else {
+            $("#resultat").html("<p>Veuillez remplir le name et le content</p>");
+        }
+    });
 });
 	</script>
 {% endblock %}

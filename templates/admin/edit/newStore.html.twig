@@ -43,7 +43,6 @@
 					</form>
 				</div>
 				<button id="btnSaveStore" type="button" class="btn btn-primary">Sauvegarder</button>
-				<button type="button" class="btn btn-secondary btnCancelStore">Annuler</button>
 			</div>
 		</div>
 		<div id="resultat"></div>
@@ -52,51 +51,50 @@
 
 {% block javascript %}
 	<script>
-		$(document).ready(function () {
-$("#btnSaveStore").click(function (e) {
-let stop = "non"
-var fd = new FormData();
-if ($('#file').val().length !== 0) {
-stop = "oui"
-var files = $('#file')[0].files[0];
-fd.append('file', files);
-$.ajax({
-url: "{{ path('admin_upload_image') }}?_token=   {{ csrf_token('upload-image') }}",
-type: 'post',
-data: fd,
-contentType: false,
-processData: false,
-success: function (response) {
-$("#image").attr("value", response.location)
-$("#resultat").html("<p>" + response.message + "</p>");
-document.getElementById("file").value = '';
-$("#btnSaveStore").click()
-}
-});
-}
-if ($('#name').val().length !== 0 && $('#address').val().length !== 0 && $('#city').val().length !== 0) {
-if (stop == "non") {
-e.preventDefault();
-$.post("{{ path('admin_save_store') }}", {
-name: $("#name").val(),
-address: $("#address").val(),
-city: $("#city").val(),
-store_id: 'new',
-image: $("#image").val(),
-csrfData: "{{ csrf_token('save-item') }}"
-}, function (data) {
-if (data.code == 200) {
-$("#resultat").html("<p>" + data.message + "</p>");
-window.location.replace("/store/" + data.storeId);
-} else {
-$("#resultat").html("<p>" + data.message + "</p>");
-}
-}, 'json');
-}
-} else {
-$("#resultat").html("<p>Veuillez remplir le name, l'address ainsi que la city</p>");
-}
-});
+$(document).ready(function() {
+    $("#btnSaveStore").click(function(e) {
+        let stop = "non"
+        var fd = new FormData();
+        if ($('#file').val().length !== 0) {
+            stop = "oui"
+            var files = $('#file')[0].files[0];
+            fd.append('file', files);
+            $.ajax({
+                url: "{{ path('admin_upload_image') }}?_token={{ csrf_token('upload-image') }}",
+                type: 'post',
+                data: fd,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    $("#image").attr("value", response.location)
+                    $("#resultat").html("<p>" + response.message + "</p>");
+                    document.getElementById("file").value = '';
+                    $("#btnSaveStore").click()
+                },
+					error: function (data) {
+						$("#resultat").html("<p>" + data.responseJSON.message + "</p>");
+					}
+            });
+        }
+        if ($('#name').val().length !== 0 && $('#address').val().length !== 0 && $('#city').val().length !== 0) {
+            if (stop == "non") {
+                e.preventDefault();
+                $.post("{{ path('admin_save_store') }}", {
+                    name: $("#name").val(),
+                    address: $("#address").val(),
+                    city: $("#city").val(),
+                    store_id: 'new',
+                    image: $("#image").val(),
+                    csrfData: "{{ csrf_token('save-item') }}"
+					}, function (data) {
+							$("#resultat").html("<p>" + data.message + "</p>");
+                        window.location.replace("/store/" + data.storeId);
+					}, 'json').fail(function(data) {$("#resultat").html("<p>" + data.responseJSON.message + "</p>");});
+            }
+        } else {
+            $("#resultat").html("<p>Veuillez remplir le name, l'address ainsi que la city</p>");
+        }
+    });
 });
 	</script>
 {% endblock %}

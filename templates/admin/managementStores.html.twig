@@ -68,28 +68,26 @@
 		</div>
 	</div>
 	<script>
-		addEventListener("load", () => {
-new pagination("store", 7, 10, "table-row");
+addEventListener("load", () => {
+    new pagination("store", 7, 10, "table-row");
 })
 
-$(document).on('click', '[data-target="#deleteModal"]', function (e) {
-$('[deleteStore]').attr("deleteStore", $(this).attr('value'))
+$(document).on('click', '[data-target="#deleteModal"]', function(e) {
+    $('[deleteStore]').attr("deleteStore", $(this).attr('value'))
 });
 
-$(document).on('click', '[deleteStore]', function (e) {
-id = $(this).attr('deleteStore')
-csrfData = $(this).attr('csrf-data')
-e.preventDefault();
-$.post("{{ path('admin_delete_store') }}", {
-id: id,
-csrfData: $(this).attr('csrf-data')
-}, function (data) {
-if (data.code == '200') {
-location.reload();
-} else {
-console.log(data)
-}
-}, 'json');
+$(document).on('click', '[deleteStore]', function(e) {
+    id = $(this).attr('deleteStore')
+    csrfData = $(this).attr('csrf-data')
+    e.preventDefault();
+    $.post("{{ path('admin_delete_store') }}", {
+        id: id,
+        csrfData: $(this).attr('csrf-data')
+    }, function(data) {
+            location.reload();
+    }, 'json').fail( function(data) {
+            console.log(data.responseJSON)
+	});
 });
 	</script>
 {% endblock %}

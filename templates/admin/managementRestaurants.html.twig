@@ -68,27 +68,25 @@
 		</div>
 	</div>
 	<script>
-		addEventListener("load", () => {
-new pagination("restaurant", 7, 10, "table-row");
+addEventListener("load", () => {
+    new pagination("restaurant", 7, 10, "table-row");
 })
 
-$(document).on('click', '[data-target="#deleteModal"]', function (e) {
-$('[deleteRestaurant]').attr("deleteRestaurant", $(this).attr('value'))
+$(document).on('click', '[data-target="#deleteModal"]', function(e) {
+    $('[deleteRestaurant]').attr("deleteRestaurant", $(this).attr('value'))
 });
 
-$(document).on('click', '[deleteRestaurant]', function (e) {
-id = $(this).attr('deleteRestaurant')
-e.preventDefault();
-$.post("{{ path('admin_delete_restaurant') }}", {
-id: id,
-csrfData: $(this).attr('csrf-data')
-}, function (data) {
-if (data.code == '200') {
-location.reload();
-} else {
-console.log(data)
-}
-}, 'json');
+$(document).on('click', '[deleteRestaurant]', function(e) {
+    id = $(this).attr('deleteRestaurant')
+    e.preventDefault();
+    $.post("{{ path('admin_delete_restaurant') }}", {
+        id: id,
+        csrfData: $(this).attr('csrf-data')
+    }, function(data) {
+            location.reload();
+    }, 'json').fail( function(data) {
+            console.log(data.responseJSON)
+	});
 });
 	</script>
 {% endblock %}

@@ -45,7 +45,6 @@
 				</div>
 				<textarea id="editeur">{{ user.bio|raw }}</textarea>
 				<button id="btnSaveUser" type="button" class="btn btn-primary">Sauvegarder</button>
-				<button type="button" class="btn btn-secondary btnCancelUser">Annuler</button>
 			</div>
 		</div>
 		<div id="resultat"></div>
@@ -56,31 +55,29 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/trumbowyg.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/langs/fr.min.js"></script>
 	<script>
-		$('#editeur').trumbowyg({lang: 'fr'});
-$(document).ready(function () {
-$("#btnSaveUser").click(function (e) {
-if ($('#username').val().length !== 0 && $('#email').val().length !== 0) {
-e.preventDefault();
-$.post("{{ path('admin_save_user') }}", {
-username: $("#username").val(),
-user_id: '{{ user.id }}',
-email: $("#email").val(),
-role: $("#role").val(),
-bio: $("#editeur").val(),
-deleteAvatar: $("#deleteAvatar").prop('checked'),
-motdepasse: $("#motdepasse").val(),
-csrfData: "{{ csrf_token('save-user') }}"
-}, function (data) {
-if (data.code == 200) {
-$("#resultat").html("<p>" + data.message + "</p>");
-} else {
-$("#resultat").html("<p>" + data.message + "</p>");
-}
-}, 'json');
-} else {
-$("#resultat").html("<p>Veuillez remplir les champs principaux (Pseudonyme, Email)</p>");
-}
+$('#editeur').trumbowyg({
+    lang: 'fr'
 });
+$(document).ready(function() {
+    $("#btnSaveUser").click(function(e) {
+        if ($('#username').val().length !== 0 && $('#email').val().length !== 0) {
+            e.preventDefault();
+            $.post("{{ path('admin_save_user') }}", {
+                username: $("#username").val(),
+                user_id: '{{ user.id }}',
+                email: $("#email").val(),
+                role: $("#role").val(),
+                bio: $("#editeur").val(),
+                deleteAvatar: $("#deleteAvatar").prop('checked'),
+                motdepasse: $("#motdepasse").val(),
+                csrfData: "{{ csrf_token('save-user') }}"
+					}, function (data) {
+							$("#resultat").html("<p>" + data.message + "</p>");
+					}, 'json').fail(function(data) {$("#resultat").html("<p>" + data.responseJSON.message + "</p>");});
+        } else {
+            $("#resultat").html("<p>Veuillez remplir les champs principaux (Pseudonyme, Email)</p>");
+        }
+    });
 });
 	</script>
 {% endblock %}

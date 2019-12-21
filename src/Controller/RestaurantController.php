@@ -97,13 +97,13 @@ class RestaurantController extends AbstractController
                     if (!$verif) {
                         $verif = $this->getDoctrine()->getRepository(RestaurantFeedback::class)->addFeedback($request->get('restaurant_id'), $user, $message, $note);
                         if ($verif) {
-                            return $this->json(['code' => 200, 'message' => 'Merci d\'avoir donné votre feedback !'], 200);
+                            return $this->json(['message' => 'Merci d\'avoir donné votre feedback !'], 200);
                         }
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Vous avez déjà donné votre feedback !'], 200);
+                        return $this->json(['message' => 'Vous avez déjà donné votre feedback !'], 400);
                     }
                 }
-                return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
             }
         }
     }

@@ -55,12 +55,12 @@ class AdminEditController extends AbstractController
                     }
                     $article = $this->getDoctrine()->getRepository(Article::class)->deleteArticle($request->get('id'));
                     if ($article) {
-                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer cet article", 'id' => $request->get('id')], 200);
+                        return $this->json(['message' => "Vous avez bien supprimer cet article", 'id' => $request->get('id')], 200);
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression de l\'article...'], 200);
+                    return $this->json(['message' => 'Erreur lors de la suppression de l\'article...'], 400);
                 }
             }
         }
@@ -92,12 +92,12 @@ class AdminEditController extends AbstractController
                         $success = "L'article à bien été mis à jour !";
                     }
                     if ($sqlArticle) {
-                        return $this->json(['code' => 200, 'message' => $success, 'articleId' => $sqlArticle], 200);
+                        return $this->json(['message' => $success, 'articleId' => $sqlArticle], 200);
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
+                    return $this->json(['message' => 'Veuillez remplir tout les champs !'], 400);
                 }
             }
         }
@@ -136,12 +136,12 @@ class AdminEditController extends AbstractController
                     }
                     $store = $this->getDoctrine()->getRepository(Store::class)->deleteStore($request->get('id'));
                     if ($store) {
-                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce store", 'id' => $request->get('id')], 200);
+                        return $this->json(['message' => "Vous avez bien supprimer ce store", 'id' => $request->get('id')], 200);
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du store...'], 200);
+                    return $this->json(['message' => 'Erreur lors de la suppression du store...'], 400);
                 }
             }
         }
@@ -173,12 +173,12 @@ class AdminEditController extends AbstractController
                         $success = "Le magasin à bien été mis à jour !";
                     }
                     if ($sqlStore) {
-                        return $this->json(['code' => 200, 'message' => $success, 'storeId' => $sqlStore], 200);
+                        return $this->json(['message' => $success, 'storeId' => $sqlStore], 200);
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
+                    return $this->json(['message' => 'Veuillez remplir tout les champs !'], 400);
                 }
             }
         }
@@ -217,12 +217,12 @@ class AdminEditController extends AbstractController
                     }
                     $restaurant = $this->getDoctrine()->getRepository(Restaurant::class)->deleteRestaurant($request->get('id'));
                     if ($restaurant) {
-                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce restaurant", 'id' => $request->get('id')], 200);
+                        return $this->json(['message' => "Vous avez bien supprimer ce restaurant", 'id' => $request->get('id')], 200);
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du restaurant...'], 200);
+                    return $this->json(['message' => 'Erreur lors de la suppression du restaurant...'], 400);
                 }
             }
         }
@@ -255,15 +255,15 @@ class AdminEditController extends AbstractController
                     }
                     if (!empty($request->get('name')) && !empty($request->get('restaurant_id')) && !empty($request->get('content'))) {
                         if ($sqlRestaurant) {
-                            return $this->json(['code' => 200, 'message' => $success, 'restaurantId' => $sqlRestaurant], 200);
+                            return $this->json(['message' => $success, 'restaurantId' => $sqlRestaurant], 200);
                         } else {
-                            return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                         }
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
+                        return $this->json(['message' => 'Veuillez remplir tout les champs !'], 400);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour du restaurant...'], 200);
+                    return $this->json(['message' => 'Erreur lors de la mise à jour du restaurant...'], 400);
                 }
             }
         }
@@ -302,12 +302,12 @@ class AdminEditController extends AbstractController
                     }
                     $product = $this->getDoctrine()->getRepository(Product::class)->deleteProduct($request->get('id'));
                     if ($product) {
-                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce product", 'id' => $request->get('id')], 200);
+                        return $this->json(['message' => "Vous avez bien supprimer ce product", 'id' => $request->get('id')], 200);
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du product...'], 200);
+                    return $this->json(['message' => 'Erreur lors de la suppression du product...'], 400);
                 }
             }
         }
@@ -339,12 +339,12 @@ class AdminEditController extends AbstractController
                         $success = "Le produit à bien été mis à jour !";
                     }
                     if ($sqlProduct) {
-                        return $this->json(['code' => 200, 'message' => $success, 'productId' => $sqlProduct], 200);
+                        return $this->json(['message' => $success, 'productId' => $sqlProduct], 200);
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
+                    return $this->json(['message' => 'Veuillez remplir tout les champs !'], 400);
                 }
             }
         }
@@ -383,12 +383,12 @@ class AdminEditController extends AbstractController
                     }
                     $meal = $this->getDoctrine()->getRepository(Meal::class)->deleteMeal($request->get('id'));
                     if ($meal) {
-                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce meal", 'id' => $request->get('id')], 200);
+                        return $this->json(['message' => "Vous avez bien supprimer ce meal", 'id' => $request->get('id')], 200);
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du meal...'], 200);
+                    return $this->json(['message' => 'Erreur lors de la suppression du meal...'], 400);
                 }
             }
         }
@@ -421,12 +421,12 @@ class AdminEditController extends AbstractController
                         $success = "Le repas à bien été mis à jour !";
                     }
                     if ($sqlMeal) {
-                        return $this->json(['code' => 200, 'message' => $success, 'mealId' => $sqlMeal], 200);
+                        return $this->json(['message' => $success, 'mealId' => $sqlMeal], 200);
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
+                    return $this->json(['message' => 'Veuillez remplir tout les champs !'], 400);
                 }
             }
         }
@@ -450,16 +450,16 @@ class AdminEditController extends AbstractController
                     $uploadOk = 0;
                 }
                 if ($uploadOk == 0) {
-                    return $this->json(['code' => 400, 'message' => 'L\'extension n\'est pas valide !'], 200);
+                    return $this->json(['message' => 'L\'extension n\'est pas valide !'], 400);
                 } else {
                     if (move_uploaded_file($_FILES['file']['tmp_name'], $location)) {
-                        return $this->json(['code' => 200, 'message' => 'Vous avez bien envoyer l\'image !', 'location' => $locationRenvoie], 200);
+                        return $this->json(['message' => 'Vous avez bien envoyer l\'image !', 'location' => $locationRenvoie], 200);
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Erreur'], 200);
+                        return $this->json(['message' => 'Erreur'], 400);
                     }
                 }
             }
-            return $this->json(['code' => 400, 'message' => 'Erreur'], 200);
+            return $this->json(['message' => 'Erreur'], 400);
         }
     }
 
@@ -474,12 +474,12 @@ class AdminEditController extends AbstractController
                 if (!empty($request->get('id'))) {
                     $restaurantFeedback = $this->getDoctrine()->getRepository(RestaurantFeedback::class)->deleteRestaurantFeedback($request->get('id'));
                     if ($restaurantFeedback) {
-                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer cet feedback", 'id' => $request->get('id')], 200);
+                        return $this->json(['message' => "Vous avez bien supprimer cet feedback", 'id' => $request->get('id')], 200);
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression de l\'feedback...'], 200);
+                    return $this->json(['message' => 'Erreur lors de la suppression de l\'feedback...'], 400);
                 }
             }
         }
@@ -528,12 +528,12 @@ class AdminEditController extends AbstractController
                     $id = $request->get('user_id');
                     $success = "L'utilisateur à bien été mis à jour !";
                     if (!$erreur) {
-                        return $this->json(['code' => 200, 'message' => $success, 'userId' => $id], 200);
+                        return $this->json(['message' => $success, 'userId' => $id], 200);
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour de l\'user...'], 200);
+                    return $this->json(['message' => 'Erreur lors de la mise à jour de l\'user...'], 400);
                 }
             }
         }
@@ -554,12 +554,12 @@ class AdminEditController extends AbstractController
                     }
                     $deleteUser = $this->getDoctrine()->getRepository(User::class)->deleteUser($request->get('id'));
                     if ($deleteUser) {
-                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer cet feedback", 'id' => $request->get('id')], 200);
+                        return $this->json(['message' => "Vous avez bien supprimer cet feedback", 'id' => $request->get('id')], 200);
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression de l\'feedback...'], 200);
+                    return $this->json(['message' => 'Erreur lors de la suppression de l\'feedback...'], 400);
                 }
             }
         }
@@ -576,12 +576,12 @@ class AdminEditController extends AbstractController
                 if (!empty($request->get('id'))) {
                     $store = $this->getDoctrine()->getRepository(ProductSync::class)->deleteProductStore($request->get('id'));
                     if ($store) {
-                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce product du store", 'id' => $request->get('id')], 200);
+                        return $this->json(['message' => "Vous avez bien supprimer ce product du store", 'id' => $request->get('id')], 200);
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du store...'], 200);
+                    return $this->json(['message' => 'Erreur lors de la suppression du store...'], 400);
                 }
             }
         }
@@ -598,12 +598,12 @@ class AdminEditController extends AbstractController
                 if (!empty($request->get('storeId')) && !empty($request->get('productId'))) {
                     $sqlProduct = $this->getDoctrine()->getRepository(ProductSync::class)->createProductStore($request->get('storeId'), $request->get('productId'));
                     if ($sqlProduct) {
-                        return $this->json(['code' => 200, 'message' => "Le produit à bien été ajouter au store !", 'mealId' => $sqlProduct], 200);
+                        return $this->json(['message' => "Le produit à bien été ajouter au store !", 'mealId' => $sqlProduct], 200);
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour du meal...'], 200);
+                    return $this->json(['message' => 'Erreur lors de la mise à jour du meal...'], 400);
                 }
             }
         }
@@ -637,12 +637,12 @@ class AdminEditController extends AbstractController
                 if (!empty($request->get('id'))) {
                     $article = $this->getDoctrine()->getRepository(Contact::class)->deleteContact($request->get('id'));
                     if ($article) {
-                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce message", 'id' => $request->get('id')], 200);
+                        return $this->json(['message' => "Vous avez bien supprimer ce message", 'id' => $request->get('id')], 200);
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression de du contact...'], 200);
+                    return $this->json(['message' => 'Erreur lors de la suppression de du contact...'], 400);
                 }
             }
         }

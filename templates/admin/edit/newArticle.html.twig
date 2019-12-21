@@ -34,7 +34,6 @@
 					</form>
 				</div>
 				<button id="btnSaveArticle" type="button" class="btn btn-primary">Sauvegarder</button>
-				<button type="button" class="btn btn-secondary btnCancelArticle">Annuler</button>
 			</div>
 		</div>
 		<div id="resultat"></div>
@@ -45,53 +44,58 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/trumbowyg.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/langs/fr.min.js"></script>
 	<script>
-		$('#editeur').trumbowyg({lang: 'fr'});
-$(document).ready(function () {
-$("#btnSaveArticle").click(function (e) {
-let stop = "non"
-var fd = new FormData();
-if ($('#file').val().length !== 0) {
-stop = "oui"
-if ($('#file').val().length !== 0) {
-var files = $('#file')[0].files[0];
-fd.append('file', files);
-$.ajax({
-url: "{{ path('admin_upload_image') }}?_token=      {{ csrf_token('upload-image') }}",
-type: 'post',
-data: fd,
-contentType: false,
-processData: false,
-success: function (response) {
-$("#image").attr("value", response.location)
-$("#resultat").html("<p>" + response.message + "</p>");
-document.getElementById("file").value = '';
-$("#btnSaveArticle").click()
-}
+$('#editeur').trumbowyg({
+    lang: 'fr'
 });
-}
-}
-if ($('#name').val().length !== 0 && $('#editeur').val().length !== 0) {
-if (stop == "non") {
-e.preventDefault();
-$.post("{{ path('admin_save_article') }}", {
-name: $("#name").val(),
-content: $("#editeur").val(),
-article_id: 'new',
-image: $("#image").val(),
-csrfData: "{{ csrf_token('save-item') }}"
-}, function (data) {
-if (data.code == 200) {
-$("#resultat").html("<p>" + data.message + "</p>");
-window.location.replace("/article/" + data.articleId);
-} else {
-$("#resultat").html("<p>" + data.message + "</p>");
-}
-}, 'json');
-}
-} else {
-$("#resultat").html("<p>Veuillez remplir le name et le content</p>");
-}
-});
+$(document).ready(function() {
+    $("#btnSaveArticle").click(function(e) {
+        let stop = "non"
+        var fd = new FormData();
+        if ($('#file').val().length !== 0) {
+            stop = "oui"
+            if ($('#file').val().length !== 0) {
+                var files = $('#file')[0].files[0];
+                fd.append('file', files);
+                $.ajax({
+                    url: "{{ path('admin_upload_image') }}?_token={{ csrf_token('upload-image') }}",
+                    type: 'post',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        $("#image").attr("value", response.location)
+                        $("#resultat").html("<p>" + response.message + "</p>");
+                        document.getElementById("file").value = '';
+                        $("#btnSaveArticle").click()
+                    },
+					error: function (data) {
+						$("#resultat").html("<p>" + data.responseJSON.message + "</p>");
+					}
+                });
+            }
+        }
+        if ($('#name').val().length !== 0 && $('#editeur').val().length !== 0) {
+            if (stop == "non") {
+                e.preventDefault();
+                $.post("{{ path('admin_save_article') }}", {
+                    name: $("#name").val(),
+                    content: $("#editeur").val(),
+                    article_id: 'new',
+                    image: $("#image").val(),
+                    csrfData: "{{ csrf_token('save-item') }}"
+                }, function(data) {
+                    if (data.code == 200) {
+                        $("#resultat").html("<p>" + data.message + "</p>");
+                        window.location.replace("/article/" + data.articleId);
+                    } else {
+                        $("#resultat").html("<p>" + data.message + "</p>");
+                    }
+                }, 'json');
+            }
+        } else {
+            $("#resultat").html("<p>Veuillez remplir le name et le content</p>");
+        }
+    });
 });
 	</script>
 {% endblock %}

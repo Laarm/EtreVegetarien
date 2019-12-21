@@ -30,7 +30,6 @@
                 </form>
             </div>
             <button id="btnSaveProduct" type="button" class="btn btn-primary">Sauvegarder</button>
-            <button type="button" class="btn btn-secondary btnCancelProduct">Annuler</button>
         </div>
     </div>
     <div id="resultat"></div>
@@ -59,6 +58,9 @@
                         document.getElementById("file").value = '';
                         $("#btnSaveProduct").click()
                     },
+					error: function (data) {
+						$("#resultat").html("<p>" + data.responseJSON.message + "</p>");
+					}
                 });
             }
             if ($('#name').val().length !== 0) {
@@ -71,18 +73,10 @@
                             image: $("#image").val(),
                             product_id: "new",
                             csrfData: "{{ csrf_token('save-item') }}"
-                        },
-                        function (data) {
-                            if (data.code == 200) {
-                                $("#resultat").html("<p>" + data.message + "</p>");
+					}, function (data) {
+							$("#resultat").html("<p>" + data.message + "</p>");
                                 window.location.replace("{{ path('adminProducts') }}");
-                            }
-                            else {
-                                $("#resultat").html("<p>" + data.message + "</p>");
-                            }
-                        },
-                        'json'
-                    );
+					}, 'json').fail(function(data) {$("#resultat").html("<p>" + data.responseJSON.message + "</p>");});
                 }
             } else {
                 $("#resultat").html("<p>Veuillez remplir le name</p>");

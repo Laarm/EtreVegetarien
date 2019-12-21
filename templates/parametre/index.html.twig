@@ -211,15 +211,10 @@
                 csrfData: "{{ csrf_token('save-profil') }}"
             },
             function (data) {
-                if (data.code == 200) {
-                    $("#resultat").html('<div class="alert alert-success alert-dismissible fade show" role="alert">' + data.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');
-                }
-                else {
-                    $("#resultat").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' + data.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');
-                }
+                $("#resultat").html('<div class="alert alert-success alert-dismissible fade show" role="alert">' + data.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');
             },
             'json'
-        );
+        ).fail(function (data) {$("#resultat").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' + data.responseJSON.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');});
     });
 </script>
 {% endblock %}

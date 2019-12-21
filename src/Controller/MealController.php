@@ -77,21 +77,21 @@ class MealController extends AbstractController
                     if (!$verif) {
                         $sqlMealFavorites = $this->getDoctrine()->getRepository(MealFavorites::class)->addMealFavorites($request->get('meal_id'));
                         if ($sqlMealFavorites) {
-                            return $this->json(['code' => 200, 'message' => "Vous avez bien ajouter ce meal en favorites", 'id' => $request->get('meal_id')], 200);
+                            return $this->json(['action' => "add", 'message' => "Vous avez bien ajouter ce repas en favorites", 'id' => $request->get('meal_id')], 200);
                         }
                     } else {
                         $sqlMealFavorites = $this->getDoctrine()->getRepository(MealFavorites::class)->removeMealFavorites($request->get('meal_id'), $this->getUser()->getId());
                         if ($sqlMealFavorites) {
-                            return $this->json(['code' => 201, 'message' => "Vous avez bien supprimer ce meal en favorites", 'id' => $request->get('meal_id')], 200);
+                            return $this->json(['action' => "delete", 'message' => "Vous avez bien supprimer ce repas en favorites", 'id' => $request->get('meal_id')], 200);
                         } else {
-                            return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                         }
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
+                    return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                 }
             }
-            return $this->json(['code' => 400, 'message' => 'Token invalide, veuillez contacter un administrateur !'], 200);
+            return $this->json(['message' => 'Token invalide, veuillez contacter un administrateur !'], 400);
         }
     }
 }

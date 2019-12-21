@@ -108,84 +108,80 @@
 		</div>
 	</div>
 	<script>
-		i = 0;
-$(document).ready(function () {
-$('[name="search"]#product').keypress(function (e) {
-$.getJSON("/products/search?search=" + $('[name="search"]#product').val() + "&limit=3").then((products) => {
-$('#search-product').html("")
-if (products.length == 0) {
-$('#search-product').html("<p class='margin-auto'>Aucun product trouvé</p>")
-}
-products.forEach((product) => {
-$("#search-product").append('<div class="flex" addProduct="' + product.id + '"><div class="w-33 flex"><img class="mr-3 rond margin-auto"src="' + product.image + '"style="height: 40px;width: 40px"></div><div class="w-33 flex"><p class="margin-auto">' + product.name + '</p></div><div class="w-33"></div></div>')
+i = 0;
+$(document).ready(function() {
+    $('[name="search"]#product').keypress(function(e) {
+        $.getJSON("/products/search?search=" + $('[name="search"]#product').val() + "&limit=3").then((products) => {
+            $('#search-product').html("")
+            if (products.length == 0) {
+                $('#search-product').html("<p class='margin-auto'>Aucun product trouvé</p>")
+            }
+            products.forEach((product) => {
+                $("#search-product").append('<div class="flex" addProduct="' + product.id + '"><div class="w-33 flex"><img class="mr-3 rond margin-auto"src="' + product.image + '"style="height: 40px;width: 40px"></div><div class="w-33 flex"><p class="margin-auto">' + product.name + '</p></div><div class="w-33"></div></div>')
+            })
+        });
+    });
+});
+$(document).ready(function() {
+    $('[name="search"]#store').keypress(function(e) {
+        $.getJSON("/stores/search?search=" + $('[name="search"]#store').val() + "&limit=3").then((stores) => {
+            $('#search-store').html("")
+            if (stores.length == 0) {
+                $('#search-store').html("<p class='margin-auto'>Aucun store trouvé</p>")
+            }
+            stores.forEach((store) => {
+                $("#search-store").append('<div class="flex" addStore="' + store.id + '"><div class="w-33 flex"><img class="mr-3 rond margin-auto"src="' + store.image + '"style="height: 40px;width: 40px"></div><div class="w-33 flex"><p class="margin-auto">' + store.name + '</p></div><div class="w-33"></div></div>')
+            })
+        });
+    });
+});
+$(document).on('click', '[addProduct]', function(e) {
+    id = $([this]).attr('addProduct')
+    $('[addProductStore]').attr('product', id)
+    $('[name="search"]#product').attr('value', id)
+    $('.product-group .input-group-append').html('<span class="input-group-text"><i class="cds fad fa-check"></i></span>')
+    $('#search-product').html("")
 })
-});
-});
-});
-$(document).ready(function () {
-$('[name="search"]#store').keypress(function (e) {
-$.getJSON("/stores/search?search=" + $('[name="search"]#store').val() + "&limit=3").then((stores) => {
-$('#search-store').html("")
-if (stores.length == 0) {
-$('#search-store').html("<p class='margin-auto'>Aucun store trouvé</p>")
-}
-stores.forEach((store) => {
-$("#search-store").append('<div class="flex" addStore="' + store.id + '"><div class="w-33 flex"><img class="mr-3 rond margin-auto"src="' + store.image + '"style="height: 40px;width: 40px"></div><div class="w-33 flex"><p class="margin-auto">' + store.name + '</p></div><div class="w-33"></div></div>')
+$(document).on('click', '[addStore]', function(e) {
+    id = $([this]).attr('addStore')
+    $('[addProductStore]').attr('store', id)
+    $('[name="search"]#store').attr('value', id)
+    $('.store-group .input-group-append').html('<span class="input-group-text"><i class="cds fad fa-check"></i></span>')
+    $('#search-store').html("")
 })
-});
-});
-});
-$(document).on('click', '[addProduct]', function (e) {
-id = $([this]).attr('addProduct')
-$('[addProductStore]').attr('product', id)
-$('[name="search"]#product').attr('value', id)
-$('.product-group .input-group-append').html('<span class="input-group-text"><i class="cds fad fa-check"></i></span>')
-$('#search-product').html("")
-})
-$(document).on('click', '[addStore]', function (e) {
-id = $([this]).attr('addStore')
-$('[addProductStore]').attr('store', id)
-$('[name="search"]#store').attr('value', id)
-$('.store-group .input-group-append').html('<span class="input-group-text"><i class="cds fad fa-check"></i></span>')
-$('#search-store').html("")
-})
-$(document).on('click', '[addProductStore]', function (e) {
-csrfData = $(this).attr('csrf-data')
-e.preventDefault();
-$.post("{{ path('admin_add_product_store') }}", {
-storeId: $([this]).attr('store'),
-productId: $([this]).attr('product'),
-csrfData: $(this).attr('csrf-data')
-}, function (data) {
-if (data.code == '200') {
-location.reload();
-} else {
-console.log(data)
-}
-}, 'json');
+$(document).on('click', '[addProductStore]', function(e) {
+    csrfData = $(this).attr('csrf-data')
+    e.preventDefault();
+    $.post("{{ path('admin_add_product_store') }}", {
+        storeId: $([this]).attr('store'),
+        productId: $([this]).attr('product'),
+        csrfData: $(this).attr('csrf-data')
+    }, function(data) {
+            location.reload();
+    }, 'json').fail( function(data) {
+            console.log(data.responseJSON)
+	});
 });
 addEventListener("load", () => {
-new pagination("store", 7, 10, "table-row");
+    new pagination("store", 7, 10, "table-row");
 })
 
-$(document).on('click', '[data-target="#deleteModal"]', function (e) {
-$('[deleteStore]').attr("deleteStore", $(this).attr('value'))
+$(document).on('click', '[data-target="#deleteModal"]', function(e) {
+    $('[deleteStore]').attr("deleteStore", $(this).attr('value'))
 });
 
-$(document).on('click', '[deleteStore]', function (e) {
-id = $(this).attr('deleteStore')
-csrfData = $(this).attr('csrf-data')
-e.preventDefault();
-$.post("{{ path('admin_delete_product_store') }}", {
-id: id,
-csrfData: $(this).attr('csrf-data')
-}, function (data) {
-if (data.code == '200') {
-location.reload();
-} else {
-console.log(data)
-}
-}, 'json');
+$(document).on('click', '[deleteStore]', function(e) {
+    id = $(this).attr('deleteStore')
+    csrfData = $(this).attr('csrf-data')
+    e.preventDefault();
+    $.post("{{ path('admin_delete_product_store') }}", {
+        id: id,
+        csrfData: $(this).attr('csrf-data')
+    }, function(data) {
+            location.reload();
+    }, 'json').fail( function(data) {
+            console.log(data.responseJSON)
+	});
 });
 	</script>
 {% endblock %}

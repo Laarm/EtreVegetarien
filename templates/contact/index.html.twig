@@ -35,32 +35,28 @@
 		</div>
 	</section>
 	<script>
-		$(document).ready(function () {
-$("#btnContact").click(function (e) {
-if ($("#cgu").prop('checked')) {
-if ($('#namecomplet').val().length !== 0 && $('#email').val().length !== 0 && $('#subject').val().length !== 0 && $('#message').val().length !== 0) {
-e.preventDefault();
-$.post('/ajax/contact/sendMessage', {
-namecomplet: $("#namecomplet").val(),
-email: $("#email").val(),
-subject: $("#subject").val(),
-message: $("#message").val(),
-cgu: $("#cgu").prop('checked'),
-csrfData: "{{ csrf_token('contact') }}"
-}, function (data) {
-if (data.code == 200) {
-$("#resultat").html('<div class="content"><p>' + data.message + '</p></div>');
-} else {
-$("#resultat").html('<div class="content"><p>' + data.message + '</p></div>');
-}
-}, 'json');
-} else {
-$("#resultat").html("<div class='content red'><p>Veuillez remplir tout les champs !</p></div>");
-}
-} else {
-$("#resultat").html("<div class='content red'><p>Veuillez cocher la case \"J'ai lu les CGU\" !</p></div>");
-}
-});
+$(document).ready(function() {
+    $("#btnContact").click(function(e) {
+        if ($("#cgu").prop('checked')) {
+            if ($('#namecomplet').val().length !== 0 && $('#email').val().length !== 0 && $('#subject').val().length !== 0 && $('#message').val().length !== 0) {
+                e.preventDefault();
+                $.post('/ajax/contact/sendMessage', {
+                    namecomplet: $("#namecomplet").val(),
+                    email: $("#email").val(),
+                    subject: $("#subject").val(),
+                    message: $("#message").val(),
+                    cgu: $("#cgu").prop('checked'),
+                    csrfData: "{{ csrf_token('contact') }}"
+                }, function(data) {
+                    $("#resultat").html('<div class="content"><p>' + data.message + '</p></div>');
+                }, 'json').fail(function(data) {$("#resultat").html('<div class="content"><p>' + data.message + '</p></div>');});
+            } else {
+                $("#resultat").html("<div class='content red'><p>Veuillez remplir tout les champs !</p></div>");
+            }
+        } else {
+            $("#resultat").html("<div class='content red'><p>Veuillez cocher la case \"J'ai lu les CGU\" !</p></div>");
+        }
+    });
 });
 	</script>
 {% endblock %}
