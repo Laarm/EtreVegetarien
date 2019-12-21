@@ -13,14 +13,14 @@ class RestaurantFixtures extends Fixture
         // $product = new Product();
         // $manager->persist($product);
 
-        for($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             $restaurant = new Restaurant();
             $restaurant->setName("Restaurant n°$i")
-                       ->setImage("http://placehold.it/350x250")
-                       ->setLocation("74 avenue de France")
-                       ->setAdresse("74 avenue de France")
-                       ->setVille("Limoges")
-                       ->setCreatedAt(new \DateTime());
+                ->setImage("http://placehold.it/350x250")
+                ->setLocation("74 avenue de France")
+                ->setAddress("74 avenue de France")
+                ->setCity("Limoges")
+                ->setCreatedAt(new \DateTime());
 
             $manager->persist($restaurant);
         }

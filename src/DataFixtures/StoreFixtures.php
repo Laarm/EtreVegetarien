@@ -13,14 +13,14 @@ class StoreFixtures extends Fixture
         // $product = new Product();
         // $manager->persist($product);
 
-        for($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             $store = new Store();
             $store->setName("Store n°$i")
-                  ->setLocation("78 avenue de Paris")
-                  ->setAdresse("78 avenue de Paris")
-                  ->setImage("http://placehold.it/350x250")
-                  ->setVille("Limoges")
-                  ->setCreatedAt(new \DateTime());
+                ->setLocation("78 avenue de Paris")
+                ->setAddress("78 avenue de Paris")
+                ->setImage("http://placehold.it/350x250")
+                ->setCity("Limoges")
+                ->setCreatedAt(new \DateTime());
 
             $manager->persist($store);
         }

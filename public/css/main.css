@@ -64,7 +64,7 @@ nav.navbar {
         width: 80px;
     }
 
-    nav.navbar.minNav .choisirVille {
+    nav.navbar.minNav .choisirCity {
         margin-top: -2px
     }
 
@@ -85,18 +85,18 @@ nav.navbar .logo:hover {
     transform: scale(1.1);
 }
 
-nav .choisirVille {
+nav .choisirCity {
     margin-left: 0
 }
 
-nav .choisirVille select {
+nav .choisirCity select {
     border: none;
     background-color: #58D68D;
     width: 93px;
     color: #FFF
 }
 
-nav .choisirVille select:focus {
+nav .choisirCity select:focus {
     border: none;
     background-color: #58D68D;
     color: #FFF;
@@ -599,7 +599,7 @@ footer .bottom .container p a {
         margin: auto
     }
 
-    nav .choisirVille {
+    nav .choisirCity {
         display: none;
     }
 

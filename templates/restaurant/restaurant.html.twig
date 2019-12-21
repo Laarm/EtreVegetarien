@@ -186,7 +186,7 @@
 				{% endif %}
 			</div>
 			<div class="flex flex-between">
-				<h2 class="mtb-auto">{{ restaurant.adresse }}</h2>
+				<h2 class="mtb-auto">{{ restaurant.address }}</h2>
 				<p class="feedback mtb-auto">{{restaurantFeedbackCount}}
 					feedback</p>
 			</div>
@@ -259,7 +259,7 @@
 							<button id="btnEnvoieNote" type="button" class="btn btn-primary">Envoyer</button>
 						{% else %}
 							<a href="{{ path('connexion') }}" class="btn btn-primary w-100">Se
-														connecter</a>
+																														connecter</a>
 						{% endif %}
 						<div id="resultat"></div>
 					</div>
@@ -288,7 +288,7 @@
 						<div class="left">
 							<a href="{{ path('restaurant_show', {'id': restaurant.id}) }}">
 								<h1 class="cds">{{ restaurant.name }}</h1>
-								<h2 class="gris">{{ restaurant.ville }}, Végétarien</h2>
+								<h2 class="gris">{{ restaurant.city }}, Végétarien</h2>
 							</a>
 						</div>
 						<div class="right mtb-auto flex">
@@ -314,7 +314,7 @@
 		addEventListener("load", () => {
 new pagination("feedback", 3, 10, "block");
 })
-$.getJSON("https://api-adresse.data.gouv.fr/search/?q=  {{ restaurant.adresse }}&limit=1").then((restaurant) => {
+$.getJSON("https://api-address.data.gouv.fr/search/?q=    {{ restaurant.address }}&limit=1").then((restaurant) => {
 lat = restaurant.features[0]['geometry']['coordinates'][1];
 lon = restaurant.features[0]['geometry']['coordinates'][0];
 initMap();

@@ -24,15 +24,15 @@
 					</div>
 					<input type="text" class="form-control hidden" id="image" value="">
 					<div class="input-group-prepend">
-						<span class="input-group-text">Ville :
+						<span class="input-group-text">City :
 						</span>
 					</div>
-					<input type="text" class="form-control" id="ville" value="">
+					<input type="text" class="form-control" id="city" value="">
 					<div class="input-group-prepend">
-						<span class="input-group-text">Adresse :
+						<span class="input-group-text">Address :
 						</span>
 					</div>
-					<input type="text" class="form-control" id="adresse" placeholder="16 avenue de l'exemple, 87100" value="">
+					<input type="text" class="form-control" id="address" placeholder="16 avenue de l'exemple, 87100" value="">
 				</div>
 				<textarea id="editeur"></textarea>
 				<div class="input-group mb-3">
@@ -68,7 +68,7 @@ var fd = new FormData();
 var files = $('#file')[0].files[0];
 fd.append('file', files);
 $.ajax({
-url: "{{ path('admin_upload_image') }}?_token= {{ csrf_token('upload-image') }}",
+url: "{{ path('admin_upload_image') }}?_token=    {{ csrf_token('upload-image') }}",
 type: 'post',
 data: fd,
 contentType: false,
@@ -86,8 +86,8 @@ if (stop == "non") {
 e.preventDefault();
 $.post("{{ path('admin_save_restaurant') }}", {
 name: $("#name").val(),
-adresse: $("#adresse").val(),
-ville: $("#ville").val(),
+address: $("#address").val(),
+city: $("#city").val(),
 restaurant_id: 'new',
 image: $("#image").val(),
 content: $("#editeur").val(),

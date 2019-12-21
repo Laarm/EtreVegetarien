@@ -22,14 +22,14 @@ class StoreRepository extends ServiceEntityRepository
         $this->entityManager = $entityManager;
         $this->validator = $validator;
     }
-    public function createStore($name, $image, $location, $adresse, $ville)
+    public function createStore($name, $image, $location, $address, $city)
     {
         $sqlStore = new Store();
         $sqlStore->setName($name)
             ->setImage($image)
             ->setLocation($location)
-            ->setAdresse($adresse)
-            ->setVille($ville)
+            ->setAddress($address)
+            ->setCity($city)
             ->setCreatedAt(new \DateTime());
         $this->entityManager->persist($sqlStore);
         $this->entityManager->flush();
@@ -41,13 +41,13 @@ class StoreRepository extends ServiceEntityRepository
         }
         return $sqlStore->getId();
     }
-    public function saveStore($storeId, $name, $image, $adresse, $ville)
+    public function saveStore($storeId, $name, $image, $address, $city)
     {
         $sqlStore = $this->find($storeId);
         $sqlStore->setName($name)
             ->setImage($image)
-            ->setAdresse($adresse)
-            ->setVille($ville);
+            ->setAddress($address)
+            ->setCity($city);
         $this->entityManager->flush();
         $errors = $this->validator->validate($sqlStore);
         if (count($errors) == 0) {

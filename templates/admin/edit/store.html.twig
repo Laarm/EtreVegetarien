@@ -1,105 +1,103 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}{{ store.name }}!{% endblock %}
-{% block stylesheets %}
-
+{% block title %}
+	{{ store.name }}!
 {% endblock %}
+{% block stylesheets %}{% endblock %}
 {% block body %}
-<section class="container">
-    <a href="{{ path('adminManagementStores') }}" class="btn btn-primary btnRetour mt-4"><i class="far fa-backspace"
-            aria-hidden="true"></i> Retour</a>
-</section>
-<section id="panel" class="container">
-    <div class="editstore">
-        <div class="flex">
-            <input id="name" value="{{ store.name }}" class="margin-auto" />
-        </div>
-        <div class="btnForSaveAndCancel">
-            <div class="input-group mb-3 mt-3">
-                <div class="input-group-prepend hidden">
-                    <span class="input-group-text">URL de l'image : </span>
-                </div>
-                <input type="text" class="form-control hidden" id="image" value="{{ store.image }}">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Ville : </span>
-                </div>
-                <input type="text" class="form-control" id="ville" value="{{ store.ville }}">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Adresse : </span>
-                </div>
-                <input type="text" class="form-control" id="adresse" value="{{ store.adresse }}">
-            </div>
-            <div class="input-group mb-3">
-                <form method="post" class="w-100" action="" enctype="multipart/form-data" id="uploadImage">
-                    <div class="input-group mb-3 w-100">
-                        <div class="custom-file w-100">
-                            <input type="file" class="custom-file-input" id="file">
-                            <label class="custom-file-label" for="file">Choisir l'image de présentation</label>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <button id="btnSaveStore" type="button" class="btn btn-primary">Sauvegarder</button>
-            <button type="button" class="btn btn-secondary btnCancelStore">Annuler</button>
-        </div>
-    </div>
-    <div id="resultat"></div>
-</section>
+	<section class="container">
+		<a href="{{ path('adminManagementStores') }}" class="btn btn-primary btnRetour mt-4">
+			<i class="far fa-backspace" aria-hidden="true"></i>
+			Retour</a>
+	</section>
+	<section id="panel" class="container">
+		<div class="editstore">
+			<div class="flex">
+				<input id="name" value="{{ store.name }}" class="margin-auto"/>
+			</div>
+			<div class="btnForSaveAndCancel">
+				<div class="input-group mb-3 mt-3">
+					<div class="input-group-prepend hidden">
+						<span class="input-group-text">URL de l'image :
+						</span>
+					</div>
+					<input type="text" class="form-control hidden" id="image" value="{{ store.image }}">
+					<div class="input-group-prepend">
+						<span class="input-group-text">City :
+						</span>
+					</div>
+					<input type="text" class="form-control" id="city" value="{{ store.city }}">
+					<div class="input-group-prepend">
+						<span class="input-group-text">Address :
+						</span>
+					</div>
+					<input type="text" class="form-control" id="address" value="{{ store.address }}">
+				</div>
+				<div class="input-group mb-3">
+					<form method="post" class="w-100" action="" enctype="multipart/form-data" id="uploadImage">
+						<div class="input-group mb-3 w-100">
+							<div class="custom-file w-100">
+								<input type="file" class="custom-file-input" id="file">
+								<label class="custom-file-label" for="file">Choisir l'image de présentation</label>
+							</div>
+						</div>
+					</form>
+				</div>
+				<button id="btnSaveStore" type="button" class="btn btn-primary">Sauvegarder</button>
+				<button type="button" class="btn btn-secondary btnCancelStore">Annuler</button>
+			</div>
+		</div>
+		<div id="resultat"></div>
+	</section>
 {% endblock %}
 
 {% block javascript %}
-<script>
-    $(document).ready(function () {
-        $("#btnSaveStore").click(function (e) {
-            let stop = "non"
-            var fd = new FormData();
-            if ($('#file').val().length !== 0) {
-                stop = "oui"
-                var fd = new FormData();
-                var files = $('#file')[0].files[0];
-                fd.append('file', files);
-                $.ajax({
-                    url: "{{ path('admin_upload_image') }}?_token={{ csrf_token('upload-image') }}",
-                    type: 'post',
-                    data: fd,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        $("#image").attr("value", response.location)
-                        $("#resultat").html("<p>" + response.message + "</p>");
-                        document.getElementById("file").value = '';
-                        $("#btnSaveStore").click()
-                    },
-                });
-            }
-            if ($('#name').val().length !== 0 && $('#adresse').val().length !== 0 && $('#ville').val().length !== 0) {
-                if (stop == "non") {
-                    e.preventDefault();
-                    $.post(
-                        "{{ path('admin_save_store') }}",
-                        {
-                            name: $("#name").val(),
-                            adresse: $("#adresse").val(),
-                            ville: $("#ville").val(),
-                            store_id: '{{ store.id }}',
-                            image: $("#image").val(),
-                            csrfData: "{{ csrf_token('save-item') }}"
-                        },
-                        function (data) {
-                            if (data.code == 200) {
-                                $("#resultat").html("<p>" + data.message + "</p>");
-                            }
-                            else {
-                                $("#resultat").html("<p>" + data.message + "</p>");
-                            }
-                        },
-                        'json'
-                    );
-                }
-            } else {
-                $("#resultat").html("<p>Veuillez remplir le name, l'adresse ainsi que la ville</p>");
-            }
-        });
-    })
-</script>
+	<script>
+		$(document).ready(function () {
+$("#btnSaveStore").click(function (e) {
+let stop = "non"
+var fd = new FormData();
+if ($('#file').val().length !== 0) {
+stop = "oui"
+var fd = new FormData();
+var files = $('#file')[0].files[0];
+fd.append('file', files);
+$.ajax({
+url: "{{ path('admin_upload_image') }}?_token=   {{ csrf_token('upload-image') }}",
+type: 'post',
+data: fd,
+contentType: false,
+processData: false,
+success: function (response) {
+$("#image").attr("value", response.location)
+$("#resultat").html("<p>" + response.message + "</p>");
+document.getElementById("file").value = '';
+$("#btnSaveStore").click()
+}
+});
+}
+if ($('#name').val().length !== 0 && $('#address').val().length !== 0 && $('#city').val().length !== 0) {
+if (stop == "non") {
+e.preventDefault();
+$.post("{{ path('admin_save_store') }}", {
+name: $("#name").val(),
+address: $("#address").val(),
+city: $("#city").val(),
+store_id: '{{ store.id }}',
+image: $("#image").val(),
+csrfData: "{{ csrf_token('save-item') }}"
+}, function (data) {
+if (data.code == 200) {
+$("#resultat").html("<p>" + data.message + "</p>");
+} else {
+$("#resultat").html("<p>" + data.message + "</p>");
+}
+}, 'json');
+}
+} else {
+$("#resultat").html("<p>Veuillez remplir le name, l'address ainsi que la city</p>");
+}
+});
+})
+	</script>
 {% endblock %}
