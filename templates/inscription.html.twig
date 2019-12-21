@@ -1,78 +1,73 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Inscription - Être végétarien sur Limoges{% endblock %}
+{% block title %}Inscription - Être végétarien sur Limoges
+{% endblock %}
 
 {% block stylesheets %}
-<link href="{{ asset('/css/inscription.css') }}" rel="stylesheet" />
+	<link href="{{ asset('/css/inscription.css') }}" rel="stylesheet"/>
 {% endblock %}
 
 {% block body %}
-<section id="inscription" class="container paddingSeperateur">
-    <div class="shadow-1 rond-2 p-4">
-        <div class="top">
-            <h1>
-                Inscription
-            </h1>
-        </div>
-        <div class="middle">
-            <div id="resultat"></div>
-            <div class="form-group">
-                <label for="pseudonyme">Pseudonyme</label>
-                <input type="text" class="form-control" id="pseudonyme" placeholder="Votre pseudonyme" required>
-            </div>
-            <div class="form-group">
-                <label for="email">E-mail</label>
-                <input type="email" class="form-control" id="email" aria-describedby="emailHelp"
-                    placeholder="Votre e-mail" required>
-                <small id="emailHelp" class="form-text text-muted">Nous ne partagerons jamais votre email avec quelqu'un
-                    d'autre.</small>
-            </div>
-            <div class="form-group">
-                <label for="password">Mot de passe</label>
-                <input type="password" class="form-control" id="password" placeholder="Votre mot de passe" required>
-            </div>
-        </div>
-        <div class="bottom flex flex-between">
-            <div class="left">
-                <button id="btnInscription" type="button" class="btn btn-primary mr-1">S'inscrire</button> - <a
-                    href="{{ path('connexion') }}" class="cds">Se connecter</a>
-            </div>
-            <div class="right mtb-auto">
-                {# <button id="btnInscriptionRapide"><i class="fad fa-user-secret"></i> Inscription anonyme
-                    <span>News</span></button> #}
-            </div>
-        </div>
-    </div>
-</section>
-<script>
-    $(document).ready(function () {
-        $("#btnInscription").click(function (e) {
-            if ($("#pseudonyme").val().length !== 0 && $("#email").val().length !== 0 && $("#password").val().length !== 0) {
-                e.preventDefault();
-                $.post(
-                    '/ajax/inscriptionAction',
-                    {
-                        username: $("#pseudonyme").val(),
-                        email: $("#email").val(),
-                        password: $("#password").val(),
-                        csrfData: "{{ csrf_token('inscription') }}"
-                    },
-                    function (data) {
-                        var data = data.split(",");
-                        if (data[0] == 'Success') {
-                            $("#resultat").html("<div class='content'><p>" + data[1] + "</p></div>");
-                            window.location.replace("/user/" + data[2]);
-                        }
-                        else {
-                            $("#resultat").html("<div class='content red'><p>" + data[1] + "</p></div>");
-                        }
-                    },
-                    'text'
-                );
-            } else {
-                $("#resultat").html("<div class='content red'><p>Veuillez remplir tout les champs !</p></div>");
-            }
-        });
-    });
-</script>
+	<section id="inscription" class="container paddingSeperateur">
+		<div class="shadow-1 rond-2 p-4">
+			<div class="top">
+				<h1>
+					Inscription
+				</h1>
+			</div>
+			<div class="middle">
+				<div id="resultat"></div>
+				<div class="form-group">
+					<label for="pseudonyme">Pseudonyme</label>
+					<input type="text" class="form-control" id="pseudonyme" placeholder="Votre pseudonyme" required>
+				</div>
+				<div class="form-group">
+					<label for="email">E-mail</label>
+					<input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Votre e-mail" required>
+					<small id="emailHelp" class="form-text text-muted">Nous ne partagerons jamais votre email avec quelqu'un
+						                    d'autre.</small>
+				</div>
+				<div class="form-group">
+					<label for="password">Mot de passe</label>
+					<input type="password" class="form-control" id="password" placeholder="Votre mot de passe" required>
+				</div>
+			</div>
+			<div class="bottom flex flex-between">
+				<div class="left">
+					<button id="btnInscription" type="button" class="btn btn-primary mr-1">S'inscrire</button>
+					-
+					<a href="{{ path('connexion') }}" class="cds">Se connecter</a>
+				</div>
+				<div
+					class="right mtb-auto">{# <button id="btnInscriptionRapide"><i class="fad fa-user-secret"></i> Inscription anonyme
+						                    <span>News</span></button> #}
+				</div>
+			</div>
+		</div>
+	</section>
+	<script>
+		$(document).ready(function () {
+$("#btnInscription").click(function (e) {
+if ($("#pseudonyme").val().length !== 0 && $("#email").val().length !== 0 && $("#password").val().length !== 0) {
+e.preventDefault();
+$.post('/ajax/inscriptionAction', {
+username: $("#pseudonyme").val(),
+email: $("#email").val(),
+password: $("#password").val(),
+csrfData: "{{ csrf_token('inscription') }}"
+}, function (data) {
+var data = data.split(",");
+if (data[0] == 'Success') {
+$("#resultat").html("<div class='content'><p>" + data[1] + "</p></div>");
+window.location.replace("/connexion/");
+} else {
+$("#resultat").html("<div class='content red'><p>" + data[1] + "</p></div>");
+}
+}, 'text');
+} else {
+$("#resultat").html("<div class='content red'><p>Veuillez remplir tout les champs !</p></div>");
+}
+});
+});
+	</script>
 {% endblock %}
