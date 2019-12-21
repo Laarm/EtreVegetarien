@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ProductFavorisRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\MealFavoritesRepository")
  */
-class ProductFavoris
+class MealFavorites
 {
     /**
      * @ORM\Id()
@@ -17,16 +17,16 @@ class ProductFavoris
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="productFavoris")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="mealFavorites")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $postedById;
+    private $postedBy;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="productFavoris")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Meal", inversedBy="mealFavorites")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $productId;
+    private $Meal;
 
     /**
      * @ORM\Column(type="datetime")
@@ -38,26 +38,26 @@ class ProductFavoris
         return $this->id;
     }
 
-    public function getPostedById(): ?User
+    public function getPostedBy(): ?User
     {
-        return $this->postedById;
+        return $this->postedBy;
     }
 
-    public function setPostedById(?User $postedById): self
+    public function setPostedBy(?User $postedBy): self
     {
-        $this->postedById = $postedById;
+        $this->postedBy = $postedBy;
 
         return $this;
     }
 
-    public function getProductId(): ?Product
+    public function getMeal(): ?Meal
     {
-        return $this->productId;
+        return $this->Meal;
     }
 
-    public function setProductId(?Product $productId): self
+    public function setMeal(?Meal $Meal): self
     {
-        $this->productId = $productId;
+        $this->Meal = $Meal;
 
         return $this;
     }

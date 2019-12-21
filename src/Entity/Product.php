@@ -34,9 +34,9 @@ class Product
     private $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ProductFavoris", mappedBy="productId", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\ProductFavorites", mappedBy="productId", orphanRemoval=true)
      */
-    private $productFavoris;
+    private $productFavorites;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ProductSync", mappedBy="Product", orphanRemoval=true)
@@ -45,7 +45,7 @@ class Product
 
     public function __construct()
     {
-        $this->productFavoris = new ArrayCollection();
+        $this->productFavorites = new ArrayCollection();
         $this->productSyncs = new ArrayCollection();
     }
 
@@ -91,30 +91,30 @@ class Product
     }
 
     /**
-     * @return Collection|ProductFavoris[]
+     * @return Collection|ProductFavorites[]
      */
-    public function getProductFavoris(): Collection
+    public function getProductFavorites(): Collection
     {
-        return $this->productFavoris;
+        return $this->productFavorites;
     }
 
-    public function addProductFavori(ProductFavoris $productFavori): self
+    public function addProductFavorite(ProductFavorites $productFavorite): self
     {
-        if (!$this->productFavoris->contains($productFavori)) {
-            $this->productFavoris[] = $productFavori;
-            $productFavori->setProductId($this);
+        if (!$this->productFavorites->contains($productFavorite)) {
+            $this->productFavorites[] = $productFavorite;
+            $productFavorite->setProductId($this);
         }
 
         return $this;
     }
 
-    public function removeProductFavori(ProductFavoris $productFavori): self
+    public function removeProductFavorite(ProductFavorites $productFavorite): self
     {
-        if ($this->productFavoris->contains($productFavori)) {
-            $this->productFavoris->removeElement($productFavori);
+        if ($this->productFavorites->contains($productFavorite)) {
+            $this->productFavorites->removeElement($productFavorite);
             // set the owning side to null (unless already changed)
-            if ($productFavori->getProductId() === $this) {
-                $productFavori->setProductId(null);
+            if ($productFavorite->getProductId() === $this) {
+                $productFavorite->setProductId(null);
             }
         }
 

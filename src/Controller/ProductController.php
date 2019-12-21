@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\ProductFavoris;
-use App\Repository\ProductFavorisRepository;
+use App\Entity\ProductFavorites;
+use App\Repository\ProductFavoritesRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,25 +22,25 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/ajax/productFavoris", name="product_favoris")
+     * @Route("/ajax/productFavorites", name="product_favorites")
      */
-    public function productFavoris(Security $security, ProductFavorisRepository $repoProductFavoris, Request $request)
+    public function productFavorites(Security $security, ProductFavoritesRepository $repoProductFavorites, Request $request)
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('product-favoris', $submittedToken)) {
+            if ($this->isCsrfTokenValid('product-favorites', $submittedToken)) {
                 if (!empty($request->get('product_id'))) {
                     $user = $security->getUser();
-                    $verif = $repoProductFavoris->findBy(array('postedById' => $user, 'productId' => $request->get('product_id')));
+                    $verif = $repoProductFavorites->findBy(array('postedById' => $user, 'productId' => $request->get('product_id')));
                     if (!$verif) {
-                        $sqlProductFavoris = $this->getDoctrine()->getRepository(ProductFavoris::class)->addProductFavoris($request->get('product_id'));
-                        if ($sqlProductFavoris) {
-                            return $this->json(['code' => 200, 'message' => "Vous avez bien ajouter ce product en favoris", 'id' => $request->get('product_id')], 200);
+                        $sqlProductFavorites = $this->getDoctrine()->getRepository(ProductFavorites::class)->addProductFavorites($request->get('product_id'));
+                        if ($sqlProductFavorites) {
+                            return $this->json(['code' => 200, 'message' => "Vous avez bien ajouter ce product en favorites", 'id' => $request->get('product_id')], 200);
                         }
                     } else {
-                        $sqlProductFavoris = $this->getDoctrine()->getRepository(ProductFavoris::class)->removeProductFavoris($request->get('product_id'), $this->getUser()->getId());
-                        if ($sqlProductFavoris) {
-                            return $this->json(['code' => 201, 'message' => "Vous avez bien supprimer ce product en favoris", 'id' => $request->get('product_id')], 200);
+                        $sqlProductFavorites = $this->getDoctrine()->getRepository(ProductFavorites::class)->removeProductFavorites($request->get('product_id'), $this->getUser()->getId());
+                        if ($sqlProductFavorites) {
+                            return $this->json(['code' => 201, 'message' => "Vous avez bien supprimer ce product en favorites", 'id' => $request->get('product_id')], 200);
                         } else {
                             return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
                         }

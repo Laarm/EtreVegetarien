@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Meal;
-use App\Entity\MealFavoris;
+use App\Entity\MealFavorites;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -11,51 +11,51 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
- * @method MealFavoris|null find($id, $lockMode = null, $lockVersion = null)
- * @method MealFavoris|null findOneBy(array $criteria, array $orderBy = null)
- * @method MealFavoris[]    findAll()
- * @method MealFavoris[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method MealFavorites|null find($id, $lockMode = null, $lockVersion = null)
+ * @method MealFavorites|null findOneBy(array $criteria, array $orderBy = null)
+ * @method MealFavorites[]    findAll()
+ * @method MealFavorites[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class MealFavorisRepository extends ServiceEntityRepository
+class MealFavoritesRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, ValidatorInterface $validator, Security $security)
     {
-        parent::__construct($registry, MealFavoris::class);
+        parent::__construct($registry, MealFavorites::class);
         $this->entityManager = $entityManager;
         $this->validator = $validator;
         $this->security = $security;
     }
-    public function addMealFavoris($mealId)
+    public function addMealFavorites($mealId)
     {
         $user = $this->security->getUser();
-        $sqlMealFavoris = new MealFavoris();
+        $sqlMealFavorites = new MealFavorites();
         $meal = $this->entityManager
             ->getRepository(Meal::class)
             ->find($mealId);
-        $sqlMealFavoris->setMeal($meal)
+        $sqlMealFavorites->setMeal($meal)
             ->setPostedBy($user)
             ->setCreatedAt(new \DateTime());
-        $this->entityManager->persist($sqlMealFavoris);
+        $this->entityManager->persist($sqlMealFavorites);
         $this->entityManager->flush();
-        $errors = $this->validator->validate($sqlMealFavoris);
+        $errors = $this->validator->validate($sqlMealFavorites);
         if (count($errors) == 0) {
             return true;
         } else {
             return false;
         }
     }
-    public function removeMealFavoris($mealId, $userId)
+    public function removeMealFavorites($mealId, $userId)
     {
         $result = $this->createQueryBuilder('r')
             ->select('r.id')
             ->where('r.postedBy = ' . $userId)
             ->andwhere('r.Meal = ' . $mealId)
             ->getQuery();
-        $mealFavorisId = $result->getResult();
-        $deleteFavoris = $this->find($mealFavorisId[0]['id']);
-        $this->entityManager->remove($deleteFavoris);
+        $mealFavoritesId = $result->getResult();
+        $deleteFavorites = $this->find($mealFavoritesId[0]['id']);
+        $this->entityManager->remove($deleteFavorites);
         $this->entityManager->flush();
-        $errors = $this->validator->validate($deleteFavoris);
+        $errors = $this->validator->validate($deleteFavorites);
         if (count($errors) == 0) {
             return true;
         } else {

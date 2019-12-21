@@ -45,13 +45,13 @@ class Meal
     private $postedBy;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\MealFavoris", mappedBy="Meal", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\MealFavorites", mappedBy="Meal", orphanRemoval=true)
      */
-    private $mealFavoris;
+    private $mealFavorites;
 
     public function __construct()
     {
-        $this->mealFavoris = new ArrayCollection();
+        $this->mealFavorites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -120,30 +120,30 @@ class Meal
     }
 
     /**
-     * @return Collection|MealFavoris[]
+     * @return Collection|MealFavorites[]
      */
-    public function getMealFavoris(): Collection
+    public function getMealFavorites(): Collection
     {
-        return $this->mealFavoris;
+        return $this->mealFavorites;
     }
 
-    public function addMealFavori(MealFavoris $mealFavori): self
+    public function addMealFavorite(MealFavorites $mealFavorite): self
     {
-        if (!$this->mealFavoris->contains($mealFavori)) {
-            $this->mealFavoris[] = $mealFavori;
-            $mealFavori->setMeal($this);
+        if (!$this->mealFavorites->contains($mealFavorite)) {
+            $this->mealFavorites[] = $mealFavorite;
+            $mealFavorite->setMeal($this);
         }
 
         return $this;
     }
 
-    public function removeMealFavori(MealFavoris $mealFavori): self
+    public function removeMealFavorite(MealFavorites $mealFavorite): self
     {
-        if ($this->mealFavoris->contains($mealFavori)) {
-            $this->mealFavoris->removeElement($mealFavori);
+        if ($this->mealFavorites->contains($mealFavorite)) {
+            $this->mealFavorites->removeElement($mealFavorite);
             // set the owning side to null (unless already changed)
-            if ($mealFavori->getMeal() === $this) {
-                $mealFavori->setMeal(null);
+            if ($mealFavorite->getMeal() === $this) {
+                $mealFavorite->setMeal(null);
             }
         }
 

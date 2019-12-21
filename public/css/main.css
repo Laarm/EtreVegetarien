@@ -670,7 +670,7 @@ footer .bottom .container p a {
     text-decoration: none;
 }
 
-[btnFavoris] {
+[btnFavorites] {
     z-index: 9;
     color: grey;
     position: absolute;
@@ -680,18 +680,18 @@ footer .bottom .container p a {
     transition-duration: 1s;
 }
 
-[btnFavoris]:hover,
-[btnFavoris]:focus,
-[btnFavoris]:active,
-[btnFavoris].active {
+[btnFavorites]:hover,
+[btnFavorites]:focus,
+[btnFavorites]:active,
+[btnFavorites].active {
     color: #58D68D;
 }
 
-[btnFavoris]:active {
+[btnFavorites]:active {
     transition-duration: 0.1s;
     transform: scale(1.5);
 }
 
-[btnFavoris].f-20 {
+[btnFavorites].f-20 {
     font-size: 20px
 }
