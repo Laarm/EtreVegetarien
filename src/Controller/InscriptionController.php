@@ -52,7 +52,7 @@ class InscriptionController extends AbstractController
                     ]);
                     if ($user == null) {
                         $sqlUser = $this->getDoctrine()->getRepository(User::class)->createUser($username, $request->get('password'), $email);
-                        if ($sqlUser !== "not good") {
+                        if ($sqlUser) {
                             $_SESSION['email'] = $email;
                             $_SESSION['password'] = $sqlUser['password'];
                             return new Response('Success,Vous êtes bien inscrit !,' . $sqlUser['id']);

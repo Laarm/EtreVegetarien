@@ -30,9 +30,9 @@ class RestaurantAvisRepository extends ServiceEntityRepository
         $this->entityManager->flush();
         $errors = $this->validator->validate($sqlRestaurant);
         if (count($errors) == 0) {
-            return "good";
+            return true;
         } else {
-            return "not good";
+            return false;
         }
     }
     public function getCountAvis($restaurant)
@@ -64,9 +64,9 @@ class RestaurantAvisRepository extends ServiceEntityRepository
         $this->entityManager->flush();
         $errors = $this->validator->validate($sqlRestaurantAvis);
         if (count($errors) == 0) {
-            return "good";
+            return true;
         } else {
-            return "not good";
+            return false;
         }
     }
     public function getAllRestaurantsAvisForUser($user)

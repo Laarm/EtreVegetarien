@@ -76,12 +76,12 @@ class RepasController extends AbstractController
                     $verif = $repoRepasFavoris->findBy(array('postedBy' => $user, 'Repas' => $request->get('repas_id')));
                     if (!$verif) {
                         $sqlRepasFavoris = $this->getDoctrine()->getRepository(RepasFavoris::class)->addRepasFavoris($request->get('repas_id'));
-                        if ($sqlRepasFavoris == "good") {
+                        if ($sqlRepasFavoris) {
                             return $this->json(['code' => 200, 'message' => "Vous avez bien ajouter ce repas en favoris", 'id' => $request->get('repas_id')], 200);
                         }
                     } else {
                         $sqlRepasFavoris = $this->getDoctrine()->getRepository(RepasFavoris::class)->removeRepasFavoris($request->get('repas_id'), $this->getUser()->getId());
-                        if ($sqlRepasFavoris == "good") {
+                        if ($sqlRepasFavoris) {
                             return $this->json(['code' => 201, 'message' => "Vous avez bien supprimer ce repas en favoris", 'id' => $request->get('repas_id')], 200);
                         } else {
                             return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);

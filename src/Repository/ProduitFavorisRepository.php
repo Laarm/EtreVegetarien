@@ -49,9 +49,9 @@ class ProduitFavorisRepository extends ServiceEntityRepository
         $this->entityManager->flush();
         $errors = $this->validator->validate($sqlProduitFavoris);
         if (count($errors) == 0) {
-            return "good";
+            return true;
         } else {
-            return "not good";
+            return false;
         }
     }
     public function removeProduitFavoris($produitId, $userId)
@@ -67,9 +67,9 @@ class ProduitFavorisRepository extends ServiceEntityRepository
         $this->entityManager->flush();
         $errors = $this->validator->validate($deleteFavoris);
         if (count($errors) == 0) {
-            return "good";
+            return true;
         } else {
-            return "not good";
+            return false;
         }
     }
 }

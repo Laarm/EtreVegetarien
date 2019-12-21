@@ -34,7 +34,7 @@ class ProduitRepository extends ServiceEntityRepository
         if (count($errors) == 0) {
             return $sqlProduit->getId();
         } else {
-            return "not good";
+            return false;
         }
     }
     public function saveProduit($produitId, $nom, $image)
@@ -47,7 +47,7 @@ class ProduitRepository extends ServiceEntityRepository
         if (count($errors) == 0) {
             return $produitId;
         } else {
-            return "not good";
+            return false;
         }
     }
     public function deleteProduit($produitId)
@@ -57,9 +57,9 @@ class ProduitRepository extends ServiceEntityRepository
         $this->entityManager->flush();
         $errors = $this->validator->validate($sqlProduit);
         if (count($errors) == 0) {
-            return "good";
+            return true;
         } else {
-            return "not good";
+            return false;
         }
     }
     public function searchProduit($search, $limit)

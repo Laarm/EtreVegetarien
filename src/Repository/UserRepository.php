@@ -35,9 +35,9 @@ class UserRepository extends ServiceEntityRepository
         $this->entityManager->flush();
         $errors = $this->validator->validate($sqlUser);
         if (count($errors) == 0) {
-            return "good";
+            return true;
         } else {
-            return "not good";
+            return false;
         }
     }
     public function saveUserAvatar($userId, $avatar)
@@ -47,9 +47,9 @@ class UserRepository extends ServiceEntityRepository
         $this->entityManager->flush();
         $errors = $this->validator->validate($sqlUser);
         if (count($errors) == 0) {
-            return "good";
+            return true;
         } else {
-            return "not good";
+            return false;
         }
     }
     public function saveUserPassword($userId, $password)
@@ -61,9 +61,9 @@ class UserRepository extends ServiceEntityRepository
         $this->entityManager->flush();
         $errors = $this->validator->validate($sqlUser);
         if (count($errors) == 0) {
-            return "good";
+            return true;
         } else {
-            return "not good";
+            return false;
         }
     }
     public function deleteUser($userId)
@@ -73,9 +73,9 @@ class UserRepository extends ServiceEntityRepository
         $this->entityManager->flush();
         $errors = $this->validator->validate($sqlUser);
         if (count($errors) == 0) {
-            return "good";
+            return true;
         } else {
-            return "not good";
+            return false;
         }
     }
     public function createUser($username, $password, $email)
@@ -93,7 +93,7 @@ class UserRepository extends ServiceEntityRepository
         if (count($errors) == 0) {
             return $return;
         } else {
-            return "not good";
+            return false;
         }
     }
 }

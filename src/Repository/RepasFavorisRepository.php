@@ -39,9 +39,9 @@ class RepasFavorisRepository extends ServiceEntityRepository
         $this->entityManager->flush();
         $errors = $this->validator->validate($sqlRepasFavoris);
         if (count($errors) == 0) {
-            return "good";
+            return true;
         } else {
-            return "not good";
+            return false;
         }
     }
     public function removeRepasFavoris($repasId, $userId)
@@ -57,9 +57,9 @@ class RepasFavorisRepository extends ServiceEntityRepository
         $this->entityManager->flush();
         $errors = $this->validator->validate($deleteFavoris);
         if (count($errors) == 0) {
-            return "good";
+            return true;
         } else {
-            return "not good";
+            return false;
         }
     }
     public function getAllRepasAvisForUser($user)

@@ -36,7 +36,7 @@ class RepasRepository extends ServiceEntityRepository
         if (count($errors) == 0) {
             return $sqlRepas->getId();
         } else {
-            return "not good";
+            return false;
         }
     }
     public function saveRepas($repasId, $nom, $image, $recette, $user)
@@ -51,7 +51,7 @@ class RepasRepository extends ServiceEntityRepository
         if (count($errors) == 0) {
             return $repasId;
         } else {
-            return "not good";
+            return false;
         }
     }
     public function deleteRepas($repasId)
@@ -61,9 +61,9 @@ class RepasRepository extends ServiceEntityRepository
         $this->entityManager->flush();
         $errors = $this->validator->validate($sqlRepas);
         if (count($errors) == 0) {
-            return "good";
+            return true;
         } else {
-            return "not good";
+            return false;
         }
     }
     public function searchRepas($search)

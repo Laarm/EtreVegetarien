@@ -96,7 +96,7 @@ class RestaurantController extends AbstractController
                     $verif = $this->getDoctrine()->getRepository(RestaurantAvis::class)->getAvisOfUser($this->getUser()->getId(), $request->get('restaurant_id'));
                     if (!$verif) {
                         $verif = $this->getDoctrine()->getRepository(RestaurantAvis::class)->addAvis($request->get('restaurant_id'), $user, $message, $note);
-                        if ($verif == "good") {
+                        if ($verif) {
                             return $this->json(['code' => 200, 'message' => 'Merci d\'avoir donné votre avis !'], 200);
                         }
                     } else {

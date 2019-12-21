@@ -34,9 +34,9 @@ class ContactRepository extends ServiceEntityRepository
         $this->entityManager->flush();
         $errors = $this->validator->validate($sql);
         if (count($errors) == 0) {
-            return "good";
+            return true;
         } else {
-            return "not good";
+            return false;
         }
     }
     public function deleteContact($contactId)
@@ -46,9 +46,9 @@ class ContactRepository extends ServiceEntityRepository
         $this->entityManager->flush();
         $errors = $this->validator->validate($sqlContact);
         if (count($errors) == 0) {
-            return "good";
+            return true;
         } else {
-            return "not good";
+            return false;
         }
     }
 }

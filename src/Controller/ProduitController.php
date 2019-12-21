@@ -34,12 +34,12 @@ class ProduitController extends AbstractController
                     $verif = $repoProduitFavoris->findBy(array('postedById' => $user, 'produitId' => $request->get('produit_id')));
                     if (!$verif) {
                         $sqlProduitFavoris = $this->getDoctrine()->getRepository(ProduitFavoris::class)->addProduitFavoris($request->get('produit_id'));
-                        if ($sqlProduitFavoris == "good") {
+                        if ($sqlProduitFavoris) {
                             return $this->json(['code' => 200, 'message' => "Vous avez bien ajouter ce produit en favoris", 'id' => $request->get('produit_id')], 200);
                         }
                     } else {
                         $sqlProduitFavoris = $this->getDoctrine()->getRepository(ProduitFavoris::class)->removeProduitFavoris($request->get('produit_id'), $this->getUser()->getId());
-                        if ($sqlProduitFavoris == "good") {
+                        if ($sqlProduitFavoris) {
                             return $this->json(['code' => 201, 'message' => "Vous avez bien supprimer ce produit en favoris", 'id' => $request->get('produit_id')], 200);
                         } else {
                             return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);

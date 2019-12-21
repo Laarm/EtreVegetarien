@@ -22,9 +22,7 @@ class AdminEditController extends AbstractController
 {
     public function index()
     {
-        return $this->render('admin/edit/index.html.twig', [
-            'controller_name' => 'AdminEditController',
-        ]);
+        return $this->render('admin/edit/index.html.twig');
     }
 
     public function newArticle()
@@ -56,7 +54,7 @@ class AdminEditController extends AbstractController
                         $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
                     }
                     $article = $this->getDoctrine()->getRepository(Article::class)->deleteArticle($request->get('id'));
-                    if ($article == "good") {
+                    if ($article) {
                         return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer cet article", 'id' => $request->get('id')], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
@@ -93,17 +91,13 @@ class AdminEditController extends AbstractController
                         $sqlArticle = $this->getDoctrine()->getRepository(Article::class)->saveArticle($request->get('article_id'), $request->get('nom'), $request->get('contenu'), $image);
                         $success = "L'article à bien été mis à jour !";
                     }
-                    if (!empty($request->get('nom')) && !empty($request->get('article_id'))) {
-                        if ($sqlArticle !== "not good") {
-                            return $this->json(['code' => 200, 'message' => $success, 'articleId' => $sqlArticle], 200);
-                        } else {
-                            return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
-                        }
+                    if ($sqlArticle) {
+                        return $this->json(['code' => 200, 'message' => $success, 'articleId' => $sqlArticle], 200);
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
+                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour de l\'article...'], 200);
+                    return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
                 }
             }
         }
@@ -141,7 +135,7 @@ class AdminEditController extends AbstractController
                         $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
                     }
                     $magasin = $this->getDoctrine()->getRepository(Magasin::class)->deleteMagasin($request->get('id'));
-                    if ($magasin == "good") {
+                    if ($magasin) {
                         return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce magasin", 'id' => $request->get('id')], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
@@ -178,17 +172,13 @@ class AdminEditController extends AbstractController
                         $sqlMagasin = $this->getDoctrine()->getRepository(Magasin::class)->saveMagasin($request->get('magasin_id'), $request->get('nom'), $request->get('image'), $request->get('adresse'), $request->get('ville'));
                         $success = "Le magasin à bien été mis à jour !";
                     }
-                    if (!empty($request->get('nom')) && !empty($request->get('magasin_id'))) {
-                        if ($sqlMagasin !== "not good") {
-                            return $this->json(['code' => 200, 'message' => $success, 'magasinId' => $sqlMagasin], 200);
-                        } else {
-                            return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
-                        }
+                    if ($sqlMagasin) {
+                        return $this->json(['code' => 200, 'message' => $success, 'magasinId' => $sqlMagasin], 200);
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
+                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour du magasin...'], 200);
+                    return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
                 }
             }
         }
@@ -226,7 +216,7 @@ class AdminEditController extends AbstractController
                         $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
                     }
                     $restaurant = $this->getDoctrine()->getRepository(Restaurant::class)->deleteRestaurant($request->get('id'));
-                    if ($restaurant == "good") {
+                    if ($restaurant) {
                         return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce restaurant", 'id' => $request->get('id')], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
@@ -264,7 +254,7 @@ class AdminEditController extends AbstractController
                         $success = "Le restaurant à bien été mis à jour !";
                     }
                     if (!empty($request->get('nom')) && !empty($request->get('restaurant_id')) && !empty($request->get('contenu'))) {
-                        if ($sqlRestaurant !== "not good") {
+                        if ($sqlRestaurant) {
                             return $this->json(['code' => 200, 'message' => $success, 'restaurantId' => $sqlRestaurant], 200);
                         } else {
                             return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
@@ -311,7 +301,7 @@ class AdminEditController extends AbstractController
                         $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
                     }
                     $produit = $this->getDoctrine()->getRepository(Produit::class)->deleteProduit($request->get('id'));
-                    if ($produit == "good") {
+                    if ($produit) {
                         return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce produit", 'id' => $request->get('id')], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
@@ -348,17 +338,13 @@ class AdminEditController extends AbstractController
                         $sqlProduit = $this->getDoctrine()->getRepository(Produit::class)->saveProduit($request->get('produit_id'), $request->get('nom'), $image);
                         $success = "Le produit à bien été mis à jour !";
                     }
-                    if (!empty($request->get('nom')) && !empty($request->get('produit_id'))) {
-                        if ($sqlProduit !== "not good") {
-                            return $this->json(['code' => 200, 'message' => $success, 'produitId' => $sqlProduit], 200);
-                        } else {
-                            return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
-                        }
+                    if ($sqlProduit) {
+                        return $this->json(['code' => 200, 'message' => $success, 'produitId' => $sqlProduit], 200);
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
+                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour du produit...'], 200);
+                    return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
                 }
             }
         }
@@ -396,7 +382,7 @@ class AdminEditController extends AbstractController
                         $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
                     }
                     $repas = $this->getDoctrine()->getRepository(Repas::class)->deleteRepas($request->get('id'));
-                    if ($repas == "good") {
+                    if ($repas) {
                         return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce repas", 'id' => $request->get('id')], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
@@ -434,17 +420,13 @@ class AdminEditController extends AbstractController
                         $sqlRepas = $this->getDoctrine()->getRepository(Repas::class)->saveRepas($request->get('repas_id'), $request->get('nom'), $image, $request->get('recette'), $user);
                         $success = "Le repas à bien été mis à jour !";
                     }
-                    if (!empty($request->get('nom')) && !empty($request->get('repas_id'))) {
-                        if ($sqlRepas !== "not good") {
-                            return $this->json(['code' => 200, 'message' => $success, 'repasId' => $sqlRepas], 200);
-                        } else {
-                            return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
-                        }
+                    if ($sqlRepas) {
+                        return $this->json(['code' => 200, 'message' => $success, 'repasId' => $sqlRepas], 200);
                     } else {
-                        return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
+                        return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la mise à jour du repas...'], 200);
+                    return $this->json(['code' => 400, 'message' => 'Veuillez remplir tout les champs !'], 200);
                 }
             }
         }
@@ -491,7 +473,7 @@ class AdminEditController extends AbstractController
             if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
                 if (!empty($request->get('id'))) {
                     $restaurantAvis = $this->getDoctrine()->getRepository(RestaurantAvis::class)->deleteRestaurantAvis($request->get('id'));
-                    if ($restaurantAvis == "good") {
+                    if ($restaurantAvis) {
                         return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer cet avis", 'id' => $request->get('id')], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
@@ -524,7 +506,7 @@ class AdminEditController extends AbstractController
                 if (!empty($request->get('username')) && !empty($request->get('email'))) {
                     $erreur = false;
                     $userSql = $this->getDoctrine()->getRepository(User::class)->saveUserProfil($request->get('user_id'), $request->get('username'), $request->get('email'), $request->get('role'), $request->get('bio'));
-                    if ($userSql !== "good") {
+                    if (!$userSql) {
                         $erreur = true;
                     }
                     if ($request->get('deleteAvatar') == true) {
@@ -533,13 +515,13 @@ class AdminEditController extends AbstractController
                             $filesystem->remove(['symlink', "../public/" . $ancienneImage->getAvatar(), 'activity.log']);
                         }
                         $userSql = $this->getDoctrine()->getRepository(User::class)->saveUserAvatar($request->get('user_id'), "");
-                        if ($userSql !== "good") {
+                        if (!$userSql) {
                             $erreur = true;
                         }
                     }
                     if (!empty($request->get('motdepasse'))) {
                         $userSql = $this->getDoctrine()->getRepository(User::class)->saveUserPassword($request->get('user_id'), $request->get('motdepasse'));
-                        if ($userSql !== "good") {
+                        if (!$userSql) {
                             $erreur = true;
                         }
                     }
@@ -571,7 +553,7 @@ class AdminEditController extends AbstractController
                         $filesystem->remove(['symlink', "../public/" . $ancienneImage->getAvatar(), 'activity.log']);
                     }
                     $deleteUser = $this->getDoctrine()->getRepository(User::class)->deleteUser($request->get('id'));
-                    if ($deleteUser == "good") {
+                    if ($deleteUser) {
                         return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer cet avis", 'id' => $request->get('id')], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
@@ -593,7 +575,7 @@ class AdminEditController extends AbstractController
             if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
                 if (!empty($request->get('id'))) {
                     $magasin = $this->getDoctrine()->getRepository(ProduitSync::class)->deleteProduitMagasin($request->get('id'));
-                    if ($magasin == "good") {
+                    if ($magasin) {
                         return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce produit du magasin", 'id' => $request->get('id')], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
@@ -615,7 +597,7 @@ class AdminEditController extends AbstractController
             if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
                 if (!empty($request->get('magasinId')) && !empty($request->get('produitId'))) {
                     $sqlProduit = $this->getDoctrine()->getRepository(ProduitSync::class)->createProduitMagasin($request->get('magasinId'), $request->get('produitId'));
-                    if ($sqlProduit !== "not good") {
+                    if ($sqlProduit) {
                         return $this->json(['code' => 200, 'message' => "Le produit à bien été ajouter au magasin !", 'repasId' => $sqlProduit], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
@@ -654,7 +636,7 @@ class AdminEditController extends AbstractController
             if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
                 if (!empty($request->get('id'))) {
                     $article = $this->getDoctrine()->getRepository(Contact::class)->deleteContact($request->get('id'));
-                    if ($article == "good") {
+                    if ($article) {
                         return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce message", 'id' => $request->get('id')], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);

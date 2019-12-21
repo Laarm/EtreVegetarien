@@ -38,7 +38,7 @@ class RestaurantRepository extends ServiceEntityRepository
         if (count($errors) == 0) {
             return $sqlRestaurant->getId();
         } else {
-            return "not good";
+            return false;
         }
     }
     public function saveRestaurant($restaurantId, $nom, $image, $adresse, $ville, $contenu)
@@ -54,7 +54,7 @@ class RestaurantRepository extends ServiceEntityRepository
         if (count($errors) == 0) {
             return $restaurantId;
         } else {
-            return "not good";
+            return false;
         }
     }
     public function deleteRestaurant($restaurantId)
@@ -64,9 +64,9 @@ class RestaurantRepository extends ServiceEntityRepository
         $this->entityManager->flush();
         $errors = $this->validator->validate($sqlRestaurant);
         if (count($errors) == 0) {
-            return "good";
+            return true;
         } else {
-            return "not good";
+            return false;
         }
     }
     public function searchRestaurant($search, $limit)

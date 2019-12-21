@@ -37,7 +37,7 @@ class MagasinRepository extends ServiceEntityRepository
         if (count($errors) == 0) {
             return $sqlMagasin->getId();
         } else {
-            return "not good";
+            return false;
         }
         return $sqlMagasin->getId();
     }
@@ -53,7 +53,7 @@ class MagasinRepository extends ServiceEntityRepository
         if (count($errors) == 0) {
             return $magasinId;
         } else {
-            return "not good";
+            return false;
         }
     }
     public function deleteMagasin($magasinId)
@@ -63,9 +63,9 @@ class MagasinRepository extends ServiceEntityRepository
         $this->entityManager->flush();
         $errors = $this->validator->validate($sqlMagasin);
         if (count($errors) == 0) {
-            return "good";
+            return true;
         } else {
-            return "not good";
+            return false;
         }
     }
     public function searchMagasin($search, $limit)

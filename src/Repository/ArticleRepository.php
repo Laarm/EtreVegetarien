@@ -35,7 +35,7 @@ class ArticleRepository extends ServiceEntityRepository
         if (count($errors) == 0) {
             return $sqlArticle->getId();
         } else {
-            return "not good";
+            return false;
         }
     }
     public function saveArticle($articleId, $nom, $contenu, $image)
@@ -49,7 +49,7 @@ class ArticleRepository extends ServiceEntityRepository
         if (count($errors) == 0) {
             return $articleId;
         } else {
-            return "not good";
+            return false;
         }
     }
     public function deleteArticle($articleId)
@@ -59,9 +59,9 @@ class ArticleRepository extends ServiceEntityRepository
         $this->entityManager->flush();
         $errors = $this->validator->validate($sqlArticle);
         if (count($errors) == 0) {
-            return "good";
+            return true;
         } else {
-            return "not good";
+            return false;
         }
     }
 }
