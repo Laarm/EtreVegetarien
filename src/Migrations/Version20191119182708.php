@@ -28,8 +28,8 @@ final class Version20191119182708 extends AbstractMigration
         $this->addSql('ALTER TABLE user CHANGE email email VARCHAR(255) DEFAULT NULL, CHANGE preference preference VARCHAR(255) DEFAULT NULL');
         $this->addSql('ALTER TABLE restaurant CHANGE adresse adresse VARCHAR(255) DEFAULT NULL');
         $this->addSql('ALTER TABLE contact CHANGE telephone telephone VARCHAR(255) DEFAULT NULL');
-        $this->addSql('ALTER TABLE magasin_avis ADD note VARCHAR(255) NOT NULL, CHANGE magasin_id magasin_id INT DEFAULT NULL, CHANGE posted_by_id posted_by_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE magasin CHANGE adresse adresse VARCHAR(255) DEFAULT NULL');
+        $this->addSql('ALTER TABLE store_avis ADD note VARCHAR(255) NOT NULL, CHANGE store_id store_id INT DEFAULT NULL, CHANGE posted_by_id posted_by_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE store CHANGE adresse adresse VARCHAR(255) DEFAULT NULL');
         $this->addSql('ALTER TABLE article_commentaire CHANGE article_id article_id INT DEFAULT NULL, CHANGE posted_by_id posted_by_id INT DEFAULT NULL');
     }
 
@@ -41,8 +41,8 @@ final class Version20191119182708 extends AbstractMigration
         $this->addSql('DROP TABLE restaurant_avis');
         $this->addSql('ALTER TABLE article_commentaire CHANGE posted_by_id posted_by_id INT DEFAULT NULL, CHANGE article_id article_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE contact CHANGE telephone telephone VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT \'NULL\' COLLATE `utf8mb4_unicode_ci`');
-        $this->addSql('ALTER TABLE magasin CHANGE adresse adresse VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT \'NULL\' COLLATE `utf8mb4_unicode_ci`');
-        $this->addSql('ALTER TABLE magasin_avis DROP note, CHANGE magasin_id magasin_id INT DEFAULT NULL, CHANGE posted_by_id posted_by_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE store CHANGE adresse adresse VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT \'NULL\' COLLATE `utf8mb4_unicode_ci`');
+        $this->addSql('ALTER TABLE store_avis DROP note, CHANGE store_id store_id INT DEFAULT NULL, CHANGE posted_by_id posted_by_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE restaurant CHANGE adresse adresse VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT \'NULL\' COLLATE `utf8mb4_unicode_ci`');
         $this->addSql('ALTER TABLE user CHANGE email email VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT \'NULL\' COLLATE `utf8mb4_unicode_ci`, CHANGE preference preference VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT \'NULL\' COLLATE `utf8mb4_unicode_ci`');
     }

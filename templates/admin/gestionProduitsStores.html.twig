@@ -1,11 +1,11 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Gestion des produits dans les magasins - Être Végétarien{% endblock %}
+{% block title %}Gestion des produits dans les stores - Être Végétarien{% endblock %}
 
 {% block body %}
 <section id="panel" class="flex">
     <div class="w-100">
-        <div paginationView="magasin">
+        <div paginationView="store">
             <table class="table table-hover contentPagination">
                 <thead>
                     <tr>
@@ -17,12 +17,12 @@
                 </thead>
                 <tbody>
                     {% for produit in produits %}
-                    <tr paginationName="magasin" paginationId="{{ loop.index }}">
+                    <tr paginationName="store" paginationId="{{ loop.index }}">
                         <th scope="row">{{ produit.id }}</th>
                         <td>{{ produit.Produit.nom }}</td>
-                        <td>{{ produit.Magasin.nom }}</td>
+                        <td>{{ produit.Store.nom }}</td>
                         <td class="btnOption">
-                            <a target="_BLANK" href="{{ path('magasin_show', {'id': produit.Magasin.id}) }}"
+                            <a target="_BLANK" href="{{ path('store_show', {'id': produit.Store.id}) }}"
                                 class="blue"><i class="fad fa-store-alt"></i></a>
                             <a class="red cursor-pointer" value="{{ produit.id }}" data-toggle="modal"
                                 data-target="#deleteModal"><i class="fad fa-times"></i></a>
@@ -37,7 +37,7 @@
                     class="fad fa-plus"></i>
                 Nouveau
             </a>
-            <ul paginationBtn="magasin" class="pagination justify-content-end">
+            <ul paginationBtn="store" class="pagination justify-content-end">
                 <div class="btnPagination flex mr-4">
                 </div>
             </ul>
@@ -59,7 +59,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-                <button deleteMagasin="0" csrf-data="{{ csrf_token('delete-item') }}" type="button"
+                <button deleteStore="0" csrf-data="{{ csrf_token('delete-item') }}" type="button"
                     class="btn btn-primary">Oui</button>
             </div>
         </div>
@@ -86,21 +86,21 @@
                 </div>
                 <div id="search-produit">
                 </div>
-                <div class="input-group mb-3 mt-3 magasin-group">
+                <div class="input-group mb-3 mt-3 store-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text">Magasin : </span>
+                        <span class="input-group-text">Store : </span>
                     </div>
-                    <input type="text" name="search" class="form-control" id="magasin">
+                    <input type="text" name="search" class="form-control" id="store">
                     <div class="input-group-append">
                         <span class="input-group-text"><i class="fad fa-times"></i></span>
                     </div>
                 </div>
-                <div id="search-magasin">
+                <div id="search-store">
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-                <button addProduitMagasin="0" produit="0" magasin="0" csrf-data="{{ csrf_token('save-item') }}"
+                <button addProduitStore="0" produit="0" store="0" csrf-data="{{ csrf_token('save-item') }}"
                     type="button" class="btn btn-primary">Oui</button>
             </div>
         </div>
@@ -123,40 +123,40 @@
         });
     });
     $(document).ready(function () {
-        $('[name="search"]#magasin').keypress(function (e) {
-            $.getJSON("/magasins/search?search=" + $('[name="search"]#magasin').val() + "&limit=3")
-                .then((magasins) => {
-                    $('#search-magasin').html("")
-                    if (magasins.length == 0) {
-                        $('#search-magasin').html("<p class='margin-auto'>Aucun magasin trouvé</p>")
+        $('[name="search"]#store').keypress(function (e) {
+            $.getJSON("/stores/search?search=" + $('[name="search"]#store').val() + "&limit=3")
+                .then((stores) => {
+                    $('#search-store').html("")
+                    if (stores.length == 0) {
+                        $('#search-store').html("<p class='margin-auto'>Aucun store trouvé</p>")
                     }
-                    magasins.forEach((magasin) => {
-                        $("#search-magasin").append('<div class="flex" addMagasin="' + magasin.id + '"><div class="w-33 flex"><img class="mr-3 rond margin-auto"src="' + magasin.image + '"style="height: 40px;width: 40px"></div><div class="w-33 flex"><p class="margin-auto">' + magasin.nom + '</p></div><div class="w-33"></div></div>')
+                    stores.forEach((store) => {
+                        $("#search-store").append('<div class="flex" addStore="' + store.id + '"><div class="w-33 flex"><img class="mr-3 rond margin-auto"src="' + store.image + '"style="height: 40px;width: 40px"></div><div class="w-33 flex"><p class="margin-auto">' + store.nom + '</p></div><div class="w-33"></div></div>')
                     })
                 });
         });
     });
     $(document).on('click', '[addProduit]', function (e) {
         id = $([this]).attr('addProduit')
-        $('[addProduitMagasin]').attr('produit', id)
+        $('[addProduitStore]').attr('produit', id)
         $('[name="search"]#produit').attr('value', id)
         $('.produit-group .input-group-append').html('<span class="input-group-text"><i class="cds fad fa-check"></i></span>')
         $('#search-produit').html("")
     })
-    $(document).on('click', '[addMagasin]', function (e) {
-        id = $([this]).attr('addMagasin')
-        $('[addProduitMagasin]').attr('magasin', id)
-        $('[name="search"]#magasin').attr('value', id)
-        $('.magasin-group .input-group-append').html('<span class="input-group-text"><i class="cds fad fa-check"></i></span>')
-        $('#search-magasin').html("")
+    $(document).on('click', '[addStore]', function (e) {
+        id = $([this]).attr('addStore')
+        $('[addProduitStore]').attr('store', id)
+        $('[name="search"]#store').attr('value', id)
+        $('.store-group .input-group-append').html('<span class="input-group-text"><i class="cds fad fa-check"></i></span>')
+        $('#search-store').html("")
     })
-    $(document).on('click', '[addProduitMagasin]', function (e) {
+    $(document).on('click', '[addProduitStore]', function (e) {
         csrfData = $(this).attr('csrf-data')
         e.preventDefault();
         $.post(
-            "{{ path('admin_add_produit_magasin') }}",
+            "{{ path('admin_add_produit_store') }}",
             {
-                magasinId: $([this]).attr('magasin'),
+                storeId: $([this]).attr('store'),
                 produitId: $([this]).attr('produit'),
                 csrfData: $(this).attr('csrf-data')
             },
@@ -172,19 +172,19 @@
         );
     });
     addEventListener("load", () => {
-        new pagination("magasin", 7, 10, "table-row");
+        new pagination("store", 7, 10, "table-row");
     })
 
     $(document).on('click', '[data-target="#deleteModal"]', function (e) {
-        $('[deleteMagasin]').attr("deleteMagasin", $(this).attr('value'))
+        $('[deleteStore]').attr("deleteStore", $(this).attr('value'))
     });
 
-    $(document).on('click', '[deleteMagasin]', function (e) {
-        id = $(this).attr('deleteMagasin')
+    $(document).on('click', '[deleteStore]', function (e) {
+        id = $(this).attr('deleteStore')
         csrfData = $(this).attr('csrf-data')
         e.preventDefault();
         $.post(
-            "{{ path('admin_delete_produit_magasin') }}",
+            "{{ path('admin_delete_produit_store') }}",
             {
                 id: id,
                 csrfData: $(this).attr('csrf-data')

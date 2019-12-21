@@ -25,9 +25,9 @@ article:
 articleShow:
     path: /article/{id}
     controller: App\Controller\ArticleController::show
-magasinShow:
-    path: /magasin/{id}
-    controller: App\Controller\MagasinController::show
+storeShow:
+    path: /store/{id}
+    controller: App\Controller\StoreController::show
 contact:
     path: /contact
     controller: App\Controller\ContactController::index
@@ -40,9 +40,9 @@ restaurants:
 repas:
     path: /repas
     controller: App\Controller\RepasController::index
-magasins:
-    path: /magasins
-    controller: App\Controller\MagasinController::index
+stores:
+    path: /stores
+    controller: App\Controller\StoreController::index
 devenirVegetarien:
     path: /devenirvegetarien
     controller: App\Controller\DevenirVegetarienController::index
@@ -64,12 +64,12 @@ adminGestionArticles:
 adminGestionArticlesCommentaires:
     path: /admin/GestionArticlesCommentaires
     controller: App\Controller\AdminController::gestionArticlesCommentaires
-adminGestionMagasins:
-    path: /admin/GestionMagasins
-    controller: App\Controller\AdminController::gestionMagasins
-adminGestionProduitsMagasins:
-    path: /admin/GestionProduitsMagasins
-    controller: App\Controller\AdminController::gestionProduitsMagasins
+adminGestionStores:
+    path: /admin/GestionStores
+    controller: App\Controller\AdminController::gestionStores
+adminGestionProduitsStores:
+    path: /admin/GestionProduitsStores
+    controller: App\Controller\AdminController::gestionProduitsStores
 adminGestionRestaurants:
     path: /admin/GestionRestaurants
     controller: App\Controller\AdminController::gestionRestaurants
@@ -94,12 +94,12 @@ adminNewArticle:
 adminEditArticle:
     path: /admin/article/{id}/edit
     controller: App\Controller\AdminEditController::editArticle
-adminNewMagasin:
-    path: /admin/magasin/new
-    controller: App\Controller\AdminEditController::newMagasin
-adminEditMagasin:
-    path: /admin/magasin/{id}/edit
-    controller: App\Controller\AdminEditController::editMagasin
+adminNewStore:
+    path: /admin/store/new
+    controller: App\Controller\AdminEditController::newStore
+adminEditStore:
+    path: /admin/store/{id}/edit
+    controller: App\Controller\AdminEditController::editStore
 adminNewRestaurant:
     path: /admin/restaurant/new
     controller: App\Controller\AdminEditController::newRestaurant
@@ -121,9 +121,9 @@ adminEditRepas:
 restaurantSearch:
     path: /restaurant/search
     controller: App\Controller\RestaurantController::restaurantSearch
-magasinSearch:
-    path: /magasins/search
-    controller: App\Controller\MagasinController::magasinSearch
+storeSearch:
+    path: /stores/search
+    controller: App\Controller\StoreController::storeSearch
 sendNoteRestaurant:
     path: /ajax/restaurant/sendNote
     controller: App\Controller\RestaurantController::sendNote

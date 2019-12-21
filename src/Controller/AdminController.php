@@ -6,10 +6,10 @@ use App\Repository\UserRepository;
 use App\Repository\RepasRepository;
 use App\Repository\ArticleRepository;
 use App\Repository\ContactRepository;
-use App\Repository\MagasinRepository;
+use App\Repository\StoreRepository;
 use App\Repository\ProduitRepository;
 use App\Repository\RestaurantRepository;
-use App\Repository\MagasinAvisRepository;
+use App\Repository\StoreAvisRepository;
 use App\Repository\ProduitSyncRepository;
 use App\Repository\RestaurantAvisRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,7 +61,7 @@ class AdminController extends AbstractController
             'article_commentaire' => $articleCommentaire,
         ]);
     }
-    public function gestionMagasins(MagasinRepository $gestionMagasinsRepo, Request $request)
+    public function gestionStores(StoreRepository $gestionStoresRepo, Request $request)
     {
         if ($request->get('view') !== null) {
             $view = $request->get('view');
@@ -70,13 +70,13 @@ class AdminController extends AbstractController
             $view = null;
             $maxView = 100;
         }
-        $magasins = $gestionMagasinsRepo->findBy(array(), null, $maxView, $view);
+        $stores = $gestionStoresRepo->findBy(array(), null, $maxView, $view);
 
-        return $this->render('admin/gestionMagasins.html.twig', [
-            'magasins' => $magasins,
+        return $this->render('admin/gestionStores.html.twig', [
+            'stores' => $stores,
         ]);
     }
-    public function gestionProduitsMagasins(ProduitSyncRepository $gestionProduitsMagasinsRepo, Request $request)
+    public function gestionProduitsStores(ProduitSyncRepository $gestionProduitsStoresRepo, Request $request)
     {
         if ($request->get('view') !== null) {
             $view = $request->get('view');
@@ -85,9 +85,9 @@ class AdminController extends AbstractController
             $view = null;
             $maxView = 100;
         }
-        $produits = $gestionProduitsMagasinsRepo->findBy(array(), null, $maxView, $view);
+        $produits = $gestionProduitsStoresRepo->findBy(array(), null, $maxView, $view);
 
-        return $this->render('admin/gestionProduitsMagasins.html.twig', [
+        return $this->render('admin/gestionProduitsStores.html.twig', [
             'produits' => $produits,
         ]);
     }

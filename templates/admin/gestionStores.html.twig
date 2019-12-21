@@ -1,12 +1,12 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Gestion des magasins - Être Végétarien
+{% block title %}Gestion des stores - Être Végétarien
 {% endblock %}
 
 {% block body %}
 	<section id="panel" class="flex">
 		<div class="w-100">
-			<div paginationview="magasin">
+			<div paginationview="store">
 				<table class="table table-hover contentPagination">
 					<thead>
 						<tr>
@@ -17,20 +17,20 @@
 						</tr>
 					</thead>
 					<tbody>
-						{% for magasin in magasins %}
-							<tr paginationname="magasin" paginationid="{{ loop.index }}">
-								<th scope="row">{{ magasin.id }}</th>
-								<td>{{ magasin.nom }}</td>
-								<td>{{ magasin.location }},
-									{{ magasin.ville }}</td>
+						{% for store in stores %}
+							<tr paginationname="store" paginationid="{{ loop.index }}">
+								<th scope="row">{{ store.id }}</th>
+								<td>{{ store.nom }}</td>
+								<td>{{ store.location }},
+									{{ store.ville }}</td>
 								<td class="btnOption">
-									<a target="_BLANK" href="{{ path('magasin_show', {'id': magasin.id}) }}">
+									<a target="_BLANK" href="{{ path('store_show', {'id': store.id}) }}">
 										<i class="fad fa-eye"></i>
 									</a>
-									<a href="{{ path('admin_edit_magasin', {'id': magasin.id}) }}" class="blue">
+									<a href="{{ path('admin_edit_store', {'id': store.id}) }}" class="blue">
 										<i class="fad fa-edit"></i>
 									</a>
-									<a class="red cursor-pointer" value="{{ magasin.id }}" data-toggle="modal" data-target="#deleteModal">
+									<a class="red cursor-pointer" value="{{ store.id }}" data-toggle="modal" data-target="#deleteModal">
 										<i class="fad fa-times"></i>
 									</a>
 								</td>
@@ -40,11 +40,11 @@
 				</table>
 			</div>
 			<div class="flex justify-flex-end">
-				<a href="{{ path('adminNewMagasin') }}" class="new btn btn-primary" role="button">
+				<a href="{{ path('adminNewStore') }}" class="new btn btn-primary" role="button">
 					<i class="fad fa-plus"></i>
 					Nouveau
 				</a>
-				<ul paginationbtn="magasin" class="pagination justify-content-end">
+				<ul paginationbtn="store" class="pagination justify-content-end">
 					<div class="btnPagination flex mr-4"></div>
 				</ul>
 			</div>
@@ -62,25 +62,25 @@
 				<div class="modal-body"></div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-					<button deletemagasin="0" csrf-data="{{ csrf_token('delete-item') }}" type="button" class="btn btn-primary">Oui</button>
+					<button deletestore="0" csrf-data="{{ csrf_token('delete-item') }}" type="button" class="btn btn-primary">Oui</button>
 				</div>
 			</div>
 		</div>
 	</div>
 	<script>
 		addEventListener("load", () => {
-new pagination("magasin", 7, 10, "table-row");
+new pagination("store", 7, 10, "table-row");
 })
 
 $(document).on('click', '[data-target="#deleteModal"]', function (e) {
-$('[deleteMagasin]').attr("deleteMagasin", $(this).attr('value'))
+$('[deleteStore]').attr("deleteStore", $(this).attr('value'))
 });
 
-$(document).on('click', '[deleteMagasin]', function (e) {
-id = $(this).attr('deleteMagasin')
+$(document).on('click', '[deleteStore]', function (e) {
+id = $(this).attr('deleteStore')
 csrfData = $(this).attr('csrf-data')
 e.preventDefault();
-$.post("{{ path('admin_delete_magasin') }}", {
+$.post("{{ path('admin_delete_store') }}", {
 id: id,
 csrfData: $(this).attr('csrf-data')
 }, function (data) {

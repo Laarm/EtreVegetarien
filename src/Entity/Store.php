@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\MagasinRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\StoreRepository")
  */
-class Magasin
+class Store
 {
     /**
      * @ORM\Id()
@@ -49,18 +49,18 @@ class Magasin
     private $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\MagasinAvis", mappedBy="magasin", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\StoreAvis", mappedBy="store", orphanRemoval=true)
      */
-    private $magasinAvis;
+    private $storeAvis;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ProduitSync", mappedBy="Magasin", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\ProduitSync", mappedBy="Store", orphanRemoval=true)
      */
     private $produitSyncs;
 
     public function __construct()
     {
-        $this->magasinAvis = new ArrayCollection();
+        $this->storeAvis = new ArrayCollection();
         $this->produitSyncs = new ArrayCollection();
     }
 
@@ -142,30 +142,30 @@ class Magasin
     }
 
     /**
-     * @return Collection|MagasinAvis[]
+     * @return Collection|StoreAvis[]
      */
-    public function getMagasinAvis(): Collection
+    public function getStoreAvis(): Collection
     {
-        return $this->magasinAvis;
+        return $this->storeAvis;
     }
 
-    public function addMagasinAvi(MagasinAvis $magasinAvi): self
+    public function addStoreAvi(StoreAvis $storeAvi): self
     {
-        if (!$this->magasinAvis->contains($magasinAvi)) {
-            $this->magasinAvis[] = $magasinAvi;
-            $magasinAvi->setMagasin($this);
+        if (!$this->storeAvis->contains($storeAvi)) {
+            $this->storeAvis[] = $storeAvi;
+            $storeAvi->setStore($this);
         }
 
         return $this;
     }
 
-    public function removeMagasinAvi(MagasinAvis $magasinAvi): self
+    public function removeStoreAvi(StoreAvis $storeAvi): self
     {
-        if ($this->magasinAvis->contains($magasinAvi)) {
-            $this->magasinAvis->removeElement($magasinAvi);
+        if ($this->storeAvis->contains($storeAvi)) {
+            $this->storeAvis->removeElement($storeAvi);
             // set the owning side to null (unless already changed)
-            if ($magasinAvi->getMagasin() === $this) {
-                $magasinAvi->setMagasin(null);
+            if ($storeAvi->getStore() === $this) {
+                $storeAvi->setStore(null);
             }
         }
 
@@ -184,7 +184,7 @@ class Magasin
     {
         if (!$this->produitSyncs->contains($produitSync)) {
             $this->produitSyncs[] = $produitSync;
-            $produitSync->setMagasin($this);
+            $produitSync->setStore($this);
         }
 
         return $this;
@@ -195,8 +195,8 @@ class Magasin
         if ($this->produitSyncs->contains($produitSync)) {
             $this->produitSyncs->removeElement($produitSync);
             // set the owning side to null (unless already changed)
-            if ($produitSync->getMagasin() === $this) {
-                $produitSync->setMagasin(null);
+            if ($produitSync->getStore() === $this) {
+                $produitSync->setStore(null);
             }
         }
 

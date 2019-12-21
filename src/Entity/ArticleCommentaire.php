@@ -17,7 +17,7 @@ class ArticleCommentaire
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="magasinAvis")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="storeAvis")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $postedBy;

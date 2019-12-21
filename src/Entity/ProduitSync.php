@@ -23,10 +23,10 @@ class ProduitSync
     private $Produit;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Magasin", inversedBy="produitSyncs")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Store", inversedBy="produitSyncs")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $Magasin;
+    private $Store;
 
     /**
      * @ORM\Column(type="datetime")
@@ -50,14 +50,14 @@ class ProduitSync
         return $this;
     }
 
-    public function getMagasin(): ?Magasin
+    public function getStore(): ?Store
     {
-        return $this->Magasin;
+        return $this->Store;
     }
 
-    public function setMagasin(?Magasin $Magasin): self
+    public function setStore(?Store $Store): self
     {
-        $this->Magasin = $Magasin;
+        $this->Store = $Store;
 
         return $this;
     }

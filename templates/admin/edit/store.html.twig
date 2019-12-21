@@ -1,33 +1,33 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}{{ magasin.nom }}!{% endblock %}
+{% block title %}{{ store.nom }}!{% endblock %}
 {% block stylesheets %}
 
 {% endblock %}
 {% block body %}
 <section class="container">
-    <a href="{{ path('adminGestionMagasins') }}" class="btn btn-primary btnRetour mt-4"><i class="far fa-backspace"
+    <a href="{{ path('adminGestionStores') }}" class="btn btn-primary btnRetour mt-4"><i class="far fa-backspace"
             aria-hidden="true"></i> Retour</a>
 </section>
 <section id="panel" class="container">
-    <div class="editmagasin">
+    <div class="editstore">
         <div class="flex">
-            <input id="nom" value="{{ magasin.nom }}" class="margin-auto" />
+            <input id="nom" value="{{ store.nom }}" class="margin-auto" />
         </div>
         <div class="btnForSaveAndCancel">
             <div class="input-group mb-3 mt-3">
                 <div class="input-group-prepend hidden">
                     <span class="input-group-text">URL de l'image : </span>
                 </div>
-                <input type="text" class="form-control hidden" id="image" value="{{ magasin.image }}">
+                <input type="text" class="form-control hidden" id="image" value="{{ store.image }}">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Ville : </span>
                 </div>
-                <input type="text" class="form-control" id="ville" value="{{ magasin.ville }}">
+                <input type="text" class="form-control" id="ville" value="{{ store.ville }}">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Adresse : </span>
                 </div>
-                <input type="text" class="form-control" id="adresse" value="{{ magasin.adresse }}">
+                <input type="text" class="form-control" id="adresse" value="{{ store.adresse }}">
             </div>
             <div class="input-group mb-3">
                 <form method="post" class="w-100" action="" enctype="multipart/form-data" id="uploadImage">
@@ -39,8 +39,8 @@
                     </div>
                 </form>
             </div>
-            <button id="btnSaveMagasin" type="button" class="btn btn-primary">Sauvegarder</button>
-            <button type="button" class="btn btn-secondary btnCancelMagasin">Annuler</button>
+            <button id="btnSaveStore" type="button" class="btn btn-primary">Sauvegarder</button>
+            <button type="button" class="btn btn-secondary btnCancelStore">Annuler</button>
         </div>
     </div>
     <div id="resultat"></div>
@@ -50,7 +50,7 @@
 {% block javascript %}
 <script>
     $(document).ready(function () {
-        $("#btnSaveMagasin").click(function (e) {
+        $("#btnSaveStore").click(function (e) {
             let stop = "non"
             var fd = new FormData();
             if ($('#file').val().length !== 0) {
@@ -68,7 +68,7 @@
                         $("#image").attr("value", response.location)
                         $("#resultat").html("<p>" + response.message + "</p>");
                         document.getElementById("file").value = '';
-                        $("#btnSaveMagasin").click()
+                        $("#btnSaveStore").click()
                     },
                 });
             }
@@ -76,12 +76,12 @@
                 if (stop == "non") {
                     e.preventDefault();
                     $.post(
-                        "{{ path('admin_save_magasin') }}",
+                        "{{ path('admin_save_store') }}",
                         {
                             nom: $("#nom").val(),
                             adresse: $("#adresse").val(),
                             ville: $("#ville").val(),
-                            magasin_id: '{{ magasin.id }}',
+                            store_id: '{{ store.id }}',
                             image: $("#image").val(),
                             csrfData: "{{ csrf_token('save-item') }}"
                         },

@@ -6,7 +6,7 @@ use App\Entity\User;
 use App\Entity\Repas;
 use App\Entity\Article;
 use App\Entity\Contact;
-use App\Entity\Magasin;
+use App\Entity\Store;
 use App\Entity\Produit;
 use App\Entity\Restaurant;
 use App\Entity\ProduitSync;
@@ -104,76 +104,76 @@ class AdminEditController extends AbstractController
     }
 
     /**
-     * @Route("/admin/magasin/{id}/edit", name="admin_edit_magasin")
+     * @Route("/admin/store/{id}/edit", name="admin_edit_store")
      */
-    public function editMagasin(Magasin $magasin)
+    public function editStore(Store $store)
     {
-        return $this->render('admin/edit/magasin.html.twig', [
-            'magasin' => $magasin,
+        return $this->render('admin/edit/store.html.twig', [
+            'store' => $store,
         ]);
     }
 
     /**
-     * @Route("/admin/magasin/new", name="admin_new_magasin")
+     * @Route("/admin/store/new", name="admin_new_store")
      */
-    public function newMagasin()
+    public function newStore()
     {
-        return $this->render('admin/edit/newMagasin.html.twig');
+        return $this->render('admin/edit/newStore.html.twig');
     }
 
     /**
-     * @Route("/admin/deleteMagasin", name="admin_delete_magasin")
+     * @Route("/admin/deleteStore", name="admin_delete_store")
      */
-    public function deleteMagasin(Request $request, Filesystem $filesystem): Response
+    public function deleteStore(Request $request, Filesystem $filesystem): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
                 if (!empty($request->get('id'))) {
-                    $ancienneImage = $this->getDoctrine()->getRepository(Magasin::class)->find($request->get('id'));
+                    $ancienneImage = $this->getDoctrine()->getRepository(Store::class)->find($request->get('id'));
                     if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
                         $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
                     }
-                    $magasin = $this->getDoctrine()->getRepository(Magasin::class)->deleteMagasin($request->get('id'));
-                    if ($magasin) {
-                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce magasin", 'id' => $request->get('id')], 200);
+                    $store = $this->getDoctrine()->getRepository(Store::class)->deleteStore($request->get('id'));
+                    if ($store) {
+                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce store", 'id' => $request->get('id')], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du magasin...'], 200);
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du store...'], 200);
                 }
             }
         }
     }
 
     /**
-     * @Route("/admin/saveMagasin", name="admin_save_magasin")
+     * @Route("/admin/saveStore", name="admin_save_store")
      */
-    public function saveMagasin(Request $request, Filesystem $filesystem): Response
+    public function saveStore(Request $request, Filesystem $filesystem): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
-                if (!empty($request->get('nom')) && !empty($request->get('ville')) && !empty($request->get('magasin_id'))) {
+                if (!empty($request->get('nom')) && !empty($request->get('ville')) && !empty($request->get('store_id'))) {
                     if (empty($request->get('image'))) {
                         $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
                     } else {
                         $image = htmlspecialchars($request->get('image'));
                     }
-                    if ($request->get('magasin_id') == "new") {
-                        $sqlMagasin = $this->getDoctrine()->getRepository(Magasin::class)->createMagasin($request->get('nom'), $image, "null", $request->get('adresse'), $request->get('ville'));
-                        $success = "Le magasin à bien été créer !";
+                    if ($request->get('store_id') == "new") {
+                        $sqlStore = $this->getDoctrine()->getRepository(Store::class)->createStore($request->get('nom'), $image, "null", $request->get('adresse'), $request->get('ville'));
+                        $success = "Le store à bien été créer !";
                     } else {
-                        $ancienneImage = $this->getDoctrine()->getRepository(Magasin::class)->find($request->get('magasin_id'));
+                        $ancienneImage = $this->getDoctrine()->getRepository(Store::class)->find($request->get('store_id'));
                         if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
                             $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
                         }
-                        $sqlMagasin = $this->getDoctrine()->getRepository(Magasin::class)->saveMagasin($request->get('magasin_id'), $request->get('nom'), $request->get('image'), $request->get('adresse'), $request->get('ville'));
-                        $success = "Le magasin à bien été mis à jour !";
+                        $sqlStore = $this->getDoctrine()->getRepository(Store::class)->saveStore($request->get('store_id'), $request->get('nom'), $request->get('image'), $request->get('adresse'), $request->get('ville'));
+                        $success = "Le store à bien été mis à jour !";
                     }
-                    if ($sqlMagasin) {
-                        return $this->json(['code' => 200, 'message' => $success, 'magasinId' => $sqlMagasin], 200);
+                    if ($sqlStore) {
+                        return $this->json(['code' => 200, 'message' => $success, 'storeId' => $sqlStore], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
                     }
@@ -566,39 +566,39 @@ class AdminEditController extends AbstractController
     }
 
     /**
-     * @Route("/admin/deleteProduitMagasin", name="admin_delete_produit_magasin")
+     * @Route("/admin/deleteProduitStore", name="admin_delete_produit_store")
      */
-    public function deleteProduitMagasin(Request $request): Response
+    public function deleteProduitStore(Request $request): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
                 if (!empty($request->get('id'))) {
-                    $magasin = $this->getDoctrine()->getRepository(ProduitSync::class)->deleteProduitMagasin($request->get('id'));
-                    if ($magasin) {
-                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce produit du magasin", 'id' => $request->get('id')], 200);
+                    $store = $this->getDoctrine()->getRepository(ProduitSync::class)->deleteProduitStore($request->get('id'));
+                    if ($store) {
+                        return $this->json(['code' => 200, 'message' => "Vous avez bien supprimer ce produit du store", 'id' => $request->get('id')], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
                     }
                 } else {
-                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du magasin...'], 200);
+                    return $this->json(['code' => 400, 'message' => 'Erreur lors de la suppression du store...'], 200);
                 }
             }
         }
     }
 
     /**
-     * @Route("/admin/addProduitSync", name="admin_add_produit_magasin")
+     * @Route("/admin/addProduitSync", name="admin_add_produit_store")
      */
     public function addProduitSync(Security $security, Request $request): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
-                if (!empty($request->get('magasinId')) && !empty($request->get('produitId'))) {
-                    $sqlProduit = $this->getDoctrine()->getRepository(ProduitSync::class)->createProduitMagasin($request->get('magasinId'), $request->get('produitId'));
+                if (!empty($request->get('storeId')) && !empty($request->get('produitId'))) {
+                    $sqlProduit = $this->getDoctrine()->getRepository(ProduitSync::class)->createProduitStore($request->get('storeId'), $request->get('produitId'));
                     if ($sqlProduit) {
-                        return $this->json(['code' => 200, 'message' => "Le produit à bien été ajouter au magasin !", 'repasId' => $sqlProduit], 200);
+                        return $this->json(['code' => 200, 'message' => "Le produit à bien été ajouter au store !", 'repasId' => $sqlProduit], 200);
                     } else {
                         return $this->json(['code' => 400, 'message' => 'Veuillez contacter un administrateur !'], 200);
                     }

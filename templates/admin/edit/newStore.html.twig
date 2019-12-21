@@ -1,18 +1,18 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Nouveau magasin - Être Végétarien !{% endblock %}
+{% block title %}Nouveau store - Être Végétarien !{% endblock %}
 {% block stylesheets %}
 
 {% endblock %}
 {% block body %}
 <section class="container">
-    <a href="{{ path('adminGestionMagasins') }}" class="btn btn-primary btnRetour mt-4"><i class="far fa-backspace"
+    <a href="{{ path('adminGestionStores') }}" class="btn btn-primary btnRetour mt-4"><i class="far fa-backspace"
             aria-hidden="true"></i> Retour</a>
 </section>
 <section id="panel" class="container">
-    <div class="editmagasin">
+    <div class="editstore">
         <div class="flex">
-            <input id="nom" value="" placeholder="Nom du magasin" class="margin-auto" />
+            <input id="nom" value="" placeholder="Nom du store" class="margin-auto" />
         </div>
         <div class="btnForSaveAndCancel">
             <div class="input-group mb-3 mt-3">
@@ -39,8 +39,8 @@
                     </div>
                 </form>
             </div>
-            <button id="btnSaveMagasin" type="button" class="btn btn-primary">Sauvegarder</button>
-            <button type="button" class="btn btn-secondary btnCancelMagasin">Annuler</button>
+            <button id="btnSaveStore" type="button" class="btn btn-primary">Sauvegarder</button>
+            <button type="button" class="btn btn-secondary btnCancelStore">Annuler</button>
         </div>
     </div>
     <div id="resultat"></div>
@@ -50,7 +50,7 @@
 {% block javascript %}
 <script>
     $(document).ready(function () {
-        $("#btnSaveMagasin").click(function (e) {
+        $("#btnSaveStore").click(function (e) {
             let stop = "non"
             var fd = new FormData();
             if ($('#file').val().length !== 0) {
@@ -67,7 +67,7 @@
                         $("#image").attr("value", response.location)
                         $("#resultat").html("<p>" + response.message + "</p>");
                         document.getElementById("file").value = '';
-                        $("#btnSaveMagasin").click()
+                        $("#btnSaveStore").click()
                     },
                 });
             }
@@ -75,19 +75,19 @@
                 if (stop == "non") {
                     e.preventDefault();
                     $.post(
-                        "{{ path('admin_save_magasin') }}",
+                        "{{ path('admin_save_store') }}",
                         {
                             nom: $("#nom").val(),
                             adresse: $("#adresse").val(),
                             ville: $("#ville").val(),
-                            magasin_id: 'new',
+                            store_id: 'new',
                             image: $("#image").val(),
                             csrfData: "{{ csrf_token('save-item') }}"
                         },
                         function (data) {
                             if (data.code == 200) {
                                 $("#resultat").html("<p>" + data.message + "</p>");
-                                window.location.replace("/magasin/" + data.magasinId);
+                                window.location.replace("/store/" + data.storeId);
                             }
                             else {
                                 $("#resultat").html("<p>" + data.message + "</p>");

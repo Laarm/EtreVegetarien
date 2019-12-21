@@ -45,9 +45,9 @@ class User implements UserInterface
     private $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\MagasinAvis", mappedBy="postedBy")
+     * @ORM\OneToMany(targetEntity="App\Entity\StoreAvis", mappedBy="postedBy")
      */
-    private $magasinAvis;
+    private $storeAvis;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\RestaurantAvis", mappedBy="postedBy")
@@ -116,7 +116,7 @@ class User implements UserInterface
 
     public function __construct()
     {
-        $this->magasinAvis = new ArrayCollection();
+        $this->storeAvis = new ArrayCollection();
         $this->restaurantAvis = new ArrayCollection();
         $this->repas = new ArrayCollection();
         $this->produitFavoris = new ArrayCollection();
@@ -189,30 +189,30 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|MagasinAvis[]
+     * @return Collection|StoreAvis[]
      */
-    public function getMagasinAvis(): Collection
+    public function getStoreAvis(): Collection
     {
-        return $this->magasinAvis;
+        return $this->storeAvis;
     }
 
-    public function addMagasinAvi(MagasinAvis $magasinAvi): self
+    public function addStoreAvi(StoreAvis $storeAvi): self
     {
-        if (!$this->magasinAvis->contains($magasinAvi)) {
-            $this->magasinAvis[] = $magasinAvi;
-            $magasinAvi->setPostedBy($this);
+        if (!$this->storeAvis->contains($storeAvi)) {
+            $this->storeAvis[] = $storeAvi;
+            $storeAvi->setPostedBy($this);
         }
 
         return $this;
     }
 
-    public function removeMagasinAvi(MagasinAvis $magasinAvi): self
+    public function removeStoreAvi(StoreAvis $storeAvi): self
     {
-        if ($this->magasinAvis->contains($magasinAvi)) {
-            $this->magasinAvis->removeElement($magasinAvi);
+        if ($this->storeAvis->contains($storeAvi)) {
+            $this->storeAvis->removeElement($storeAvi);
             // set the owning side to null (unless already changed)
-            if ($magasinAvi->getPostedBy() === $this) {
-                $magasinAvi->setPostedBy(null);
+            if ($storeAvi->getPostedBy() === $this) {
+                $storeAvi->setPostedBy(null);
             }
         }
 

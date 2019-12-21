@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Magasin;
+use App\Entity\Store;
 use App\Entity\Produit;
 use App\Entity\ProduitSync;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,34 +24,34 @@ class ProduitSyncRepository extends ServiceEntityRepository
         $this->entityManager = $entityManager;
         $this->validator = $validator;
     }
-    public function getProduitOfMagasin($magasin)
+    public function getProduitOfStore($store)
     {
         $result = $this->createQueryBuilder('m')
             ->select('m')
-            ->where('m.Magasin = :magasinId')
-            ->setParameter('magasinId', $magasin)
+            ->where('m.Store = :storeId')
+            ->setParameter('storeId', $store)
             ->orderBy('m.createdAt', 'DESC')
             ->getQuery();
         return $result->getResult();
     }
-    public function deleteProduitMagasin($magasinId)
+    public function deleteProduitStore($storeId)
     {
-        $sqlMagasin = $this->find($magasinId);
-        $this->entityManager->remove($sqlMagasin);
+        $sqlStore = $this->find($storeId);
+        $this->entityManager->remove($sqlStore);
         $this->entityManager->flush();
-        $errors = $this->validator->validate($sqlMagasin);
+        $errors = $this->validator->validate($sqlStore);
         if (count($errors) == 0) {
             return true;
         } else {
             return false;
         }
     }
-    public function createProduitMagasin($magasinId, $produitId)
+    public function createProduitStore($storeId, $produitId)
     {
-        $magasinId = $this->entityManager->getRepository(Magasin::class)->find($magasinId);
+        $storeId = $this->entityManager->getRepository(Store::class)->find($storeId);
         $produitId = $this->entityManager->getRepository(Produit::class)->find($produitId);
         $sqlProduit = new ProduitSync();
-        $sqlProduit->setMagasin($magasinId)
+        $sqlProduit->setStore($storeId)
             ->setProduit($produitId)
             ->setCreatedAt(new \DateTime());
         $this->entityManager->persist($sqlProduit);

@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Magasins - Être Végétarien!{% endblock %}
+{% block title %}Stores - Être Végétarien!{% endblock %}
 
 {% block body %}
 <style>
-    #magasins .nav-search i {
+    #stores .nav-search i {
         position: absolute;
         padding: 10px;
         margin-top: 2px;
@@ -20,11 +20,11 @@
         -webkit-border-radius: 200px 200px 200px 200px !important;
     }
 
-    #magasins .produit-list-design {
+    #stores .produit-list-design {
         margin-top: 5%
     }
 
-    #magasins .produit-list-design .item {
+    #stores .produit-list-design .item {
         width: 30%;
         margin-bottom: 5%;
         -webkit-box-shadow: 0px 0px 48px -20px rgba(0, 0, 0, 0.75);
@@ -32,20 +32,20 @@
         box-shadow: 0px 0px 48px -20px rgba(0, 0, 0, 0.75);
     }
 
-    #magasins .produit-list-design .item .top {
+    #stores .produit-list-design .item .top {
         transition-duration: .3s;
         background-color: #58D68D;
         display: flex;
         padding: 30px
     }
 
-    #magasins .produit-list-design .item .top img {
+    #stores .produit-list-design .item .top img {
         width: 80%;
         margin: auto;
         transition-duration: .3s;
     }
 
-    #magasins .produit-list-design .item .bottom {
+    #stores .produit-list-design .item .bottom {
         transition-duration: .3s;
         background-color: #FFF;
         text-align: center;
@@ -55,59 +55,59 @@
         display: flex;
     }
 
-    #magasins .produit-list-design .item .bottom p {
+    #stores .produit-list-design .item .bottom p {
         margin: auto;
         font-weight: bolder;
     }
 
-    #magasins .produit-list-design .item:hover .top {
+    #stores .produit-list-design .item:hover .top {
         transition-duration: .3s;
         background-color: #FFF;
     }
 
-    #magasins .produit-list-design .item:hover .top img {
+    #stores .produit-list-design .item:hover .top img {
         transition-duration: .3s;
         transform: scale(0.9);
     }
 
-    #magasins .produit-list-design .item:hover .bottom {
+    #stores .produit-list-design .item:hover .bottom {
         transition-duration: .3s;
         background-color: #58D68D;
         height: 160px;
         margin-top: -100px;
     }
 
-    #magasins .produit-list-design .item:hover .bottom p {
+    #stores .produit-list-design .item:hover .bottom p {
         margin: auto auto 13px auto;
     }
 
     @media(max-width: 991px) {
-        #magasins .produit-list-design .item {
+        #stores .produit-list-design .item {
             width: 90%;
             margin: auto;
             margin-bottom: 5%
         }
 
-        #magasins .nav-search {
+        #stores .nav-search {
             width: 80%;
             margin-left: 10%
         }
     }
 </style>
-<section id="magasins" class="container paddingSeperateur">
+<section id="stores" class="container paddingSeperateur">
     <div class="input-group nav-search">
         <i class="fas fa-search"></i>
-        <input type="text" name="search" class="form-control" placeholder="Rechercher un magasin" value="">
+        <input type="text" name="search" class="form-control" placeholder="Rechercher un store" value="">
     </div>
     <div class="produit-list-design flex flex-wrap flex-between">
-        {% for magasin in magasins %}
+        {% for store in stores %}
         <div class="item">
-            <a href="{{ path('magasin_show', {'id': magasin.id}) }}">
+            <a href="{{ path('store_show', {'id': store.id}) }}">
                 <div class="top">
-                    <img alt="{{ magasin.nom }}" src="{{ magasin.image }}" />
+                    <img alt="{{ store.nom }}" src="{{ store.image }}" />
                 </div>
                 <div class="bottom">
-                    <p>{{ magasin.nom }}</p>
+                    <p>{{ store.nom }}</p>
                 </div>
             </a>
         </div>
@@ -120,14 +120,14 @@
     i = 0;
     $(document).ready(function () {
         $('[name="search"]').keypress(function (e) {
-            $.getJSON("/magasins/search?search=" + $('[name="search"]').val())
-                .then((magasins) => {
+            $.getJSON("/stores/search?search=" + $('[name="search"]').val())
+                .then((stores) => {
                     $('.produit-list-design').html("")
-                    if (magasins.length == 0) {
+                    if (stores.length == 0) {
                         $('.produit-list-design').html("<p class='margin-auto'>Aucun restaurant trouvé</p>")
                     }
-                    magasins.forEach((magasin) => {
-                        $(".produit-list-design").append('<a class="item" href="/magasin/' + magasin.id + '"><div class= "top"><img alt="' + magasin.nom + '" src="' + magasin.image + '" /></div><div class="bottom"><p>' + magasin.nom + '</p></div></a>')
+                    stores.forEach((store) => {
+                        $(".produit-list-design").append('<a class="item" href="/store/' + store.id + '"><div class= "top"><img alt="' + store.nom + '" src="' + store.image + '" /></div><div class="bottom"><p>' + store.nom + '</p></div></a>')
                     })
                 });
         });

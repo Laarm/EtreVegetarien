@@ -95,7 +95,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <a class="item" href="{{ path('magasins') }}">Trouver des magasins</a>
+                <a class="item" href="{{ path('stores') }}">Trouver des stores</a>
                 <a class="item" href="{{ path('devenirVegetarien') }}">Devenir Végétarien</a>
                 {% if not app.user %}
                 <a class="item computer-hidden" href="{{ path('connexion') }}"><i class="fad fa-sign-in"></i>
@@ -127,7 +127,7 @@
                 </div>
                 <div class="info flex flex-center">
                     <a href="{{ path('index') }}">Accueil</a>
-                    <a href="{{ path('magasins') }}">Magasins</a>
+                    <a href="{{ path('stores') }}">Stores</a>
                     <a href="{{ path('devenirVegetarien') }}">Devenir Végétarien</a>
                 </div>
                 <div class="sous-info flex flex-center mb-4">

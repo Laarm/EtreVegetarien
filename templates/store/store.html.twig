@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ magasin.nom }} - Être Végétarien!{% endblock %}
+{% block title %}{{ store.nom }} - Être Végétarien!{% endblock %}
 {% block stylesheets %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
     integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
@@ -10,7 +10,7 @@
 {% endblock %}
 {% block body %}
 <style>
-    #magasin .nav-search i {
+    #store .nav-search i {
         position: absolute;
         padding: 10px;
         margin-top: 2px;
@@ -26,11 +26,11 @@
         -webkit-border-radius: 200px 200px 200px 200px !important;
     }
 
-    #magasin .produit-list-design {
+    #store .produit-list-design {
         margin-top: 5%
     }
 
-    #magasin .produit-list-design .item {
+    #store .produit-list-design .item {
         width: 30%;
         margin-bottom: 5%;
         -webkit-box-shadow: 0px 0px 48px -20px rgba(0, 0, 0, 0.75);
@@ -38,20 +38,20 @@
         box-shadow: 0px 0px 48px -20px rgba(0, 0, 0, 0.75);
     }
 
-    #magasin .produit-list-design .item .top {
+    #store .produit-list-design .item .top {
         transition-duration: .3s;
         background-color: #279156;
         display: flex;
         padding: 30px
     }
 
-    #magasin .produit-list-design .item .top img {
+    #store .produit-list-design .item .top img {
         width: 80%;
         margin: auto;
         transition-duration: .3s;
     }
 
-    #magasin .produit-list-design .item .bottom {
+    #store .produit-list-design .item .bottom {
         transition-duration: .3s;
         background-color: #FFF;
         text-align: center;
@@ -61,46 +61,46 @@
         display: flex;
     }
 
-    #magasin .produit-list-design .item .bottom p {
+    #store .produit-list-design .item .bottom p {
         margin: auto;
         font-weight: bolder;
     }
 
-    #magasin .produit-list-design .item:hover .top {
+    #store .produit-list-design .item:hover .top {
         transition-duration: .3s;
         background-color: #FFF;
     }
 
-    #magasin .produit-list-design .item:hover .top img {
+    #store .produit-list-design .item:hover .top img {
         transition-duration: .3s;
         transform: scale(0.9);
     }
 
-    #magasin .produit-list-design .item:hover .bottom {
+    #store .produit-list-design .item:hover .bottom {
         transition-duration: .3s;
         background-color: #279156;
         height: 160px;
         margin-top: -100px;
     }
 
-    #magasin .produit-list-design .item:hover .bottom p {
+    #store .produit-list-design .item:hover .bottom p {
         margin: auto auto 13px auto;
     }
 
     @media(max-width: 991px) {
-        #magasin .produit-list-design .item {
+        #store .produit-list-design .item {
             width: 90%;
             margin: auto;
             margin-bottom: 5%
         }
     }
 
-    #magasin .banniere_magasin {
+    #store .banniere_store {
         height: 300px;
         width: 100%;
     }
 
-    #magasin #map {
+    #store #map {
         height: 600px;
         width: 100%;
     }
@@ -127,10 +127,10 @@
         border-bottom: #58D68D 6px solid
     }
 </style>
-<section id="magasin" class="container paddingSeperateur">
-    <h1>{{ magasin.nom }}</h1>
-    <div class="banniere_magasin"
-        style="background-image: url('{{ asset(magasin.image) }}');background-size: 100% auto;background-position: center">
+<section id="store" class="container paddingSeperateur">
+    <h1>{{ store.nom }}</h1>
+    <div class="banniere_store"
+        style="background-image: url('{{ asset(store.image) }}');background-size: 100% auto;background-position: center">
     </div>
     <div class="w-100">
         <ul class="nav nav-tabs" id="tab" role="tablist">
@@ -180,9 +180,9 @@
     crossorigin=""></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
 <script>
-    $.getJSON("https://api-adresse.data.gouv.fr/search/?q= {{ magasin.adresse }}&limit=1").then((magasin) => {
-        lat = magasin.features[0]['geometry']['coordinates'][1];
-        lon = magasin.features[0]['geometry']['coordinates'][0];
+    $.getJSON("https://api-adresse.data.gouv.fr/search/?q= {{ store.adresse }}&limit=1").then((store) => {
+        lat = store.features[0]['geometry']['coordinates'][1];
+        lon = store.features[0]['geometry']['coordinates'][0];
         initMap();
     });
     var macarte = null;

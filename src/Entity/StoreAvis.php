@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\MagasinAvisRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\StoreAvisRepository")
  */
-class MagasinAvis
+class StoreAvis
 {
     /**
      * @ORM\Id()
@@ -17,13 +17,13 @@ class MagasinAvis
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Magasin", inversedBy="magasinAvis")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Store", inversedBy="storeAvis")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
-    private $magasin;
+    private $store;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="magasinAvis")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="storeAvis")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $postedBy;
@@ -43,14 +43,14 @@ class MagasinAvis
         return $this->id;
     }
 
-    public function getMagasin(): ?Magasin
+    public function getStore(): ?Store
     {
-        return $this->magasin;
+        return $this->store;
     }
 
-    public function setMagasin(?Magasin $magasin): self
+    public function setStore(?Store $store): self
     {
-        $this->magasin = $magasin;
+        $this->store = $store;
 
         return $this;
     }
