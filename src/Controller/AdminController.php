@@ -9,12 +9,11 @@ use App\Repository\ContactRepository;
 use App\Repository\StoreRepository;
 use App\Repository\ProductRepository;
 use App\Repository\RestaurantRepository;
-use App\Repository\StoreAvisRepository;
 use App\Repository\ProductSyncRepository;
 use App\Repository\RestaurantAvisRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\ArticleCommentaireRepository;
+use App\Repository\ArticleCommentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminController extends AbstractController
@@ -24,7 +23,6 @@ class AdminController extends AbstractController
         $articles = $repo->findBy(array(), null, "5", null);
 
         return $this->render('admin/index.html.twig', [
-            'controller_name' => 'AdminController',
             'articles' => $articles,
         ]);
     }
@@ -47,7 +45,7 @@ class AdminController extends AbstractController
             'articles' => $articles,
         ]);
     }
-    public function managementArticlesCommentaires(ArticleCommentaireRepository $articleCommentaireRepo, Request $request)
+    public function managementArticlesComments(ArticleCommentRepository $articleCommentRepo, Request $request)
     {
         if ($request->get('view') !== null) {
             $view = $request->get('view');
@@ -56,9 +54,9 @@ class AdminController extends AbstractController
             $view = null;
             $maxView = 100;
         }
-        $articleCommentaire = $articleCommentaireRepo->findBy(array(), null, $maxView, $view);
-        return $this->render('admin/managementArticlesCommentaires.html.twig', [
-            'article_commentaire' => $articleCommentaire,
+        $articleComment = $articleCommentRepo->findBy(array(), null, $maxView, $view);
+        return $this->render('admin/managementArticlesComments.html.twig', [
+            'article_comment' => $articleComment,
         ]);
     }
     public function managementStores(StoreRepository $managementStoresRepo, Request $request)

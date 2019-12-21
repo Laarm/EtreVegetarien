@@ -39,9 +39,9 @@ class Article
     private $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ArticleCommentaire", mappedBy="article", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\ArticleComment", mappedBy="article", orphanRemoval=true)
      */
-    private $articleCommentaires;
+    private $articleComments;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -50,7 +50,7 @@ class Article
 
     public function __construct()
     {
-        $this->articleCommentaires = new ArrayCollection();
+        $this->articleComments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -107,30 +107,30 @@ class Article
     }
 
     /**
-     * @return Collection|ArticleCommentaire[]
+     * @return Collection|ArticleComment[]
      */
-    public function getArticleCommentaires(): Collection
+    public function getArticleComments(): Collection
     {
-        return $this->articleCommentaires;
+        return $this->articleComments;
     }
 
-    public function addArticleCommentaire(ArticleCommentaire $articleCommentaire): self
+    public function addArticleComment(ArticleComment $articleComment): self
     {
-        if (!$this->articleCommentaires->contains($articleCommentaire)) {
-            $this->articleCommentaires[] = $articleCommentaire;
-            $articleCommentaire->setArticle($this);
+        if (!$this->articleComments->contains($articleComment)) {
+            $this->articleComments[] = $articleComment;
+            $articleComment->setArticle($this);
         }
 
         return $this;
     }
 
-    public function removeArticleCommentaire(ArticleCommentaire $articleCommentaire): self
+    public function removeArticleComment(ArticleComment $articleComment): self
     {
-        if ($this->articleCommentaires->contains($articleCommentaire)) {
-            $this->articleCommentaires->removeElement($articleCommentaire);
+        if ($this->articleComments->contains($articleComment)) {
+            $this->articleComments->removeElement($articleComment);
             // set the owning side to null (unless already changed)
-            if ($articleCommentaire->getArticle() === $this) {
-                $articleCommentaire->setArticle(null);
+            if ($articleComment->getArticle() === $this) {
+                $articleComment->setArticle(null);
             }
         }
 

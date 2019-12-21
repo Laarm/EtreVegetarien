@@ -61,9 +61,9 @@ admin:
 adminManagementArticles:
     path: /admin/ManagementArticles
     controller: App\Controller\AdminController::managementArticles
-adminManagementArticlesCommentaires:
-    path: /admin/ManagementArticlesCommentaires
-    controller: App\Controller\AdminController::managementArticlesCommentaires
+adminManagementArticlesComments:
+    path: /admin/ManagementArticlesComments
+    controller: App\Controller\AdminController::managementArticlesComments
 adminManagementStores:
     path: /admin/ManagementStores
     controller: App\Controller\AdminController::managementStores

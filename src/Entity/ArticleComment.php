@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ArticleCommentaireRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ArticleCommentRepository")
  */
-class ArticleCommentaire
+class ArticleComment
 {
     /**
      * @ORM\Id()
@@ -33,7 +33,7 @@ class ArticleCommentaire
     private $createdAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Article", inversedBy="articleCommentaires")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Article", inversedBy="articleComments")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $article;

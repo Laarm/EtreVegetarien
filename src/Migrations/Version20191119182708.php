@@ -12,12 +12,12 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20191119182708 extends AbstractMigration
 {
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return '';
     }
 
-    public function up(Schema $schema) : void
+    public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
@@ -30,16 +30,16 @@ final class Version20191119182708 extends AbstractMigration
         $this->addSql('ALTER TABLE contact CHANGE telephone telephone VARCHAR(255) DEFAULT NULL');
         $this->addSql('ALTER TABLE store_avis ADD note VARCHAR(255) NOT NULL, CHANGE store_id store_id INT DEFAULT NULL, CHANGE posted_by_id posted_by_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE store CHANGE adresse adresse VARCHAR(255) DEFAULT NULL');
-        $this->addSql('ALTER TABLE article_commentaire CHANGE article_id article_id INT DEFAULT NULL, CHANGE posted_by_id posted_by_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE article_comment CHANGE article_id article_id INT DEFAULT NULL, CHANGE posted_by_id posted_by_id INT DEFAULT NULL');
     }
 
-    public function down(Schema $schema) : void
+    public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('DROP TABLE restaurant_avis');
-        $this->addSql('ALTER TABLE article_commentaire CHANGE posted_by_id posted_by_id INT DEFAULT NULL, CHANGE article_id article_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE article_comment CHANGE posted_by_id posted_by_id INT DEFAULT NULL, CHANGE article_id article_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE contact CHANGE telephone telephone VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT \'NULL\' COLLATE `utf8mb4_unicode_ci`');
         $this->addSql('ALTER TABLE store CHANGE adresse adresse VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT \'NULL\' COLLATE `utf8mb4_unicode_ci`');
         $this->addSql('ALTER TABLE store_avis DROP note, CHANGE store_id store_id INT DEFAULT NULL, CHANGE posted_by_id posted_by_id INT DEFAULT NULL');

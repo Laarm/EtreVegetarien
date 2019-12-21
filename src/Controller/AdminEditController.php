@@ -511,7 +511,7 @@ class AdminEditController extends AbstractController
                     }
                     if ($request->get('deleteAvatar') == true) {
                         $ancienneImage = $this->getDoctrine()->getRepository(User::class)->find($request->get('user_id'));
-                        if (substr($ancienneImage->getAvatar(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getAvatar()) {
+                        if (!empty($ancienneImage->getAvatar()) && substr($ancienneImage->getAvatar(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getAvatar()) {
                             $filesystem->remove(['symlink', "../public/" . $ancienneImage->getAvatar(), 'activity.log']);
                         }
                         $userSql = $this->getDoctrine()->getRepository(User::class)->saveUserAvatar($request->get('user_id'), "");
