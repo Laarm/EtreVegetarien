@@ -22,12 +22,12 @@ class MealRepository extends ServiceEntityRepository
         $this->entityManager = $entityManager;
         $this->validator = $validator;
     }
-    public function createMeal($name, $image, $recette, $user)
+    public function createMeal($name, $image, $recipe, $user)
     {
         $sqlMeal = new Meal();
         $sqlMeal->setName($name)
             ->setImage($image)
-            ->setRecette($recette)
+            ->setRecipe($recipe)
             ->setPostedBy($user)
             ->setCreatedAt(new \DateTime());
         $this->entityManager->persist($sqlMeal);
@@ -39,12 +39,12 @@ class MealRepository extends ServiceEntityRepository
             return false;
         }
     }
-    public function saveMeal($mealId, $name, $image, $recette, $user)
+    public function saveMeal($mealId, $name, $image, $recipe, $user)
     {
         $sqlMeal = $this->find($mealId);
         $sqlMeal->setName($name)
             ->setImage($image)
-            ->setRecette($recette)
+            ->setRecipe($recipe)
             ->setPostedBy($user);
         $this->entityManager->flush();
         $errors = $this->validator->validate($sqlMeal);

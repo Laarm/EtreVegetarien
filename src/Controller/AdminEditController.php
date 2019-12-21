@@ -402,7 +402,7 @@ class AdminEditController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
-                if (!empty($request->get('name')) && !empty($request->get('meal_id')) && !empty($request->get('recette'))) {
+                if (!empty($request->get('name')) && !empty($request->get('meal_id')) && !empty($request->get('recipe'))) {
                     $user = $security->getUser();
                     if (empty($request->get('image'))) {
                         $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
@@ -410,14 +410,14 @@ class AdminEditController extends AbstractController
                         $image = $request->get('image');
                     }
                     if ($request->get('meal_id') == "new") {
-                        $sqlMeal = $this->getDoctrine()->getRepository(Meal::class)->createMeal($request->get('name'), $image, $request->get('recette'), $user);
+                        $sqlMeal = $this->getDoctrine()->getRepository(Meal::class)->createMeal($request->get('name'), $image, $request->get('recipe'), $user);
                         $success = "Le repas à bien été créer !";
                     } else {
                         $ancienneImage = $this->getDoctrine()->getRepository(Meal::class)->find($request->get('meal_id'));
                         if (substr($ancienneImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $ancienneImage->getImage()) {
                             $filesystem->remove(['symlink', "../public/" . $ancienneImage->getImage(), 'activity.log']);
                         }
-                        $sqlMeal = $this->getDoctrine()->getRepository(Meal::class)->saveMeal($request->get('meal_id'), $request->get('name'), $image, $request->get('recette'), $user);
+                        $sqlMeal = $this->getDoctrine()->getRepository(Meal::class)->saveMeal($request->get('meal_id'), $request->get('name'), $image, $request->get('recipe'), $user);
                         $success = "Le repas à bien été mis à jour !";
                     }
                     if ($sqlMeal) {

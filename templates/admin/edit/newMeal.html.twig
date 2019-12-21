@@ -24,7 +24,7 @@
 					</div>
 					<input type="text" class="form-control hidden" id="image" value="">
 					<div class="input-group-prepend">
-						<span class="input-group-text">Recette :
+						<span class="input-group-text">Recipe :
 						</span>
 					</div>
 					<textarea id="editeur"></textarea>
@@ -62,7 +62,7 @@ if ($('#file').val().length !== 0) {
 var files = $('#file')[0].files[0];
 fd.append('file', files);
 $.ajax({
-url: "{{ path('admin_upload_image') }}?_token= {{ csrf_token('upload-image') }}",
+url: "{{ path('admin_upload_image') }}?_token=   {{ csrf_token('upload-image') }}",
 type: 'post',
 data: fd,
 contentType: false,
@@ -81,7 +81,7 @@ if (stop == "non") {
 e.preventDefault();
 $.post("{{ path('admin_save_meal') }}", {
 name: $("#name").val(),
-recette: $("#editeur").val(),
+recipe: $("#editeur").val(),
 meal_id: 'new',
 image: $("#image").val(),
 csrfData: "{{ csrf_token('save-item') }}"

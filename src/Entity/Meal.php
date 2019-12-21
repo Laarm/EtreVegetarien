@@ -26,7 +26,7 @@ class Meal
     /**
      * @ORM\Column(type="text")
      */
-    private $recette;
+    private $recipe;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -71,14 +71,14 @@ class Meal
         return $this;
     }
 
-    public function getRecette(): ?string
+    public function getRecipe(): ?string
     {
-        return $this->recette;
+        return $this->recipe;
     }
 
-    public function setRecette(string $recette): self
+    public function setRecipe(string $recipe): self
     {
-        $this->recette = $recette;
+        $this->recipe = $recipe;
 
         return $this;
     }

@@ -13,13 +13,13 @@ class MealFixtures extends Fixture
         // $product = new Product();
         // $manager->persist($product);
 
-        for($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             $meal = new Meal();
             $meal->setName("Meal n°$i")
-                  ->setRecette("<p>Recette : Fromage</p>")
-                  ->setImage("http://placehold.it/350x250")
-                  ->setPostedBy("Admin")
-                  ->setCreatedAt(new \DateTime());
+                ->setRecipe("<p>Recipe : Fromage</p>")
+                ->setImage("http://placehold.it/350x250")
+                ->setPostedBy("Admin")
+                ->setCreatedAt(new \DateTime());
 
             $manager->persist($meal);
         }
