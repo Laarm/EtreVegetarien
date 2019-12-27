@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Restaurant;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
@@ -15,10 +14,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class RestaurantRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, ValidatorInterface $validator)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Restaurant::class);
-        $this->validator = $validator;
     }
     public function createRestaurant($sqlRestaurant)
     {
@@ -31,9 +29,9 @@ class RestaurantRepository extends ServiceEntityRepository
         $this->_em->flush();
         return $sqlRestaurant->getId();
     }
-    public function deleteRestaurant($sql)
+    public function deleteRestaurant($restaurant)
     {
-        $this->_em->remove($sql);
+        $this->_em->remove($restaurant);
         $this->_em->flush();
     }
     public function searchRestaurant($search, $limit)

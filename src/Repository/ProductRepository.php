@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Product;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**

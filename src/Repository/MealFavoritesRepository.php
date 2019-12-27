@@ -4,9 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Meal;
 use App\Entity\MealFavorites;
-use Symfony\Component\Security\Core\Security;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
@@ -17,15 +15,13 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class MealFavoritesRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, ValidatorInterface $validator, Security $security)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, MealFavorites::class);
-        $this->validator = $validator;
-        $this->security = $security;
     }
-    public function addMealFavorites($sql)
+    public function addMealFavorites($mealFavorites)
     {
-        $this->_em->persist($sql);
+        $this->_em->persist($mealFavorites);
         $this->_em->flush();
     }
     public function removeMealFavorites($mealId, $userId)

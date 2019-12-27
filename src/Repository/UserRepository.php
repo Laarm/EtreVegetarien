@@ -4,9 +4,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -38,9 +36,9 @@ class UserRepository extends ServiceEntityRepository
         $this->_em->remove($user);
         $this->_em->flush();
     }
-    public function createUser($sql)
+    public function createUser($user)
     {
-        $this->_em->persist($sql);
+        $this->_em->persist($user);
         $this->_em->flush();
     }
 }

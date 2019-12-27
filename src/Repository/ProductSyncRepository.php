@@ -2,11 +2,8 @@
 
 namespace App\Repository;
 
-use App\Entity\Store;
-use App\Entity\Product;
 use App\Entity\ProductSync;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
@@ -17,10 +14,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class ProductSyncRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, ValidatorInterface $validator)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ProductSync::class);
-        $this->validator = $validator;
     }
     public function getProductOfStore($store)
     {
@@ -37,9 +33,9 @@ class ProductSyncRepository extends ServiceEntityRepository
         $this->_em->remove($sqlStore);
         $this->_em->flush();
     }
-    public function createProductStore($sql)
+    public function createProductStore($productSync)
     {
-        $this->_em->persist($sql);
+        $this->_em->persist($productSync);
         $this->_em->flush();
     }
 }

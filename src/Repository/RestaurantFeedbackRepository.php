@@ -2,10 +2,8 @@
 
 namespace App\Repository;
 
-use App\Entity\Restaurant;
 use App\Entity\RestaurantFeedback;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
@@ -16,10 +14,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class RestaurantFeedbackRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, ValidatorInterface $validator)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, RestaurantFeedback::class);
-        $this->validator = $validator;
     }
     public function deleteRestaurantFeedback($sqlRestaurant)
     {

@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Meal;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
@@ -15,10 +14,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class MealRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, ValidatorInterface $validator)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Meal::class);
-        $this->validator = $validator;
     }
     public function createMeal($sqlMeal)
     {
