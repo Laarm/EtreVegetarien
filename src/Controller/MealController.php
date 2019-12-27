@@ -66,7 +66,7 @@ class MealController extends AbstractController
     /**
      * @Route("/ajax/mealFavorites", name="meal_favorites")
      */
-    public function mealFavorites(Security $security, MealFavoritesRepository $repoMealFavorites, Request $request)
+    public function mealFavorites(Security $security, MealFavoritesRepository $repoMealFavorites, Request $request, ValidatorInterface $validator)
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
@@ -75,17 +75,25 @@ class MealController extends AbstractController
                     $user = $security->getUser();
                     $verif = $repoMealFavorites->findBy(array('postedBy' => $user, 'Meal' => $request->get('meal_id')));
                     if (!$verif) {
-                        $sqlMealFavorites = $this->getDoctrine()->getRepository(MealFavorites::class)->addMealFavorites($request->get('meal_id'));
-                        if ($sqlMealFavorites) {
+                        $sqlMealFavorites = new MealFavorites();
+                        $meal = $this->getDoctrine()
+                            ->getRepository(Meal::class)
+                            ->find($request->get('meal_id'));
+                        $sqlMealFavorites->setMeal($meal)
+                            ->setPostedBy($user)
+                            ->setCreatedAt(new \DateTime());
+                        $errors = $validator->validate($sqlMealFavorites);
+                        if (count($errors) == 0) {
+                            $sqlMealFavorites = $this->getDoctrine()->getRepository(MealFavorites::class)->addMealFavorites($sqlMealFavorites);
                             return $this->json(['action' => "add", 'message' => "Vous avez bien ajouter ce repas en favorites", 'id' => $request->get('meal_id')], 200);
                         }
                     } else {
                         $sqlMealFavorites = $this->getDoctrine()->getRepository(MealFavorites::class)->removeMealFavorites($request->get('meal_id'), $this->getUser()->getId());
-                        if ($sqlMealFavorites) {
+                        $errors = $validator->validate($sqlMealFavorites);
+                        if (count($errors) == 0) {
                             return $this->json(['action' => "delete", 'message' => "Vous avez bien supprimer ce repas en favorites", 'id' => $request->get('meal_id')], 200);
-                        } else {
-                            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                         }
+                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                     }
                 } else {
                     return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);

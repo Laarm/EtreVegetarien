@@ -4,9 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Meal;
 use App\Entity\MealFavorites;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -24,24 +23,10 @@ class MealFavoritesRepository extends ServiceEntityRepository
         $this->validator = $validator;
         $this->security = $security;
     }
-    public function addMealFavorites($mealId)
+    public function addMealFavorites($sql)
     {
-        $user = $this->security->getUser();
-        $sqlMealFavorites = new MealFavorites();
-        $meal = $this->_em
-            ->getRepository(Meal::class)
-            ->find($mealId);
-        $sqlMealFavorites->setMeal($meal)
-            ->setPostedBy($user)
-            ->setCreatedAt(new \DateTime());
-        $this->_em->persist($sqlMealFavorites);
+        $this->_em->persist($sql);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlMealFavorites);
-        if (count($errors) == 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
     public function removeMealFavorites($mealId, $userId)
     {
@@ -54,12 +39,7 @@ class MealFavoritesRepository extends ServiceEntityRepository
         $deleteFavorites = $this->find($mealFavoritesId[0]['id']);
         $this->_em->remove($deleteFavorites);
         $this->_em->flush();
-        $errors = $this->validator->validate($deleteFavorites);
-        if (count($errors) == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return $deleteFavorites;
     }
     public function getAllMealFeedbackForUser($user)
     {

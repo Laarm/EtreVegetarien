@@ -84,13 +84,9 @@ $(document).ready(function() {
                     image: $("#image").val(),
                     csrfData: "{{ csrf_token('save-item') }}"
                 }, function(data) {
-                    if (data.code == 200) {
-                        $("#resultat").html("<p>" + data.message + "</p>");
-                        window.location.replace("/article/" + data.articleId);
-                    } else {
-                        $("#resultat").html("<p>" + data.message + "</p>");
-                    }
-                }, 'json');
+                    $("#resultat").html("<p>" + data.message + "</p>");
+                    window.location.replace("/article/" + data.articleId);
+                }, 'json').fail(function(data) {$("#resultat").html("<p>" + data.responseJSON.message + "</p>");});;
             }
         } else {
             $("#resultat").html("<p>Veuillez remplir le name et le content</p>");

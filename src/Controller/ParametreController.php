@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\ArticleRepository;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ParametreController extends AbstractController
@@ -25,7 +27,7 @@ class ParametreController extends AbstractController
     /**
      * @Route("/parametre/uploadAvatar", name="upload_avatar")
      */
-    public function uploadImage(Request $request): Response
+    public function uploadImage(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('_token');
@@ -43,12 +45,17 @@ class ParametreController extends AbstractController
                     return $this->json(['message' => 'L\'extension n\'est pas valide !'], 200);
                 } else {
                     if (move_uploaded_file($_FILES['file']['tmp_name'], $location)) {
-                        $userSql = $this->getDoctrine()->getRepository(User::class)->saveUserAvatar($this->getUser()->getId(), $locationRenvoie);
-                        if ($userSql == "good") {
-                            return $this->json(['message' => 'Vous avez bien envoyer l\'image !', 'location' => $locationRenvoie], 200);
-                        } else {
-                            return $this->json(['message' => 'Veuillez contacter un administrateur'], 400);
+                        $oldImage = $this->getDoctrine()->getRepository(User::class)->find($this->getUser()->getId());
+                        if (!empty($oldImage->getAvatar()) && substr($oldImage->getAvatar(), 0, 4) !== "http" && $request->get('image') !== $oldImage->getAvatar()) {
+                            $filesystem->remove(['symlink', "../public/" . $oldImage->getAvatar(), 'activity.log']);
                         }
+                        $oldImage->setAvatar($locationRenvoie);
+                        $errors = $validator->validate($oldImage);
+                        if (count($errors) == 0) {
+                            $this->getDoctrine()->getRepository(User::class)->saveUserAvatar($oldImage);
+                            return $this->json(['message' => 'Vous avez bien envoyer l\'image !', 'location' => $locationRenvoie], 200);
+                        }
+                        return $this->json(['message' => 'Veuillez contacter un administrateur'], 400);
                     } else {
                         return $this->json(['message' => 'Erreur'], 400);
                     }
@@ -60,17 +67,24 @@ class ParametreController extends AbstractController
     /**
      * @Route("/parametre/saveProfil", name="save_profil")
      */
-    public function saveProfil(Request $request): Response
+    public function saveProfil(Request $request, ValidatorInterface $validator): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('save-profil', $submittedToken)) {
-                $userSql = $this->getDoctrine()->getRepository(User::class)->saveUserProfil($this->getUser()->getId(), $request->get('username'), $request->get('email'), $this->getUser()->getRole(), $request->get('bio'), $request->get('preference'), $request->get('date'));
-                if ($userSql) {
+                $sqlUser = $this->getDoctrine()->getRepository(User::class)->find($this->getUser()->getId());
+                $sqlUser->setUsername($request->get('username'))
+                    ->setEmail($request->get('email'))
+                    ->setRole($request->get('role'))
+                    ->setPreference($request->get('preference'))
+                    ->setPreferenceCreatedAt(new \DateTime($request->get('date')))
+                    ->setBio($request->get('bio'));
+                $errors = $validator->validate($sqlUser);
+                if (count($errors) == 0) {
+                    $this->getDoctrine()->getRepository(User::class)->saveUserProfil($sqlUser);
                     return $this->json(['message' => 'Votre profil à bien été sauvegarder !'], 200);
-                } else {
-                    return $this->json(['message' => 'Erreur, veuillez contacter un administrateur !'], 400);
                 }
+                return $this->json(['message' => 'Erreur, veuillez contacter un administrateur !'], 400);
             }
             return $this->json(['message' => 'Erreur'], 400);
         }

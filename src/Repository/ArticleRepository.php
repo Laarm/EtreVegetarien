@@ -3,8 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Article;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -21,46 +20,21 @@ class ArticleRepository extends ServiceEntityRepository
         parent::__construct($registry, Article::class);
         $this->validator = $validator;
     }
-    public function createArticle($name, $content, $image)
+    public function createArticle($sqlArticle)
     {
-        $sqlArticle = new Article();
-        $sqlArticle->setName($name)
-            ->setContent($content)
-            ->setImage($image)
-            ->setCreatedAt(new \DateTime());
         $this->_em->persist($sqlArticle);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlArticle);
-        if (count($errors) == 0) {
-            return $sqlArticle->getId();
-        } else {
-            return false;
-        }
+        return $sqlArticle->getId();
     }
-    public function saveArticle($articleId, $name, $content, $image)
+    public function saveArticle($sqlArticle)
     {
-        $sqlArticle = $this->find($articleId);
-        $sqlArticle->setName($name)
-            ->setContent($content)
-            ->setImage($image);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlArticle);
-        if (count($errors) == 0) {
-            return $articleId;
-        } else {
-            return false;
-        }
+        return $sqlArticle;
     }
-    public function deleteArticle($articleId)
+    public function deleteArticle($sqlArticle)
     {
-        $sqlArticle = $this->find($articleId);
         $this->_em->remove($sqlArticle);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlArticle);
-        if (count($errors) == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return $sqlArticle;
     }
 }

@@ -2,16 +2,17 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
-use App\Repository\RestaurantRepository;
-use App\Repository\RestaurantFeedbackRepository;
-use App\Repository\ArticleRepository;
 use App\Entity\Restaurant;
 use App\Entity\RestaurantFeedback;
-use Symfony\Component\HttpFoundation\Response;
+use App\Repository\ArticleRepository;
+use App\Repository\RestaurantRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\RestaurantFeedbackRepository;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class RestaurantController extends AbstractController
 {
@@ -80,7 +81,7 @@ class RestaurantController extends AbstractController
     /**
      * @Route("/ajax/restaurant/sendNote", name="send_note_restaurant")
      */
-    public function sendNote(Security $security, Request $request): Response
+    public function sendNote(Security $security, Request $request, ValidatorInterface $validator): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
@@ -95,13 +96,21 @@ class RestaurantController extends AbstractController
                     $user = $security->getUser();
                     $verif = $this->getDoctrine()->getRepository(RestaurantFeedback::class)->getFeedbackOfUser($this->getUser()->getId(), $request->get('restaurant_id'));
                     if (!$verif) {
-                        $verif = $this->getDoctrine()->getRepository(RestaurantFeedback::class)->addFeedback($request->get('restaurant_id'), $user, $message, $note);
-                        if ($verif) {
+                        $restaurant = $this->getDoctrine()->getRepository(Restaurant::class)
+                            ->find($request->get('restaurant_id'));
+                        $sqlRestaurantFeedback = new RestaurantFeedback();
+                        $sqlRestaurantFeedback->setRestaurant($restaurant)
+                            ->setPostedBy($user)
+                            ->setMessage($message)
+                            ->setNote($note)
+                            ->setCreatedAt(new \DateTime());
+                        $errors = $validator->validate($sqlRestaurantFeedback);
+                        if (count($errors) == 0) {
+                            $verif = $this->getDoctrine()->getRepository(RestaurantFeedback::class)->addFeedback($sqlRestaurantFeedback);
                             return $this->json(['message' => 'Merci d\'avoir donné votre feedback !'], 200);
                         }
-                    } else {
-                        return $this->json(['message' => 'Vous avez déjà donné votre feedback !'], 400);
                     }
+                    return $this->json(['message' => 'Vous avez déjà donné votre feedback !'], 200);
                 }
                 return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
             }

@@ -3,8 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Meal;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -21,49 +20,21 @@ class MealRepository extends ServiceEntityRepository
         parent::__construct($registry, Meal::class);
         $this->validator = $validator;
     }
-    public function createMeal($name, $image, $recipe, $user)
+    public function createMeal($sqlMeal)
     {
-        $sqlMeal = new Meal();
-        $sqlMeal->setName($name)
-            ->setImage($image)
-            ->setRecipe($recipe)
-            ->setPostedBy($user)
-            ->setCreatedAt(new \DateTime());
         $this->_em->persist($sqlMeal);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlMeal);
-        if (count($errors) == 0) {
-            return $sqlMeal->getId();
-        } else {
-            return false;
-        }
+        return $sqlMeal->getId();
     }
-    public function saveMeal($mealId, $name, $image, $recipe, $user)
+    public function saveMeal($sqlMeal)
     {
-        $sqlMeal = $this->find($mealId);
-        $sqlMeal->setName($name)
-            ->setImage($image)
-            ->setRecipe($recipe)
-            ->setPostedBy($user);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlMeal);
-        if (count($errors) == 0) {
-            return $mealId;
-        } else {
-            return false;
-        }
+        return $sqlMeal;
     }
-    public function deleteMeal($mealId)
+    public function deleteMeal($sqlMeal)
     {
-        $sqlMeal = $this->find($mealId);
         $this->_em->remove($sqlMeal);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlMeal);
-        if (count($errors) == 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
     public function searchMeal($search)
     {

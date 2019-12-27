@@ -4,8 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Restaurant;
 use App\Entity\RestaurantFeedback;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -22,17 +21,10 @@ class RestaurantFeedbackRepository extends ServiceEntityRepository
         parent::__construct($registry, RestaurantFeedback::class);
         $this->validator = $validator;
     }
-    public function deleteRestaurantFeedback($restaurantId)
+    public function deleteRestaurantFeedback($sqlRestaurant)
     {
-        $sqlRestaurant = $this->find($restaurantId);
         $this->_em->remove($sqlRestaurant);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlRestaurant);
-        if (count($errors) == 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
     public function getCountFeedback($restaurant)
     {
@@ -49,24 +41,10 @@ class RestaurantFeedbackRepository extends ServiceEntityRepository
             'postedBy' => $user,
         ]);
     }
-    public function addFeedback($restaurant, $user, $message, $note)
+    public function addFeedback($restaurantFeedback)
     {
-        $restaurant = $this->_em->getRepository(Restaurant::class)
-            ->find($restaurant);
-        $sqlRestaurantFeedback = new RestaurantFeedback();
-        $sqlRestaurantFeedback->setRestaurant($restaurant)
-            ->setPostedBy($user)
-            ->setMessage($message)
-            ->setNote($note)
-            ->setCreatedAt(new \DateTime());
-        $this->_em->persist($sqlRestaurantFeedback);
+        $this->_em->persist($restaurantFeedback);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlRestaurantFeedback);
-        if (count($errors) == 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
     public function getAllRestaurantsFeedbackForUser($user)
     {

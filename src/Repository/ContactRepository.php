@@ -3,8 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Contact;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -21,33 +20,14 @@ class ContactRepository extends ServiceEntityRepository
         parent::__construct($registry, Contact::class);
         $this->validator = $validator;
     }
-    public function sendMessage($name, $email, $subject, $message)
+    public function sendMessage($sql)
     {
-        $sql = new Contact();
-        $sql->setName($name)
-            ->setEmail($email)
-            ->setSubject($subject)
-            ->setMessage($message)
-            ->setCreatedAt(new \DateTime());
         $this->_em->persist($sql);
         $this->_em->flush();
-        $errors = $this->validator->validate($sql);
-        if (count($errors) == 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
-    public function deleteContact($contactId)
+    public function deleteContact($sql)
     {
-        $sqlContact = $this->find($contactId);
-        $this->_em->remove($sqlContact);
+        $this->_em->remove($sql);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlContact);
-        if (count($errors) == 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
 }

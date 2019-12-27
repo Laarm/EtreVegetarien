@@ -3,8 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -17,84 +16,31 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class UserRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
-        $this->passwordEncoder = $passwordEncoder;
-        $this->validator = $validator;
     }
 
-    public function saveUserProfil($userId, $username, $email, $role, $bio, $preference, $preferenceCreatedAt)
+    public function saveUserProfil($user)
     {
-        $sqlUser = $this->find($userId);
-        $sqlUser->setUsername($username)
-            ->setEmail($email)
-            ->setRole($role)
-            ->setPreference($preference)
-            ->setPreferenceCreatedAt(new \DateTime($preferenceCreatedAt))
-            ->setBio($bio);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlUser);
-        if (count($errors) == 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
-    public function saveUserAvatar($userId, $avatar)
+    public function saveUserAvatar($user)
     {
-        $sqlUser = $this->find($userId);
-        $sqlUser->setAvatar($avatar);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlUser);
-        if (count($errors) == 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
-    public function saveUserPassword($userId, $password)
+    public function saveUserPassword($user)
     {
-        $sqlUser = new User();
-        $password = $this->passwordEncoder->encodePassword($sqlUser, $password);
-        $sqlUser = $this->find($userId);
-        $sqlUser->setPassword($password);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlUser);
-        if (count($errors) == 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
-    public function deleteUser($userId)
+    public function deleteUser($user)
     {
-        $sqlUser = $this->find($userId);
-        $this->_em->remove($sqlUser);
+        $this->_em->remove($user);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlUser);
-        if (count($errors) == 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
-    public function createUser($username, $password, $email)
+    public function createUser($sql)
     {
-        $sqlUser = new User();
-        $password = $this->passwordEncoder->encodePassword($sqlUser, $password);
-        $sqlUser->setUsername($username)
-            ->setPassword($password)
-            ->setEmail($email)
-            ->setCreatedAt(new \DateTime());
-        $this->_em->persist($sqlUser);
+        $this->_em->persist($sql);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlUser);
-        $return = array("password" => $password, "id" => $sqlUser->getId());
-        if (count($errors) == 0) {
-            return $return;
-        } else {
-            return false;
-        }
     }
 }

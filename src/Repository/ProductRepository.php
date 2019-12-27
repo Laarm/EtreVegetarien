@@ -3,8 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Product;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -16,50 +15,25 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class ProductRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, ValidatorInterface $validator)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Product::class);
-        $this->validator = $validator;
     }
-    public function createProduct($name, $image)
+    public function createProduct($sqlProduct)
     {
-        $sqlProduct = new Product();
-        $sqlProduct->setName($name)
-            ->setImage($image)
-            ->setCreatedAt(new \DateTime());
         $this->_em->persist($sqlProduct);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlProduct);
-        if (count($errors) == 0) {
-            return $sqlProduct->getId();
-        } else {
-            return false;
-        }
+        return $sqlProduct->getId();
     }
-    public function saveProduct($productId, $name, $image)
+    public function saveProduct($productId)
     {
-        $sqlProduct = $this->find($productId);
-        $sqlProduct->setName($name)
-            ->setImage($image);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlProduct);
-        if (count($errors) == 0) {
-            return $productId;
-        } else {
-            return false;
-        }
+        return $productId;
     }
-    public function deleteProduct($productId)
+    public function deleteProduct($sqlProduct)
     {
-        $sqlProduct = $this->find($productId);
         $this->_em->remove($sqlProduct);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlProduct);
-        if (count($errors) == 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
     public function searchProduct($search, $limit)
     {

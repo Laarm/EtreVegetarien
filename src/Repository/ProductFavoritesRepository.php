@@ -2,11 +2,9 @@
 
 namespace App\Repository;
 
-use App\Entity\Product;
 use App\Entity\ProductFavorites;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -34,24 +32,10 @@ class ProductFavoritesRepository extends ServiceEntityRepository
             ->getQuery();
         return $result->getResult();
     }
-    public function addProductFavorites($productId)
+    public function addProductFavorites($productFavorites)
     {
-        $user = $this->security->getUser();
-        $product = $this->_em
-            ->getRepository(Product::class)
-            ->find($productId);
-        $sqlProductFavorites = new ProductFavorites();
-        $sqlProductFavorites->setProductId($product)
-            ->setPostedById($user)
-            ->setCreatedAt(new \DateTime());
-        $this->_em->persist($sqlProductFavorites);
+        $this->_em->persist($productFavorites);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlProductFavorites);
-        if (count($errors) == 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
     public function removeProductFavorites($productId, $userId)
     {
@@ -64,11 +48,6 @@ class ProductFavoritesRepository extends ServiceEntityRepository
         $deleteFavorites = $this->find($productFavoritesId[0]['id']);
         $this->_em->remove($deleteFavorites);
         $this->_em->flush();
-        $errors = $this->validator->validate($deleteFavorites);
-        if (count($errors) == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return $deleteFavorites;
     }
 }

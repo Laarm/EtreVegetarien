@@ -25,7 +25,7 @@ class InscriptionController extends AbstractController
             'articles' => $articles,
         ]);
     }
-    public function inscriptionAction(ValidatorInterface $validator, EntityManagerInterface $entityManager, UserRepository $repo, UserPasswordEncoderInterface $passwordEncoder, Request $request): Response
+    public function inscriptionAction(ValidatorInterface $validator, UserPasswordEncoderInterface $passwordEncoder, UserRepository $repo, Request $request): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
@@ -51,14 +51,18 @@ class InscriptionController extends AbstractController
                         'email' => $email,
                     ]);
                     if ($user == null) {
-                        $sqlUser = $this->getDoctrine()->getRepository(User::class)->createUser($username, $request->get('password'), $email);
-                        if ($sqlUser) {
-                            $_SESSION['email'] = $email;
-                            $_SESSION['password'] = $sqlUser['password'];
-                            return new Response('Success,Vous êtes bien inscrit !,' . $sqlUser['id']);
-                        } else {
-                            return new Response('Error,Problème au niveau du serveur, veuillez contacter un administrateur !');
+                        $sqlUser = new User();
+                        $password = $passwordEncoder->encodePassword($sqlUser, $request->get('password'));
+                        $sqlUser->setUsername($username)
+                            ->setPassword($password)
+                            ->setEmail($email)
+                            ->setCreatedAt(new \DateTime());
+                        $errors = $validator->validate($sqlUser);
+                        if (count($errors) == 0) {
+                            $sqlUser = $this->getDoctrine()->getRepository(User::class)->createUser($sqlUser);
+                            return new Response('Success,Vous êtes bien inscrit !');
                         }
+                        return new Response('Error,Problème au niveau du serveur, veuillez contacter un administrateur !');
                     } else {
                         return new Response('Error,L\'email est déjà utilisé !');
                     }

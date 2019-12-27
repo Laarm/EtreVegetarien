@@ -232,7 +232,7 @@
 							<div class="feedbackContent contentPagination">
 								{% for favorites in mealFavorites %}
 									<a class="media" href="{{ path('user', {'id': favorites.Meal.PostedBy.id}) }}">
-										<img id="avatar" class="mr-3 rond" src="{{ asset(favorites.Meal.PostedBy.avatar) }}" alt="Votre avatar" style="height: 40px;width: 40px">
+										<img id="avatar" class="mr-3 rond" src="{% if favorites.Meal.PostedBy.avatar %}{{ asset(favorites.Meal.PostedBy.avatar) }}{% else %}https://iupac.org/wp-content/uploads/2018/05/default-avatar.png{% endif %}" alt="Votre avatar" style="height: 40px;width: 40px">
 										<div class="media-body">
 											<p>{{ favorites.Meal.PostedBy.username }}</p>
 											<p class="mt--20 cds">
@@ -261,7 +261,7 @@
 			</h1>
 			<div class="content">
 				<a class="media" href="{{ path('user', {'id': meal.PostedBy.id}) }}">
-					<img id="avatar" class="mr-3 rond" src="{{ asset(meal.PostedBy.avatar) }}" alt="Votre avatar" style="height: 40px;width: 40px">
+					<img id="avatar" class="mr-3 rond" src="{% if meal.PostedBy.avatar %}{{ asset(meal.PostedBy.avatar) }}{% else %}https://iupac.org/wp-content/uploads/2018/05/default-avatar.png{% endif %}" alt="Votre avatar" style="height: 40px;width: 40px">
 					<div class="media-body">
 						<p>Arnaud</p>
 						<p class="mt--20 cds">

@@ -3,8 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Restaurant;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -21,52 +20,21 @@ class RestaurantRepository extends ServiceEntityRepository
         parent::__construct($registry, Restaurant::class);
         $this->validator = $validator;
     }
-    public function createRestaurant($name, $image, $location, $address, $city, $content)
+    public function createRestaurant($sqlRestaurant)
     {
-        $sqlRestaurant = new Restaurant();
-        $sqlRestaurant->setName($name)
-            ->setImage($image)
-            ->setLocation($location)
-            ->setAddress($address)
-            ->setCity($city)
-            ->setContent($content)
-            ->setCreatedAt(new \DateTime());
         $this->_em->persist($sqlRestaurant);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlRestaurant);
-        if (count($errors) == 0) {
-            return $sqlRestaurant->getId();
-        } else {
-            return false;
-        }
+        return $sqlRestaurant->getId();
     }
-    public function saveRestaurant($restaurantId, $name, $image, $address, $city, $content)
+    public function saveRestaurant($sqlRestaurant)
     {
-        $sqlRestaurant = $this->find($restaurantId);
-        $sqlRestaurant->setName($name)
-            ->setImage($image)
-            ->setAddress($address)
-            ->setCity($city)
-            ->setContent($content);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlRestaurant);
-        if (count($errors) == 0) {
-            return $restaurantId;
-        } else {
-            return false;
-        }
+        return $sqlRestaurant->getId();
     }
-    public function deleteRestaurant($restaurantId)
+    public function deleteRestaurant($sql)
     {
-        $sqlRestaurant = $this->find($restaurantId);
-        $this->_em->remove($sqlRestaurant);
+        $this->_em->remove($sql);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlRestaurant);
-        if (count($errors) == 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
     public function searchRestaurant($search, $limit)
     {

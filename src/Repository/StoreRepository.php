@@ -3,8 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Store;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -21,51 +20,21 @@ class StoreRepository extends ServiceEntityRepository
         parent::__construct($registry, Store::class);
         $this->validator = $validator;
     }
-    public function createStore($name, $image, $location, $address, $city)
+    public function createStore($sqlStore)
     {
-        $sqlStore = new Store();
-        $sqlStore->setName($name)
-            ->setImage($image)
-            ->setLocation($location)
-            ->setAddress($address)
-            ->setCity($city)
-            ->setCreatedAt(new \DateTime());
         $this->_em->persist($sqlStore);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlStore);
-        if (count($errors) == 0) {
-            return $sqlStore->getId();
-        } else {
-            return false;
-        }
         return $sqlStore->getId();
     }
-    public function saveStore($storeId, $name, $image, $address, $city)
+    public function saveStore($sqlStore)
     {
-        $sqlStore = $this->find($storeId);
-        $sqlStore->setName($name)
-            ->setImage($image)
-            ->setAddress($address)
-            ->setCity($city);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlStore);
-        if (count($errors) == 0) {
-            return $storeId;
-        } else {
-            return false;
-        }
+        return $sqlStore->getId();
     }
-    public function deleteStore($storeId)
+    public function deleteStore($sqlStore)
     {
-        $sqlStore = $this->find($storeId);
         $this->_em->remove($sqlStore);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlStore);
-        if (count($errors) == 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
     public function searchStore($search, $limit)
     {

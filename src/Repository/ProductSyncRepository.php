@@ -5,8 +5,7 @@ namespace App\Repository;
 use App\Entity\Store;
 use App\Entity\Product;
 use App\Entity\ProductSync;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -33,33 +32,14 @@ class ProductSyncRepository extends ServiceEntityRepository
             ->getQuery();
         return $result->getResult();
     }
-    public function deleteProductStore($storeId)
+    public function deleteProductStore($sqlStore)
     {
-        $sqlStore = $this->find($storeId);
         $this->_em->remove($sqlStore);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlStore);
-        if (count($errors) == 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
-    public function createProductStore($storeId, $productId)
+    public function createProductStore($sql)
     {
-        $storeId = $this->_em->getRepository(Store::class)->find($storeId);
-        $productId = $this->_em->getRepository(Product::class)->find($productId);
-        $sqlProduct = new ProductSync();
-        $sqlProduct->setStore($storeId)
-            ->setProduct($productId)
-            ->setCreatedAt(new \DateTime());
-        $this->_em->persist($sqlProduct);
+        $this->_em->persist($sql);
         $this->_em->flush();
-        $errors = $this->validator->validate($sqlProduct);
-        if (count($errors) == 0) {
-            return $sqlProduct->getId();
-        } else {
-            return false;
-        }
     }
 }
