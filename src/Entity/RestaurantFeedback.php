@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RestaurantFeedbackRepository")
  */
@@ -13,28 +15,33 @@ class RestaurantFeedback
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Restaurant", inversedBy="restaurantFeedback")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @Assert\NotBlank
      */
     private $restaurant;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="restaurantFeedback")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @Assert\NotBlank
      */
     private $postedBy;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $note;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank
      */
     private $createdAt;
 

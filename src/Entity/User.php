@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
@@ -16,16 +18,19 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $password;
 
@@ -41,16 +46,19 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank
      */
     private $createdAt;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\StoreFeedback", mappedBy="postedBy")
+     * @Assert\NotBlank
      */
     private $storeFeedback;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\RestaurantFeedback", mappedBy="postedBy")
+     * @Assert\NotBlank
      */
     private $restaurantFeedback;
 
@@ -86,11 +94,13 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Meal", mappedBy="postedBy", orphanRemoval=true)
+     * @Assert\NotBlank
      */
     private $meal;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ProductFavorites", mappedBy="postedById", orphanRemoval=true)
+     * @Assert\NotBlank
      */
     private $productFavorites;
 
@@ -101,6 +111,7 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\MealFavorites", mappedBy="postedBy", orphanRemoval=true)
+     * @Assert\NotBlank
      */
     private $mealFavorites;
 

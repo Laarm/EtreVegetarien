@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticleCommentRepository")
  */
@@ -13,28 +15,33 @@ class ArticleComment
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="storeFeedback")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @Assert\NotBlank
      */
     private $postedBy;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $content;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank
      */
     private $createdAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Article", inversedBy="articleComments")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @Assert\NotBlank
      */
     private $article;
 

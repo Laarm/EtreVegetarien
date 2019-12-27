@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProductSyncRepository")
  */
@@ -13,23 +15,27 @@ class ProductSync
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="productSyncs")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank
      */
     private $Product;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Store", inversedBy="productSyncs")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank
      */
     private $Store;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank
      */
     private $createdAt;
 

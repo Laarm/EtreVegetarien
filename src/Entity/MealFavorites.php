@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MealFavoritesRepository")
  */
@@ -13,23 +15,27 @@ class MealFavorites
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="mealFavorites")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank
      */
     private $postedBy;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Meal", inversedBy="mealFavorites")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank
      */
     private $Meal;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank
      */
     private $createdAt;
 
