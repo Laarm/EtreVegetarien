@@ -11,6 +11,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 class ParametreController extends AbstractController
 {
     /**
@@ -32,34 +34,23 @@ class ParametreController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('_token');
             if ($this->isCsrfTokenValid('upload-avatar', $submittedToken)) {
-                $filename = $_FILES['file']['name'];
-                $location = "../public/img/uploads/avatars/" . time() . "-" . $filename;
-                $locationRenvoie = "img/uploads/avatars/" . time() . "-" . $filename;
-                $uploadOk = 1;
-                $imageFileType = pathinfo($location, PATHINFO_EXTENSION);
-                $valid_extensions = array("jpg", "jpeg", "png");
-                if (!in_array(strtolower($imageFileType), $valid_extensions)) {
-                    $uploadOk = 0;
+                $uploadedFile = $request->files->get('file');
+                $imageConstraint = new Assert\Image([
+                    "maxSize" => "2k"
+                ]);
+                $constraintViolations = $validator->validate($uploadedFile, [$imageConstraint]);
+                if ($constraintViolations->count() > 0) {
+                    return $this->json(['message' => 'Erreur, veuillez contacter un administrateur !'], 400);
                 }
-                if ($uploadOk == 0) {
-                    return $this->json(['message' => 'L\'extension n\'est pas valide !'], 200);
-                } else {
-                    if (move_uploaded_file($_FILES['file']['tmp_name'], $location)) {
-                        $oldImage = $this->getDoctrine()->getRepository(User::class)->find($this->getUser()->getId());
-                        if (!empty($oldImage->getAvatar()) && substr($oldImage->getAvatar(), 0, 4) !== "http" && $request->get('image') !== $oldImage->getAvatar()) {
-                            $filesystem->remove(['symlink', "../public/" . $oldImage->getAvatar(), 'activity.log']);
-                        }
-                        $oldImage->setAvatar($locationRenvoie);
-                        $errors = $validator->validate($oldImage);
-                        if (count($errors) == 0) {
-                            $this->getDoctrine()->getRepository(User::class)->saveUserAvatar($oldImage);
-                            return $this->json(['message' => 'Vous avez bien envoyer l\'image !', 'location' => $locationRenvoie], 200);
-                        }
-                        return $this->json(['message' => 'Veuillez contacter un administrateur'], 400);
-                    } else {
-                        return $this->json(['message' => 'Erreur'], 400);
-                    }
+                $filename = uniqid("", true) . $uploadedFile->getClientOriginalName();
+                $uploadedFile->move(__DIR__ . '/../../public/img/uploads/avatars', $filename);
+                $oldImage = $this->getDoctrine()->getRepository(User::class)->find($this->getUser()->getId());
+                if (!empty($oldImage->getAvatar()) && substr($oldImage->getAvatar(), 0, 4) !== "http" && 'img/uploads/avatars/' . $filename !== $oldImage->getAvatar()) {
+                    $filesystem->remove(['symlink', "../public/" . $oldImage->getAvatar(), 'activity.log']);
                 }
+                $oldImage->setAvatar('img/uploads/avatars/' . $filename);
+                $this->getDoctrine()->getRepository(User::class)->saveUserAvatar($oldImage);
+                return $this->json(['message' => 'Vous avez bien envoyer l\'image !', 'location' => 'img/uploads/avatars/' . $filename], 200);
             }
             return $this->json(['message' => 'Erreur'], 400);
         }

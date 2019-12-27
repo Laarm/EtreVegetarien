@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Repository\ArticleRepository;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
@@ -20,5 +19,6 @@ class ConnexionController extends AbstractController
     }
 
     public function logout()
-    { }
+    {
+    }
 }

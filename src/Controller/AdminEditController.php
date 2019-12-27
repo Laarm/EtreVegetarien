@@ -10,7 +10,6 @@ use App\Entity\Contact;
 use App\Entity\Product;
 use App\Entity\Restaurant;
 use App\Entity\ProductSync;
-use Doctrine\ORM\EntityManager;
 use App\Entity\RestaurantFeedback;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -21,6 +20,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
+use Symfony\Component\Validator\Constraints as Assert;
 
 class AdminEditController extends AbstractController
 {
@@ -523,29 +524,22 @@ class AdminEditController extends AbstractController
     /**
      * @Route("/admin/uploadImage", name="admin_upload_image")
      */
-    public function uploadImage(Request $request): Response
+    public function uploadImage(Request $request, ValidatorInterface $validator): Response
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('_token');
             if ($this->isCsrfTokenValid('upload-image', $submittedToken)) {
-                $filename = $_FILES['file']['name'];
-                $location = "../public/img/uploads/" . time() . "-" . $filename;
-                $locationRenvoie = "img/uploads/" . time() . "-" . $filename;
-                $uploadOk = 1;
-                $imageFileType = pathinfo($location, PATHINFO_EXTENSION);
-                $valid_extensions = array("jpg", "jpeg", "png");
-                if (!in_array(strtolower($imageFileType), $valid_extensions)) {
-                    $uploadOk = 0;
+                $uploadedFile = $request->files->get('file');
+                $imageConstraint = new Assert\Image([
+                    "maxSize" => "2k"
+                ]);
+                $constraintViolations = $validator->validate($uploadedFile, [$imageConstraint]);
+                if ($constraintViolations->count() > 0) {
+                    return $this->json(['message' => 'Erreur, veuillez contacter un administrateur !'], 400);
                 }
-                if ($uploadOk == 0) {
-                    return $this->json(['message' => 'L\'extension n\'est pas valide !'], 400);
-                } else {
-                    if (move_uploaded_file($_FILES['file']['tmp_name'], $location)) {
-                        return $this->json(['message' => 'Vous avez bien envoyer l\'image !', 'location' => $locationRenvoie], 200);
-                    } else {
-                        return $this->json(['message' => 'Erreur'], 400);
-                    }
-                }
+                $filename = uniqid("", true) . $uploadedFile->getClientOriginalName();
+                $uploadedFile->move(__DIR__ . '/../../public/img/uploads', $filename);
+                return $this->json(['message' => 'Vous avez bien envoyer l\'image !', 'location' => 'img/uploads/' . $filename], 200);
             }
             return $this->json(['message' => 'Erreur'], 400);
         }
@@ -601,7 +595,7 @@ class AdminEditController extends AbstractController
                         ->setBio($request->get('bio'));
                     $errors = $validator->validate($sqlUser);
                     if (count($errors) == 0) {
-                        $userSql = $this->getDoctrine()->getRepository(User::class)->saveUserProfil($sqlUser);
+                        $this->getDoctrine()->getRepository(User::class)->saveUserProfil($sqlUser);
                     } else {
                         return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                     }

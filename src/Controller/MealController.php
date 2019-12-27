@@ -6,7 +6,6 @@ use App\Entity\Meal;
 use App\Entity\MealFavorites;
 use App\Repository\MealRepository;
 use App\Repository\ArticleRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\MealFavoritesRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
@@ -50,7 +49,7 @@ class MealController extends AbstractController
     /**
      * @Route("/meal/{id}", name="meal_show")
      */
-    public function showMeal(Meal $meal, ArticleRepository $repo, MealRepository $repoMeal, MealFavoritesRepository $repoMealFavorites, Security $security)
+    public function showMeal(Meal $meal, ArticleRepository $repo, MealRepository $repoMeal, MealFavoritesRepository $repoMealFavorites)
     {
         $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
         $autresmeal = $repoMeal->findBy(array('postedBy' => $meal->getPostedBy()), null, "8", null);

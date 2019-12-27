@@ -2,9 +2,7 @@
 
 namespace App\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Entity\Article;
 use App\Repository\ArticleRepository;
 
 class IndexController extends AbstractController
