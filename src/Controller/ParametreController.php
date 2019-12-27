@@ -36,11 +36,11 @@ class ParametreController extends AbstractController
             if ($this->isCsrfTokenValid('upload-avatar', $submittedToken)) {
                 $uploadedFile = $request->files->get('file');
                 $imageConstraint = new Assert\Image([
-                    "maxSize" => "2k"
+                    "maxSize" => "1m"
                 ]);
                 $constraintViolations = $validator->validate($uploadedFile, [$imageConstraint]);
                 if ($constraintViolations->count() > 0) {
-                    return $this->json(['message' => 'Erreur, veuillez contacter un administrateur !'], 400);
+                    return $this->json(['message' => $constraintViolations], 400);
                 }
                 $filename = uniqid("", true) . $uploadedFile->getClientOriginalName();
                 $uploadedFile->move(__DIR__ . '/../../public/img/uploads/avatars', $filename);

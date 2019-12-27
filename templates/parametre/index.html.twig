@@ -183,6 +183,7 @@
 {% block javascript %}
 <script>
     $("#btnSave").click(function () {
+        let stop = false
         if ($('#file')[0].files[0]) {
             var fd = new FormData();
             var files = $('#file')[0].files[0];
@@ -193,28 +194,35 @@
                 data: fd,
                 contentType: false,
                 processData: false,
-                success: function (response) {
-                    $("#avatar").attr("src", response.location)
-                    $("#resultat").html('<div class="alert alert-success alert-dismissible fade show" role="alert">' + response.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');
+                success: function (data) {
+                    $("#avatar").attr("src", data.location)
+                    $("#resultat").html('<div class="alert alert-success alert-dismissible fade show" role="alert">' + data.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');
                     document.getElementById("file").value = '';
+                    stop = true
+                    $("#btnSave").click()
                 },
+				error: function (data) {
+                    $("#resultat").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' + data.responseJSON.message.detail + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');
+				}
             });
         }
-        $.post(
-            "{{ path('save_profil') }}",
-            {
-                username: $("#username").val(),
-                email: $("#email").val(),
-                bio: $("#bio").val(),
-                preference: $("#preference").val(),
-                date: $("#date").val(),
-                csrfData: "{{ csrf_token('save-profil') }}"
-            },
-            function (data) {
-                $("#resultat").html('<div class="alert alert-success alert-dismissible fade show" role="alert">' + data.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');
-            },
-            'json'
-        ).fail(function (data) {$("#resultat").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' + data.responseJSON.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');});
+        if(stop){
+            $.post(
+                "{{ path('save_profil') }}",
+                {
+                    username: $("#username").val(),
+                    email: $("#email").val(),
+                    bio: $("#bio").val(),
+                    preference: $("#preference").val(),
+                    date: $("#date").val(),
+                    csrfData: "{{ csrf_token('save-profil') }}"
+                },
+                function (data) {
+                    $("#resultat").html('<div class="alert alert-success alert-dismissible fade show" role="alert">' + data.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');
+                },
+                'json'
+            ).fail(function (data) {$("#resultat").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' + data.responseJSON.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');});
+        }
     });
 </script>
 {% endblock %}
