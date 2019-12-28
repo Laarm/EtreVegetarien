@@ -183,8 +183,9 @@
 {% block javascript %}
 <script>
     $("#btnSave").click(function () {
-        let stop = false
+        let stop = true
         if ($('#file')[0].files[0]) {
+            stop = false
             var fd = new FormData();
             var files = $('#file')[0].files[0];
             fd.append('file', files);

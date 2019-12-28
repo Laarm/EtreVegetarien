@@ -154,9 +154,9 @@
 										<p>{{ product.Product.name }}</p>
 									</div>
 								</a>
-								<div btnfavorites="{{product.Product.id}}" class="{% for favorites in product.Product.productFavorites %}{% if favorites.postedById.id == app.user.id %}active{% endif %}{% endfor %}">
+								{% if app.user %}<div btnfavorites="{{product.Product.id}}" class="{% for favorites in product.Product.productFavorites %}{% if favorites.postedById.id == app.user.id %}active{% endif %}{% endfor %}">
 									<i class="cursor-pointer fad fa-star"></i>
-								</div>
+								</div>{% endif %}
 							</div>
 						{% else %}
 							<p class="text-center">Aucun product</p>

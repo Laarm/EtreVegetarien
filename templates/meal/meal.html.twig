@@ -206,7 +206,7 @@
 			<div class="flex flex-between">
 				<h1 class="mtb-auto">{{ meal.name }}</h1>
 				<p class="note mtb-auto">
-					<i btnfavorites="{{meal.id}}" class="{% for favorites in meal.mealFavorites %}{% if favorites.postedBy.id == app.user.id %}active{% endif %}{% endfor %} cursor-pointer fad fa-star"></i>
+					{% if app.user %}<i btnfavorites="{{meal.id}}" class="{% for favorites in meal.mealFavorites %}{% if favorites.postedBy.id == app.user.id %}active{% endif %}{% endfor %} cursor-pointer fad fa-star"></i>{% endif %}
 				</p>
 			</div>
 			<div class="flex flex-between">
@@ -241,7 +241,7 @@
 										</div>
 									</a>
 								{% else %}
-									<p class="text-center">Aucune personne à ajouter ce meal en favorites</p>
+									<p class="text-center">Aucune personne à ajouter ce repas en favorites</p>
 								{% endfor %}
 							</div>
 						</div>
@@ -272,7 +272,7 @@
 			</div>
 			<h1>
 				<h1 class="titre">
-					<span>Autres meal</span>
+					<span>Autres repas</span>
 				</h1>
 			</h1>
 			<div class="content">
@@ -289,12 +289,12 @@
 						</div>
 						<div class="right mtb-auto flex">
 							<p class="mtb-auto note">
-								<i btnfavorites="{{meal.id}}" class="{% for favorites in meal.mealFavorites %}{% if favorites.postedBy.id == app.user.id %}active{% endif %}{% endfor %} f-20 cursor-pointer fad fa-star"></i>
+								{% if app.user %}<i btnfavorites="{{meal.id}}" class="{% for favorites in meal.mealFavorites %}{% if favorites.postedBy.id == app.user.id %}active{% endif %}{% endfor %} f-20 cursor-pointer fad fa-star"></i>{% endif %}
 							</p>
 						</div>
 					</div>
 				{% else %}
-					<em>Aucun meal</em>
+					<em>Aucun repas</em>
 				{% endfor %}
 			</div>
 		</div>

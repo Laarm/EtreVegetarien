@@ -108,9 +108,12 @@ class RestaurantController extends AbstractController
                         if (count($errors) == 0) {
                             $verif = $this->getDoctrine()->getRepository(RestaurantFeedback::class)->addFeedback($sqlRestaurantFeedback);
                             return $this->json(['message' => 'Merci d\'avoir donné votre feedback !'], 200);
+                        } else {
+                            return $this->json(['message' => 'Erreur !'], 200);
                         }
+                    } else {
+                        return $this->json(['message' => 'Vous avez déjà donné votre feedback !'], 200);
                     }
-                    return $this->json(['message' => 'Vous avez déjà donné votre feedback !'], 200);
                 }
                 return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
             }

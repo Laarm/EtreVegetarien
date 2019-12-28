@@ -253,13 +253,12 @@
 								</ul>
 							</div>
 							<div class="form-group">
-								<label for="exampleFormControlTextarea1">Message (optionnel)</label>
-								<textarea id="message" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+								<label for="message">Message (optionnel)</label>
+								<textarea id="message" class="form-control" rows="3"></textarea>
 							</div>
 							<button id="btnEnvoieNote" type="button" class="btn btn-primary">Envoyer</button>
 						{% else %}
-							<a href="{{ path('connexion') }}" class="btn btn-primary w-100">Se
-																														connecter</a>
+							<a href="{{ path('connexion') }}" class="btn btn-primary w-100">Se connecter</a>
 						{% endif %}
 						<div id="resultat"></div>
 					</div>
@@ -354,7 +353,7 @@ $("#btnEnvoieNote").click(function(e) {
     }, function(data) {
             $("#resultat").html("<div class='content'><p>" + data.message + "</p></div>");
             $("#feedback .feedbackCont").load("{{ path('restaurant_show', {'id': restaurant.id}) }}?view=0&maxView=3 #feedback .feedbackContent");
-    }, 'json').fail(function(data){$("#resultat").html("<div class='content red'><p>" + data.message + "</p></div>");});
+    }, 'json').fail(function(data){$("#resultat").html("<div class='content red'><p>" + data.responseJSON.message + "</p></div>");});
 });
 	</script>
 {% endblock %}

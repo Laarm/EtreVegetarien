@@ -66,7 +66,6 @@ class ParametreController extends AbstractController
                 $sqlUser = $this->getDoctrine()->getRepository(User::class)->find($this->getUser()->getId());
                 $sqlUser->setUsername($request->get('username'))
                     ->setEmail($request->get('email'))
-                    ->setRole($request->get('role'))
                     ->setPreference($request->get('preference'))
                     ->setPreferenceCreatedAt(new \DateTime($request->get('date')))
                     ->setBio($request->get('bio'));

@@ -67,7 +67,7 @@
 			<h1 class="text-center">{{article.name}}</h1>
 			<p>{{article.content|raw}}</p>
 			<p>
-				<span class="cds">Chapitre
+				<span class="cds">{{article.name}}
 					{{article.category}}</span>
 				- Posté le
 				{{ article.createdAt|date("d/m/Y") }}
@@ -80,7 +80,7 @@
 				{% for donnee in articles %}
 					<div class="article">
 						<a href="{{ path('article_show', {'id': donnee.id}) }}">
-							<h1 class="cds">Chapitre
+							<h1 class="cds">{{donnee.name}}
 								{{ donnee.category }}
 								<span>-
 									{{ donnee.createdAt|date("d/m/Y") }}

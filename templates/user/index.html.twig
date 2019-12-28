@@ -106,14 +106,14 @@
 							</div>
 							<div class="product-list-design tab-pane fade" id="mealfav" role="tabpanel" aria-labelledby="mealfav-tab">
 								{% for mea in meal %}
-									<div class="item">
+        							<a class="item" href="{{ path('meal_show', {'id': mea.Meal.id}) }}">
 										<div class="top">
 											<img alt="{{ mea.Meal.name }}" src="{{ asset(mea.Meal.image) }}"/>
 										</div>
 										<div class="bottom">
 											<p>{{ mea.Meal.name }}</p>
 										</div>
-									</div>
+									</a>
 								{% endfor %}
 							</div>
 							<div class="product-list-design tab-pane fade" id="v-nourriturefav" role="tabpanel" aria-labelledby="v-nourriturefav-tab">

@@ -2,128 +2,134 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 index:
-    path: /
-    controller: App\Controller\IndexController::index
+  path: /
+  controller: App\Controller\IndexController::index
 connexion:
-    path: /connexion
-    controller: App\Controller\ConnexionController::index
+  path: /connexion
+  controller: App\Controller\ConnexionController::index
 connexionAction:
-    path: /ajax/connexionAction
-    controller: App\Controller\ConnexionController::connexionAction
+  path: /ajax/connexionAction
+  controller: App\Controller\ConnexionController::connexionAction
 inscription:
-    path: /inscription
-    controller: App\Controller\InscriptionController::index
+  path: /inscription
+  controller: App\Controller\InscriptionController::index
 inscriptionAction:
-    path: /ajax/inscriptionAction
-    controller: App\Controller\InscriptionController::inscriptionAction
+  path: /ajax/inscriptionAction
+  controller: App\Controller\InscriptionController::inscriptionAction
 user:
-    path: /user/{id}
-    controller: App\Controller\UserController::index
+  path: /user/{id}
+  controller: App\Controller\UserController::index
 article:
-    path: /article
-    controller: App\Controller\ArticleController::index
+  path: /article
+  controller: App\Controller\ArticleController::index
 articleShow:
-    path: /article/{id}
-    controller: App\Controller\ArticleController::show
+  path: /article/{id}
+  controller: App\Controller\ArticleController::show
 storeShow:
-    path: /store/{id}
-    controller: App\Controller\StoreController::show
+  path: /store/{id}
+  controller: App\Controller\StoreController::show
 contact:
-    path: /contact
-    controller: App\Controller\ContactController::index
+  path: /contact
+  controller: App\Controller\ContactController::index
 contactSendMessage:
-    path: /ajax/contact/sendMessage
-    controller: App\Controller\ContactController::sendMessage
+  path: /ajax/contact/sendMessage
+  controller: App\Controller\ContactController::sendMessage
 restaurants:
-    path: /restaurants
-    controller: App\Controller\RestaurantController::index
+  path: /restaurants
+  controller: App\Controller\RestaurantController::index
 meal:
-    path: /meal
-    controller: App\Controller\MealController::index
+  path: /meal
+  controller: App\Controller\MealController::index
 stores:
-    path: /stores
-    controller: App\Controller\StoreController::index
+  path: /stores
+  controller: App\Controller\StoreController::index
 devenirVegetarien:
-    path: /devenirvegetarien
-    controller: App\Controller\DevenirVegetarienController::index
+  path: /devenirvegetarien
+  controller: App\Controller\DevenirVegetarienController::index
 blog:
-    path: /blog
-    controller: App\Controller\BlogController::index
+  path: /blog
+  controller: App\Controller\BlogController::index
 motDePasseOublie:
-    path: /motdepasseoublie
-    controller: App\Controller\MotDePasseOublieController::index
+  path: /motdepasseoublie
+  controller: App\Controller\MotDePasseOublieController::index
+passwordForgot:
+  path: /ajax/passwordForgot
+  controller: App\Controller\MotDePasseOublieController::PasswordForgotAjax
+passwordForgotChange:
+  path: /ajax/passwordForgotChange
+  controller: App\Controller\MotDePasseOublieController::passwordForgotChange
 deconnexion:
-    path: /deconnexion
-    controller: App\Controller\ConnexionController::logout
+  path: /deconnexion
+  controller: App\Controller\ConnexionController::logout
 admin:
-    path: /admin
-    controller: App\Controller\AdminController::index
+  path: /admin
+  controller: App\Controller\AdminController::index
 adminManagementArticles:
-    path: /admin/ManagementArticles
-    controller: App\Controller\AdminController::managementArticles
+  path: /admin/ManagementArticles
+  controller: App\Controller\AdminController::managementArticles
 adminManagementArticlesComments:
-    path: /admin/ManagementArticlesComments
-    controller: App\Controller\AdminController::managementArticlesComments
+  path: /admin/ManagementArticlesComments
+  controller: App\Controller\AdminController::managementArticlesComments
 adminManagementStores:
-    path: /admin/ManagementStores
-    controller: App\Controller\AdminController::managementStores
+  path: /admin/ManagementStores
+  controller: App\Controller\AdminController::managementStores
 adminManagementProductsStores:
-    path: /admin/ManagementProductsStores
-    controller: App\Controller\AdminController::managementProductsStores
+  path: /admin/ManagementProductsStores
+  controller: App\Controller\AdminController::managementProductsStores
 adminManagementRestaurants:
-    path: /admin/ManagementRestaurants
-    controller: App\Controller\AdminController::managementRestaurants
+  path: /admin/ManagementRestaurants
+  controller: App\Controller\AdminController::managementRestaurants
 adminManagementRestaurantsFeedback:
-    path: /admin/ManagementRestaurantsFeedback
-    controller: App\Controller\AdminController::managementRestaurantsFeedback
+  path: /admin/ManagementRestaurantsFeedback
+  controller: App\Controller\AdminController::managementRestaurantsFeedback
 adminProducts:
-    path: /admin/products
-    controller: App\Controller\AdminController::products
+  path: /admin/products
+  controller: App\Controller\AdminController::products
 adminUsers:
-    path: /admin/users
-    controller: App\Controller\AdminController::users
+  path: /admin/users
+  controller: App\Controller\AdminController::users
 adminMeal:
-    path: /admin/meal
-    controller: App\Controller\AdminController::meal
+  path: /admin/meal
+  controller: App\Controller\AdminController::meal
 adminContacts:
-    path: /admin/contacts
-    controller: App\Controller\AdminController::contacts
+  path: /admin/contacts
+  controller: App\Controller\AdminController::contacts
 adminNewArticle:
-    path: /admin/article/new
-    controller: App\Controller\AdminEditController::newArticle
+  path: /admin/article/new
+  controller: App\Controller\AdminEditController::newArticle
 adminEditArticle:
-    path: /admin/article/{id}/edit
-    controller: App\Controller\AdminEditController::editArticle
+  path: /admin/article/{id}/edit
+  controller: App\Controller\AdminEditController::editArticle
 adminNewStore:
-    path: /admin/store/new
-    controller: App\Controller\AdminEditController::newStore
+  path: /admin/store/new
+  controller: App\Controller\AdminEditController::newStore
 adminEditStore:
-    path: /admin/store/{id}/edit
-    controller: App\Controller\AdminEditController::editStore
+  path: /admin/store/{id}/edit
+  controller: App\Controller\AdminEditController::editStore
 adminNewRestaurant:
-    path: /admin/restaurant/new
-    controller: App\Controller\AdminEditController::newRestaurant
+  path: /admin/restaurant/new
+  controller: App\Controller\AdminEditController::newRestaurant
 adminEditRestaurant:
-    path: /admin/restaurant/{id}/edit
-    controller: App\Controller\AdminEditController::editRestaurant
+  path: /admin/restaurant/{id}/edit
+  controller: App\Controller\AdminEditController::editRestaurant
 adminNewProduct:
-    path: /admin/product/new
-    controller: App\Controller\AdminEditController::newProduct
+  path: /admin/product/new
+  controller: App\Controller\AdminEditController::newProduct
 adminEditProduct:
-    path: /admin/product/{id}/edit
-    controller: App\Controller\AdminEditController::editProduct
+  path: /admin/product/{id}/edit
+  controller: App\Controller\AdminEditController::editProduct
 adminNewMeal:
-    path: /admin/meal/new
-    controller: App\Controller\AdminEditController::newMeal
+  path: /admin/meal/new
+  controller: App\Controller\AdminEditController::newMeal
 adminEditMeal:
-    path: /admin/meal/{id}/edit
-    controller: App\Controller\AdminEditController::editMeal
+  path: /admin/meal/{id}/edit
+  controller: App\Controller\AdminEditController::editMeal
 restaurantSearch:
-    path: /restaurant/search
-    controller: App\Controller\RestaurantController::restaurantSearch
+  path: /restaurant/search
+  controller: App\Controller\RestaurantController::restaurantSearch
 storeSearch:
-    path: /stores/search
-    controller: App\Controller\StoreController::storeSearch
+  path: /stores/search
+  controller: App\Controller\StoreController::storeSearch
 sendNoteRestaurant:
-    path: /ajax/restaurant/sendNote
-    controller: App\Controller\RestaurantController::sendNote
+  path: /ajax/restaurant/sendNote
+  controller: App\Controller\RestaurantController::sendNote

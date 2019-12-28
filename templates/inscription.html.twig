@@ -46,28 +46,28 @@
 		</div>
 	</section>
 	<script>
-		$(document).ready(function () {
-$("#btnInscription").click(function (e) {
-if ($("#pseudonyme").val().length !== 0 && $("#email").val().length !== 0 && $("#password").val().length !== 0) {
-e.preventDefault();
-$.post('/ajax/inscriptionAction', {
-username: $("#pseudonyme").val(),
-email: $("#email").val(),
-password: $("#password").val(),
-csrfData: "{{ csrf_token('inscription') }}"
-}, function (data) {
-var data = data.split(",");
-if (data[0] == 'Success') {
-$("#resultat").html("<div class='content'><p>" + data[1] + "</p></div>");
-window.location.replace("/connexion/");
-} else {
-$("#resultat").html("<div class='content red'><p>" + data[1] + "</p></div>");
-}
-}, 'text');
-} else {
-$("#resultat").html("<div class='content red'><p>Veuillez remplir tout les champs !</p></div>");
-}
-});
-});
+	$(document).ready(function() {
+		$("#btnInscription").click(function(e) {
+			if ($("#pseudonyme").val().length !== 0 && $("#email").val().length !== 0 && $("#password").val().length !== 0) {
+				e.preventDefault();
+				$.post("{{ path('inscriptionAction') }}", {
+					username: $("#pseudonyme").val(),
+					email: $("#email").val(),
+					password: $("#password").val(),
+					csrfData: "{{ csrf_token('inscription') }}"
+				}, function(data) {
+					var data = data.split(",");
+					if (data[0] == 'Success') {
+						$("#resultat").html("<div class='content'><p>" + data[1] + "</p></div>");
+						window.location.replace("{{ path('connexion') }}");
+					} else {
+						$("#resultat").html("<div class='content red'><p>" + data[1] + "</p></div>");
+					}
+				}, 'text');
+			} else {
+				$("#resultat").html("<div class='content red'><p>Veuillez remplir tout les champs !</p></div>");
+			}
+		});
+	});
 	</script>
 {% endblock %}

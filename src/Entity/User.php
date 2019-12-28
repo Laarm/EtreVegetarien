@@ -18,7 +18,6 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Assert\NotBlank
      */
     private $id;
 
@@ -119,6 +118,16 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $bio;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $passwordForgot;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $passwordforgotExpiration;
 
     public function __construct()
     {
@@ -457,6 +466,30 @@ class User implements UserInterface
     public function setBio(?string $bio): self
     {
         $this->bio = $bio;
+
+        return $this;
+    }
+
+    public function getPasswordForgot(): ?string
+    {
+        return $this->passwordForgot;
+    }
+
+    public function setPasswordForgot(?string $passwordForgot): self
+    {
+        $this->passwordForgot = $passwordForgot;
+
+        return $this;
+    }
+
+    public function getPasswordforgotExpiration(): ?\DateTimeInterface
+    {
+        return $this->passwordforgotExpiration;
+    }
+
+    public function setPasswordforgotExpiration(?\DateTimeInterface $passwordforgotExpiration): self
+    {
+        $this->passwordforgotExpiration = $passwordforgotExpiration;
 
         return $this;
     }
