@@ -80,6 +80,9 @@ nav .nav-item .dropdown-item:hover {
 }
 
 @media (max-width: 991px) {
+    main {
+        margin-top: 60px
+    }
     nav.navbar {
         height: initial
     }

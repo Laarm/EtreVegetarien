@@ -186,4 +186,16 @@
     font-size: 20px
 }
 
-@media(max-width: 991px) {}
+@media(max-width: 991px) {
+    #meal {
+        flex-direction: column;
+    }
+    #meal .left.col-7 {
+        width: 100%;
+        max-width: 100%;
+    }
+    #meal .right.col-5 {
+        width: 100%;
+        max-width: 100%;
+    }
+}

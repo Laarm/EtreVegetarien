@@ -19,7 +19,7 @@
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 		<script src="https://kit.fontawesome.com/97fb64c932.js" crossorigin="anonymous"></script>
 		<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet">
-		<link href="{{ asset('/css/main.css') }}" rel="stylesheet"/> {% block stylesheets %}{% endblock %}
+		<link href="{{ asset('/css/main-min.css') }}" rel="stylesheet"/> {% block stylesheets %}{% endblock %}
 	</head>
 
 	<body>
@@ -251,8 +251,19 @@
 			}
 			autoSize() {
 				this.btnOpenNav.addEventListener("click", () => {
+					if(window.innerWidth < 991){
+						$( ".sous-menu.flex.shadow-1.opened" ).addClass("overflowX");
+						if(document.querySelector(".item.dropdown.show")){
+							$( ".sous-menu.flex.shadow-1.opened" ).removeClass("overflowX");
+						}
+					}
 					$("[aria-labelledby='" + $(this.btnOpenNav).attr('autoSize') + "']").css("min-width", $("#menu-1").width() + 24);
 				});
+				document.addEventListener("click", () => {
+					if(!document.querySelector(".sous-menu.flex.shadow-1.opened .item.dropdown.show") && window.innerWidth < 991){
+						$( ".sous-menu.flex.shadow-1.opened" ).removeClass("overflowX");
+					}
+				})
 			}
 		}
 		addEventListener("load", () => {

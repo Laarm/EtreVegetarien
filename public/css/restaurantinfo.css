@@ -161,4 +161,16 @@
     color: #FFF
 }
 
-@media(max-width: 991px) {}
+@media(max-width: 991px) {
+    #restaurant {
+        flex-direction: column;
+    }
+    #restaurant .left.col-7 {
+        width: 100%;
+        max-width: 100%;
+    }
+    #restaurant .right.col-5 {
+        width: 100%;
+        max-width: 100%;
+    }
+}

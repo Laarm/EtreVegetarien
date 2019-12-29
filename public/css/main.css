@@ -577,6 +577,9 @@ footer .bottom .container p a {
 */
 
 @media(max-width: 991px) {
+    .sous-menu.flex.shadow-1.opened.overflowX {
+        overflow: visible;
+    }
     nav.navbar {
         height: 45px;
         background-color: #FFF;
