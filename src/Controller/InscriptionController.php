@@ -59,38 +59,38 @@ class InscriptionController extends AbstractController
                         $errors = $validator->validate($sqlUser);
                         if (count($errors) == 0) {
                             $sqlUser = $this->getDoctrine()->getRepository(User::class)->createUser($sqlUser);
-                            return new Response('Success,Vous êtes bien inscrit !');
+                            return $this->json(['message' => 'Vous êtes bien inscrit !'], 200);
                         }
-                        return new Response('Error,Problème au niveau du serveur, veuillez contacter un administrateur !');
+                        return $this->json(['message' => 'Problème au niveau du serveur, veuillez contacter un administrateur !'], 400);
                     } else {
-                        return new Response('Error,L\'email est déjà utilisé !');
+                        return $this->json(['message' => 'L\'email est déjà utilisé !'], 400);
                     }
                 } else {
                     if (strlen($request->get('username')) < 5) {
-                        return new Response('Error,Votre pseudonyme est trop court !');
+                        return $this->json(['message' => 'Votre pseudonyme est trop court !'], 400);
                     }
                     if (strlen($request->get('username')) > 20) {
-                        return new Response('Error,Votre pseudonyme est trop long !');
+                        return $this->json(['message' => 'Votre pseudonyme est trop long !'], 400);
                     }
                     if (strlen($request->get('email')) < 5) {
-                        return new Response('Error,Votre email est trop court !');
+                        return $this->json(['message' => 'Votre email est trop court !'], 400);
                     }
                     if (strlen($request->get('email')) > 20) {
-                        return new Response('Error,Votre email est trop long !');
+                        return $this->json(['message' => 'Votre email est trop long !'], 400);
                     }
                     if (preg_match('#^(([a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+\.?)*[a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+)@(([a-z0-9-_]+\.?)*[a-z0-9-_]+)\.[a-z]{2,}$#i', $request->get('email'))) {
-                        return new Response('Error,Votre email n\'est pas conforme (exemple : exemple@exemple.fr) !');
+                        return $this->json(['message' => 'Votre email n\'est pas conforme (exemple : exemple@exemple.fr) !'], 400);
                     }
                     if (strlen($request->get('password')) < 6) {
-                        return new Response('Error,Votre mot de passe est trop court !');
+                        return $this->json(['message' => 'Votre mot de passe est trop court !'], 400);
                     }
                     if (strlen($request->get('password')) > 70) {
-                        return new Response('Error,Votre mot de passe est trop long !');
+                        return $this->json(['message' => 'Votre mot de passe est trop long !'], 400);
                     }
                     if (!preg_match('#^(([a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+\.?)*[a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+)@(([a-z0-9-_]+\.?)*[a-z0-9-_]+)\.[a-z]{2,}$#i', $request->get('email'))) {
-                        return new Response('Error,Votre e-mail est invalide !');
+                        return $this->json(['message' => 'Votre e-mail est invalide !'], 400);
                     }
-                    return new Response('Error,Veuillez remplir tout les champs !');
+                    return $this->json(['message' => 'Veuillez remplir tout les champs !'], 400);
                 }
             }
         }

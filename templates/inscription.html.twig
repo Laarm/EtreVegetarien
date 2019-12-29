@@ -56,14 +56,11 @@
 					password: $("#password").val(),
 					csrfData: "{{ csrf_token('inscription') }}"
 				}, function(data) {
-					var data = data.split(",");
-					if (data[0] == 'Success') {
-						$("#resultat").html("<div class='content'><p>" + data[1] + "</p></div>");
+						$("#resultat").html("<div class='content'><p>" + data.message + "</p></div>");
 						window.location.replace("{{ path('connexion') }}");
-					} else {
-						$("#resultat").html("<div class='content red'><p>" + data[1] + "</p></div>");
-					}
-				}, 'text');
+				}, 'json').fail(function (data) {
+					$("#resultat").html("<div class='content red'><p>" + data.responseJSON.message + "</p></div>");
+				});
 			} else {
 				$("#resultat").html("<div class='content red'><p>Veuillez remplir tout les champs !</p></div>");
 			}
