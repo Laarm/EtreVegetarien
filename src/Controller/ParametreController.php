@@ -119,4 +119,30 @@ class ParametreController extends AbstractController
             return $this->json(['message' => 'Erreur'], 400);
         }
     }
+
+    /**
+     * @Route("/parametre/saveRS", name="save_rs")
+     * @param Request $request
+     * @param ValidatorInterface $validator
+     * @return Response
+     */
+    public function saveRS(Request $request, ValidatorInterface $validator): Response
+    {
+        if ($request->isXmlHttpRequest()) {
+            $submittedToken = $request->get('csrfData');
+            if ($this->isCsrfTokenValid('save-rs', $submittedToken)) {
+                    $sqlUser = $this->getDoctrine()->getRepository(User::class)->find($this->getUser()->getId());
+                    $sqlUser->setFacebook($request->get('facebook'))
+                        ->setInstagram($request->get('instagram'))
+                        ->setYoutube($request->get('youtube'));
+                    $errors = $validator->validate($sqlUser);
+                    if (count($errors) == 0) {
+                        $this->getDoctrine()->getRepository(User::class)->saveUserProfil($sqlUser);
+                        return $this->json(['message' => 'Vos réseaux sociaux ont bien été sauvegarder !'], 200);
+                    }
+                    return $this->json(['message' => 'Erreur, veuillez contacter un administrateur !'], 400);
+            }
+            return $this->json(['message' => 'Erreur'], 400);
+        }
+    }
 }

@@ -130,15 +130,20 @@
 							</div>
 							<div class="tab-pane fade" id="v-rs" role="tabpanel" aria-labelledby="v-rs-tab">
 								<div class="margin-auto">
-									<a href="https://">
+									{% if app.user.youtube or app.user.instagram or app.user.facebook %}
+									{% if app.user.instagram %}<a target="_blank" href="{{app.user.instagram}}">
 										<i class="fab fa-instagram"></i>
-									</a>
-									<a href="https://">
+									</a>{% endif %}
+									{% if app.user.facebook %}<a target="_blank" href="{{app.user.facebook}}">
 										<i class="fab fa-facebook-f"></i>
-									</a>
-									<a href="https://">
+									</a>{% endif %}
+										{% if app.user.youtube %}
+									<a target="_blank" href="{{app.user.youtube}}">
 										<i class="fab fa-youtube"></i>
-									</a>
+									</a>{% endif %}
+										{% else %}
+										<p>Aucun réseaux sociaux.</p>
+									{% endif %}
 								</div>
 							</div>
 						</div>
