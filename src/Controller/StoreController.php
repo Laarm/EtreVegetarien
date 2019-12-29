@@ -15,6 +15,9 @@ class StoreController extends AbstractController
 {
     /**
      * @Route("/store", name="store")
+     * @param StoreRepository $storerepo
+     * @param ArticleRepository $repo
+     * @return Response
      */
     public function index(StoreRepository $storerepo, ArticleRepository $repo)
     {
@@ -28,6 +31,9 @@ class StoreController extends AbstractController
 
     /**
      * @Route("/store/{id}", name="store_show")
+     * @param Store $store
+     * @param ArticleRepository $repo
+     * @return Response
      */
     public function show(Store $store, ArticleRepository $repo)
     {
@@ -42,6 +48,8 @@ class StoreController extends AbstractController
 
     /**
      * @Route("/stores/search", name="store_search")
+     * @param Request $request
+     * @return Response
      */
     public function searchStore(Request $request): Response
     {
