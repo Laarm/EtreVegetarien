@@ -115,9 +115,12 @@
 						<hr>
 					{% endif %}
 					{% set feedbackFinal = null %}
+					{% set feedbackLoop = 1 %}
 					{% for feedback in restaurant.restaurantFeedback %}
 						{% set feedbackFinal = feedbackFinal + feedback.note %}
+						{% set feedbackLoop = loop.index %}
 					{% endfor %}
+					{% set feedbackFinal = feedbackFinal/feedbackLoop %}
 					<div class="restaurant flex flex-between">
 						<div class="left">
 							<a href="{{ path('restaurant_show', {'id': restaurant.id}) }}">
