@@ -336,21 +336,17 @@ class AdminEditController extends AbstractController
             }
             if ($request->get('product_id') == "new") {
                 $product = new Product();
-                $product->setName($request->get('name'))
-                    ->setImage($image)
-                    ->setCreatedAt(new \DateTime());
+                $product->setName($request->get('name'))->setImage($image)->setCreatedAt(new \DateTime());
                 if (count($validator->validate($product)) == 0) {
                     $product = $this->getDoctrine()->getRepository(Product::class)->createProduct($product);
                     return $this->json(['message' => "Le produit à bien été créer !", 'productId' => $product], 200);
                 }
             } else {
                 $product = $this->getDoctrine()->getRepository(Product::class)->find($request->get('product_id'));
-                $oldImage = $product->getImage();
-                $product->setName($request->get('name'))
-                    ->setImage($image);
+                $product->setName($request->get('name'))->setImage($image);
                 if (count($validator->validate($product)) == 0) {
-                    if (substr($oldImage, 0, 4) !== "http" && $request->get('image') !== $oldImage) {
-                        $filesystem->remove(['symlink', "../public/" . $oldImage, 'activity.log']);
+                    if (substr($product->getImage(), 0, 4) !== "http" && $request->get('image') !== $product->getImage()) {
+                        $filesystem->remove(['symlink', "../public/" . $product->getImage(), 'activity.log']);
                     }
                     $product = $this->getDoctrine()->getRepository(Product::class)->saveProduct($product);
                     return $this->json(['message' => "Le produit à bien été mis à jour !", 'productId' => $product->getId()], 200);
