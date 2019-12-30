@@ -140,12 +140,12 @@ class User implements UserInterface
 
     public function __get($name)
     {
-        return isset($this->$name) ? $this->$name : false;
+        return !empty($this->$name) ? $this->$name : false;
     }
 
     public function __isset($name)
     {
-        return isset($this->$name) ? true : "false";
+        return !empty($this->$name) ? true : false;
     }
 
     public function getUsername(): ?string
