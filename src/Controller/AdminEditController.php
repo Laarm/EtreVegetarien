@@ -137,27 +137,16 @@ class AdminEditController extends AbstractController
      */
     public function deleteStore(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('delete-store', $submittedToken)) {
-                if (!empty($request->get('id'))) {
-                    $oldImage = $this->getDoctrine()->getRepository(Store::class)->find($request->get('id'));
-                    if (substr($oldImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $oldImage->getImage()) {
-                        $filesystem->remove(['symlink', "../public/" . $oldImage->getImage(), 'activity.log']);
-                    }
-                    $sqlStore = $this->getDoctrine()->getRepository(Store::class)->find($request->get('id'));
-                    $errors = $validator->validate($sqlStore);
-                    if (count($errors) == 0) {
-                        $this->getDoctrine()->getRepository(Store::class)->deleteStore($sqlStore);
-                        return $this->json(['message' => "Vous avez bien supprimer ce store", 'id' => $request->get('id')], 200);
-                    } else {
-                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
-                    }
-                } else {
-                    return $this->json(['message' => 'Erreur lors de la suppression du store...'], 400);
-                }
+        if ($this->isCsrfTokenValid('delete-store', $request->get('csrfData')) && !empty($request->get('id'))) {
+            $oldImage = $this->getDoctrine()->getRepository(Store::class)->find($request->get('id'));
+            $filesystem->remove(['symlink', "../public/" . $oldImage->getImage(), 'activity.log']);
+            $sqlStore = $this->getDoctrine()->getRepository(Store::class)->find($request->get('id'));
+            if (count($validator->validate($sqlStore)) == 0) {
+                $this->getDoctrine()->getRepository(Store::class)->deleteStore($sqlStore);
+                return $this->json(['message' => "Vous avez bien supprimer ce store", 'id' => $request->get('id')], 200);
             }
         }
+        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }
 
     /**
@@ -236,27 +225,16 @@ class AdminEditController extends AbstractController
      */
     public function deleteRestaurant(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('delete-restaurant', $submittedToken)) {
-                if (!empty($request->get('id'))) {
-                    $oldImage = $this->getDoctrine()->getRepository(Restaurant::class)->find($request->get('id'));
-                    if (substr($oldImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $oldImage->getImage()) {
-                        $filesystem->remove(['symlink', "../public/" . $oldImage->getImage(), 'activity.log']);
-                    }
-                    $sql = $this->getDoctrine()->getRepository(Restaurant::class)->find($request->get('id'));
-                    $errors = $validator->validate($sql);
-                    if (count($errors) == 0) {
-                        $this->getDoctrine()->getRepository(Restaurant::class)->deleteRestaurant($sql);
-                        return $this->json(['message' => "Vous avez bien supprimer ce restaurant", 'id' => $request->get('id')], 200);
-                    } else {
-                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
-                    }
-                } else {
-                    return $this->json(['message' => 'Erreur lors de la suppression du restaurant...'], 400);
-                }
+        if ($this->isCsrfTokenValid('delete-restaurant', $request->get('csrfData')) && !empty($request->get('id'))) {
+            $oldImage = $this->getDoctrine()->getRepository(Restaurant::class)->find($request->get('id'));
+            $filesystem->remove(['symlink', "../public/" . $oldImage->getImage(), 'activity.log']);
+            $sql = $this->getDoctrine()->getRepository(Restaurant::class)->find($request->get('id'));
+            if (count($validator->validate($sql)) == 0) {
+                $this->getDoctrine()->getRepository(Restaurant::class)->deleteRestaurant($sql);
+                return $this->json(['message' => "Vous avez bien supprimer ce restaurant", 'id' => $request->get('id')], 200);
             }
         }
+        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }
 
     /**
@@ -338,27 +316,16 @@ class AdminEditController extends AbstractController
      */
     public function deleteProduct(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('delete-product', $submittedToken)) {
-                if (!empty($request->get('id'))) {
-                    $oldImage = $this->getDoctrine()->getRepository(Product::class)->find($request->get('id'));
-                    if (substr($oldImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $oldImage->getImage()) {
-                        $filesystem->remove(['symlink', "../public/" . $oldImage->getImage(), 'activity.log']);
-                    }
-                    $sql = $this->getDoctrine()->getRepository(Product::class)->find($request->get('id'));
-                    $errors = $validator->validate($sql);
-                    if (count($errors) == 0) {
-                        $this->getDoctrine()->getRepository(Product::class)->deleteProduct($sql);
-                        return $this->json(['message' => "Vous avez bien supprimer ce produit", 'id' => $request->get('id')], 200);
-                    } else {
-                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
-                    }
-                } else {
-                    return $this->json(['message' => 'Erreur lors de la suppression du produit...'], 400);
-                }
+        if ($this->isCsrfTokenValid('delete-product', $request->get('csrfData')) && !empty($request->get('id'))) {
+            $oldImage = $this->getDoctrine()->getRepository(Product::class)->find($request->get('id'));
+            $filesystem->remove(['symlink', "../public/" . $oldImage->getImage(), 'activity.log']);
+            $sql = $this->getDoctrine()->getRepository(Product::class)->find($request->get('id'));
+            if (count($validator->validate($sql)) == 0) {
+                $this->getDoctrine()->getRepository(Product::class)->deleteProduct($sql);
+                return $this->json(['message' => "Vous avez bien supprimer ce produit", 'id' => $request->get('id')], 200);
             }
         }
+        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }
 
     /**
@@ -433,27 +400,16 @@ class AdminEditController extends AbstractController
      */
     public function deleteMeal(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('delete-meal', $submittedToken)) {
-                if (!empty($request->get('id'))) {
-                    $oldImage = $this->getDoctrine()->getRepository(Meal::class)->find($request->get('id'));
-                    if (substr($oldImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $oldImage->getImage()) {
-                        $filesystem->remove(['symlink', "../public/" . $oldImage->getImage(), 'activity.log']);
-                    }
-                    $sql = $this->getDoctrine()->getRepository(Meal::class)->find($request->get('id'));
-                    $errors = $validator->validate($sql);
-                    if (count($errors) == 0) {
-                        $this->getDoctrine()->getRepository(Meal::class)->deleteMeal($sql);
-                        return $this->json(['message' => "Vous avez bien supprimer ce repas", 'id' => $request->get('id')], 200);
-                    } else {
-                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
-                    }
-                } else {
-                    return $this->json(['message' => 'Erreur lors de la suppression du repas...'], 400);
-                }
+        if ($this->isCsrfTokenValid('delete-meal', $request->get('csrfData')) && !empty($request->get('id'))) {
+            $oldImage = $this->getDoctrine()->getRepository(Meal::class)->find($request->get('id'));
+            $filesystem->remove(['symlink', "../public/" . $oldImage->getImage(), 'activity.log']);
+            $sql = $this->getDoctrine()->getRepository(Meal::class)->find($request->get('id'));
+            if (count($validator->validate($sql)) == 0) {
+                $this->getDoctrine()->getRepository(Meal::class)->deleteMeal($sql);
+                return $this->json(['message' => "Vous avez bien supprimer ce repas", 'id' => $request->get('id')], 200);
             }
         }
+        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }
 
     /**
@@ -539,23 +495,14 @@ class AdminEditController extends AbstractController
      */
     public function deleteRestaurantFeedback(Request $request, ValidatorInterface $validator): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('delete-restaurantfeedback', $submittedToken)) {
-                if (!empty($request->get('id'))) {
-                    $sql = $this->getDoctrine()->getRepository(RestaurantFeedback::class)->find($request->get('id'));
-                    $errors = $validator->validate($sql);
-                    if (count($errors) == 0) {
-                        $this->getDoctrine()->getRepository(RestaurantFeedback::class)->deleteRestaurantFeedback($sql);
-                        return $this->json(['message' => "Vous avez bien supprimer cet avis", 'id' => $request->get('id')], 200);
-                    } else {
-                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
-                    }
-                } else {
-                    return $this->json(['message' => 'Erreur lors de la suppression de l\'avis...'], 400);
-                }
+        if ($this->isCsrfTokenValid('delete-restaurantfeedback', $request->get('csrfData')) && !empty($request->get('id'))) {
+            $sql = $this->getDoctrine()->getRepository(RestaurantFeedback::class)->find($request->get('id'));
+            if (count($validator->validate($sql)) == 0) {
+                $this->getDoctrine()->getRepository(RestaurantFeedback::class)->deleteRestaurantFeedback($sql);
+                return $this->json(['message' => "Vous avez bien supprimer cet avis", 'id' => $request->get('id')], 200);
             }
         }
+        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }
 
     /**
@@ -628,9 +575,7 @@ class AdminEditController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete-user', $request->get('csrfData')) && !empty($request->get('id'))) {
             $oldImage = $this->getDoctrine()->getRepository(User::class)->find($request->get('id'));
-            if (substr($oldImage->getAvatar(), 0, 4) !== "http" && $request->get('image') !== $oldImage->getAvatar()) {
-                $filesystem->remove(['symlink', "../public/" . $oldImage->getAvatar(), 'activity.log']);
-            }
+            $filesystem->remove(['symlink', "../public/" . $oldImage->getAvatar(), 'activity.log']);
             if (count($validator->validate($oldImage)) == 0) {
                 $this->getDoctrine()->getRepository(User::class)->deleteUser($oldImage);
                 return $this->json(['message' => "Vous avez bien supprimer cet utilisateur", 'id' => $request->get('id')], 200);
@@ -704,21 +649,13 @@ class AdminEditController extends AbstractController
      */
     public function deleteContact(Request $request, ValidatorInterface $validator): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('delete-contact', $submittedToken)) {
-                if (!empty($request->get('id'))) {
-                    $sql = $this->getDoctrine()->getRepository(Contact::class)->find($request->get('id'));
-                    $errors = $validator->validate($sql);
-                    if (count($errors) == 0) {
-                        $this->getDoctrine()->getRepository(Contact::class)->deleteContact($sql);
-                        return $this->json(['message' => "Vous avez bien supprimer ce message", 'id' => $request->get('id')], 200);
-                    }
-                    return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
-                } else {
-                    return $this->json(['message' => 'Erreur lors de la suppression de du contact...'], 400);
-                }
+        if ($this->isCsrfTokenValid('delete-contact', $request->get('csrfData')) && !empty($request->get('id'))) {
+            $sql = $this->getDoctrine()->getRepository(Contact::class)->find($request->get('id'));
+            if (count($validator->validate($sql)) == 0) {
+                $this->getDoctrine()->getRepository(Contact::class)->deleteContact($sql);
+                return $this->json(['message' => "Vous avez bien supprimer ce message", 'id' => $request->get('id')], 200);
             }
         }
+        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }
 }
