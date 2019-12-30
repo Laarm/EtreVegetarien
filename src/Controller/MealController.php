@@ -92,13 +92,10 @@ class MealController extends AbstractController
                         if (count($errors) == 0) {
                             return $this->json(['action' => "delete", 'message' => "Vous avez bien supprimer ce repas en favorites", 'id' => $request->get('meal_id')], 200);
                         }
-                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                     }
-                } else {
-                    return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                 }
             }
-            return $this->json(['message' => 'Token invalide, veuillez contacter un administrateur !'], 400);
+            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
         }
     }
 }
