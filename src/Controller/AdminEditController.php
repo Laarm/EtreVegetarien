@@ -23,7 +23,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class AdminEditController extends AbstractController
+class deleteStoreAdminEditController extends AbstractController
 {
     public function index()
     {
@@ -52,7 +52,7 @@ class AdminEditController extends AbstractController
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
+            if ($this->isCsrfTokenValid('delete-article', $submittedToken)) {
                 if (!empty($request->get('id'))) {
                     $oldImage = $this->getDoctrine()->getRepository(Article::class)->find($request->get('id'));
                     if (substr($oldImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $oldImage->getImage()) {
@@ -150,7 +150,7 @@ class AdminEditController extends AbstractController
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
+            if ($this->isCsrfTokenValid('delete-store', $submittedToken)) {
                 if (!empty($request->get('id'))) {
                     $oldImage = $this->getDoctrine()->getRepository(Store::class)->find($request->get('id'));
                     if (substr($oldImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $oldImage->getImage()) {
@@ -249,7 +249,7 @@ class AdminEditController extends AbstractController
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
+            if ($this->isCsrfTokenValid('delete-restaurant', $submittedToken)) {
                 if (!empty($request->get('id'))) {
                     $oldImage = $this->getDoctrine()->getRepository(Restaurant::class)->find($request->get('id'));
                     if (substr($oldImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $oldImage->getImage()) {
@@ -351,7 +351,7 @@ class AdminEditController extends AbstractController
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
+            if ($this->isCsrfTokenValid('delete-product', $submittedToken)) {
                 if (!empty($request->get('id'))) {
                     $oldImage = $this->getDoctrine()->getRepository(Product::class)->find($request->get('id'));
                     if (substr($oldImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $oldImage->getImage()) {
@@ -446,7 +446,7 @@ class AdminEditController extends AbstractController
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
+            if ($this->isCsrfTokenValid('delete-meal', $submittedToken)) {
                 if (!empty($request->get('id'))) {
                     $oldImage = $this->getDoctrine()->getRepository(Meal::class)->find($request->get('id'));
                     if (substr($oldImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $oldImage->getImage()) {
@@ -552,7 +552,7 @@ class AdminEditController extends AbstractController
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
+            if ($this->isCsrfTokenValid('delete-restaurantfeedback', $submittedToken)) {
                 if (!empty($request->get('id'))) {
                     $sql = $this->getDoctrine()->getRepository(RestaurantFeedback::class)->find($request->get('id'));
                     $errors = $validator->validate($sql);
@@ -639,7 +639,7 @@ class AdminEditController extends AbstractController
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
+            if ($this->isCsrfTokenValid('delete-user', $submittedToken)) {
                 if (!empty($request->get('id'))) {
                     $oldImage = $this->getDoctrine()->getRepository(User::class)->find($request->get('id'));
                     if (substr($oldImage->getAvatar(), 0, 4) !== "http" && $request->get('image') !== $oldImage->getAvatar()) {
@@ -666,7 +666,7 @@ class AdminEditController extends AbstractController
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
+            if ($this->isCsrfTokenValid('delete-productsync', $submittedToken)) {
                 if (!empty($request->get('id'))) {
                     $sql = $this->getDoctrine()->getRepository(ProductSync::class)->find($request->get('id'));
                     $errors = $validator->validate($sql);
@@ -734,7 +734,7 @@ class AdminEditController extends AbstractController
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {
+            if ($this->isCsrfTokenValid('delete-contact', $submittedToken)) {
                 if (!empty($request->get('id'))) {
                     $sql = $this->getDoctrine()->getRepository(Contact::class)->find($request->get('id'));
                     $errors = $validator->validate($sql);
