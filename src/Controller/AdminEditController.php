@@ -637,25 +637,19 @@ class AdminEditController extends AbstractController
      */
     public function deleteUser(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('delete-user', $submittedToken)) {
-                if (!empty($request->get('id'))) {
-                    $oldImage = $this->getDoctrine()->getRepository(User::class)->find($request->get('id'));
-                    if (substr($oldImage->getAvatar(), 0, 4) !== "http" && $request->get('image') !== $oldImage->getAvatar()) {
-                        $filesystem->remove(['symlink', "../public/" . $oldImage->getAvatar(), 'activity.log']);
-                    }
-                    $errors = $validator->validate($oldImage);
-                    if (count($errors) == 0) {
-                        $this->getDoctrine()->getRepository(User::class)->deleteUser($oldImage);
-                        return $this->json(['message' => "Vous avez bien supprimer cet utilisateur", 'id' => $request->get('id')], 200);
-                    } else {
-                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
-                    }
-                } else {
-                    return $this->json(['message' => 'Erreur lors de la suppression de l\'utilisateur...'], 400);
-                }
+        if ($this->isCsrfTokenValid('delete-user', $request->get('csrfData')) && !empty($request->get('id'))) {
+            $oldImage = $this->getDoctrine()->getRepository(User::class)->find($request->get('id'));
+            if (substr($oldImage->getAvatar(), 0, 4) !== "http" && $request->get('image') !== $oldImage->getAvatar()) {
+                $filesystem->remove(['symlink', "../public/" . $oldImage->getAvatar(), 'activity.log']);
             }
+            if (count($validator->validate($oldImage)) == 0) {
+                $this->getDoctrine()->getRepository(User::class)->deleteUser($oldImage);
+                return $this->json(['message' => "Vous avez bien supprimer cet utilisateur", 'id' => $request->get('id')], 200);
+            } else {
+                return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
+            }
+        } else {
+            return $this->json(['message' => 'Erreur lors de la suppression de l\'utilisateur...'], 400);
         }
     }
 

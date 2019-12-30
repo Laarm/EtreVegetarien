@@ -83,7 +83,7 @@ class MealController extends AbstractController
                             ->setCreatedAt(new \DateTime());
                         $errors = $validator->validate($sqlMealFavorites);
                         if (count($errors) == 0) {
-                            $sqlMealFavorites = $this->getDoctrine()->getRepository(MealFavorites::class)->addMealFavorites($sqlMealFavorites);
+                            $this->getDoctrine()->getRepository(MealFavorites::class)->addMealFavorites($sqlMealFavorites);
                             return $this->json(['action' => "add", 'message' => "Vous avez bien ajouter ce repas en favorites", 'id' => $request->get('meal_id')], 200);
                         }
                     } else {
