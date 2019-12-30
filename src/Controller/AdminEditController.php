@@ -50,27 +50,16 @@ class AdminEditController extends AbstractController
      */
     public function deleteArticle(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('delete-article', $submittedToken)) {
-                if (!empty($request->get('id'))) {
+            if ($this->isCsrfTokenValid('delete-article', $request->get('csrfData')) && !empty($request->get('id'))) {
                     $oldImage = $this->getDoctrine()->getRepository(Article::class)->find($request->get('id'));
-                    if (substr($oldImage->getImage(), 0, 4) !== "http" && $request->get('image') !== $oldImage->getImage()) {
-                        $filesystem->remove(['symlink', "../public/" . $oldImage->getImage(), 'activity.log']);
-                    }
+                    $filesystem->remove(['symlink', "../public/" . $oldImage->getImage(), 'activity.log']);
                     $sqlArticle = $this->getDoctrine()->getRepository(Article::class)->find($request->get('id'));
-                    $errors = $validator->validate($sqlArticle);
-                    if (count($errors) == 0) {
+                    if (count($validator->validate($sqlArticle)) == 0) {
                         $this->getDoctrine()->getRepository(Article::class)->deleteArticle($sqlArticle);
                         return $this->json(['message' => "Vous avez bien supprimer cet article", 'id' => $request->get('id')], 200);
-                    } else {
-                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
                     }
-                } else {
-                    return $this->json(['message' => 'Erreur lors de la suppression de l\'article...'], 400);
                 }
-            }
-        }
+                return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }
 
     /**
