@@ -23,7 +23,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class deleteStoreAdminEditController extends AbstractController
+class AdminEditController extends AbstractController
 {
     public function index()
     {

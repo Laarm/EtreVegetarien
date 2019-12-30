@@ -28,7 +28,7 @@ class InscriptionController extends AbstractController
     {
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('inscription', $submittedToken)) {
+            if ($this->isCsrfTokenValid('create-user-inscription', $submittedToken)) {
                 if (
                     strlen($request->get('username')) > 5
                     &&
@@ -67,29 +67,27 @@ class InscriptionController extends AbstractController
                     }
                 } else {
                     if (strlen($request->get('username')) < 5) {
-                        return $this->json(['message' => 'Votre pseudonyme est trop court !'], 400);
+                        $message = "Votre pseudonyme est trop court !";
                     }
                     if (strlen($request->get('username')) > 20) {
-                        return $this->json(['message' => 'Votre pseudonyme est trop long !'], 400);
+                        $message = "Votre pseudonyme est trop long !";
                     }
                     if (strlen($request->get('email')) < 5) {
-                        return $this->json(['message' => 'Votre email est trop court !'], 400);
+                        $message = "Votre email est trop court !";
                     }
-                    if (strlen($request->get('email')) > 20) {
-                        return $this->json(['message' => 'Votre email est trop long !'], 400);
-                    }
-                    if (preg_match('#^(([a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+\.?)*[a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+)@(([a-z0-9-_]+\.?)*[a-z0-9-_]+)\.[a-z]{2,}$#i', $request->get('email'))) {
-                        return $this->json(['message' => 'Votre email n\'est pas conforme (exemple : exemple@exemple.fr) !'], 400);
+                    if (strlen($request->get('email')) > 70) {
+                        $message = "Votre email est trop long !";
                     }
                     if (strlen($request->get('password')) < 6) {
-                        return $this->json(['message' => 'Votre mot de passe est trop court !'], 400);
+                        $message = "Votre mot de passe est trop court !";
                     }
                     if (strlen($request->get('password')) > 70) {
-                        return $this->json(['message' => 'Votre mot de passe est trop long !'], 400);
+                        $message = "Votre mot de passe est trop long !";
                     }
                     if (!preg_match('#^(([a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+\.?)*[a-z0-9!\#$%&\\\'*+/=?^_`{|}~-]+)@(([a-z0-9-_]+\.?)*[a-z0-9-_]+)\.[a-z]{2,}$#i', $request->get('email'))) {
-                        return $this->json(['message' => 'Votre e-mail est invalide !'], 400);
+                        $message = "Votre email n'est pas conforme (exemple : exemple@exemple.fr) !";
                     }
+                    if($message){return $this->json(['message' => $message], 400);}
                     return $this->json(['message' => 'Veuillez remplir tout les champs !'], 400);
                 }
             }

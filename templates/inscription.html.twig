@@ -54,7 +54,7 @@
 					username: $("#pseudonyme").val(),
 					email: $("#email").val(),
 					password: $("#password").val(),
-					csrfData: "{{ csrf_token('inscription') }}"
+					csrfData: "{{ csrf_token('create-user-inscription') }}"
 				}, function(data) {
 						$("#resultat").html("<div class='content'><p>" + data.message + "</p></div>");
 						window.location.replace("{{ path('connexion') }}");
