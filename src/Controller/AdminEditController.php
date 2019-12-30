@@ -37,6 +37,8 @@ class AdminEditController extends AbstractController
 
     /**
      * @Route("/admin/article/{id}/edit", name="admin_edit_article")
+     * @param Article $article
+     * @return Response
      */
     public function editArticle(Article $article)
     {
@@ -47,6 +49,10 @@ class AdminEditController extends AbstractController
 
     /**
      * @Route("/admin/deleteArticle", name="admin_delete_article")
+     * @param Request $request
+     * @param Filesystem $filesystem
+     * @param ValidatorInterface $validator
+     * @return Response
      */
     public function deleteArticle(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
     {
@@ -64,58 +70,53 @@ class AdminEditController extends AbstractController
 
     /**
      * @Route("/admin/saveArticle", name="admin_save_article")
+     * @param Request $request
+     * @param Filesystem $filesystem
+     * @param ValidatorInterface $validator
+     * @param EntityManagerInterface $em
+     * @return Response
+     * @throws \Exception
      */
     public function saveArticle(Request $request, Filesystem $filesystem, ValidatorInterface $validator, EntityManagerInterface $em): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
-                $error = false;
-                if (!empty($request->get('name')) && !empty($request->get('content')) && !empty($request->get('article_id'))) {
-                    if (empty($request->get('image'))) {
-                        $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
-                    } else {
-                        $image = htmlspecialchars($request->get('image'));
+        if ($this->isCsrfTokenValid('save-item', $request->get('csrfData')) && !empty($request->get('name')) && !empty($request->get('content')) && !empty($request->get('article_id'))) {
+            $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
+            if (!empty($request->get('image'))) {
+                $image = htmlspecialchars($request->get('image'));
+            }
+            if ($request->get('article_id') == "new") {
+                $article = new Article();
+                $article->setName($request->get('name'))
+                    ->setContent($request->get('content'))
+                    ->setImage($image)
+                    ->setCreatedAt(new \DateTime());
+                if (count($validator->validate($article)) == 0) {
+                    $article = $this->getDoctrine()->getRepository(Article::class)->createArticle($article);
+                    return $this->json(['message' => "L'article à bien été créer !", 'articleId' => $article], 200);
+                }
+            } else {
+                $article = $em->getRepository(Article::class)->find($request->get('article_id'));
+                $oldImage = $article->getImage();
+                $article->setName($request->get('name'))
+                    ->setContent($request->get('content'))
+                    ->setImage($image);
+                if (count($validator->validate($article)) == 0) {
+                    if (substr($oldImage, 0, 4) !== "http" && $request->get('image') !== $oldImage) {
+                        $filesystem->remove(['symlink', "../public/" . $oldImage, 'activity.log']);
                     }
-                    if ($request->get('article_id') == "new") {
-                        $article = new Article();
-                        $article->setName($request->get('name'))
-                            ->setContent($request->get('content'))
-                            ->setImage($image)
-                            ->setCreatedAt(new \DateTime());
-                        $errors = $validator->validate($article);
-                        if (count($errors) == 0) {
-                            $article = $this->getDoctrine()->getRepository(Article::class)->createArticle($article);
-                            return $this->json(['message' => "L'article à bien été créer !", 'articleId' => $article], 200);
-                        } else {
-                            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
-                        }
-                    } else {
-                        $article = $em->getRepository(Article::class)->find($request->get('article_id'));
-                        $oldImage = $article->getImage();
-                        $article->setName($request->get('name'))
-                            ->setContent($request->get('content'))
-                            ->setImage($image);
-                        $errors = $validator->validate($article);
-                        if (count($errors) == 0) {
-                            if (substr($oldImage, 0, 4) !== "http" && $request->get('image') !== $oldImage) {
-                                $filesystem->remove(['symlink', "../public/" . $oldImage, 'activity.log']);
-                            }
-                            $article = $this->getDoctrine()->getRepository(Article::class)->saveArticle($article);
-                            return $this->json(['message' => "L'article à bien été mis à jour !", 'articleId' => $article->getId()], 200);
-                        } else {
-                            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
-                        }
-                    }
-                } else {
-                    return $this->json(['message' => 'Veuillez remplir tout les champs !'], 400);
+                    $article = $this->getDoctrine()->getRepository(Article::class)->saveArticle($article);
+                    return $this->json(['message' => "L'article à bien été mis à jour !", 'articleId' => $article->getId()], 200);
                 }
             }
+            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
         }
+        return $this->json(['message' => 'Veuillez remplir tout les champs !'], 400);
     }
 
     /**
      * @Route("/admin/store/{id}/edit", name="admin_edit_store")
+     * @param Store $store
+     * @return Response
      */
     public function editStore(Store $store)
     {
@@ -134,6 +135,10 @@ class AdminEditController extends AbstractController
 
     /**
      * @Route("/admin/deleteStore", name="admin_delete_store")
+     * @param Request $request
+     * @param Filesystem $filesystem
+     * @param ValidatorInterface $validator
+     * @return Response
      */
     public function deleteStore(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
     {
@@ -151,55 +156,49 @@ class AdminEditController extends AbstractController
 
     /**
      * @Route("/admin/saveStore", name="admin_save_store")
+     * @param Request $request
+     * @param Filesystem $filesystem
+     * @param ValidatorInterface $validator
+     * @return Response
+     * @throws \Exception
      */
     public function saveStore(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
-                if (!empty($request->get('name')) && !empty($request->get('city')) && !empty($request->get('store_id'))) {
-                    if (empty($request->get('image'))) {
-                        $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
-                    } else {
-                        $image = htmlspecialchars($request->get('image'));
+        if ($this->isCsrfTokenValid('save-item', $request->get('csrfData')) && !empty($request->get('name')) && !empty($request->get('city')) && !empty($request->get('store_id'))) {
+            $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
+            if (!empty($request->get('image'))) {
+                $image = htmlspecialchars($request->get('image'));
+            }
+            if ($request->get('store_id') == "new") {
+                $sqlStore = new Store();
+                $sqlStore->setName($request->get('name'))
+                    ->setImage($image)
+                    ->setLocation("null")
+                    ->setAddress($request->get('address'))
+                    ->setCity($request->get('city'))
+                    ->setCreatedAt(new \DateTime());
+                if (count($validator->validate($sqlStore)) == 0) {
+                    $storeId = $this->getDoctrine()->getRepository(Store::class)->createStore($sqlStore);
+                    return $this->json(['message' => "Le magasin à bien été créer !", 'storeId' => $storeId], 200);
+                }
+            } else {
+                $sqlStore = $this->getDoctrine()->getRepository(Store::class)->find($request->get('store_id'));
+                $oldImage = $sqlStore->getImage();
+                $sqlStore->setName($request->get('name'))
+                    ->setImage($image)
+                    ->setAddress($request->get('address'))
+                    ->setCity($request->get('city'));
+                if (count($validator->validate($sqlStore)) == 0) {
+                    if (substr($oldImage, 0, 4) !== "http" && $request->get('image') !== $oldImage) {
+                        $filesystem->remove(['symlink', "../public/" . $oldImage, 'activity.log']);
                     }
-                    if ($request->get('store_id') == "new") {
-                        $sqlStore = new Store();
-                        $sqlStore->setName($request->get('name'))
-                            ->setImage($image)
-                            ->setLocation("null")
-                            ->setAddress($request->get('address'))
-                            ->setCity($request->get('city'))
-                            ->setCreatedAt(new \DateTime());
-                        $errors = $validator->validate($sqlStore);
-                        if (count($errors) == 0) {
-                            $storeId = $this->getDoctrine()->getRepository(Store::class)->createStore($sqlStore);
-                            return $this->json(['message' => "Le magasin à bien été créer !", 'storeId' => $storeId], 200);
-                        } else {
-                            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
-                        }
-                    } else {
-                        $sqlStore = $this->getDoctrine()->getRepository(Store::class)->find($request->get('store_id'));
-                        $oldImage = $sqlStore->getImage();
-                        $sqlStore->setName($request->get('name'))
-                            ->setImage($image)
-                            ->setAddress($request->get('address'))
-                            ->setCity($request->get('city'));
-                        $errors = $validator->validate($sqlStore);
-                        if (count($errors) == 0) {
-                            if (substr($oldImage, 0, 4) !== "http" && $request->get('image') !== $oldImage) {
-                                $filesystem->remove(['symlink', "../public/" . $oldImage, 'activity.log']);
-                            }
-                            $storeId = $this->getDoctrine()->getRepository(Store::class)->saveStore($sqlStore);
-                            return $this->json(['message' => "Le magasin à bien été mis à jour !", 'storeId' => $storeId], 200);
-                        } else {
-                        }
-                    }
-                } else {
-                    return $this->json(['message' => 'Veuillez remplir tout les champs !'], 400);
+                    $storeId = $this->getDoctrine()->getRepository(Store::class)->saveStore($sqlStore);
+                    return $this->json(['message' => "Le magasin à bien été mis à jour !", 'storeId' => $storeId], 200);
                 }
             }
+            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
         }
+        return $this->json(['message' => 'Veuillez remplir tout les champs !'], 400);
     }
 
     /**
@@ -239,58 +238,50 @@ class AdminEditController extends AbstractController
 
     /**
      * @Route("/admin/saveRestaurant", name="admin_save_restaurant")
+     * @param Request $request
+     * @param Filesystem $filesystem
+     * @param ValidatorInterface $validator
+     * @return Response
+     * @throws \Exception
      */
     public function saveRestaurant(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
-                if (!empty($request->get('name')) && !empty($request->get('city')) && !empty($request->get('restaurant_id')) && !empty($request->get('content'))) {
-                    if (empty($request->get('image'))) {
-                        $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
-                    } else {
-                        $image = htmlspecialchars($request->get('image'));
+        if ($this->isCsrfTokenValid('save-item', $request->get('csrfData')) && !empty($request->get('name')) && !empty($request->get('city')) && !empty($request->get('restaurant_id')) && !empty($request->get('content'))) {
+            $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
+            if (!empty($request->get('image'))) {
+                $image = htmlspecialchars($request->get('image'));
+            }
+            if ($request->get('restaurant_id') == "new") {
+                $restaurant = new Restaurant();
+                $restaurant->setName($request->get('name'))
+                    ->setImage($image)
+                    ->setLocation("null")
+                    ->setAddress($request->get('address'))
+                    ->setCity($request->get('city'))
+                    ->setContent($request->get('content'))
+                    ->setCreatedAt(new \DateTime());
+                if (count($validator->validate($restaurant)) == 0) {
+                    $restaurant = $this->getDoctrine()->getRepository(Restaurant::class)->createRestaurant($restaurant);
+                    return $this->json(['message' => "Le restaurant à bien été créer !", 'restaurantId' => $restaurant], 200);
+                }
+            } else {
+                $restaurant = $this->getDoctrine()->getRepository(Restaurant::class)->find($request->get('restaurant_id'));
+                $oldImage = $restaurant->getImage();
+                $restaurant->setName($request->get('name'))
+                    ->setImage($image)
+                    ->setAddress($request->get('address'))
+                    ->setCity($request->get('city'))
+                    ->setContent($request->get('content'));
+                if (count($validator->validate($restaurant)) == 0) {
+                    if (substr($oldImage, 0, 4) !== "http" && $request->get('image') !== $oldImage) {
+                        $filesystem->remove(['symlink', "../public/" . $oldImage, 'activity.log']);
                     }
-                    if ($request->get('restaurant_id') == "new") {
-                        $restaurant = new Restaurant();
-                        $restaurant->setName($request->get('name'))
-                            ->setImage($image)
-                            ->setLocation("null")
-                            ->setAddress($request->get('address'))
-                            ->setCity($request->get('city'))
-                            ->setContent($request->get('content'))
-                            ->setCreatedAt(new \DateTime());
-                        $errors = $validator->validate($restaurant);
-                        if (count($errors) == 0) {
-                            $restaurant = $this->getDoctrine()->getRepository(Restaurant::class)->createRestaurant($restaurant);
-                            return $this->json(['message' => "Le restaurant à bien été créer !", 'restaurantId' => $restaurant], 200);
-                        } else {
-                            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
-                        }
-                    } else {
-                        $restaurant = $this->getDoctrine()->getRepository(Restaurant::class)->find($request->get('restaurant_id'));
-                        $oldImage = $restaurant->getImage();
-                        $restaurant->setName($request->get('name'))
-                            ->setImage($image)
-                            ->setAddress($request->get('address'))
-                            ->setCity($request->get('city'))
-                            ->setContent($request->get('content'));
-                        $errors = $validator->validate($restaurant);
-                        if (count($errors) == 0) {
-                            if (substr($oldImage, 0, 4) !== "http" && $request->get('image') !== $oldImage) {
-                                $filesystem->remove(['symlink', "../public/" . $oldImage, 'activity.log']);
-                            }
-                            $restaurant = $this->getDoctrine()->getRepository(Restaurant::class)->saveRestaurant($restaurant);
-                            return $this->json(['message' => "Le restaurant à bien été mis à jour !", 'restaurantId' => $restaurant], 200);
-                        } else {
-                            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
-                        }
-                    }
-                } else {
-                    return $this->json(['message' => 'Erreur lors de la mise à jour du restaurant...'], 400);
+                    $restaurant = $this->getDoctrine()->getRepository(Restaurant::class)->saveRestaurant($restaurant);
+                    return $this->json(['message' => "Le restaurant à bien été mis à jour !", 'restaurantId' => $restaurant], 200);
                 }
             }
         }
+        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }
 
     /**
@@ -330,51 +321,44 @@ class AdminEditController extends AbstractController
 
     /**
      * @Route("/admin/saveProduct", name="admin_save_product")
+     * @param Request $request
+     * @param Filesystem $filesystem
+     * @param ValidatorInterface $validator
+     * @return Response
+     * @throws \Exception
      */
     public function saveProduct(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
-                if (!empty($request->get('name')) && !empty($request->get('product_id'))) {
-                    if (empty($request->get('image'))) {
-                        $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
-                    } else {
-                        $image = htmlspecialchars($request->get('image'));
+        if ($this->isCsrfTokenValid('save-item', $request->get('csrfData')) && !empty($request->get('name')) && !empty($request->get('product_id'))) {
+            $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
+            if (!empty($request->get('image'))) {
+                $image = htmlspecialchars($request->get('image'));
+            }
+            if ($request->get('product_id') == "new") {
+                $product = new Product();
+                $product->setName($request->get('name'))
+                    ->setImage($image)
+                    ->setCreatedAt(new \DateTime());
+                if (count($validator->validate($product)) == 0) {
+                    $product = $this->getDoctrine()->getRepository(Product::class)->createProduct($product);
+                    return $this->json(['message' => "Le produit à bien été créer !", 'productId' => $product], 200);
+                }
+            } else {
+                $product = $this->getDoctrine()->getRepository(Product::class)->find($request->get('product_id'));
+                $oldImage = $product->getImage();
+                $product->setName($request->get('name'))
+                    ->setImage($image);
+                if (count($validator->validate($product)) == 0) {
+                    if (substr($oldImage, 0, 4) !== "http" && $request->get('image') !== $oldImage) {
+                        $filesystem->remove(['symlink', "../public/" . $oldImage, 'activity.log']);
                     }
-                    if ($request->get('product_id') == "new") {
-                        $product = new Product();
-                        $product->setName($request->get('name'))
-                            ->setImage($image)
-                            ->setCreatedAt(new \DateTime());
-                        $errors = $validator->validate($product);
-                        if (count($errors) == 0) {
-                            $product = $this->getDoctrine()->getRepository(Product::class)->createProduct($product);
-                            return $this->json(['message' => "Le produit à bien été créer !", 'productId' => $product], 200);
-                        } else {
-                            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
-                        }
-                    } else {
-                        $product = $this->getDoctrine()->getRepository(Product::class)->find($request->get('product_id'));
-                        $oldImage = $product->getImage();
-                        $product->setName($request->get('name'))
-                            ->setImage($image);
-                        $errors = $validator->validate($product);
-                        if (count($errors) == 0) {
-                            if (substr($oldImage, 0, 4) !== "http" && $request->get('image') !== $oldImage) {
-                                $filesystem->remove(['symlink', "../public/" . $oldImage, 'activity.log']);
-                            }
-                            $product = $this->getDoctrine()->getRepository(Product::class)->saveProduct($product);
-                            return $this->json(['message' => "Le produit à bien été mis à jour !", 'productId' => $product->getId()], 200);
-                        } else {
-                            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
-                        }
-                    }
-                } else {
-                    return $this->json(['message' => 'Veuillez remplir tout les champs !'], 400);
+                    $product = $this->getDoctrine()->getRepository(Product::class)->saveProduct($product);
+                    return $this->json(['message' => "Le produit à bien été mis à jour !", 'productId' => $product->getId()], 200);
                 }
             }
+            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
         }
+        return $this->json(['message' => 'Veuillez remplir tout les champs !'], 400);
     }
 
     /**
@@ -414,84 +398,78 @@ class AdminEditController extends AbstractController
 
     /**
      * @Route("/admin/saveMeal", name="admin_save_meal")
+     * @param Security $security
+     * @param Request $request
+     * @param Filesystem $filesystem
+     * @param ValidatorInterface $validator
+     * @return Response
+     * @throws \Exception
      */
     public function saveMeal(Security $security, Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
-                if (!empty($request->get('name')) && !empty($request->get('meal_id')) && !empty($request->get('recipe'))) {
-                    $user = $security->getUser();
-                    if (empty($request->get('image'))) {
-                        $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
-                    } else {
-                        $image = $request->get('image');
+        if ($this->isCsrfTokenValid('save-item', $request->get('csrfData')) && !empty($request->get('name')) && !empty($request->get('meal_id')) && !empty($request->get('recipe'))) {
+            $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
+            if (!empty($request->get('image'))) {
+                $image = $request->get('image');
+            }
+            if ($request->get('meal_id') == "new") {
+                $meal = new Meal();
+                $meal->setName($request->get('name'))
+                    ->setImage($image)
+                    ->setRecipe($request->get('recipe'))
+                    ->setPostedBy($security->getUser())
+                    ->setCreatedAt(new \DateTime());
+                if (count($validator->validate($meal)) == 0) {
+                    $meal = $this->getDoctrine()->getRepository(Meal::class)->createMeal($meal);
+                    return $this->json(['message' => "Le repas à bien été créer !", 'mealId' => $meal], 200);
+                }
+            } else {
+                $meal = $this->getDoctrine()->getRepository(Meal::class)->find($request->get('meal_id'));
+                $oldImage = $meal->getImage();
+                $meal->setName($request->get('name'))
+                    ->setImage($image)
+                    ->setRecipe($request->get('recipe'))
+                    ->setPostedBy($security->getUser());
+                if (count($validator->validate($meal)) == 0) {
+                    if (substr($oldImage, 0, 4) !== "http" && $request->get('image') !== $oldImage) {
+                        $filesystem->remove(['symlink', "../public/" . $oldImage, 'activity.log']);
                     }
-                    if ($request->get('meal_id') == "new") {
-                        $meal = new Meal();
-                        $meal->setName($request->get('name'))
-                            ->setImage($image)
-                            ->setRecipe($request->get('recipe'))
-                            ->setPostedBy($user)
-                            ->setCreatedAt(new \DateTime());
-                        $errors = $validator->validate($meal);
-                        if (count($errors) == 0) {
-                            $meal = $this->getDoctrine()->getRepository(Meal::class)->createMeal($meal);
-                            return $this->json(['message' => "Le repas à bien été créer !", 'mealId' => $meal], 200);
-                        } else {
-                            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
-                        }
-                    } else {
-                        $meal = $this->getDoctrine()->getRepository(Meal::class)->find($request->get('meal_id'));
-                        $oldImage = $meal->getImage();
-                        $meal->setName($request->get('name'))
-                            ->setImage($image)
-                            ->setRecipe($request->get('recipe'))
-                            ->setPostedBy($user);
-                        $errors = $validator->validate($meal);
-                        if (count($errors) == 0) {
-                            if (substr($oldImage, 0, 4) !== "http" && $request->get('image') !== $oldImage) {
-                                $filesystem->remove(['symlink', "../public/" . $oldImage, 'activity.log']);
-                            }
-                            $meal = $this->getDoctrine()->getRepository(Meal::class)->saveMeal($meal);
-                            return $this->json(['message' => "Le repas à bien été mis à jour !", 'mealId' => $meal->getId()], 200);
-                        } else {
-                            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
-                        }
-                    }
-                } else {
-                    return $this->json(['message' => 'Veuillez remplir tout les champs !'], 400);
+                    $meal = $this->getDoctrine()->getRepository(Meal::class)->saveMeal($meal);
+                    return $this->json(['message' => "Le repas à bien été mis à jour !", 'mealId' => $meal->getId()], 200);
                 }
             }
+            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
         }
+        return $this->json(['message' => 'Veuillez remplir tout les champs !'], 400);
     }
 
     /**
      * @Route("/admin/uploadImage", name="admin_upload_image")
+     * @param Request $request
+     * @param ValidatorInterface $validator
+     * @return Response
      */
     public function uploadImage(Request $request, ValidatorInterface $validator): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->get('_token');
-            if ($this->isCsrfTokenValid('upload-image', $submittedToken)) {
-                $uploadedFile = $request->files->get('file');
-                $imageConstraint = new Assert\Image([
-                    "maxSize" => "2k"
-                ]);
-                $constraintViolations = $validator->validate($uploadedFile, [$imageConstraint]);
-                if ($constraintViolations->count() > 0) {
-                    return $this->json(['message' => 'Erreur, veuillez contacter un administrateur !'], 400);
-                }
-                $filename = uniqid("", true) . $uploadedFile->getClientOriginalName();
-                $uploadedFile->move(__DIR__ . '/../../public/img/uploads', $filename);
-                return $this->json(['message' => 'Vous avez bien envoyer l\'image !', 'location' => 'img/uploads/' . $filename], 200);
+        if ($this->isCsrfTokenValid('upload-image', $request->get('_token'))) {
+            $uploadedFile = $request->files->get('file');
+            $imageConstraint = new Assert\Image(["maxSize" => "2k"]);
+            $constraintViolations = $validator->validate($uploadedFile, [$imageConstraint]);
+            if ($constraintViolations->count() > 0) {
+                return $this->json(['message' => 'Erreur, veuillez contacter un administrateur !'], 400);
             }
-            return $this->json(['message' => 'Erreur'], 400);
+            $filename = uniqid("", true) . $uploadedFile->getClientOriginalName();
+            $uploadedFile->move(__DIR__ . '/../../public/img/uploads', $filename);
+            return $this->json(['message' => 'Vous avez bien envoyer l\'image !', 'location' => 'img/uploads/' . $filename], 200);
         }
+        return $this->json(['message' => 'Erreur'], 400);
     }
 
     /**
      * @Route("/admin/deleteRestaurantFeedback", name="admin_delete_restaurantfeedback")
+     * @param Request $request
+     * @param ValidatorInterface $validator
+     * @return Response
      */
     public function deleteRestaurantFeedback(Request $request, ValidatorInterface $validator): Response
     {
@@ -507,6 +485,8 @@ class AdminEditController extends AbstractController
 
     /**
      * @Route("/admin/user/{id}/edit", name="admin_edit_user")
+     * @param User $user
+     * @return Response
      */
     public function editUser(User $user)
     {
@@ -517,59 +497,54 @@ class AdminEditController extends AbstractController
 
     /**
      * @Route("/admin/saveUser", name="admin_save_user")
+     * @param Request $request
+     * @param Filesystem $filesystem
+     * @param ValidatorInterface $validator
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @return Response
      */
     public function saveUser(Request $request, Filesystem $filesystem, ValidatorInterface $validator, UserPasswordEncoderInterface $passwordEncoder): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('save-user', $submittedToken)) {
-                if (!empty($request->get('username')) && !empty($request->get('email'))) {
-                    $sqlUser = $this->getDoctrine()->getRepository(User::class)->find($request->get('user_id'));
-                    $sqlUser->setUsername($request->get('username'))
-                        ->setEmail($request->get('email'))
-                        ->setRole($request->get('role'))
-                        ->setBio($request->get('bio'));
-                    $errors = $validator->validate($sqlUser);
-                    if (count($errors) == 0) {
-                        $this->getDoctrine()->getRepository(User::class)->saveUserProfil($sqlUser);
-                    } else {
-                        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
-                    }
-                    if ($request->get('deleteAvatar') == true) {
-                        $oldImage = $this->getDoctrine()->getRepository(User::class)->find($request->get('user_id'));
-                        if (!empty($oldImage->getAvatar()) && substr($oldImage->getAvatar(), 0, 4) !== "http" && $request->get('image') !== $oldImage->getAvatar()) {
-                            $filesystem->remove(['symlink', "../public/" . $oldImage->getAvatar(), 'activity.log']);
-                        }
-                        $oldImage->setAvatar(null);
-                        $errors = $validator->validate($oldImage);
-                        if (count($errors) == 0) {
-                            $this->getDoctrine()->getRepository(User::class)->saveUserAvatar($oldImage);
-                        } else {
-                            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
-                        }
-                    }
-                    if (!empty($request->get('motdepasse'))) {
-                        $sqlUser = $this->getDoctrine()->getRepository(User::class)->find($request->get('user_id'));
-                        $password = $passwordEncoder->encodePassword($sqlUser, $request->get('motdepasse'));
-                        $sqlUser->setPassword($password);
-                        $errors = $validator->validate($sqlUser);
-                        if (count($errors) == 0) {
-                            $userSql = $this->getDoctrine()->getRepository(User::class)->saveUserPassword($sqlUser);
-                        } else {
-                            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
-                        }
-                    }
-                    $success = "L'utilisateur à bien été mis à jour !";
-                    return $this->json(['message' => $success, 'userId' => $request->get('user_id')], 200);
-                } else {
-                    return $this->json(['message' => 'Erreur lors de la mise à jour de l\'user...'], 400);
+        if ($this->isCsrfTokenValid('save-user', $request->get('csrfData')) && !empty($request->get('username')) && !empty($request->get('email'))) {
+            $sqlUser = $this->getDoctrine()->getRepository(User::class)->find($request->get('user_id'));
+            $sqlUser->setUsername($request->get('username'))
+                ->setEmail($request->get('email'))
+                ->setRole($request->get('role'))
+                ->setBio($request->get('bio'));
+            if (count($validator->validate($sqlUser)) == 0) {
+                $this->getDoctrine()->getRepository(User::class)->saveUserProfil($sqlUser);
+            }
+            if ($request->get('deleteAvatar') == "true") {
+                $oldImage = $this->getDoctrine()->getRepository(User::class)->find($request->get('user_id'));
+                $filesystem->remove(['symlink', "../public/" . $oldImage->getAvatar(), 'activity.log']);
+                $oldImage->setAvatar(null);
+                if (count($validator->validate($oldImage)) == 0) {
+                    $this->getDoctrine()->getRepository(User::class)->saveUserAvatar($oldImage);
                 }
             }
+            if (!empty($request->get('motdepasse'))) {
+                $sqlUser = $this->getDoctrine()->getRepository(User::class)->find($request->get('user_id'));
+                $password = $passwordEncoder->encodePassword($sqlUser, $request->get('motdepasse'));
+                $sqlUser->setPassword($password);
+                $errors = $validator->validate($sqlUser);
+                if (count($errors) == 0) {
+                    $this->getDoctrine()->getRepository(User::class)->saveUserPassword($sqlUser);
+                } else {
+                    return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
+                }
+            }
+            $success = "L'utilisateur à bien été mis à jour !";
+            return $this->json(['message' => $success, 'userId' => $request->get('user_id')], 200);
         }
+        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }
 
     /**
      * @Route("/admin/deleteUser", name="admin_delete_user")
+     * @param Request $request
+     * @param Filesystem $filesystem
+     * @param ValidatorInterface $validator
+     * @return Response
      */
     public function deleteUser(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
     {
@@ -586,6 +561,9 @@ class AdminEditController extends AbstractController
 
     /**
      * @Route("/admin/deleteProductStore", name="admin_delete_product_store")
+     * @param Request $request
+     * @param ValidatorInterface $validator
+     * @return Response
      */
     public function deleteProductStore(Request $request, ValidatorInterface $validator): Response
     {
@@ -601,44 +579,39 @@ class AdminEditController extends AbstractController
 
     /**
      * @Route("/admin/addProductSync", name="admin_add_product_store")
+     * @param Request $request
+     * @param ValidatorInterface $validator
+     * @return Response
+     * @throws \Exception
      */
     public function addProductSync(Request $request, ValidatorInterface $validator): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('save-item', $submittedToken)) {
-                if (!empty($request->get('storeId')) && !empty($request->get('productId'))) {
-                    $storeId = $this->getDoctrine()->getRepository(Store::class)->find($request->get('storeId'));
-                    $productId = $this->getDoctrine()->getRepository(Product::class)->find($request->get('productId'));
-                    $sql = new ProductSync();
-                    $sql->setStore($storeId)
-                        ->setProduct($productId)
-                        ->setCreatedAt(new \DateTime());
-                    $this->getDoctrine()->getRepository(ProductSync::class)->createProductStore($sql);
-                    $errors = $validator->validate($sql);
-                    if (count($errors) == 0) {
-                        return $this->json(['message' => "Le produit à bien été ajouter au store !", 'productId' => $sql->getId()], 200);
-                    }
-                    return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
-                } else {
-                    return $this->json(['message' => 'Erreur lors de la mise à jour du meal...'], 400);
-                }
+        if ($this->isCsrfTokenValid('save-item', $request->get('csrfData')) && !empty($request->get('storeId')) && !empty($request->get('productId'))) {
+            $sql = new ProductSync();
+            $sql->setStore($this->getDoctrine()->getRepository(Store::class)->find($request->get('storeId')))
+                ->setProduct($this->getDoctrine()->getRepository(Product::class)->find($request->get('productId')))
+                ->setCreatedAt(new \DateTime());
+            if (count($validator->validate($sql)) == 0) {
+                $this->getDoctrine()->getRepository(ProductSync::class)->createProductStore($sql);
+                return $this->json(['message' => "Le produit à bien été ajouter au store !", 'productId' => $sql->getId()], 200);
             }
         }
+        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }
 
     /**
      * @Route("/products/search", name="product_search")
+     * @param Request $request
+     * @return Response
      */
     public function searchProduct(Request $request): Response
     {
-        $search = htmlspecialchars($request->get('search'));
-        if (!empty($search)) {
-            $products = $this->getDoctrine()->getRepository(Product::class)->searchProduct($search, 3);
+        if (!empty($request->get('search'))) {
+            $products = $this->getDoctrine()->getRepository(Product::class)->searchProduct($request->get('search'), 3);
             return $this->json($products, 200);
         }
-        if ($search == "") {
-            $products = $this->getDoctrine()->getRepository(Product::class)->getAllProduct($search, 3);
+        if ($request->get('search') == "") {
+            $products = $this->getDoctrine()->getRepository(Product::class)->getAllProduct($request->get('search'), 3);
             return $this->json($products, 200);
         }
         return $this->json([], 200);
@@ -646,6 +619,9 @@ class AdminEditController extends AbstractController
 
     /**
      * @Route("/admin/deleteContact", name="admin_delete_contact")
+     * @param Request $request
+     * @param ValidatorInterface $validator
+     * @return Response
      */
     public function deleteContact(Request $request, ValidatorInterface $validator): Response
     {
