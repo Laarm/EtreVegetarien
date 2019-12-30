@@ -18,6 +18,9 @@ class RestaurantController extends AbstractController
 {
     /**
      * @Route("/restaurants", name="restaurants")
+     * @param RestaurantRepository $restaurantrepo
+     * @param ArticleRepository $repo
+     * @return Response
      */
     public function index(RestaurantRepository $restaurantrepo, ArticleRepository $repo)
     {
@@ -31,6 +34,12 @@ class RestaurantController extends AbstractController
 
     /**
      * @Route("/restaurant/{id}", name="restaurant_show")
+     * @param Restaurant $restaurant
+     * @param ArticleRepository $repo
+     * @param RestaurantRepository $repoRestaurant
+     * @param RestaurantFeedbackRepository $repoRestaurantFeedback
+     * @param Request $request
+     * @return Response
      */
     public function showRestaurant(Restaurant $restaurant, ArticleRepository $repo, RestaurantRepository $repoRestaurant, RestaurantFeedbackRepository $repoRestaurantFeedback, Request $request)
     {
@@ -57,6 +66,8 @@ class RestaurantController extends AbstractController
 
     /**
      * @Route("/restaurants/search", name="restaurant_search")
+     * @param Request $request
+     * @return Response
      */
     public function searchRestaurant(Request $request): Response
     {
@@ -80,6 +91,11 @@ class RestaurantController extends AbstractController
 
     /**
      * @Route("/ajax/restaurant/sendNote", name="send_note_restaurant")
+     * @param Security $security
+     * @param Request $request
+     * @param ValidatorInterface $validator
+     * @return Response
+     * @throws \Exception
      */
     public function sendNote(Security $security, Request $request, ValidatorInterface $validator): Response
     {
@@ -106,7 +122,7 @@ class RestaurantController extends AbstractController
                             ->setCreatedAt(new \DateTime());
                         $errors = $validator->validate($sqlRestaurantFeedback);
                         if (count($errors) == 0) {
-                            $verif = $this->getDoctrine()->getRepository(RestaurantFeedback::class)->addFeedback($sqlRestaurantFeedback);
+                            $this->getDoctrine()->getRepository(RestaurantFeedback::class)->addFeedback($sqlRestaurantFeedback);
                             return $this->json(['message' => 'Merci d\'avoir donné votre feedback !'], 200);
                         } else {
                             return $this->json(['message' => 'Erreur !'], 200);

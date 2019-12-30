@@ -138,9 +138,14 @@ class User implements UserInterface
         $this->mealFavorites = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function __get($name)
     {
-        return $this->id;
+        return isset($this->$name) ? $this->$name : false;
+    }
+
+    public function __isset($name)
+    {
+        return isset($this->$name) ? true : false;
     }
 
     public function getUsername(): ?string
@@ -167,11 +172,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
     public function setEmail(?string $email): self
     {
         $this->email = $email;
@@ -179,21 +179,11 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getPreference(): ?string
-    {
-        return $this->preference;
-    }
-
     public function setPreference(?string $preference): self
     {
         $this->preference = $preference;
 
         return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
     }
 
     public function setCreatedAt(\DateTimeInterface $createdAt): self
@@ -265,23 +255,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getFacebook(): ?string
-    {
-        return $this->facebook;
-    }
-
-    public function setFacebook(?string $facebook): self
-    {
-        $this->facebook = $facebook;
-
-        return $this;
-    }
-
-    public function getInstagram(): ?string
-    {
-        return $this->instagram;
-    }
-
     public function setInstagram(?string $instagram): self
     {
         $this->instagram = $instagram;
@@ -289,21 +262,11 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getYoutube(): ?string
-    {
-        return $this->youtube;
-    }
-
     public function setYoutube(?string $youtube): self
     {
         $this->youtube = $youtube;
 
         return $this;
-    }
-
-    public function getTwitter(): ?string
-    {
-        return $this->twitter;
     }
 
     public function setTwitter(?string $twitter): self
@@ -403,21 +366,11 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getPreferenceCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->preferenceCreatedAt;
-    }
-
     public function setPreferenceCreatedAt(?\DateTimeInterface $preferenceCreatedAt): self
     {
         $this->preferenceCreatedAt = $preferenceCreatedAt;
 
         return $this;
-    }
-
-    public function getAvatar(): ?string
-    {
-        return $this->avatar;
     }
 
     public function setAvatar(?string $avatar): self
@@ -458,11 +411,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getBio(): ?string
-    {
-        return $this->bio;
-    }
-
     public function setBio(?string $bio): self
     {
         $this->bio = $bio;
@@ -470,21 +418,11 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getPasswordForgot(): ?string
-    {
-        return $this->passwordForgot;
-    }
-
     public function setPasswordForgot(?string $passwordForgot): self
     {
         $this->passwordForgot = $passwordForgot;
 
         return $this;
-    }
-
-    public function getPasswordforgotExpiration(): ?\DateTimeInterface
-    {
-        return $this->passwordforgotExpiration;
     }
 
     public function setPasswordforgotExpiration(?\DateTimeInterface $passwordforgotExpiration): self
