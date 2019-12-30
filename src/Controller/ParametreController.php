@@ -51,9 +51,9 @@ class ParametreController extends AbstractController
                 }
                 $filename = uniqid("", true) . $uploadedFile->getClientOriginalName();
                 $uploadedFile->move(__DIR__ . '/../../public/img/uploads/avatars', $filename);
-                $oldImage = $this->getDoctrine()->getRepository(User::class)->find($this->getUser()->getId());
-                if (!empty($oldImage->getAvatar()) && substr($oldImage->getAvatar(), 0, 4) !== "http" && 'img/uploads/avatars/' . $filename !== $oldImage->getAvatar()) {
-                    $filesystem->remove(['symlink', "../public/" . $oldImage->getAvatar(), 'activity.log']);
+                $oldImage = $this->getDoctrine()->getRepository(User::class)->find($this->getUser()->id);
+                if (!empty($oldImage->avatar) && substr($oldImage->avatar, 0, 4) !== "http" && 'img/uploads/avatars/' . $filename !== $oldImage->avatar) {
+                    $filesystem->remove(['symlink', "../public/" . $oldImage->avatar, 'activity.log']);
                 }
                 $oldImage->setAvatar('img/uploads/avatars/' . $filename);
                 $this->getDoctrine()->getRepository(User::class)->saveUserAvatar($oldImage);
@@ -75,7 +75,7 @@ class ParametreController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('save-profil', $submittedToken)) {
-                $sqlUser = $this->getDoctrine()->getRepository(User::class)->find($this->getUser()->getId());
+                $sqlUser = $this->getDoctrine()->getRepository(User::class)->find($this->getUser()->id);
                 $sqlUser->setUsername($request->get('username'))
                     ->setEmail($request->get('email'))
                     ->setPreference($request->get('preference'))
@@ -105,7 +105,7 @@ class ParametreController extends AbstractController
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('save-password', $submittedToken)) {
                 if($passwordEncoder->isPasswordValid($this->getUser(), $request->get('oldPassword')) && $request->get('password') == $request->get('verifyPassword')) {
-                    $sqlUser = $this->getDoctrine()->getRepository(User::class)->find($this->getUser()->getId());
+                    $sqlUser = $this->getDoctrine()->getRepository(User::class)->find($this->getUser()->id);
                     $sqlUser->setPassword($passwordEncoder->encodePassword($sqlUser, $request->get('password')));
                     $errors = $validator->validate($sqlUser);
                     if (count($errors) == 0) {
@@ -131,7 +131,7 @@ class ParametreController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $submittedToken = $request->get('csrfData');
             if ($this->isCsrfTokenValid('save-rs', $submittedToken)) {
-                    $sqlUser = $this->getDoctrine()->getRepository(User::class)->find($this->getUser()->getId());
+                    $sqlUser = $this->getDoctrine()->getRepository(User::class)->find($this->getUser()->id);
                     $sqlUser->setFacebook($request->get('facebook'))
                         ->setInstagram($request->get('instagram'))
                         ->setYoutube($request->get('youtube'));

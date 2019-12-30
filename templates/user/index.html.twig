@@ -130,15 +130,15 @@
 							</div>
 							<div class="tab-pane fade" id="v-rs" role="tabpanel" aria-labelledby="v-rs-tab">
 								<div class="margin-auto">
-									{% if app.user.youtube or app.user.instagram or app.user.facebook %}
-									{% if app.user.instagram %}<a target="_blank" href="{{app.user.instagram}}">
+									{% if user.youtube or user.instagram or user.facebook %}
+									{% if user.instagram %}<a target="_blank" href="{{user.instagram}}">
 										<i class="fab fa-instagram"></i>
 									</a>{% endif %}
-									{% if app.user.facebook %}<a target="_blank" href="{{app.user.facebook}}">
+									{% if user.facebook %}<a target="_blank" href="{{user.facebook}}">
 										<i class="fab fa-facebook-f"></i>
 									</a>{% endif %}
-										{% if app.user.youtube %}
-									<a target="_blank" href="{{app.user.youtube}}">
+										{% if user.youtube %}
+									<a target="_blank" href="{{user.youtube}}">
 										<i class="fab fa-youtube"></i>
 									</a>{% endif %}
 										{% else %}

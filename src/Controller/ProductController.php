@@ -49,7 +49,7 @@ class ProductController extends AbstractController
                             return $this->json(['action' => "add", 'message' => "Vous avez bien ajouter ce produit en favorites", 'id' => $request->get('product_id')], 200);
                         }
                     } else {
-                        $sqlProductFavorites = $this->getDoctrine()->getRepository(ProductFavorites::class)->removeProductFavorites($request->get('product_id'), $this->getUser()->getId());
+                        $sqlProductFavorites = $this->getDoctrine()->getRepository(ProductFavorites::class)->removeProductFavorites($request->get('product_id'), $this->getUser()->id);
                         $errors = $validator->validate($sqlProductFavorites);
                         if (count($errors) == 0) {
                             return $this->json(['action' => "delete", 'message' => "Vous avez bien supprimer ce produit en favorites", 'id' => $request->get('product_id')], 200);

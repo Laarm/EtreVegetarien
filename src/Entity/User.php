@@ -145,7 +145,7 @@ class User implements UserInterface
 
     public function __isset($name)
     {
-        return isset($this->$name) ? true : false;
+        return isset($this->$name) ? true : "false";
     }
 
     public function getUsername(): ?string
@@ -251,6 +251,13 @@ class User implements UserInterface
                 $restaurantAvi->setPostedBy(null);
             }
         }
+
+        return $this;
+    }
+
+    public function setFacebook(?string $facebook): self
+    {
+        $this->facebook = $facebook;
 
         return $this;
     }

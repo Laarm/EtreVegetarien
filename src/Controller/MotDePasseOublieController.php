@@ -60,7 +60,7 @@ class MotDePasseOublieController extends AbstractController
     public function passwordForgot(ArticleRepository $repo, Request $request)
     {
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(array("passwordForgot" => $request->get('id')));
-        if ($user && $user->getPasswordForgotExpiration() > new \DateTime("now")) {
+        if ($user && $user->passwordforgotExpiration > new \DateTime("now")) {
             $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
             return $this->render('mot_de_passe_oublie/changePassword.html.twig', [
                 'articles' => $articles,
