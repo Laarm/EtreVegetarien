@@ -248,9 +248,7 @@ class AdminEditController extends AbstractController
     {
         if ($this->isCsrfTokenValid('save-item', $request->get('csrfData')) && !empty($request->get('name')) && !empty($request->get('city')) && !empty($request->get('restaurant_id')) && !empty($request->get('content'))) {
             $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
-            if (!empty($request->get('image'))) {
-                $image = htmlspecialchars($request->get('image'));
-            }
+            if (!empty($request->get('image'))) {$image = htmlspecialchars($request->get('image'));}
             if ($request->get('restaurant_id') == "new") {
                 $restaurant = new Restaurant();
                 $restaurant->setName($request->get('name'))
