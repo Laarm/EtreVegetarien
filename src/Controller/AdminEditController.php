@@ -655,22 +655,14 @@ class AdminEditController extends AbstractController
      */
     public function deleteProductStore(Request $request, ValidatorInterface $validator): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('delete-productsync', $submittedToken)) {
-                if (!empty($request->get('id'))) {
-                    $sql = $this->getDoctrine()->getRepository(ProductSync::class)->find($request->get('id'));
-                    $errors = $validator->validate($sql);
-                    if (count($errors) == 0) {
-                        $this->getDoctrine()->getRepository(ProductSync::class)->deleteProductStore($sql);
-                        return $this->json(['message' => "Vous avez bien supprimer ce product du store", 'id' => $request->get('id')], 200);
-                    }
-                    return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
-                } else {
-                    return $this->json(['message' => 'Erreur lors de la suppression du store...'], 400);
-                }
+        if ($this->isCsrfTokenValid('delete-productsync', $request->get('csrfData')) && !empty($request->get('id'))) {
+            $sql = $this->getDoctrine()->getRepository(ProductSync::class)->find($request->get('id'));
+            if (count($validator->validate($sql)) == 0) {
+                $this->getDoctrine()->getRepository(ProductSync::class)->deleteProductStore($sql);
+                return $this->json(['message' => "Vous avez bien supprimer ce product du store", 'id' => $request->get('id')], 200);
             }
         }
+        return $this->json(['message' => 'Erreur lors de la suppression du store...'], 400);
     }
 
     /**
