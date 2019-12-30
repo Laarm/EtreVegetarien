@@ -645,12 +645,9 @@ class AdminEditController extends AbstractController
             if (count($validator->validate($oldImage)) == 0) {
                 $this->getDoctrine()->getRepository(User::class)->deleteUser($oldImage);
                 return $this->json(['message' => "Vous avez bien supprimer cet utilisateur", 'id' => $request->get('id')], 200);
-            } else {
-                return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
             }
-        } else {
-            return $this->json(['message' => 'Erreur lors de la suppression de l\'utilisateur...'], 400);
         }
+        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }
 
     /**
