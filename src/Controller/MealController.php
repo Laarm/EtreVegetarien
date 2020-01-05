@@ -67,35 +67,25 @@ class MealController extends AbstractController
      */
     public function mealFavorites(Security $security, MealFavoritesRepository $repoMealFavorites, Request $request, ValidatorInterface $validator)
     {
-        if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('meal-favorites', $submittedToken)) {
-                if (!empty($request->get('meal_id'))) {
-                    $user = $security->getUser();
-                    $verif = $repoMealFavorites->findBy(array('postedBy' => $user, 'Meal' => $request->get('meal_id')));
-                    if (!$verif) {
-                        $sqlMealFavorites = new MealFavorites();
-                        $meal = $this->getDoctrine()
-                            ->getRepository(Meal::class)
-                            ->find($request->get('meal_id'));
-                        $sqlMealFavorites->setMeal($meal)
-                            ->setPostedBy($user)
-                            ->setCreatedAt(new \DateTime());
-                        $errors = $validator->validate($sqlMealFavorites);
-                        if (count($errors) == 0) {
-                            $this->getDoctrine()->getRepository(MealFavorites::class)->addMealFavorites($sqlMealFavorites);
-                            return $this->json(['action' => "add", 'message' => "Vous avez bien ajouter ce repas en favorites", 'id' => $request->get('meal_id')], 200);
-                        }
-                    } else {
-                        $sqlMealFavorites = $this->getDoctrine()->getRepository(MealFavorites::class)->removeMealFavorites($request->get('meal_id'), $this->getUser()->getId());
-                        $errors = $validator->validate($sqlMealFavorites);
-                        if (count($errors) == 0) {
-                            return $this->json(['action' => "delete", 'message' => "Vous avez bien supprimer ce repas en favorites", 'id' => $request->get('meal_id')], 200);
-                        }
-                    }
+        if ($this->isCsrfTokenValid('meal-favorites', $request->get('csrfData')) && !empty($request->get('meal_id'))) {
+            if (!$repoMealFavorites->findBy(array('postedBy' => $security->getUser(), 'Meal' => $request->get('meal_id')))) {
+                $sqlMealFavorites = new MealFavorites();
+                $sqlMealFavorites->setMeal($this->getDoctrine()
+                    ->getRepository(Meal::class)
+                    ->find($request->get('meal_id')))
+                    ->setPostedBy($security->getUser())
+                    ->setCreatedAt(new \DateTime());
+                if (count($validator->validate($sqlMealFavorites)) == 0) {
+                    $this->getDoctrine()->getRepository(MealFavorites::class)->addMealFavorites($sqlMealFavorites);
+                    return $this->json(['action' => "add", 'message' => "Vous avez bien ajouter ce repas en favorites", 'id' => $request->get('meal_id')], 200);
+                }
+            } else {
+                $sqlMealFavorites = $this->getDoctrine()->getRepository(MealFavorites::class)->removeMealFavorites($request->get('meal_id'), $this->getUser()->getId());
+                if (count($validator->validate($sqlMealFavorites)) == 0) {
+                    return $this->json(['action' => "delete", 'message' => "Vous avez bien supprimer ce repas en favorites", 'id' => $request->get('meal_id')], 200);
                 }
             }
-            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
         }
+        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }
 }
