@@ -35,6 +35,98 @@ trait UserTrait
      */
     private $avatar;
 
+
+    /**
+     * @var string username
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $username;
+
+    /**
+     * @var string password
+     *
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     */
+    private $password;
+
+    /**
+     * @var string email
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $email;
+    
+    /**
+     * Get username
+     *
+     * @return string
+     */
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    /**
+     * Set username
+     *
+     * @param string|null $username
+     * @return UserTrait
+     */
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * Get password
+     *
+     * @return string
+     */
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    /**
+     * Set password
+     *
+     * @param string|null $password
+     * @return UserTrait
+     */
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string|null $email
+     * @return UserTrait
+     */
+    public function setEmail(?string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
     /**
      * Get avatar
      *
