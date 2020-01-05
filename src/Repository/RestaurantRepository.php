@@ -37,13 +37,14 @@ class RestaurantRepository extends ServiceEntityRepository
     public function searchRestaurant($search, $limit)
     {
         $result = $this->createQueryBuilder('m')
-            ->select('m.id', 'm.name', 'm.image')
-            ->where('m.name LIKE :search')
-            ->setParameter('search', '%' . $search . '%')
-            ->orderBy('m.name', 'ASC')
+            ->select('m.id', 'm.name', 'm.image');
+        if($search !== "") {
+            $result->where('m.name LIKE :search')->setParameter('search', '%' . $search . '%');
+        }
+        return $result->orderBy('m.name', 'ASC')
             ->setMaxResults($limit)
-            ->getQuery();
-        return $result->getResult();
+            ->getQuery()
+            ->getResult();
     }
     public function getAllRestaurant($limit)
     {

@@ -53,12 +53,8 @@ class StoreController extends AbstractController
      */
     public function searchStore(Request $request): Response
     {
-        if (!empty($request->get('limit'))) {
-            $limit = $request->get('limit');
-        } else {
-            $limit = "100";
-        }
-        $search = htmlspecialchars($request->get('search'));
+        $limit = $request->get('limit', 100);
+        $search = $request->get('search');
         if (!empty($search)) {
             $stores = $this->getDoctrine()->getRepository(Store::class)->searchStore($search, $limit);
             return $this->json($stores, 200);
