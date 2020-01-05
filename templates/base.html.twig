@@ -55,7 +55,7 @@
 									<a class="dropdown-item" href="{{ path('user', {'id': app.user.id}) }}">
 										<i class="fad fa-user"></i>
 										Mon profil</a>
-									{% if app.user.role == "ROLE_ADMIN" %}
+									{% if is_granted('ROLE_ADMIN') %}
 										<a class="dropdown-item" href="{{ path('admin') }}">
 											<i class="fad fa-tools"></i>
 											Panel</a>

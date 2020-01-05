@@ -2,7 +2,6 @@
 
 namespace App\Entity\Traits;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 trait UserTrait
@@ -40,6 +39,12 @@ trait UserTrait
      * @var string username
      *
      * @ORM\Column(type="string", length=255, nullable=true)
+     *      @Assert\Length(
+     *      min = 5,
+     *      max = 20,
+     *      minMessage = "Votre pseudonyme doit contenir au moins 5 caractères",
+     *      maxMessage = "Votre pseudonyme doit contenir moins de 20 caractères"
+     * )
      */
     private $username;
 
@@ -48,13 +53,18 @@ trait UserTrait
      *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Assert\NotCompromisedPassword
      */
     private $password;
 
     /**
      * @var string email
      *
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true, unique=true)
+     * @Assert\Email(
+     *     message = "Votre adresse e-mail '{{ value }}' n'est pas valide.",
+     *     checkMX = true
+     * )
      */
     private $email;
 

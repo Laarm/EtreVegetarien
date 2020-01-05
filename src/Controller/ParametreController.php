@@ -45,9 +45,8 @@ class ParametreController extends AbstractController
                 $imageConstraint = new Assert\Image([
                     "maxSize" => "1m"
                 ]);
-                $constraintViolations = $validator->validate($uploadedFile, [$imageConstraint]);
-                if ($constraintViolations->count() > 0) {
-                    return $this->json(['message' => $constraintViolations], 400);
+                if ($validator->validate($uploadedFile, [$imageConstraint])->count() > 0) {
+                    return $this->json(['message' => $validator->validate($uploadedFile, [$imageConstraint])], 400);
                 }
                 $filename = uniqid("", true) . $uploadedFile->getClientOriginalName();
                 $uploadedFile->move(__DIR__ . '/../../public/img/uploads/avatars', $filename);

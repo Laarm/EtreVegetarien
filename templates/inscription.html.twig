@@ -59,7 +59,7 @@
 						$("#resultat").html("<div class='content'><p>" + data.message + "</p></div>");
 						window.location.replace("{{ path('connexion') }}");
 				}, 'json').fail(function (data) {
-					$("#resultat").html("<div class='content red'><p>" + data.responseJSON.message + "</p></div>");
+					$("#resultat").html("<div class='content red'><p>" + data.responseJSON.message.detail + "</p></div>");
 				});
 			} else {
 				$("#resultat").html("<div class='content red'><p>Veuillez remplir tout les champs !</p></div>");
