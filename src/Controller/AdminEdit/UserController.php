@@ -36,36 +36,23 @@ class UserController extends AbstractController
      */
     public function saveUser(Request $request, Filesystem $filesystem, ValidatorInterface $validator, UserPasswordEncoderInterface $passwordEncoder): Response
     {
-        if ($this->isCsrfTokenValid('save-user', $request->get('csrfData')) && !empty($request->get('username')) && !empty($request->get('email'))) {
+        if ($this->isCsrfTokenValid('save-user', $request->get('csrfData'))) {
             $sqlUser = $this->getDoctrine()->getRepository(User::class)->find($request->get('user_id'));
             $sqlUser->setUsername($request->get('username'))
                 ->setEmail($request->get('email'))
                 ->setRole($request->get('role'))
                 ->setBio($request->get('bio'));
-            if (count($validator->validate($sqlUser)) == 0) {
-                $this->getDoctrine()->getRepository(User::class)->saveUserProfil($sqlUser);
-            }
             if ($request->get('deleteAvatar') == "true") {
-                $oldImage = $this->getDoctrine()->getRepository(User::class)->find($request->get('user_id'));
-                if(!empty($oldImage->getAvatar())){$filesystem->remove(['symlink', "../public/" . $oldImage->getAvatar(), 'activity.log']);}
-                $oldImage->setAvatar(null);
-                if (count($validator->validate($oldImage)) == 0) {
-                    $this->getDoctrine()->getRepository(User::class)->saveUserAvatar($oldImage);
-                }
+                if(!empty($sqlUser->getAvatar())){$filesystem->remove(['symlink', "../public/" . $sqlUser->getAvatar(), 'activity.log']);}
+                $sqlUser->setAvatar(null);
             }
             if (!empty($request->get('motdepasse'))) {
-                $sqlUser = $this->getDoctrine()->getRepository(User::class)->find($request->get('user_id'));
-                $password = $passwordEncoder->encodePassword($sqlUser, $request->get('motdepasse'));
-                $sqlUser->setPassword($password);
-                $errors = $validator->validate($sqlUser);
-                if (count($errors) == 0) {
-                    $this->getDoctrine()->getRepository(User::class)->saveUserPassword($sqlUser);
-                } else {
-                    return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
-                }
+                $sqlUser->setPassword($passwordEncoder->encodePassword($sqlUser, $request->get('motdepasse')));
             }
-            $success = "L'utilisateur à bien été mis à jour !";
-            return $this->json(['message' => $success, 'userId' => $request->get('user_id')], 200);
+            if (count($validator->validate($sqlUser)) == 0) {
+                $this->getDoctrine()->getRepository(User::class)->saveUserProfil($sqlUser);
+                return $this->json(['message' => "L'utilisateur à bien été mis à jour !", 'userId' => $request->get('user_id')], 200);
+            }
         }
         return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }

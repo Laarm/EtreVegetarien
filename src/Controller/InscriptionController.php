@@ -7,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use App\Repository\UserRepository;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Repository\ArticleRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +23,7 @@ class InscriptionController extends AbstractController
             'articles' => $articles,
         ]);
     }
-    public function inscriptionAction(ValidatorInterface $validator, UserPasswordEncoderInterface $passwordEncoder, UserRepository $repo, Request $request): Response
+    public function inscriptionAction(ValidatorInterface $validator, UserPasswordEncoderInterface $passwordEncoder, Request $request): Response
     {
         if ($this->isCsrfTokenValid('create-user-inscription', $request->get('csrfData')) && strlen($request->get('password')) > 6) {
                 $sqlUser = new User();
