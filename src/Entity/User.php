@@ -164,18 +164,6 @@ class User implements UserInterface
         return [$this->role];
     }
 
-    public function getRole(): ?string
-    {
-        return $this->role;
-    }
-
-    public function setRole(?string $role): self
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
     /**
      * @return Collection|Meal[]
      */

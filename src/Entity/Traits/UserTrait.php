@@ -57,7 +57,37 @@ trait UserTrait
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $email;
-    
+
+    /**
+     * @var string role
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $role;
+
+    /**
+     * Get role
+     *
+     * @return string
+     */
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    /**
+     * Set role
+     *
+     * @param string|null $role
+     * @return UserTrait
+     */
+    public function setRole(?string $role): self
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
     /**
      * Get username
      *
