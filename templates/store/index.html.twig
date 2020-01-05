@@ -29,7 +29,7 @@
 <script>
     i = 0;
     $(document).ready(function () {
-        $('[name="search"]').keypress(function (e) {
+        $('[name="search"]').keyup(function (e) {
             $.getJSON("/stores/search?search=" + $('[name="search"]').val())
                 .then((stores) => {
                     $('.product-list-design').html("")
