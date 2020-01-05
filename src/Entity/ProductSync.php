@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -11,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class ProductSync
 {
+    use TimestampableTrait;
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -31,12 +33,6 @@ class ProductSync
      * @Assert\NotBlank
      */
     private $Store;
-
-    /**
-     * @ORM\Column(type="datetime")
-     * @Assert\NotBlank
-     */
-    private $createdAt;
 
     public function getId(): ?int
     {
@@ -63,18 +59,6 @@ class ProductSync
     public function setStore(?Store $Store): self
     {
         $this->Store = $Store;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
 
         return $this;
     }

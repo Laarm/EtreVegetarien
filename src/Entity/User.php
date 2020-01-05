@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\SocialNetworkTrait;
+use App\Entity\Traits\TimestampableTrait;
+use App\Entity\Traits\UserTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,6 +17,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User implements UserInterface
 {
+    use TimestampableTrait;
+    use SocialNetworkTrait;
+    use UserTrait;
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -39,17 +45,6 @@ class User implements UserInterface
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $preference;
-
-    /**
-     * @ORM\Column(type="datetime")
-     * @Assert\NotBlank
-     */
-    private $createdAt;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\StoreFeedback", mappedBy="postedBy")
      * @Assert\NotBlank
      */
@@ -60,26 +55,6 @@ class User implements UserInterface
      * @Assert\NotBlank
      */
     private $restaurantFeedback;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $facebook;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $instagram;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $youtube;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $twitter;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -104,25 +79,10 @@ class User implements UserInterface
     private $productFavorites;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $avatar;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\MealFavorites", mappedBy="postedBy", orphanRemoval=true)
      * @Assert\NotBlank
      */
     private $mealFavorites;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $bio;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $passwordForgot;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -175,30 +135,6 @@ class User implements UserInterface
     public function setEmail(?string $email): self
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    public function getPreference(): ?string
-    {
-        return $this->preference;
-    }
-
-    public function setPreference(?string $preference): self
-    {
-        $this->preference = $preference;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
 
         return $this;
     }
@@ -261,54 +197,6 @@ class User implements UserInterface
                 $restaurantAvi->setPostedBy(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getFacebook(): ?string
-    {
-        return $this->facebook;
-    }
-
-    public function setFacebook(?string $facebook): self
-    {
-        $this->facebook = $facebook;
-
-        return $this;
-    }
-
-    public function getInstagram(): ?string
-    {
-        return $this->instagram;
-    }
-
-    public function setInstagram(?string $instagram): self
-    {
-        $this->instagram = $instagram;
-
-        return $this;
-    }
-
-    public function getYoutube(): ?string
-    {
-        return $this->youtube;
-    }
-
-    public function setYoutube(?string $youtube): self
-    {
-        $this->youtube = $youtube;
-
-        return $this;
-    }
-
-    public function getTwitter(): ?string
-    {
-        return $this->twitter;
-    }
-
-    public function setTwitter(?string $twitter): self
-    {
-        $this->twitter = $twitter;
 
         return $this;
     }
@@ -403,30 +291,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getPreferenceCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->preferenceCreatedAt;
-    }
-
-    public function setPreferenceCreatedAt(?\DateTimeInterface $preferenceCreatedAt): self
-    {
-        $this->preferenceCreatedAt = $preferenceCreatedAt;
-
-        return $this;
-    }
-
-    public function getAvatar(): ?string
-    {
-        return $this->avatar;
-    }
-
-    public function setAvatar(?string $avatar): self
-    {
-        $this->avatar = $avatar;
-
-        return $this;
-    }
-
     /**
      * @return Collection|MealFavorites[]
      */
@@ -454,42 +318,6 @@ class User implements UserInterface
                 $mealFavorite->setPostedBy(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getBio(): ?string
-    {
-        return $this->bio;
-    }
-
-    public function setBio(?string $bio): self
-    {
-        $this->bio = $bio;
-
-        return $this;
-    }
-
-    public function getPasswordForgot(): ?string
-    {
-        return $this->passwordForgot;
-    }
-
-    public function setPasswordForgot(?string $passwordForgot): self
-    {
-        $this->passwordForgot = $passwordForgot;
-
-        return $this;
-    }
-
-    public function getPasswordforgotExpiration(): ?\DateTimeInterface
-    {
-        return $this->passwordforgotExpiration;
-    }
-
-    public function setPasswordforgotExpiration(?\DateTimeInterface $passwordforgotExpiration): self
-    {
-        $this->passwordforgotExpiration = $passwordforgotExpiration;
 
         return $this;
     }
