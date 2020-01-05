@@ -66,34 +66,34 @@ admin:
   controller: App\Controller\AdminController::index
 adminManagementArticles:
   path: /admin/ManagementArticles
-  controller: App\Controller\AdminController::managementArticles
+  controller: App\Controller\Admin\ManagementArticlesController::managementArticles
 adminManagementArticlesComments:
   path: /admin/ManagementArticlesComments
-  controller: App\Controller\AdminController::managementArticlesComments
+  controller: App\Controller\Admin\ManagementArticlesController::managementArticlesComments
 adminManagementStores:
   path: /admin/ManagementStores
-  controller: App\Controller\AdminController::managementStores
+  controller: App\Controller\Admin\ManagementStoresController::managementStores
 adminManagementProductsStores:
   path: /admin/ManagementProductsStores
-  controller: App\Controller\AdminController::managementProductsStores
+  controller: App\Controller\Admin\ManagementStoresController::managementProductsStores
 adminManagementRestaurants:
   path: /admin/ManagementRestaurants
-  controller: App\Controller\AdminController::managementRestaurants
+  controller: App\Controller\Admin\ManagementRestaurantsController::managementRestaurants
 adminManagementRestaurantsFeedback:
   path: /admin/ManagementRestaurantsFeedback
-  controller: App\Controller\AdminController::managementRestaurantsFeedback
+  controller: App\Controller\Admin\ManagementRestaurantsController::managementRestaurantsFeedback
 adminProducts:
   path: /admin/products
-  controller: App\Controller\AdminController::products
+  controller: App\Controller\Admin\ManagementProductsController::products
 adminUsers:
   path: /admin/users
-  controller: App\Controller\AdminController::users
+  controller: App\Controller\Admin\ManagementUsersController::users
 adminMeal:
   path: /admin/meal
-  controller: App\Controller\AdminController::meal
+  controller: App\Controller\Admin\ManagementMealController::meal
 adminContacts:
   path: /admin/contacts
-  controller: App\Controller\AdminController::contacts
+  controller: App\Controller\Admin\ManagementContactsController::contacts
 adminNewArticle:
   path: /admin/article/new
   controller: App\Controller\AdminEditController::newArticle
