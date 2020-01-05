@@ -87,40 +87,22 @@ class RestaurantController extends AbstractController
      */
     public function sendNote(Security $security, Request $request, ValidatorInterface $validator): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('send-note', $submittedToken)) {
-                $note = $request->get('note');
-                if (!empty($note) && !empty($request->get('restaurant_id'))) {
-                    if ($request->get('message') == "") {
-                        $message = null;
-                    } else {
-                        $message = $request->get('message');
-                    }
-                    $user = $security->getUser();
-                    $verif = $this->getDoctrine()->getRepository(RestaurantFeedback::class)->getFeedbackOfUser($this->getUser()->getId(), $request->get('restaurant_id'));
-                    if (!$verif) {
-                        $restaurant = $this->getDoctrine()->getRepository(Restaurant::class)
-                            ->find($request->get('restaurant_id'));
-                        $sqlRestaurantFeedback = new RestaurantFeedback();
-                        $sqlRestaurantFeedback->setRestaurant($restaurant)
-                            ->setPostedBy($user)
-                            ->setMessage($message)
-                            ->setNote($note)
-                            ->setCreatedAt(new \DateTime());
-                        $errors = $validator->validate($sqlRestaurantFeedback);
-                        if (count($errors) == 0) {
-                            $this->getDoctrine()->getRepository(RestaurantFeedback::class)->addFeedback($sqlRestaurantFeedback);
-                            return $this->json(['message' => 'Merci d\'avoir donné votre feedback !'], 200);
-                        } else {
-                            return $this->json(['message' => 'Erreur !'], 200);
-                        }
-                    } else {
-                        return $this->json(['message' => 'Vous avez déjà donné votre feedback !'], 200);
-                    }
+        if ($this->isCsrfTokenValid('send-note', $request->get('csrfData')) && !empty($request->get('note')) && !empty($request->get('restaurant_id'))) {
+            if (!$this->getDoctrine()->getRepository(RestaurantFeedback::class)->getFeedbackOfUser($this->getUser()->getId(), $request->get('restaurant_id'))) {
+                $sqlRestaurantFeedback = new RestaurantFeedback();
+                $sqlRestaurantFeedback->setRestaurant($this->getDoctrine()->getRepository(Restaurant::class)->find($request->get('restaurant_id')))
+                    ->setPostedBy($security->getUser())
+                    ->setMessage($request->get('message', ""))
+                    ->setNote($request->get('note'))
+                    ->setCreatedAt(new \DateTime());
+                if (count($validator->validate($sqlRestaurantFeedback)) == 0) {
+                    $this->getDoctrine()->getRepository(RestaurantFeedback::class)->addFeedback($sqlRestaurantFeedback);
+                    return $this->json(['message' => 'Merci d\'avoir donné votre avis !'], 200);
                 }
-                return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
+            } else {
+                return $this->json(['message' => 'Vous avez déjà donné votre avis !'], 200);
             }
+            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
         }
     }
 }
