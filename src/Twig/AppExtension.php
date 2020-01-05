@@ -72,7 +72,8 @@ class AppExtension extends AbstractExtension
 
     public function timeDiff($oneTime, $twoTime, $full, $phrase): string
     {
-        $oneTime = new \DateTime($oneTime);
+//        $oneTime = new \DateTime($oneTime);
+        $oneTime = $oneTime;
         if ($twoTime == "now") {
             $twoTime = new \DateTime();
         }

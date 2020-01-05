@@ -110,7 +110,7 @@ class RestaurantController extends AbstractController
                         $message = $request->get('message');
                     }
                     $user = $security->getUser();
-                    $verif = $this->getDoctrine()->getRepository(RestaurantFeedback::class)->getFeedbackOfUser($this->getUser()->id, $request->get('restaurant_id'));
+                    $verif = $this->getDoctrine()->getRepository(RestaurantFeedback::class)->getFeedbackOfUser($this->getUser()->getId(), $request->get('restaurant_id'));
                     if (!$verif) {
                         $restaurant = $this->getDoctrine()->getRepository(Restaurant::class)
                             ->find($request->get('restaurant_id'));

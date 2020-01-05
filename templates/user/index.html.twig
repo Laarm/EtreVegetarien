@@ -16,7 +16,7 @@
 				<h1>{{user.username}}{{ user.role|badgeIcon|raw }}</h1>
 				{% if user.preference is not empty %}
 					<h2>{{user.preference}}</h2>
-					<span>({{ user.preferenceCreatedAt.date|timeDiff("now", false, "Depuis ") }})</span>
+					<span>({{ user.preferenceCreatedAt|timeDiff("now", false, "Depuis ") }})</span>
 				{% else %}
 					<h2>Membre</h2>
 					<span>({{ user.createdAt.date|timeDiff("now", false, "Il y a ") }})</span>
