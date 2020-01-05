@@ -39,7 +39,7 @@ trait UserTrait
      * @var string username
      *
      * @ORM\Column(type="string", length=255, nullable=true)
-     *      @Assert\Length(
+     * @Assert\Length(
      *      min = 5,
      *      max = 20,
      *      minMessage = "Votre pseudonyme doit contenir au moins 5 caractères",
@@ -53,7 +53,6 @@ trait UserTrait
      *
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
-     * @Assert\NotCompromisedPassword
      */
     private $password;
 
