@@ -70,19 +70,15 @@ class PasswordForgotController extends AbstractController
 
     public function passwordForgotChange(Request $request, ValidatorInterface $validator, UserPasswordEncoderInterface $passwordEncoder)
     {
-        if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('password-forgot', $submittedToken)) {
-                $sqlUser = $this->getDoctrine()->getRepository(User::class)->findOneBy(array("passwordForgot" => $request->get('code')));
-                $password = $passwordEncoder->encodePassword($sqlUser, $request->get('password'));
-                $sqlUser->setPasswordForgot(null)
-                    ->setPassword($password)
-                    ->setPasswordForgotExpiration(null);
-                $errors = $validator->validate($sqlUser);
-                if (count($errors) == 0) {
-                    $this->getDoctrine()->getRepository(User::class)->saveUserProfil($sqlUser);
-                    return $this->json(['message' => 'Votre mot de passe à bien été modifié !'], 200);
-                }
+        if ($this->isCsrfTokenValid('password-forgot', $request->get('csrfData'))) {
+            $sqlUser = $this->getDoctrine()->getRepository(User::class)->findOneBy(array("passwordForgot" => $request->get('code')));
+            $password = $passwordEncoder->encodePassword($sqlUser, $request->get('password'));
+            $sqlUser->setPasswordForgot(null)
+                ->setPassword($password)
+                ->setPasswordForgotExpiration(null);
+            if (count($validator->validate($sqlUser)) == 0) {
+                $this->getDoctrine()->getRepository(User::class)->saveUserProfil($sqlUser);
+                return $this->json(['message' => 'Votre mot de passe à bien été modifié !'], 200);
             }
         }
     }
