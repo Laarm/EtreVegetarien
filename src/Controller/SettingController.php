@@ -52,11 +52,10 @@ class SettingController extends AbstractController
             if (!empty($oldImage->getAvatar()) && 'img/uploads/avatars/' . $filename !== $oldImage->getAvatar()) {
                 $filesystem->remove(['symlink', "../public/" . $oldImage->getAvatar(), 'activity.log']);
             }
-            $oldImage->setAvatar('img/uploads/avatars/' . $filename);
-            $this->getDoctrine()->getRepository(User::class)->saveUserAvatar($oldImage);
+            $this->getDoctrine()->getRepository(User::class)->saveUserAvatar($oldImage->setAvatar('img/uploads/avatars/' . $filename));
             return $this->json(['message' => 'Vous avez bien envoyer l\'image !', 'location' => 'img/uploads/avatars/' . $filename], 200);
         }
-        return $this->json(['message' => 'Erreur'], 400);
+        return $this->json(['message' => 'Erreur, veuillez contacter un administrateur !'], 400);
     }
 
     /**
