@@ -23,6 +23,7 @@ class MealFavoritesRepository extends ServiceEntityRepository
     {
         $this->_em->persist($mealFavorites);
         $this->_em->flush();
+        return "";
     }
     public function removeMealFavorites($mealId, $userId)
     {
@@ -35,7 +36,7 @@ class MealFavoritesRepository extends ServiceEntityRepository
         $deleteFavorites = $this->find($mealFavoritesId[0]['id']);
         $this->_em->remove($deleteFavorites);
         $this->_em->flush();
-        return $deleteFavorites;
+        return $mealId;
     }
     public function getAllMealFeedbackForUser($user)
     {

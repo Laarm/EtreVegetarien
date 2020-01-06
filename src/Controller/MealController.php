@@ -64,6 +64,12 @@ class MealController extends AbstractController
 
     /**
      * @Route("/ajax/mealFavorites", name="meal_favorites")
+     * @param Security $security
+     * @param MealFavoritesRepository $repoMealFavorites
+     * @param Request $request
+     * @param ValidatorInterface $validator
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @throws \Exception
      */
     public function mealFavorites(Security $security, MealFavoritesRepository $repoMealFavorites, Request $request, ValidatorInterface $validator)
     {
@@ -76,15 +82,12 @@ class MealController extends AbstractController
                     ->setPostedBy($security->getUser())
                     ->setCreatedAt(new \DateTime());
                 if (count($validator->validate($sqlMealFavorites)) == 0) {
-                    $this->getDoctrine()->getRepository(MealFavorites::class)->addMealFavorites($sqlMealFavorites);
-                    return $this->json(['action' => "add", 'message' => "Vous avez bien ajouter ce repas en favorites", 'id' => $request->get('meal_id')], 200);
+                    $mealId = $this->getDoctrine()->getRepository(MealFavorites::class)->addMealFavorites($sqlMealFavorites);
                 }
             } else {
-                $sqlMealFavorites = $this->getDoctrine()->getRepository(MealFavorites::class)->removeMealFavorites($request->get('meal_id'), $this->getUser()->getId());
-                if (count($validator->validate($sqlMealFavorites)) == 0) {
-                    return $this->json(['action' => "delete", 'message' => "Vous avez bien supprimer ce repas en favorites", 'id' => $request->get('meal_id')], 200);
-                }
+                $mealId = $this->getDoctrine()->getRepository(MealFavorites::class)->removeMealFavorites($request->get('meal_id'), $this->getUser()->getId());
             }
+            return $this->json(['action' => $mealId, 'message' => "Réalisé avec success", 'id' => $request->get('meal_id')], 200);
         }
         return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }

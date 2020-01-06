@@ -123,10 +123,10 @@ $("[btnFavorites]").click(function(e) {
         meal_id: $(this).attr('btnFavorites'),
         csrfData: "{{ csrf_token('meal-favorites') }}"
     }, function(data) {
-        if (data.action == 'add') {
+    	console.log(data)
+        if (data.action == '') {
             $('[btnFavorites = "' + data.id + '"]').addClass('active')
-        }
-        if (data.action == 'delete') {
+        }else{
             $('[btnFavorites = "' + data.id + '"]').removeClass('active')
         }
     }, 'json').fail(function(data) {console.log(data.responseJSON)});
