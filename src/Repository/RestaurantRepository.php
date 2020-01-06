@@ -18,12 +18,6 @@ class RestaurantRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Restaurant::class);
     }
-    public function createRestaurant($sqlRestaurant)
-    {
-        $this->_em->persist($sqlRestaurant);
-        $this->_em->flush();
-        return $sqlRestaurant->getId();
-    }
     public function saveRestaurant($sqlRestaurant)
     {
         $this->_em->persist($sqlRestaurant);

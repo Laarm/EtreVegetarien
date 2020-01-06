@@ -18,14 +18,9 @@ class ProductRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Product::class);
     }
-    public function createProduct($sqlProduct)
-    {
-        $this->_em->persist($sqlProduct);
-        $this->_em->flush();
-        return $sqlProduct->getId();
-    }
     public function saveProduct($productId)
     {
+        $this->_em->persist($productId);
         $this->_em->flush();
         return $productId;
     }

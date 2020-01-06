@@ -57,32 +57,22 @@ class ProductController extends AbstractController
      */
     public function saveProduct(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
     {
-        if ($this->isCsrfTokenValid('save-item', $request->get('csrfData')) && !empty($request->get('name')) && !empty($request->get('product_id'))) {
-            $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
-            if (!empty($request->get('image'))) {
-                $image = htmlspecialchars($request->get('image'));
-            }
-            if ($request->get('product_id') == "new") {
-                $product = new Product();
-                $product->setName($request->get('name'))->setImage($image)->setCreatedAt(new \DateTime());
-                if (count($validator->validate($product)) == 0) {
-                    $product = $this->getDoctrine()->getRepository(Product::class)->createProduct($product);
-                    return $this->json(['message' => "Le produit à bien été créer !", 'productId' => $product], 200);
-                }
-            } else {
+        if ($this->isCsrfTokenValid('save-item', $request->get('csrfData'))) {
+            $product = new Product();
+            $product->setCreatedAt(new \DateTime());
+            if ($request->get('product_id') !== "new") {
                 $product = $this->getDoctrine()->getRepository(Product::class)->find($request->get('product_id'));
-                $product->setName($request->get('name'))->setImage($image);
-                if (count($validator->validate($product)) == 0) {
-                    if (substr($product->getImage(), 0, 4) !== "http" && $request->get('image') !== $product->getImage()) {
-                        $filesystem->remove(['symlink', "../public/" . $product->getImage(), 'activity.log']);
-                    }
-                    $product = $this->getDoctrine()->getRepository(Product::class)->saveProduct($product);
-                    return $this->json(['message' => "Le produit à bien été mis à jour !", 'productId' => $product->getId()], 200);
+                if ($request->get('image') !== $product->getImage()) {
+                    $filesystem->remove(['symlink', "../public/" . $product->getImage(), 'activity.log']);
                 }
             }
-            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
+            $product->setName($request->get('name'))->setImage($request->get('image'));
+            if (count($validator->validate($product)) == 0) {
+                $product = $this->getDoctrine()->getRepository(Product::class)->saveProduct($product);
+                return $this->json(['message' => "Le produit à bien été mis à jour !", 'productId' => $product->getId()], 200);
+            }
         }
-        return $this->json(['message' => 'Veuillez remplir tout les champs !'], 400);
+        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }
 
     /**
