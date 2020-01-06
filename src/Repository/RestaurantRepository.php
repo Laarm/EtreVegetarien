@@ -26,6 +26,7 @@ class RestaurantRepository extends ServiceEntityRepository
     }
     public function saveRestaurant($sqlRestaurant)
     {
+        $this->_em->persist($sqlRestaurant);
         $this->_em->flush();
         return $sqlRestaurant->getId();
     }

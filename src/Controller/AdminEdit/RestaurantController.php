@@ -58,37 +58,22 @@ class RestaurantController extends AbstractController
     public function saveRestaurant(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
     {
         if ($this->isCsrfTokenValid('save-item', $request->get('csrfData'))) {
-//            $image = "https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103";
-//            if (!empty($request->get('image'))) {$image = htmlspecialchars($request->get('image'));}
-            $image = $request->get('image', 'https://scontent-cdg2-1.cdninstagram.com/vp/23a0f75b8f3f1f8d4324fd331f2526f0/5E5FF4E8/t51.2885-15/e35/s1080x1080/71022418_387653261929539_2767454389404154771_n.jpg?_nc_ht=scontent-cdg2-1.cdninstagram.com&_nc_cat=103');
-            if ($request->get('restaurant_id') == "new") {
-                $restaurant = new Restaurant();
-                $restaurant->setName($request->get('name'))
-                    ->setImage($image)
-                    ->setLocation("null")
-                    ->setAddress($request->get('address'))
-                    ->setCity($request->get('city'))
-                    ->setContent($request->get('content'))
-                    ->setCreatedAt(new \DateTime());
-                if (count($validator->validate($restaurant)) == 0) {
-                    $restaurant = $this->getDoctrine()->getRepository(Restaurant::class)->createRestaurant($restaurant);
-                    return $this->json(['message' => "Le restaurant à bien été créer !", 'restaurantId' => $restaurant], 200);
-                }
-            } else {
+            $restaurant = new Restaurant();
+            $restaurant->setCreatedAt(new \DateTime());
+            if ($request->get('restaurant_id') !== "new") {
                 $restaurant = $this->getDoctrine()->getRepository(Restaurant::class)->find($request->get('restaurant_id'));
-                $oldImage = $restaurant->getImage();
-                $restaurant->setName($request->get('name'))
-                    ->setImage($image)
-                    ->setAddress($request->get('address'))
-                    ->setCity($request->get('city'))
-                    ->setContent($request->get('content'));
-                if (count($validator->validate($restaurant)) == 0) {
-                    if (substr($oldImage, 0, 4) !== "http" && $request->get('image') !== $oldImage) {
-                        $filesystem->remove(['symlink', "../public/" . $oldImage, 'activity.log']);
-                    }
-                    $restaurant = $this->getDoctrine()->getRepository(Restaurant::class)->saveRestaurant($restaurant);
-                    return $this->json(['message' => "Le restaurant à bien été mis à jour !", 'restaurantId' => $restaurant], 200);
+                if ($request->get('image') !== $restaurant->getImage()) {
+                    $filesystem->remove(['symlink', "../public/" . $restaurant->getImage(), 'activity.log']);
                 }
+            }
+            $restaurant->setName($request->get('name'))->setLocation("null")
+                ->setImage($request->get('image'))
+                ->setAddress($request->get('address'))
+                ->setCity($request->get('city'))
+                ->setContent($request->get('content'));
+            if (count($validator->validate($restaurant)) == 0) {
+                $restaurant = $this->getDoctrine()->getRepository(Restaurant::class)->saveRestaurant($restaurant);
+                return $this->json(['message' => "Le restaurant à bien été mis à jour !", 'restaurantId' => $restaurant], 200);
             }
         }
         return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
