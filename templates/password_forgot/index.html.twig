@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mot de passe oublié - Être végétarien!!{% endblock %}
+{% block title %}Mot de passe oublié - Être végétarien!{% endblock %}
 
 {% block body %}
-	<section id="motdepasseoublie" class="container paddingSeperateur">
+	<section id="PasswordForgot" class="container paddingSeperateur">
 		<div class="shadow-1 rond-2 p-4">
 			<div class="top">
 				<h1>
@@ -21,12 +21,12 @@
 			</div>
 			<div class="bottom flex flex-between">
 				<div class="left">
-					<button id="btnMotDePasseOublie" type="button" class="btn btn-primary mr-1">Envoyer</button>
+					<button id="btnPasswordForgot" type="button" class="btn btn-primary mr-1">Envoyer</button>
 					-
 					<a href="{{ path('connexion') }}" class="cds">Se connecter</a>
 				</div>
 				<div
-					class="right mtb-auto">{# <button id="btnMotDePasseOublieRapide"><i class="fad fa-user-secret"></i> MotDePasseOublie anonyme
+					class="right mtb-auto">{# <button id="btnPasswordForgotRapide"><i class="fad fa-user-secret"></i> PasswordForgot anonyme
 						                    <span>News</span></button> #}
 				</div>
 			</div>
@@ -34,7 +34,7 @@
 	</section>
 	<script>
 	$(document).ready(function() {
-        $("#btnMotDePasseOublie").click(function(e) {
+        $("#btnPasswordForgot").click(function(e) {
             if ($("#email").val().length !== 0) {
                 e.preventDefault();
                 $.post("{{ path('passwordForgot') }}", {

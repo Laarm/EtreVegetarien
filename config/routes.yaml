@@ -49,15 +49,15 @@ devenirVegetarien:
 blog:
   path: /blog
   controller: App\Controller\BlogController::index
-motDePasseOublie:
-  path: /motdepasseoublie
-  controller: App\Controller\MotDePasseOublieController::index
+PasswordForgot:
+  path: /PasswordForgot
+  controller: App\Controller\PasswordForgotController::index
 passwordForgot:
   path: /ajax/passwordForgot
-  controller: App\Controller\MotDePasseOublieController::PasswordForgotAjax
+  controller: App\Controller\PasswordForgotController::PasswordForgotAjax
 passwordForgotChange:
   path: /ajax/passwordForgotChange
-  controller: App\Controller\MotDePasseOublieController::passwordForgotChange
+  controller: App\Controller\PasswordForgotController::passwordForgotChange
 deconnexion:
   path: /deconnexion
   controller: App\Controller\ConnexionController::logout

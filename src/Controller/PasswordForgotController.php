@@ -5,18 +5,19 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\ArticleRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class MotDePasseOublieController extends AbstractController
+class PasswordForgotController extends AbstractController
 {
     public function index(ArticleRepository $repo)
     {
         $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
-        return $this->render('mot_de_passe_oublie/index.html.twig', [
+        return $this->render('password_forgot/index.html.twig', [
             'articles' => $articles,
         ]);
     }
@@ -35,7 +36,7 @@ class MotDePasseOublieController extends AbstractController
                     ->setTo($request->get('email'))
                     ->setBody(
                         $this->renderView(
-                            'emails/passwordforgot.html.twig',
+                            'emails/passwordForgot.html.twig',
                             ['code' => $sqlUser->getPasswordForgot()]
                         ),
                         'text/html'
@@ -47,14 +48,18 @@ class MotDePasseOublieController extends AbstractController
     }
 
     /**
-     * @Route("/motdepasseoublie/{id}", name="mot_de_passe_oublie")
+     * @Route("/PasswordForgot/{id}", name="password_forgot")
+     * @param ArticleRepository $repo
+     * @param Request $request
+     * @return Response
+     * @throws \Exception
      */
     public function passwordForgot(ArticleRepository $repo, Request $request)
     {
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(array("passwordForgot" => $request->get('id')));
         if ($user && $user->getPasswordForgotExpiration() > new \DateTime("now")) {
             $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
-            return $this->render('mot_de_passe_oublie/changePassword.html.twig', [
+            return $this->render('password_forgot/changePassword.html.twig', [
                 'articles' => $articles,
                 'code' => $request->get('id'),
             ]);
