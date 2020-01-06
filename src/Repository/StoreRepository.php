@@ -18,14 +18,9 @@ class StoreRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Store::class);
     }
-    public function createStore($sqlStore)
-    {
-        $this->_em->persist($sqlStore);
-        $this->_em->flush();
-        return $sqlStore->getId();
-    }
     public function saveStore($sqlStore)
     {
+        $this->_em->persist($sqlStore);
         $this->_em->flush();
         return $sqlStore->getId();
     }
