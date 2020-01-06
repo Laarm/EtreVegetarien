@@ -21,7 +21,7 @@ class pagination {
         this.displayCount = 0
         this.nombreObjet = $('[paginationName="' + name + '"]').length
         this.nombrePagination = this.nombreObjet / this.displayMax
-        if (this.nombreObjet > this.displayMax) {this.paginationInit()}
+        if (this.nombreObjet > this.displayMax) {this.paginationInit();$('[paginationName="' + this.name + '"]').css('display', 'none');}
     }
     paginationInit() {
         if (this.nombrePagination < this.displayBtnMax) {
@@ -33,7 +33,6 @@ class pagination {
             this.btnPagination = document.querySelector('[btnPaginationId="' + display + '"]');
             this.btn(this.btnPagination)
         }
-        $('[paginationName="' + this.name + '"]').css('display', 'none');
         for (this.displayCount; this.displayCount < this.displayMax + 1; this.displayCount++) {
             $('[paginationId="' + this.displayCount + '"]').css('display', this.option);
         }
