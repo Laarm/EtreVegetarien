@@ -23,34 +23,26 @@ class MotDePasseOublieController extends AbstractController
 
     public function PasswordForgotAjax(Request $request, \Swift_Mailer $mailer, ValidatorInterface $validator)
     {
-        if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('password-forgot', $submittedToken)) {
-                $dateTime = new \DateTime("now");
-                $dateTime->modify('+15 minutes');
-                $code = mt_rand(5000, 15000);
-                $sqlUser = $this->getDoctrine()->getRepository(User::class)->findOneBy(array("email" => $request->get('email')));
-                $sqlUser->setPasswordForgot($code)
-                    ->setPasswordForgotExpiration($dateTime);
-                $errors = $validator->validate($sqlUser);
-                if (count($errors) == 0) {
-                    $this->getDoctrine()->getRepository(User::class)->saveUserProfil($sqlUser);
-                    $message = (new \Swift_Message('Mot de passe oublié - Être Végétarien!'))
-                        ->setFrom('modarateur@yaleen.fr')
-                        ->setTo($request->get('email'))
-                        ->setBody(
-                            $this->renderView(
-                                'emails/passwordforgot.html.twig',
-                                ['code' => $code]
-                            ),
-                            'text/html'
-                        );
-
-                    $mailer->send($message);
-                    return $this->json(['message' => 'Nous avons envoyer un e-mail !'], 200);
-                }
-                return $this->json(['message' => 'Erreur'], 400);
+        if ($this->isCsrfTokenValid('password-forgot', $request->get('csrfData'))) {
+            $dateTime = new \DateTime("now");
+            $sqlUser = $this->getDoctrine()->getRepository(User::class)->findOneBy(array("email" => $request->get('email')));
+            $sqlUser->setPasswordForgot(mt_rand(5000, 15000))
+                ->setPasswordForgotExpiration($dateTime->modify('+15 minutes'));
+            if (count($validator->validate($sqlUser)) == 0) {
+                $this->getDoctrine()->getRepository(User::class)->saveUserProfil($sqlUser);
+                $mailer->send((new \Swift_Message('Mot de passe oublié - Être Végétarien!'))
+                    ->setFrom('modarateur@yaleen.fr')
+                    ->setTo($request->get('email'))
+                    ->setBody(
+                        $this->renderView(
+                            'emails/passwordforgot.html.twig',
+                            ['code' => $sqlUser->getPasswordForgot()]
+                        ),
+                        'text/html'
+                    ));
+                return $this->json(['message' => 'Nous avons envoyer un e-mail !'], 200);
             }
+            return $this->json(['message' => 'Erreur, veuillez contacter un administrateur'], 400);
         }
     }
 
