@@ -3,6 +3,7 @@
 namespace App\Controller\AdminEdit;
 
 use App\Entity\Product;
+use Config\Functions;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,9 +63,8 @@ class ProductController extends AbstractController
             $product->setCreatedAt(new \DateTime());
             if ($request->get('product_id') !== "new") {
                 $product = $this->getDoctrine()->getRepository(Product::class)->find($request->get('product_id'));
-                if ($request->get('image') !== $product->getImage()) {
-                    $filesystem->remove(['symlink', "../public/" . $product->getImage(), 'activity.log']);
-                }
+                $functions = new Functions();
+                $functions->deleteFile($request->get('image'), $product->getImage(), $filesystem);
             }
             $product->setName($request->get('name'))->setImage($request->get('image'));
             if (count($validator->validate($product)) == 0) {

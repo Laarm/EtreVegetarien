@@ -3,6 +3,7 @@
 namespace App\Controller\AdminEdit;
 
 use App\Entity\Meal;
+use Config\Functions;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -68,9 +69,8 @@ class MealController extends AbstractController
             $meal->setCreatedAt(new \DateTime());
             if ($request->get('meal_id') !== "new") {
                 $meal = $this->getDoctrine()->getRepository(Meal::class)->find($request->get('meal_id'));
-                if ($request->get('image') !== $meal->getImage()) {
-                    $filesystem->remove(['symlink', "../public/" . $meal->getImage(), 'activity.log']);
-                }
+                $functions = new Functions();
+                $functions->deleteFile($request->get('image'), $meal->getImage(), $filesystem);
             }
             $meal->setName($request->get('name'))
                 ->setImage($request->get('image'))

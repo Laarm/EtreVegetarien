@@ -3,6 +3,7 @@
 namespace App\Controller\AdminEdit;
 
 use App\Entity\Article;
+use Config\Functions;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
@@ -66,9 +67,8 @@ class ArticleController extends AbstractController
             $article->setCreatedAt(new \DateTime());
             if ($request->get('article_id') !== "new") {
                 $article = $em->getRepository(Article::class)->find($request->get('article_id'));
-                if ($request->get('image') !== $article->getImage()) {
-                    $filesystem->remove(['symlink', "../public/" . $article->getImage(), 'activity.log']);
-                }
+                $functions = new Functions();
+                $functions->deleteFile($request->get('image'), $article->getImage(), $filesystem);
             }
             $article->setName($request->get('name'))
                 ->setContent($request->get('content'))

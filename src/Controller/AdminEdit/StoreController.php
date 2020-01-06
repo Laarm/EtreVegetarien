@@ -3,6 +3,7 @@
 namespace App\Controller\AdminEdit;
 
 use App\Entity\Store;
+use Config\Functions;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -68,9 +69,8 @@ class StoreController extends AbstractController
             $sqlStore->setCreatedAt(new \DateTime());
             if ($request->get('store_id') !== "new") {
                 $sqlStore = $this->getDoctrine()->getRepository(Store::class)->find($request->get('store_id'));
-                if (substr($sqlStore->getImage(), 0, 4) !== "http" && $request->get('image') !== $sqlStore->getImage()) {
-                    $filesystem->remove(['symlink', "../public/" . $sqlStore->getImage(), 'activity.log']);
-                }
+                $functions = new Functions();
+                $functions->deleteFile($request->get('image'), $sqlStore->getImage(), $filesystem);
             }
             $sqlStore->setName($request->get('name'))
                 ->setImage($request->get('image'))

@@ -3,6 +3,7 @@
 namespace App\Controller\AdminEdit;
 
 use App\Entity\Restaurant;
+use Config\Functions;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,9 +63,8 @@ class RestaurantController extends AbstractController
             $restaurant->setCreatedAt(new \DateTime());
             if ($request->get('restaurant_id') !== "new") {
                 $restaurant = $this->getDoctrine()->getRepository(Restaurant::class)->find($request->get('restaurant_id'));
-                if ($request->get('image') !== $restaurant->getImage()) {
-                    $filesystem->remove(['symlink', "../public/" . $restaurant->getImage(), 'activity.log']);
-                }
+                $functions = new Functions();
+                $functions->deleteFile($request->get('image'), $restaurant->getImage(), $filesystem);
             }
             $restaurant->setName($request->get('name'))->setLocation("null")
                 ->setImage($request->get('image'))
