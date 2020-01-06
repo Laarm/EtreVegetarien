@@ -18,14 +18,9 @@ class MealRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Meal::class);
     }
-    public function createMeal($sqlMeal)
-    {
-        $this->_em->persist($sqlMeal);
-        $this->_em->flush();
-        return $sqlMeal->getId();
-    }
     public function saveMeal($sqlMeal)
     {
+        $this->_em->persist($sqlMeal);
         $this->_em->flush();
         return $sqlMeal;
     }
