@@ -49,15 +49,12 @@ class AppExtension extends AbstractExtension
 
     public function timeDiff($oneTime, $twoTime, $full, $phrase): string
     {
-        $oneTime = $oneTime;
         if ($twoTime == "now") {
             $twoTime = new \DateTime();
         }
         $diff = $twoTime->diff($oneTime);
-
         $diff->w = floor($diff->d / 7);
         $diff->d -= $diff->w * 7;
-
         $string = array(
             'y' => 'an',
             'm' => 'mois',
@@ -74,7 +71,6 @@ class AppExtension extends AbstractExtension
                 unset($string[$k]);
             }
         }
-
         if (!$full) $string = array_slice($string, 0, 1);
         return $string ? $phrase . implode(', ', $string) : 'Maintenant';
     }
