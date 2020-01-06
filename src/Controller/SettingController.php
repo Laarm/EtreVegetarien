@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\ArticleRepository;
+use Config\Functions;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +20,7 @@ class SettingController extends AbstractController
     /**
      * @Route("/setting", name="setting")
      * @param ArticleRepository $repo
+     * @param Functions $functions
      * @return Response
      */
     public function index(ArticleRepository $repo)
@@ -49,9 +51,8 @@ class SettingController extends AbstractController
             $filename = uniqid("", true) . $uploadedFile->getClientOriginalName();
             $uploadedFile->move(__DIR__ . '/../../public/img/uploads/avatars', $filename);
             $oldImage = $this->getDoctrine()->getRepository(User::class)->find($this->getUser()->getId());
-            if (!empty($oldImage->getAvatar()) && 'img/uploads/avatars/' . $filename !== $oldImage->getAvatar()) {
-                $filesystem->remove(['symlink', "../public/" . $oldImage->getAvatar(), 'activity.log']);
-            }
+            $functions = new Functions();
+            $functions->deleteFile($filename, $oldImage->getAvatar(), $filesystem);
             $this->getDoctrine()->getRepository(User::class)->saveUserAvatar($oldImage->setAvatar('img/uploads/avatars/' . $filename));
             return $this->json(['message' => 'Vous avez bien envoyer l\'image !', 'location' => 'img/uploads/avatars/' . $filename], 200);
         }
