@@ -40,7 +40,7 @@ class AppExtension extends AbstractExtension
         if ($content == "Végan") {return '<i class="fad fa-leaf margin-auto"></i>';}
         if ($content == "Flexitarien") {return '<i class="fad fa-steak margin-auto"></i>';}
         if ($content == "L'ovo-végétarien") {return '<i class="fad fa-egg margin-auto"></i>';}
-        if ($content == "Lacto-végétarien" && $content == "L'ovo-lacto-végétarien") {return '<i class="fad fa-cheese-swiss margin-auto"></i>';}
+        if ($content == "Lacto-végétarien" OR $content == "L'ovo-lacto-végétarien") {return '<i class="fad fa-cheese-swiss margin-auto"></i>';}
         if ($content == "Pollo-végétarien") {return '<i class="fad fa-drumstick margin-auto"></i>';}
         if ($content == "Crudivorien") {return '<i class="fas fa-carrot margin-auto"></i>';}
         return '<i class="fad fa-user margin-auto"></i>';
