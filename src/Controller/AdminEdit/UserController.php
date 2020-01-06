@@ -69,10 +69,8 @@ class UserController extends AbstractController
         if ($this->isCsrfTokenValid('delete-user', $request->get('csrfData')) && !empty($request->get('id'))) {
             $oldImage = $this->getDoctrine()->getRepository(User::class)->find($request->get('id'));
             if(!empty($oldImage->getAvatar())){$filesystem->remove(['symlink', "../public/" . $oldImage->getAvatar(), 'activity.log']);}
-            if (count($validator->validate($oldImage)) == 0) {
-                $this->getDoctrine()->getRepository(User::class)->deleteUser($oldImage);
-                return $this->json(['message' => "Vous avez bien supprimer cet utilisateur", 'id' => $request->get('id')], 200);
-            }
+            $this->getDoctrine()->getRepository(User::class)->deleteUser($oldImage);
+            return $this->json(['message' => "Vous avez bien supprimer cet utilisateur", 'id' => $request->get('id')], 200);
         }
         return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }

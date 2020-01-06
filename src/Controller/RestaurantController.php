@@ -89,10 +89,9 @@ class RestaurantController extends AbstractController
                     $this->getDoctrine()->getRepository(RestaurantFeedback::class)->addFeedback($sqlRestaurantFeedback);
                     return $this->json(['message' => 'Merci d\'avoir donné votre avis !'], 200);
                 }
-            } else {
-                return $this->json(['message' => 'Vous avez déjà donné votre avis !'], 200);
             }
-            return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
+            return $this->json(['message' => 'Vous avez déjà donné votre avis !'], 200);
         }
+        return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }
 }
