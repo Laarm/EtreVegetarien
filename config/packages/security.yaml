@@ -40,5 +40,5 @@ security:
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/connexion$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/parametre$, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/setting$, roles: IS_AUTHENTICATED_FULLY }
         # - { path: ^/profile, roles: ROLE_USER }

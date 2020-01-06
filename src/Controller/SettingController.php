@@ -14,23 +14,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class ParametreController extends AbstractController
+class SettingController extends AbstractController
 {
     /**
-     * @Route("/parametre", name="parametre")
+     * @Route("/setting", name="setting")
      * @param ArticleRepository $repo
      * @return Response
      */
     public function index(ArticleRepository $repo)
     {
         $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
-        return $this->render('parametre/index.html.twig', [
+        return $this->render('setting/index.html.twig', [
             'articles' => $articles,
         ]);
     }
 
     /**
-     * @Route("/parametre/uploadAvatar", name="upload_avatar")
+     * @Route("/setting/uploadAvatar", name="upload_avatar")
      * @param Request $request
      * @param Filesystem $filesystem
      * @param ValidatorInterface $validator
@@ -60,7 +60,7 @@ class ParametreController extends AbstractController
     }
 
     /**
-     * @Route("/parametre/saveProfil", name="save_profil")
+     * @Route("/setting/saveProfil", name="save_profil")
      * @param Request $request
      * @param ValidatorInterface $validator
      * @return Response
@@ -84,7 +84,7 @@ class ParametreController extends AbstractController
     }
 
     /**
-     * @Route("/parametre/savePassword", name="save_password")
+     * @Route("/setting/savePassword", name="save_password")
      * @param Request $request
      * @param ValidatorInterface $validator
      * @param UserPasswordEncoderInterface $passwordEncoder
@@ -108,7 +108,7 @@ class ParametreController extends AbstractController
     }
 
     /**
-     * @Route("/parametre/saveRS", name="save_rs")
+     * @Route("/setting/saveRS", name="save_rs")
      * @param Request $request
      * @param ValidatorInterface $validator
      * @return Response
