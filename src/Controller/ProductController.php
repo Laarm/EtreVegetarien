@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Entity\ProductFavorites;
+use Exception;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use App\Repository\ProductFavoritesRepository;
@@ -18,9 +20,7 @@ class ProductController extends AbstractController
      */
     public function index()
     {
-        return $this->render('product/index.html.twig', [
-            'controller_name' => 'ProductController',
-        ]);
+        return $this->render('product/index.html.twig');
     }
 
     /**
@@ -29,8 +29,8 @@ class ProductController extends AbstractController
      * @param ValidatorInterface $validator
      * @param ProductFavoritesRepository $repoProductFavorites
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function productFavorites(Security $security, ValidatorInterface $validator, ProductFavoritesRepository $repoProductFavorites, Request $request)
     {

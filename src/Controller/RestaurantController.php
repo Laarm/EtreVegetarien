@@ -43,22 +43,12 @@ class RestaurantController extends AbstractController
      */
     public function showRestaurant(Restaurant $restaurant, ArticleRepository $repo, RestaurantRepository $repoRestaurant, RestaurantFeedbackRepository $repoRestaurantFeedback, Request $request)
     {
-        $articles = $repo->findBy(array(), array('id' => 'DESC'), "4", null);
-        $autresrestaurants = $repoRestaurant->findBy(array('city' => $restaurant->getCity()), null, "10", null);
-        if ($request->get('view') !== null) {
-            $view = $request->get('view');
-            $maxView = $request->get('maxView');
-        } else {
-            $view = null;
-            $maxView = 100;
-        }
         $restaurantsSom = $this->getDoctrine()->getRepository(RestaurantFeedback::class)->getCountFeedback($restaurant->getId());
-        $restaurantFeedback = $repoRestaurantFeedback->findBy(array('restaurant' => $restaurant), null, $maxView, $view);
         return $this->render('restaurant/restaurant.html.twig', [
             'restaurant' => $restaurant,
-            'articles' => $articles,
-            'autresrestaurants' => $autresrestaurants,
-            'restaurantFeedbackAll' => $restaurantFeedback,
+            'articles' => $repo->findBy(array(), array('id' => 'DESC'), "4", null),
+            'othersRestaurants' => $repoRestaurant->findBy(array('city' => $restaurant->getCity()), null, "10", null),
+            'restaurantFeedbackAll' => $repoRestaurantFeedback->findBy(array('restaurant' => $restaurant), null, $request->get('maxView', 100), $request->get('view', null)),
             'restaurantNote' => $restaurantsSom[0][1],
             'restaurantFeedbackCount' => $restaurantsSom[0][2],
         ]);

@@ -49,9 +49,7 @@ class AppExtension extends AbstractExtension
 
     public function timeDiff($oneTime, $twoTime, $full, $phrase): string
     {
-        if ($twoTime == "now") {
-            $twoTime = new \DateTime();
-        }
+        if ($twoTime == "now") {$twoTime = new \DateTime();}
         $diff = $twoTime->diff($oneTime);
         $diff->w = floor($diff->d / 7);
         $diff->d -= $diff->w * 7;

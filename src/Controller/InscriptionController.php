@@ -15,6 +15,8 @@ class InscriptionController extends AbstractController
 {
     /**
      * @Route("/inscription", name="inscription")
+     * @param ArticleRepository $repo
+     * @return Response
      */
     public function index(ArticleRepository $repo)
     {
