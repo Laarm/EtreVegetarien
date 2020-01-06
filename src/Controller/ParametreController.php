@@ -100,23 +100,19 @@ class ParametreController extends AbstractController
      */
     public function savePassword(Request $request, ValidatorInterface $validator, UserPasswordEncoderInterface $passwordEncoder): Response
     {
-        if ($request->isXmlHttpRequest()) {
-            $submittedToken = $request->get('csrfData');
-            if ($this->isCsrfTokenValid('save-password', $submittedToken)) {
-                if($passwordEncoder->isPasswordValid($this->getUser(), $request->get('oldPassword')) && $request->get('password') == $request->get('verifyPassword')) {
-                    $sqlUser = $this->getDoctrine()->getRepository(User::class)->find($this->getUser()->getId());
-                    $sqlUser->setPassword($passwordEncoder->encodePassword($sqlUser, $request->get('password')));
-                    $errors = $validator->validate($sqlUser);
-                    if (count($errors) == 0) {
-                        $this->getDoctrine()->getRepository(User::class)->saveUserProfil($sqlUser);
-                        return $this->json(['message' => 'Votre mot de passe à bien été sauvegarder !'], 200);
-                    }
-                    return $this->json(['message' => 'Erreur, veuillez contacter un administrateur !'], 400);
+        if ($this->isCsrfTokenValid('save-password', $request->get('csrfData'))) {
+            if($passwordEncoder->isPasswordValid($this->getUser(), $request->get('oldPassword')) && $request->get('password') == $request->get('verifyPassword')) {
+                $sqlUser = $this->getDoctrine()->getRepository(User::class)->find($this->getUser()->getId());
+                $sqlUser->setPassword($passwordEncoder->encodePassword($sqlUser, $request->get('password')));
+                if (count($validator->validate($sqlUser)) == 0) {
+                    $this->getDoctrine()->getRepository(User::class)->saveUserProfil($sqlUser);
+                    return $this->json(['message' => 'Votre mot de passe à bien été sauvegarder !'], 200);
                 }
+            }else{
                 return $this->json(['message' => 'Mot de passe incorrect !'], 400);
             }
-            return $this->json(['message' => 'Erreur'], 400);
         }
+        return $this->json(['message' => 'Erreur, veuillez contacter un administrateur'], 400);
     }
 
     /**
