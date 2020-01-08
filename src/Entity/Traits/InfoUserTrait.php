@@ -38,7 +38,8 @@ trait InfoUserTrait
     /**
      * @var string username
      *
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      * @Assert\Length(
      *      min = 5,
      *      max = 20,
@@ -52,6 +53,7 @@ trait InfoUserTrait
      * @var string email
      *
      * @ORM\Column(type="string", length=255, nullable=true, unique=true)
+     * @Assert\NotBlank
      * @Assert\Email(
      *     message = "Votre adresse e-mail '{{ value }}' n'est pas valide.",
      *     checkMX = true

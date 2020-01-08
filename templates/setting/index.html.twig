@@ -148,20 +148,24 @@
 {% block javascript %}
 <script>
 $("#savePassword").click(function () {
-    $.post(
-        "{{ path('save_password') }}",
-                {
-                    oldPassword: $("#oldPassword").val(),
-                    password: $("#password").val(),
-                    verifyPassword: $("#verifyPassword").val(),
-                    csrfData: "{{ csrf_token('save-password') }}"
-                },
-                function (data) {
-                    $("#resultat").html('<div class="alert alert-success alert-dismissible fade show" role="alert">' + data.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');
-                },
-                'json'
-            ).fail(function (data) {$("#resultat").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' + data.responseJSON.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');});
-    })
+    if($('#oldPassword').val().length !== 0 && $('#password').val().length !== 0 && $('#verifyPassword').val().length !== 0) {
+        $.post(
+            "{{ path('save_password') }}",
+                    {
+                        oldPassword: $("#oldPassword").val(),
+                        password: $("#password").val(),
+                        verifyPassword: $("#verifyPassword").val(),
+                        csrfData: "{{ csrf_token('save-password') }}"
+                    },
+                    function (data) {
+                        $("#resultat").html('<div class="alert alert-success alert-dismissible fade show" role="alert">' + data.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');
+                    },
+                    'json'
+                ).fail(function (data) {$("#resultat").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' + data.responseJSON.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');});
+    }else{
+          $("#resultat").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">Veuillez remplir tout les champs<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');
+    }
+})
 $("#saveRS").click(function () {
     $.post(
         "{{ path('save_rs') }}",
@@ -178,46 +182,50 @@ $("#saveRS").click(function () {
             ).fail(function (data) {$("#resultat").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' + data.responseJSON.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');});
     })
 $("#btnSave").click(function () {
-    let stop = true;
-    if ($('#file')[0].files[0]) {
-        stop = false
-        var fd = new FormData();
-        var files = $('#file')[0].files[0];
-        fd.append('file', files);
-        $.ajax({
-            url: "{{ path('upload_avatar') }}?_token={{ csrf_token('upload-avatar') }}",
-                type: 'POST',
-                data: fd,
-                contentType: false,
-                processData: false,
-                success: function (data) {
-                    $("#avatar").attr("src", data.location)
-                    $("#resultat").html('<div class="alert alert-success alert-dismissible fade show" role="alert">' + data.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');
-                    document.getElementById("file").value = '';
-                    stop = true
-                    $("#btnSave").click()
-                },
-				error: function (data) {
-                    $("#resultat").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' + data.responseJSON.message.detail + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');
-				}
-            });
-        }
-        if(stop){
-            $.post(
-                "{{ path('save_profil') }}",
-                {
-                    username: $("#username").val(),
-                    email: $("#email").val(),
-                    bio: $("#bio").val(),
-                    preference: $("#preference").val(),
-                    date: $("#date").val(),
-                    csrfData: "{{ csrf_token('save-profil') }}"
-                },
-                function (data) {
-                    $("#resultat").html('<div class="alert alert-success alert-dismissible fade show" role="alert">' + data.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');
-                },
-                'json'
-            ).fail(function (data) {$("#resultat").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' + data.responseJSON.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');});
+    if($('#username').val().length !== 0 && $('#email').val().length !== 0) {
+        let stop = true;
+        if ($('#file')[0].files[0]) {
+            stop = false
+            var fd = new FormData();
+            var files = $('#file')[0].files[0];
+            fd.append('file', files);
+            $.ajax({
+                url: "{{ path('upload_avatar') }}?_token={{ csrf_token('upload-avatar') }}",
+                    type: 'POST',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        $("#avatar").attr("src", data.location)
+                        $("#resultat").html('<div class="alert alert-success alert-dismissible fade show" role="alert">' + data.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');
+                        document.getElementById("file").value = '';
+                        stop = true
+                        $("#btnSave").click()
+                    },
+                    error: function (data) {
+                        $("#resultat").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' + data.responseJSON.message.detail + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');
+                    }
+                });
+            }
+            if(stop){
+                $.post(
+                    "{{ path('save_profil') }}",
+                    {
+                        username: $("#username").val(),
+                        email: $("#email").val(),
+                        bio: $("#bio").val(),
+                        preference: $("#preference").val(),
+                        date: $("#date").val(),
+                        csrfData: "{{ csrf_token('save-profil') }}"
+                    },
+                    function (data) {
+                        $("#resultat").html('<div class="alert alert-success alert-dismissible fade show" role="alert">' + data.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');
+                    },
+                    'json'
+                ).fail(function (data) {$("#resultat").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">' + data.responseJSON.message + '<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');});
+            }
+        }else{
+            $("#resultat").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">Veuillez remplir tout les champs<button type="button" class="close" data-dismiss="alert" aria-label="Fermer"><span aria-hidden="true">×</span></button></div>');
         }
     });
 </script>

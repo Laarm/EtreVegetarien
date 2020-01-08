@@ -20,7 +20,6 @@ class SettingController extends AbstractController
     /**
      * @Route("/setting", name="setting")
      * @param ArticleRepository $repo
-     * @param Functions $functions
      * @return Response
      */
     public function index(ArticleRepository $repo)
@@ -51,8 +50,7 @@ class SettingController extends AbstractController
             $filename = uniqid("", true) . $uploadedFile->getClientOriginalName();
             $uploadedFile->move(__DIR__ . '/../../public/img/uploads/avatars', $filename);
             $oldImage = $this->getDoctrine()->getRepository(User::class)->find($this->getUser()->getId());
-            $functions = new Functions();
-            $functions->deleteFile($filename, $oldImage->getAvatar(), $filesystem);
+            deleteFile($filename, $oldImage->getAvatar());
             $this->getDoctrine()->getRepository(User::class)->saveUserAvatar($oldImage->setAvatar('img/uploads/avatars/' . $filename));
             return $this->json(['message' => 'Vous avez bien envoyer l\'image !', 'location' => 'img/uploads/avatars/' . $filename], 200);
         }
