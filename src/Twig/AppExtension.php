@@ -35,16 +35,22 @@ class AppExtension extends AbstractExtension
 
     public function badgePreferenceIcon($content): string
     {
-        $badge = '<i class="fad fa-user margin-auto"></i>';
-        if ($content == "Végétarien") {$badge = '<i class="fad fa-seedling margin-auto"></i>';}
-        if ($content == "Pesco-végétarien") {$badge = '<i class="fad fa-fish margin-auto"></i>';}
-        if ($content == "Végan") {$badge = '<i class="fad fa-leaf margin-auto"></i>';}
-        if ($content == "Flexitarien") {$badge = '<i class="fad fa-steak margin-auto"></i>';}
-        if ($content == "L'ovo-végétarien") {$badge = '<i class="fad fa-egg margin-auto"></i>';}
-        if ($content == "Lacto-végétarien" OR $content == "L'ovo-lacto-végétarien") {$badge = '<i class="fad fa-cheese-swiss margin-auto"></i>';}
-        if ($content == "Pollo-végétarien") {$badge = '<i class="fad fa-drumstick margin-auto"></i>';}
-        if ($content == "Crudivorien") {$badge = '<i class="fas fa-carrot margin-auto"></i>';}
-        return $badge;
+        $badge = array(
+            'Végétarien' => 'fa-seedling',
+            'Pesco-végétarien' => 'fa-fish',
+            'Végan' => 'fa-leaf',
+            'Flexitarien' => 'fa-steak',
+            "L'ovo-végétarien" => 'fa-egg',
+            "L'ovo-lacto-végétarien" => 'fa-fa-cheese-swiss',
+            'Lacto-végétarien' => 'fa-cheese-swiss',
+            'Pollo-végétarien' => 'fa-drumstick',
+            'Crudivorien' => 'fa-carrot',
+        );
+        if(!empty($badge[$content])){
+            return '<i class="fad '.$badge[$content].' margin-auto"></i>';
+        }else{
+            return '<i class="fad fa-user margin-auto"></i>';
+        }
     }
 
     public function timeDiff($oneTime, $twoTime, $full, $phrase): string
