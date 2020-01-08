@@ -3,7 +3,7 @@
 namespace App\Controller\AdminEdit;
 
 use App\Entity\Restaurant;
-use Config\Functions;
+use Exception;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,17 +33,18 @@ class RestaurantController extends AbstractController
     }
 
     /**
-     * @Route("/admin/deleteRestaurant", name="admin_delete_restaurant")
+     * @Route("/admin/deleteRestaurant/{id}", name="admin_delete_restaurant")
+     * @param Request $request
+     * @param Filesystem $filesystem
+     * @param Restaurant $restaurant
+     * @return Response
      */
-    public function deleteRestaurant(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
+    public function deleteRestaurant(Request $request, Filesystem $filesystem, Restaurant $restaurant): Response
     {
-        if ($this->isCsrfTokenValid('delete-restaurant', $request->get('csrfData')) && !empty($request->get('id'))) {
-            $sql = $this->getDoctrine()->getRepository(Restaurant::class)->find($request->get('id'));
-            if (count($validator->validate($sql)) == 0) {
-                $filesystem->remove(['symlink', "../public/" . $sql->getImage(), 'activity.log']);
-                $this->getDoctrine()->getRepository(Restaurant::class)->deleteRestaurant($sql);
-                return $this->json(['message' => "Vous avez bien supprimer ce restaurant", 'id' => $request->get('id')], 200);
-            }
+        if ($this->isCsrfTokenValid('delete-restaurant', $request->get('csrfData'))) {
+            $filesystem->remove(['symlink', "../public/" . $restaurant->getImage()]);
+            $this->getDoctrine()->getRepository(Restaurant::class)->deleteRestaurant($restaurant);
+            return $this->json(['message' => "Vous avez bien supprimer ce restaurant", 'id' => $restaurant->getId()], 200);
         }
         return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }
@@ -51,20 +52,18 @@ class RestaurantController extends AbstractController
     /**
      * @Route("/admin/saveRestaurant", name="admin_save_restaurant")
      * @param Request $request
-     * @param Filesystem $filesystem
      * @param ValidatorInterface $validator
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
-    public function saveRestaurant(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
+    public function saveRestaurant(Request $request, ValidatorInterface $validator): Response
     {
         if ($this->isCsrfTokenValid('save-item', $request->get('csrfData'))) {
             $restaurant = new Restaurant();
             $restaurant->setCreatedAt(new \DateTime());
             if ($request->get('restaurant_id') !== "new") {
                 $restaurant = $this->getDoctrine()->getRepository(Restaurant::class)->find($request->get('restaurant_id'));
-                $functions = new Functions();
-                $functions->deleteFile($request->get('image'), $restaurant->getImage(), $filesystem);
+                deleteFile($request->get('image'), $restaurant->getImage());
             }
             $restaurant->setName($request->get('name'))->setLocation("null")
                 ->setImage($request->get('image'))

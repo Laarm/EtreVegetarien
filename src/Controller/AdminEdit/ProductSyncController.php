@@ -14,19 +14,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ProductSyncController extends AbstractController
 {
     /**
-     * @Route("/admin/deleteProductStore", name="admin_delete_product_store")
+     * @Route("/admin/deleteProductStore/{id}", name="admin_delete_product_store")
      * @param Request $request
-     * @param ValidatorInterface $validator
      * @return Response
      */
-    public function deleteProductStore(Request $request, ValidatorInterface $validator): Response
+    public function deleteProductStore(Request $request, ProductSync $productSync): Response
     {
-        if ($this->isCsrfTokenValid('delete-productsync', $request->get('csrfData')) && !empty($request->get('id'))) {
-            $sql = $this->getDoctrine()->getRepository(ProductSync::class)->find($request->get('id'));
-            if (count($validator->validate($sql)) == 0) {
-                $this->getDoctrine()->getRepository(ProductSync::class)->deleteProductStore($sql);
-                return $this->json(['message' => "Vous avez bien supprimer ce product du store", 'id' => $request->get('id')], 200);
-            }
+        if ($this->isCsrfTokenValid('delete-productsync', $request->get('csrfData'))) {
+            $this->getDoctrine()->getRepository(ProductSync::class)->deleteProductStore($productSync);
+            return $this->json(['message' => "Vous avez bien supprimer ce product du store", 'id' => $productSync->getId()], 200);
         }
         return $this->json(['message' => 'Erreur lors de la suppression du store...'], 400);
     }

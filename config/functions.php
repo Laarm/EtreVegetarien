@@ -1,13 +1,8 @@
 <?php
 
-namespace Config;
-
-class Functions
+function deleteFile($file, $oldFile)
 {
-    function deleteFile($file, $oldFile, $filesystem)
-    {
-        if (!empty($oldFile) && 'img/uploads/avatars/' . $file !== $oldFile) {
-            $filesystem->remove(['symlink', "../public/" . $oldFile, 'activity.log']);
-        }
+    if (!empty($oldFile) && 'img/uploads/avatars/' . $file !== $oldFile && file_exists("/../public/".$oldFile)) {
+        unlink(__DIR__."/../public/".$oldFile);
     }
 }

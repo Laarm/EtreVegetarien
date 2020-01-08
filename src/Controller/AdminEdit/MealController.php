@@ -3,7 +3,6 @@
 namespace App\Controller\AdminEdit;
 
 use App\Entity\Meal;
-use Config\Functions;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,21 +33,18 @@ class MealController extends AbstractController
     }
 
     /**
-     * @Route("/admin/deleteMeal", name="admin_delete_meal")
+     * @Route("/admin/deleteMeal/{id}", name="admin_delete_meal")
      * @param Request $request
      * @param Filesystem $filesystem
-     * @param ValidatorInterface $validator
+     * @param Meal $meal
      * @return Response
      */
-    public function deleteMeal(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
+    public function deleteMeal(Request $request, Filesystem $filesystem, Meal $meal): Response
     {
-        if ($this->isCsrfTokenValid('delete-meal', $request->get('csrfData')) && !empty($request->get('id'))) {
-            $sql = $this->getDoctrine()->getRepository(Meal::class)->find($request->get('id'));
-            if (count($validator->validate($sql)) == 0) {
-                $filesystem->remove(['symlink', "../public/" . $sql->getImage(), 'activity.log']);
-                $this->getDoctrine()->getRepository(Meal::class)->deleteMeal($sql);
-                return $this->json(['message' => "Vous avez bien supprimer ce repas", 'id' => $request->get('id')], 200);
-            }
+        if ($this->isCsrfTokenValid('delete-meal', $request->get('csrfData'))) {
+            $filesystem->remove(['symlink', "../public/" . $meal->getImage()]);
+            $this->getDoctrine()->getRepository(Meal::class)->deleteMeal($meal);
+            return $this->json(['message' => "Vous avez bien supprimer ce repas", 'id' => $meal->getId()], 200);
         }
         return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }
@@ -69,8 +65,7 @@ class MealController extends AbstractController
             $meal->setCreatedAt(new \DateTime());
             if ($request->get('meal_id') !== "new") {
                 $meal = $this->getDoctrine()->getRepository(Meal::class)->find($request->get('meal_id'));
-                $functions = new Functions();
-                $functions->deleteFile($request->get('image'), $meal->getImage(), $filesystem);
+                deleteFile($request->get('image'), $meal->getImage(), $filesystem);
             }
             $meal->setName($request->get('name'))
                 ->setImage($request->get('image'))

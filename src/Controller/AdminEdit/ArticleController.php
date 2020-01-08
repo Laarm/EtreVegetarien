@@ -3,7 +3,6 @@
 namespace App\Controller\AdminEdit;
 
 use App\Entity\Article;
-use Config\Functions;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,21 +31,17 @@ class ArticleController extends AbstractController
     }
 
     /**
-     * @Route("/admin/deleteArticle", name="admin_delete_article")
+     * @Route("/admin/deleteArticle/{id}", name="admin_delete_article")
      * @param Request $request
      * @param Filesystem $filesystem
-     * @param ValidatorInterface $validator
      * @return Response
      */
-    public function deleteArticle(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
+    public function deleteArticle(Request $request, Filesystem $filesystem, Article $article): Response
     {
-        if ($this->isCsrfTokenValid('delete-article', $request->get('csrfData')) && !empty($request->get('id'))) {
-            $sqlArticle = $this->getDoctrine()->getRepository(Article::class)->find($request->get('id'));
-            if (count($validator->validate($sqlArticle)) == 0) {
-                $filesystem->remove(['symlink', "../public/" . $sqlArticle->getImage(), 'activity.log']);
-                $this->getDoctrine()->getRepository(Article::class)->deleteArticle($sqlArticle);
-                return $this->json(['message' => "Vous avez bien supprimer cet article", 'id' => $request->get('id')], 200);
-            }
+        if ($this->isCsrfTokenValid('delete-article', $request->get('csrfData'))) {
+            $filesystem->remove(['symlink', "../public/" . $article->getImage()]);
+            $this->getDoctrine()->getRepository(Article::class)->deleteArticle($article);
+            return $this->json(['message' => "Vous avez bien supprimer cet article", 'id' => $request->get('id')], 200);
         }
         return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }
@@ -54,21 +49,19 @@ class ArticleController extends AbstractController
     /**
      * @Route("/admin/saveArticle", name="admin_save_article")
      * @param Request $request
-     * @param Filesystem $filesystem
      * @param ValidatorInterface $validator
      * @param EntityManagerInterface $em
      * @return Response
      * @throws \Exception
      */
-    public function saveArticle(Request $request, Filesystem $filesystem, ValidatorInterface $validator, EntityManagerInterface $em): Response
+    public function saveArticle(Request $request, ValidatorInterface $validator, EntityManagerInterface $em): Response
     {
         if ($this->isCsrfTokenValid('save-item', $request->get('csrfData'))) {
             $article = new Article();
             $article->setCreatedAt(new \DateTime());
             if ($request->get('article_id') !== "new") {
                 $article = $em->getRepository(Article::class)->find($request->get('article_id'));
-                $functions = new Functions();
-                $functions->deleteFile($request->get('image'), $article->getImage(), $filesystem);
+                deleteFile($request->get('image'), $article->getImage());
             }
             $article->setName($request->get('name'))
                 ->setContent($request->get('content'))

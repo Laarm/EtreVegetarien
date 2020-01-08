@@ -78,7 +78,7 @@ $(document).on('click', '[data-target="#deleteModal"]', function(e) {
 $(document).on('click', '[deleteMeal]', function(e) {
     id = $(this).attr('deleteMeal')
     e.preventDefault();
-    $.post("{{ path('admin_delete_meal') }}", {
+    $.post("/admin/deleteMeal/"+id, {
         id: id,
         csrfData: $(this).attr('csrf-data')
     }, function(data) {

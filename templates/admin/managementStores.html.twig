@@ -54,7 +54,7 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="deleteModalLabel">Êtes-vous sûr de supprimer cet article ?</h5>
+					<h5 class="modal-title" id="deleteModalLabel">Êtes-vous sûr de supprimer ce magasin ?</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -80,7 +80,7 @@ $(document).on('click', '[deleteStore]', function(e) {
     id = $(this).attr('deleteStore')
     csrfData = $(this).attr('csrf-data')
     e.preventDefault();
-    $.post("{{ path('admin_delete_store') }}", {
+    $.post("/admin/deleteStore/"+id, {
         id: id,
         csrfData: $(this).attr('csrf-data')
     }, function(data) {

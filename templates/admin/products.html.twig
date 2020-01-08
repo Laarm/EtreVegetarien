@@ -75,7 +75,7 @@ $(document).on('click', '[data-target="#deleteModal"]', function(e) {
 $(document).on('click', '[deleteProduct]', function(e) {
     id = $(this).attr('deleteProduct')
     e.preventDefault();
-    $.post("{{ path('admin_delete_product') }}", {
+    $.post("/admin/deleteProduct/"+id, {
         id: id,
         csrfData: $(this).attr('csrf-data')
     }, function(data) {

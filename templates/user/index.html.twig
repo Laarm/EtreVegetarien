@@ -19,7 +19,7 @@
 					<span>({{ user.preferenceCreatedAt|timeDiff("now", false, "Depuis ") }})</span>
 				{% else %}
 					<h2>Membre</h2>
-					<span>({{ user.createdAt.date|timeDiff("now", false, "Il y a ") }})</span>
+					<span>({{ user.createdAt|timeDiff("now", false, "Il y a ") }})</span>
 				{% endif %}
 				{% if app.user %}
 					{% if app.user.id == user.id %}

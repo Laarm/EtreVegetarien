@@ -40,7 +40,7 @@ class AdminEditController extends AbstractController
     {
         if ($this->isCsrfTokenValid('upload-image', $request->get('_token'))) {
             $uploadedFile = $request->files->get('file');
-            $imageConstraint = new Assert\Image(["maxSize" => "2k"]);
+            $imageConstraint = new Assert\Image(["maxSize" => "512k"]);
             $constraintViolations = $validator->validate($uploadedFile, [$imageConstraint]);
             if ($constraintViolations->count() > 0) {
                 return $this->json(['message' => 'Erreur, veuillez contacter un administrateur !'], 400);

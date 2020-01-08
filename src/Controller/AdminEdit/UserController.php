@@ -58,19 +58,18 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/admin/deleteUser", name="admin_delete_user")
+     * @Route("/admin/deleteUser/{id}", name="admin_delete_user")
      * @param Request $request
      * @param Filesystem $filesystem
-     * @param ValidatorInterface $validator
+     * @param User $user
      * @return Response
      */
-    public function deleteUser(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
+    public function deleteUser(Request $request, Filesystem $filesystem, User $user): Response
     {
-        if ($this->isCsrfTokenValid('delete-user', $request->get('csrfData')) && !empty($request->get('id'))) {
-            $oldImage = $this->getDoctrine()->getRepository(User::class)->find($request->get('id'));
-            if(!empty($oldImage->getAvatar())){$filesystem->remove(['symlink', "../public/" . $oldImage->getAvatar(), 'activity.log']);}
-            $this->getDoctrine()->getRepository(User::class)->deleteUser($oldImage);
-            return $this->json(['message' => "Vous avez bien supprimer cet utilisateur", 'id' => $request->get('id')], 200);
+        if ($this->isCsrfTokenValid('delete-user', $request->get('csrfData'))) {
+            if(!empty($user->getAvatar())){$filesystem->remove(['symlink', "../public/" . $user->getAvatar()]);}
+            $this->getDoctrine()->getRepository(User::class)->deleteUser($user);
+            return $this->json(['message' => "Vous avez bien supprimer cet utilisateur", 'id' => $user->getId()], 200);
         }
         return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }

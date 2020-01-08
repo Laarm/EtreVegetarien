@@ -51,7 +51,7 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="deleteModalLabel">Êtes-vous sûr de supprimer cet feedback ?</h5>
+					<h5 class="modal-title" id="deleteModalLabel">Êtes-vous sûr de supprimer cet avis ?</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -76,7 +76,7 @@ $(document).on('click', '[data-target="#deleteModal"]', function(e) {
 $(document).on('click', '[deleteRestaurantFeedback]', function(e) {
     id = $(this).attr('deleteRestaurantFeedback')
     e.preventDefault();
-    $.post("{{ path('admin_delete_restaurantfeedback') }}", {
+    $.post("/admin/deleteRestaurantFeedback/"+id, {
         id: id,
         csrfData: $(this).attr('csrf-data')
     }, function(data) {

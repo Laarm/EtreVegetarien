@@ -3,7 +3,6 @@
 namespace App\Controller\AdminEdit;
 
 use App\Entity\Store;
-use Config\Functions;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,21 +34,18 @@ class StoreController extends AbstractController
     }
 
     /**
-     * @Route("/admin/deleteStore", name="admin_delete_store")
+     * @Route("/admin/deleteStore/{id}", name="admin_delete_store")
      * @param Request $request
      * @param Filesystem $filesystem
-     * @param ValidatorInterface $validator
+     * @param Store $store
      * @return Response
      */
-    public function deleteStore(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
+    public function deleteStore(Request $request, Filesystem $filesystem, Store $store): Response
     {
-        if ($this->isCsrfTokenValid('delete-store', $request->get('csrfData')) && !empty($request->get('id'))) {
-            $sqlStore = $this->getDoctrine()->getRepository(Store::class)->find($request->get('id'));
-            if (count($validator->validate($sqlStore)) == 0) {
-                $filesystem->remove(['symlink', "../public/" . $sqlStore->getImage(), 'activity.log']);
-                $this->getDoctrine()->getRepository(Store::class)->deleteStore($sqlStore);
-                return $this->json(['message' => "Vous avez bien supprimer ce store", 'id' => $request->get('id')], 200);
-            }
+        if ($this->isCsrfTokenValid('delete-store', $request->get('csrfData'))) {
+            $filesystem->remove(['symlink', "../public/" . $sqlStore->getImage()]);
+            $this->getDoctrine()->getRepository(Store::class)->deleteStore($store);
+            return $this->json(['message' => "Vous avez bien supprimer ce store", 'id' => $store->getId()], 200);
         }
         return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }
@@ -69,8 +65,7 @@ class StoreController extends AbstractController
             $sqlStore->setCreatedAt(new \DateTime());
             if ($request->get('store_id') !== "new") {
                 $sqlStore = $this->getDoctrine()->getRepository(Store::class)->find($request->get('store_id'));
-                $functions = new Functions();
-                $functions->deleteFile($request->get('image'), $sqlStore->getImage(), $filesystem);
+                deleteFile($request->get('image'), $sqlStore->getImage());
             }
             $sqlStore->setName($request->get('name'))
                 ->setImage($request->get('image'))

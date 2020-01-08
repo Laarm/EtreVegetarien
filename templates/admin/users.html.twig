@@ -49,7 +49,7 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="deleteModalLabel">Êtes-vous sûr de supprimer cet user ?</h5>
+					<h5 class="modal-title" id="deleteModalLabel">Êtes-vous sûr de supprimer cet utilisateur ?</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -74,7 +74,7 @@ $(document).on('click', '[data-target="#deleteModal"]', function(e) {
 $(document).on('click', '[deleteUser]', function(e) {
     id = $(this).attr('deleteUser')
     e.preventDefault();
-    $.post("{{ path('admin_delete_user') }}", {
+    $.post("/admin/deleteUser/"+id, {
         id: id,
         csrfData: $(this).attr('csrf-data')
     }, function(data) {

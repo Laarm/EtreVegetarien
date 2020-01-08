@@ -3,7 +3,6 @@
 namespace App\Controller\AdminEdit;
 
 use App\Entity\Product;
-use Config\Functions;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +15,8 @@ class ProductController extends AbstractController
 
     /**
      * @Route("/admin/product/{id}/edit", name="admin_edit_product")
+     * @param Product $product
+     * @return Response
      */
     public function editProduct(Product $product)
     {
@@ -33,17 +34,18 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/admin/deleteProduct", name="admin_delete_product")
+     * @Route("/admin/deleteProduct/{id}", name="admin_delete_product")
+     * @param Request $request
+     * @param Filesystem $filesystem
+     * @param Product $product
+     * @return Response
      */
-    public function deleteProduct(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
+    public function deleteProduct(Request $request, Filesystem $filesystem, Product $product): Response
     {
-        if ($this->isCsrfTokenValid('delete-product', $request->get('csrfData')) && !empty($request->get('id'))) {
-            $sql = $this->getDoctrine()->getRepository(Product::class)->find($request->get('id'));
-            if (count($validator->validate($sql)) == 0) {
-                $filesystem->remove(['symlink', "../public/" . $sql->getImage(), 'activity.log']);
-                $this->getDoctrine()->getRepository(Product::class)->deleteProduct($sql);
-                return $this->json(['message' => "Vous avez bien supprimer ce produit", 'id' => $request->get('id')], 200);
-            }
+        if ($this->isCsrfTokenValid('delete-product', $request->get('csrfData'))) {
+            $filesystem->remove(['symlink', "../public/" . $product->getImage()]);
+            $this->getDoctrine()->getRepository(Product::class)->deleteProduct($product);
+            return $this->json(['message' => "Vous avez bien supprimer ce produit", 'id' => $product->getId()], 200);
         }
         return $this->json(['message' => 'Veuillez contacter un administrateur !'], 400);
     }
@@ -51,20 +53,18 @@ class ProductController extends AbstractController
     /**
      * @Route("/admin/saveProduct", name="admin_save_product")
      * @param Request $request
-     * @param Filesystem $filesystem
      * @param ValidatorInterface $validator
      * @return Response
      * @throws \Exception
      */
-    public function saveProduct(Request $request, Filesystem $filesystem, ValidatorInterface $validator): Response
+    public function saveProduct(Request $request, ValidatorInterface $validator): Response
     {
         if ($this->isCsrfTokenValid('save-item', $request->get('csrfData'))) {
             $product = new Product();
             $product->setCreatedAt(new \DateTime());
             if ($request->get('product_id') !== "new") {
                 $product = $this->getDoctrine()->getRepository(Product::class)->find($request->get('product_id'));
-                $functions = new Functions();
-                $functions->deleteFile($request->get('image'), $product->getImage(), $filesystem);
+                deleteFile($request->get('image'), $product->getImage());
             }
             $product->setName($request->get('name'))->setImage($request->get('image'));
             if (count($validator->validate($product)) == 0) {
