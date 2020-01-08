@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\InfoUserTrait;
 use App\Entity\Traits\SocialNetworkTrait;
 use App\Entity\Traits\TimestampableTrait;
 use App\Entity\Traits\UserTrait;
@@ -24,6 +25,7 @@ class User implements UserInterface
 {
     use TimestampableTrait;
     use SocialNetworkTrait;
+    use InfoUserTrait;
     use UserTrait;
     /**
      * @ORM\Id()
@@ -71,11 +73,6 @@ class User implements UserInterface
      * @Assert\NotBlank
      */
     private $mealFavorites;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $passwordforgotExpiration;
 
     public function __construct()
     {
