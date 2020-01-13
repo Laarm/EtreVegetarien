@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
 
-OUTPUT_FILE="../prod/prod.zip"
+mkdir "prod/"
+OUTPUT_FILE="./prod/prod.zip"
 
 export APP_ENV=prod
 export APP_DEBUG=0
