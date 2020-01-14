@@ -6,12 +6,14 @@
 /public/bundles/
 /var/
 /vendor/
+/.idea/
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###
 .phpunit
 .phpunit.result.cache
 /phpunit.xml
+/.DS_Store
 ###< symfony/phpunit-bridge ###
 
 ###> symfony/web-server-bundle ###
