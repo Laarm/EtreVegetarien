@@ -3,7 +3,7 @@
 {% block body %}
 <section id="nosArticles" class="fakeBlank paddingSeperateur">
     <div class="container">
-        <h1 class="titre"><span>Nos Articles</span></h1>
+        <p class="titre"><span>Nos Articles</span></p>
     </div>
     <div class="container flex flex-center flex-wrap">
         {% for article in articles %}
@@ -13,7 +13,7 @@
                     <img src="{{ asset(article.image) }}" alt="Test" />
                 </div>
                 <div class="bottom">
-                    <h1>{{ article.name }}</h1>
+                    <p class="titleOfArticle">{{ article.name }}</p>
                 </div>
             </div>
         </a>
@@ -24,7 +24,7 @@
 </section>
 <section id="postInstagram" class="paddingSeperateur">
     <div class="container">
-        <h1 class="titre"><span>Publication Instagram</span></h1>
+        <p class="titre"><span>Publication Instagram</span></p>
     </div>
     <div class="container flex shadow-2">
         {% for post in postInstagram.data %}
@@ -38,7 +38,7 @@
 <section id="onParleDeNous" class="fakeBlank paddingSeperateur">
     <div class="container text-center">
         <img class="logo" src="{{ asset('/img/logo/logo-min-min.png') }}" alt="Logo Être Végétarien" />
-        <h1 class="titre"><span>On parle de nous</span></h1>
+        <p class="titre"><span>On parle de nous</span></p>
         <div class="flex flex-center flex-wrap">
             <a class="item" href="https://www.yaleen.fr/"><img src="https://www.yaleen.fr/res/img/logo.png"
                     alt="Logo de Yaleen" /></a>

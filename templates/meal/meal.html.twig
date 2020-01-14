@@ -20,9 +20,9 @@
 				</p>
 			</div>
 			<div class="flex flex-between">
-				<h2 class="mtb-auto">Publié le
+				<p class="mtb-auto postedOf">Publié le
 					<strong>{{meal.createdAt|date("d/m/Y")}}</strong>
-				</h2>
+				</p>
 			</div>
 			<div class="w-100">
 				<ul class="nav nav-tabs" id="tab" role="tablist">
@@ -64,11 +64,9 @@
 			</div>
 		</div>
 		<div class="right col-5">
-			<h1>
-				<h1 class="titre">
-					<span>Publié par</span>
-				</h1>
-			</h1>
+			<p class="titre">
+				<span>Publié par</span>
+			</p>
 			<div class="content">
 				<a class="media" href="{{ path('user', {'id': meal.PostedBy.id}) }}">
 					<img id="avatar" class="mr-3 rond" src="{% if meal.PostedBy.avatar %}{{ asset(meal.PostedBy.avatar) }}{% else %}https://iupac.org/wp-content/uploads/2018/05/default-avatar.png{% endif %}" alt="Votre avatar" style="height: 40px;width: 40px">
@@ -80,11 +78,9 @@
 					</div>
 				</a>
 			</div>
-			<h1>
-				<h1 class="titre">
-					<span>Autres repas</span>
-				</h1>
-			</h1>
+			<p class="titre">
+				<span>Autres repas</span>
+			</p>
 			<div class="content">
 				{% for meal in autresmeal %}
 					{% if loop.index != 1 %}
@@ -93,8 +89,8 @@
 					<div class="meal flex flex-between">
 						<div class="left">
 							<a href="{{ path('meal_show', {'id': meal.id}) }}">
-								<h1 class="cds">{{ meal.name }}</h1>
-								<h2 class="gris">{{ meal.PostedBy.username }}, Végétarien</h2>
+								<p class="cds mealName">{{ meal.name }}</p>
+								<p class="gris mealPostedBy">{{ meal.PostedBy.username }}, Végétarien</p>
 							</a>
 						</div>
 						<div class="right mtb-auto flex">

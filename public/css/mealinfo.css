@@ -8,6 +8,9 @@
 #meal p {
     color: #939396;
 }
+#meal p.titre {
+    color: #4e4e56;
+}
 
 #meal a {
     color: #939396
@@ -198,4 +201,21 @@
         width: 100%;
         max-width: 100%;
     }
+}
+.mealName {
+    margin-top: 2.5%;
+    font-size: 1rem!important;
+    font-weight: bold!important;
+    color: #58d68d!important;
+}
+.mealPostedBy {
+    font-size: .8rem!important;
+    font-weight: bold!important;
+    color: #939396;
+    margin-top: 20px;
+}
+.postedOf {
+    color: #939396;
+    font-size: 1.2em;
+    margin-top: 20px;
 }

@@ -21,7 +21,7 @@
 				{% endif %}
 			</div>
 			<div class="flex flex-between">
-				<h2 class="mtb-auto">{{ restaurant.address }}</h2>
+				<p class="mtb-auto restaurantAdress">{{ restaurant.address }}</p>
 				<p class="feedback mtb-auto">{{restaurantFeedbackCount}}
 					avis</p>
 			</div>
@@ -104,11 +104,9 @@
 			</div>
 		</div>
 		<div class="right col-5">
-			<h1>
-				<h1 class="titre">
-					<span>Autres restaurants</span>
-				</h1>
-			</h1>
+			<p class="titre">
+				<span>Autres restaurants</span>
+			</p>
 			<div class="content">
 				{% for restaurant in othersRestaurants %}
 					{% if loop.index != 1 %}
@@ -124,8 +122,8 @@
 					<div class="restaurant flex flex-between">
 						<div class="left">
 							<a href="{{ path('restaurant_show', {'id': restaurant.id}) }}">
-								<h1 class="cds">{{ restaurant.name }}</h1>
-								<h2 class="gris">{{ restaurant.city }}, Végétarien</h2>
+								<p class="cds restaurantName">{{ restaurant.name }}</p>
+								<p class="gris restaurantCity">{{ restaurant.city }}, Végétarien</p>
 							</a>
 						</div>
 						<div class="right mtb-auto flex">

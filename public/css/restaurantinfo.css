@@ -33,6 +33,9 @@
 #restaurant h1.titre {
     font-size: 1.4em
 }
+#restaurant p.titre {
+     font-size: 1.4em
+}
 
 #restaurant .left .note span {
     font-size: 2em;
@@ -173,4 +176,21 @@
         width: 100%;
         max-width: 100%;
     }
+}
+.restaurantAdress {
+    color: #939396;
+    font-size: 1.2em;
+    margin-top: 20px;
+}
+.restaurantName {
+    margin-top: 2.5%;
+    font-size: 1rem!important;
+    font-weight: bold!important;
+    color: #58d68d!important;
+}
+.restaurantCity {
+    color: #939396;
+    margin-top: 20px;
+    font-size: .8rem!important;
+    font-weight: bold!important;
 }

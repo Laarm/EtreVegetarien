@@ -19,20 +19,20 @@
 				{{ article.createdAt|date("H:i:s") }}</p>
 		</div>
 		<div class="sidebar">
-			<h1 class="gris">Derniers articles</h1>
+			<p class="gris lastArticle">Derniers articles</p>
 			<div class="content">
 				{% for donnee in articles %}
 					<div class="article">
 						<a href="{{ path('article_show', {'id': donnee.id}) }}">
-							<h1 class="cds">{{donnee.name}}
+							<p class="titleOfArticle cds">{{donnee.name}}
 								{{ donnee.category }}
 								<span>-
 									{{ donnee.createdAt|date("d/m/Y") }}
 									à
 									{{ donnee.createdAt|date("H:i:s") }}</span>
-							</h1>
-							<h2 class="gris">{{ donnee.name }},
-								{{ donnee.content|reducContent(30) }}...</h2>
+							</p>
+							<p class="gris descriptionOfArticle">{{ donnee.name }},
+								{{ donnee.content|reducContent(30) }}...</p>
 						</a>
 					</div>
 				{% else %}

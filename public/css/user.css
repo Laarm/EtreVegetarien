@@ -81,6 +81,15 @@ main {
     color: #58D68D
 }
 
+#timeline .container .top .userBio {
+    font-weight: bolder;
+    font-size: 25px
+}
+
+#timeline .container .top .userBio i {
+    color: #58D68D
+}
+
 #timeline .container .top p {
     font-size: 13px
 }
