@@ -11,14 +11,16 @@
     </div>
     <div class="product-list-design flex flex-wrap flex-between">
         {% for restaurant in restaurants %}
-        <a class="item" href="{{ path('restaurant_show', {'id': restaurant.id}) }}">
-            <div class="top">
-                <img alt="{{ restaurant.name }}" src="{{ restaurant.image }}" />
-            </div>
-            <div class="bottom">
-                <p>{{ restaurant.name }}</p>
-            </div>
-        </a>
+            <figure class="item">
+                <a href="{{ path('restaurant_show', {'id': restaurant.id}) }}">
+                    <div class="top">
+                        <img alt="{{ restaurant.name }}" src="{{ restaurant.image }}" />
+                    </div>
+                    <figcaption class="bottom">
+                        <p>{{ restaurant.name }}</p>
+                    </figcaption>
+                </a>
+            </figure>
         {% endfor %}
     </div>
 </section>

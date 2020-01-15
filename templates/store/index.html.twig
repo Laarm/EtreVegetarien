@@ -11,16 +11,16 @@
     </div>
     <div class="product-list-design flex flex-wrap flex-between">
         {% for store in stores %}
-        <div class="item">
+        <figure class="item">
             <a href="{{ path('store_show', {'id': store.id}) }}">
                 <div class="top">
                     <img alt="{{ store.name }}" src="{{ store.image }}" />
                 </div>
-                <div class="bottom">
+                <figcaption class="bottom">
                     <p>{{ store.name }}</p>
-                </div>
+                </figcaption>
             </a>
-        </div>
+        </figure>
         {% endfor %}
     </div>
 </section>

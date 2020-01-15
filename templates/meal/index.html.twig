@@ -11,14 +11,16 @@
     </div>
     <div class="product-list-design flex flex-wrap flex-between">
         {% for meal in meal %}
-        <a class="item" href="{{ path('meal_show', {'id': meal.id}) }}">
-            <div class="top">
-                <img alt="{{ meal.name }}" src="{{ meal.image }}" />
-            </div>
-            <div class="bottom">
-                <p>{{ meal.name }}</p>
-            </div>
-        </a>
+            <figure class="item">
+                <a class="item" href="{{ path('meal_show', {'id': meal.id}) }}">
+                    <div class="top">
+                        <img alt="{{ meal.name }}" src="{{ meal.image }}" />
+                    </div>
+                    <figcaption class="bottom">
+                        <p>{{ meal.name }}</p>
+                    </figcaption>
+                </a>
+            </figure>
         {% endfor %}
     </div>
 </section>
