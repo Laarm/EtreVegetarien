@@ -2,20 +2,18 @@
 
 {% block body %}
 <section id="nosArticles" class="fakeBlank paddingSeperateur">
-    <div class="container">
-        <p class="titre"><span>Nos Articles</span></p>
-    </div>
+    <header class="container">
+        <h1 class="titre"><span>Nos Articles</span></h1>
+    </header>
     <div class="container flex flex-center flex-wrap">
         {% for article in articles %}
         <a class="item" href="{{ path('article_show', {'id': article.id}) }}">
-            <div class="content shadow-2">
-                <div class="top">
-                    <img src="{{ asset(article.image) }}" alt="Test" />
-                </div>
-                <div class="bottom">
+            <figure class="content shadow-2">
+                <img src="{{ asset(article.image) }}" alt="{{ article.name }}" />
+                <figcaption class="bottom">
                     <p class="titleOfArticle">{{ article.name }}</p>
-                </div>
-            </div>
+                </figcaption>
+            </figure>
         </a>
         {% else %}
         <p class="text-center">Aucun article</p>
@@ -24,14 +22,14 @@
 </section>
 <section id="postInstagram" class="paddingSeperateur">
     <div class="container">
-        <p class="titre"><span>Publication Instagram</span></p>
+        <h2 class="titre"><span>Publication Instagram</span></h2>
     </div>
     <div class="container flex shadow-2">
         {% for post in postInstagram.data %}
-        <div class="item">
+        <figure class="item">
             <img src="{{post.images.standard_resolution.url}}"
                 alt="{% if post.caption is not null %}{{ post.caption.text }}{% else %}Photo de {{post.user.full_name}}{% endif %}{% if post.location is not null %} à {{post.location.name}}{% endif %}" />
-        </div>
+        </figure>
         {% endfor %}
     </div>
 </section>

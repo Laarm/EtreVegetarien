@@ -31,12 +31,12 @@
 					{% endif %}
 				{% endif %}
 			</div>
-			<div class="right">
+			<figure class="right">
 				<div class="avatar flex"><img class="mtb-auto" src="{% if user.avatar %}{{ asset(user.avatar) }}{% else %}https://iupac.org/wp-content/uploads/2018/05/default-avatar.png{% endif %}" alt="Avatar de {{user.username}}"/></div>
-				<div class="badge">
+				<figcaption class="badge">
 					<div class="flex">{{ user.preference|badgePreferenceIcon|raw }}</div>
-				</div>
-			</div>
+				</figcaption>
+			</figure>
 		</div>
 	</section>
 	<section id="timeline" class="container paddingSeperateur">
@@ -45,7 +45,7 @@
 				<p class="userBio">
 					<i class="fad fa-user"></i>
 					Biographie</p>
-				<p>
+				<blockquote>
 					{% if user.bio %}
 						{% if user.role == "ROLE_ADMIN" %}
 							{{ user.bio|raw }}
@@ -54,7 +54,7 @@
 						{% endif %}
 						{% else %}Aucune biographie
 					{% endif %}
-				</p>
+				</blockquote>
 			</div>
 			<div class="bottom">
 				<div class="row">
@@ -92,21 +92,22 @@
 						<div class="tab-content" id="v-pills-tabContent">
 							<div class="product-list-design tab-pane fade show active" id="restaurantfav" role="tabpanel" aria-labelledby="restaurant-tab">
 								{% for restaurant in restaurants %}
-									<div class="item">
+									<figure class="item">
 										<a href="{{ path('restaurant_show', {'id': restaurant.Restaurant.id}) }}">
 											<div class="top">
 												<img alt="{{ restaurant.Restaurant.name }}" src="{{ asset(restaurant.Restaurant.image) }}"/>
 											</div>
-											<div class="bottom">
+											<figcaption class="bottom">
 												<p>{{ restaurant.Restaurant.name }}</p>
-											</div>
+											</figcaption>
 										</a>
-									</div>
+									</figure>
 								{% endfor %}
 							</div>
 							<div class="product-list-design tab-pane fade" id="mealfav" role="tabpanel" aria-labelledby="mealfav-tab">
 								{% for mea in meal %}
-        							<a class="item" href="{{ path('meal_show', {'id': mea.Meal.id}) }}">
+								<figure class="item">
+        							<a href="{{ path('meal_show', {'id': mea.Meal.id}) }}">
 										<div class="top">
 											<img alt="{{ mea.Meal.name }}" src="{{ asset(mea.Meal.image) }}"/>
 										</div>
@@ -114,18 +115,19 @@
 											<p>{{ mea.Meal.name }}</p>
 										</div>
 									</a>
+								</figure>
 								{% endfor %}
 							</div>
 							<div class="product-list-design tab-pane fade" id="v-nourriturefav" role="tabpanel" aria-labelledby="v-nourriturefav-tab">
 								{% for product in products %}
-									<div class="item">
+									<figure class="item">
 										<div class="top">
 											<img alt="{{ product.productId.name }}" src="{{ asset(product.productId.image) }}"/>
 										</div>
-										<div class="bottom">
+										<figcaption class="bottom">
 											<p>{{ product.productId.name }}</p>
-										</div>
-									</div>
+										</figcaption>
+									</figure>
 								{% endfor %}
 							</div>
 							<div class="tab-pane fade" id="v-rs" role="tabpanel" aria-labelledby="v-rs-tab">

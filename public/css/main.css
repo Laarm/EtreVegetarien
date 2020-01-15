@@ -21,7 +21,7 @@ input:focus {
     box-shadow: 0 0 0 0.2rem rgba(88, 214, 141, .25);
 }
 
-h1.titre {
+h1.titre, h2.titre {
     color: #58D68D;
     text-align: center;
     font-size: 25px;
@@ -32,7 +32,7 @@ h1.titre {
     background-position: center;
 }
 
-h1.titre span {
+h1.titre span, h2.titre span {
     background-color: #FFF;
     padding: 0 10px
 }
